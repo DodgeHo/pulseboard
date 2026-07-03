@@ -1,0 +1,30 @@
+{
+  "name": "pulseboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.11.0",
+  "scripts": {
+    "compose:up": "docker compose up --build",
+    "compose:down": "docker compose down",
+    "dev:api": "pnpm --filter @pulseboard/api dev",
+    "dev:worker": "pnpm --filter @pulseboard/worker dev",
+    "db:generate": "pnpm --filter @pulseboard/db db:generate",
+    "db:push": "pnpm --filter @pulseboard/db db:push",
+    "db:deploy": "pnpm --filter @pulseboard/db db:deploy",
+    "db:seed": "pnpm --filter @pulseboard/db db:seed",
+    "demo:flow": "tsx scripts/demo-flow.ts",
+    "doctor": "tsx scripts/doctor.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.tools.json && pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:integration": "pnpm --filter @pulseboard/api test:integration",
+    "lint": "pnpm typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "prisma": "^6.19.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

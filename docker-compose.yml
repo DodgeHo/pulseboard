@@ -1,0 +1,87 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: pulseboard
+      POSTGRES_PASSWORD: pulseboard
+      POSTGRES_DB: pulseboard
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pulseboard -d pulseboard"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    build:
+      context: .
+    command: sh -c "pnpm db:generate && pnpm db:deploy && pnpm db:seed"
+    environment:
+      DATABASE_URL: postgresql://pulseboard:pulseboard@postgres:5432/pulseboard?schema=public
+      DEMO_API_KEY: pb_local_demo_key_change_me
+      API_KEY_HASH_SALT: local-development-only
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+    command: pnpm dev:api
+    environment:
+      NODE_ENV: development
+      API_PORT: 4000
+      LOG_LEVEL: info
+      DATABASE_URL: postgresql://pulseboard:pulseboard@postgres:5432/pulseboard?schema=public
+      REDIS_URL: redis://redis:6379
+      API_KEY_HASH_SALT: local-development-only
+      CHECK_SCHEDULER_INTERVAL_MS: 60000
+      HTTP_CHECK_TIMEOUT_MS: 5000
+      WRITE_RATE_LIMIT_WINDOW_MS: 60000
+      WRITE_RATE_LIMIT_MAX: 120
+    ports:
+      - "4000:4000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/health/live').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  worker:
+    build:
+      context: .
+    command: pnpm dev:worker
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: info
+      DATABASE_URL: postgresql://pulseboard:pulseboard@postgres:5432/pulseboard?schema=public
+      REDIS_URL: redis://redis:6379
+      API_KEY_HASH_SALT: local-development-only
+      CHECK_SCHEDULER_INTERVAL_MS: 60000
+      HTTP_CHECK_TIMEOUT_MS: 5000
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

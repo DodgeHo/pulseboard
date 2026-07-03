@@ -1,0 +1,153 @@
+# Tencent Cloud Staging Rehearsal
+
+This document is a rehearsal plan, not a command log. The Tencent Cloud Ubuntu server should be used to practice real Linux deployment operations before the project is exposed as an overseas-facing AWS demo.
+
+## Scope
+
+Use staging to prove:
+
+- Docker Compose can run the API, worker, PostgreSQL, and Redis on Linux.
+- HTTPS can be terminated by a reverse proxy.
+- Services restart after reboot.
+- Deployment can be repeated from a clean checkout.
+- Rollback and cleanup are documented.
+
+Do not use staging as the final public demo if latency or network accessibility is poor for overseas reviewers.
+
+## Secrets Policy
+
+Never commit:
+
+- SSH private keys
+- server passwords
+- DNS tokens
+- production `.env` files
+- provider credentials
+
+Use a server-side `.env` file created manually:
+
+```bash
+NODE_ENV=production
+API_PORT=4000
+LOG_LEVEL=info
+DATABASE_URL=postgresql://pulseboard:change-me@postgres:5432/pulseboard?schema=public
+REDIS_URL=redis://redis:6379
+DEMO_API_KEY=replace-with-a-long-random-demo-key
+API_KEY_HASH_SALT=replace-with-a-long-random-salt
+WRITE_RATE_LIMIT_WINDOW_MS=60000
+WRITE_RATE_LIMIT_MAX=120
+CHECK_SCHEDULER_INTERVAL_MS=60000
+HTTP_CHECK_TIMEOUT_MS=5000
+```
+
+## Server Preparation
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl git ufw
+
+# Install Docker from the official Docker repository before running Compose.
+docker --version
+docker compose version
+```
+
+Suggested firewall policy:
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable
+```
+
+Do not expose PostgreSQL or Redis ports publicly.
+
+## First Deployment
+
+```bash
+git clone <repo-url> pulseboard
+cd pulseboard
+cp .env.example .env
+# edit .env on the server
+docker compose up --build -d
+docker compose ps
+```
+
+For a more production-like rehearsal behind Caddy or Nginx:
+
+```bash
+docker compose -f docker-compose.production.example.yml up --build -d
+```
+
+Verify:
+
+```bash
+curl http://127.0.0.1:4000/health/live
+curl http://127.0.0.1:4000/health/ready
+curl -H "Authorization: Bearer $DEMO_API_KEY" http://127.0.0.1:4000/v1/workspaces
+```
+
+## Reverse Proxy
+
+Use Caddy or Nginx. Caddy is simpler for a rehearsal because it can manage certificates automatically.
+
+Example Caddy route:
+
+```caddyfile
+api.staging.example.com {
+  reverse_proxy 127.0.0.1:4000
+}
+```
+
+Only create DNS records after confirming the staging host should be reachable from the public internet.
+
+## Restart Policy
+
+For staging, Docker Compose can use service restart policies in a deployment override file. The production example compose file already includes `restart: unless-stopped`.
+
+```yaml
+services:
+  api:
+    restart: unless-stopped
+  worker:
+    restart: unless-stopped
+  postgres:
+    restart: unless-stopped
+  redis:
+    restart: unless-stopped
+```
+
+Keep production-like operational behavior without introducing Kubernetes.
+
+## Update
+
+```bash
+git pull --ff-only
+docker compose up --build -d
+docker compose ps
+curl http://127.0.0.1:4000/health/ready
+```
+
+## Rollback
+
+```bash
+git log --oneline -5
+git checkout <previous-known-good-commit>
+docker compose up --build -d
+curl http://127.0.0.1:4000/health/ready
+```
+
+For schema migrations, rollback should be treated carefully. Prefer forward fixes unless the failed migration is known to be reversible and no important data has been written.
+
+## Cleanup
+
+```bash
+docker compose down
+docker compose down -v # destructive: removes local PostgreSQL data
+```
+
+Also remove:
+
+- reverse proxy site config
+- staging DNS records
+- temporary server-side `.env`

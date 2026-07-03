@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+dist
+coverage
+.git
+.github
+.env
+.env.*
+!.env.example
+*.log
+.turbo
+.DS_Store
+output
+_analysis
+
