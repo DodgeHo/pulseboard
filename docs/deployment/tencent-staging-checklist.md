@@ -77,6 +77,8 @@ Use this checklist to rehearse a low-risk Linux staging deployment. It is intent
 
 After the repository exists on the server, create `.env` manually in the repository root. Do not copy real values back into the repository.
 
+The production compose file requires `POSTGRES_PASSWORD`, `DEMO_API_KEY`, and `API_KEY_HASH_SALT`; it should fail fast if any of those values are missing.
+
 - [ ] Generate a long random demo API key.
 - [ ] Generate a long random API key hash salt.
 - [ ] Generate a non-default PostgreSQL password.

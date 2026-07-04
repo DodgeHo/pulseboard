@@ -3,7 +3,7 @@ services:
     image: ${POSTGRES_IMAGE:-postgres:16-alpine}
     environment:
       POSTGRES_USER: pulseboard
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}
       POSTGRES_DB: pulseboard
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -31,9 +31,9 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
     command: sh -c "pnpm db:generate && pnpm db:deploy && pnpm db:seed"
     environment:
-      DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:-change-me}@postgres:5432/pulseboard?schema=public
-      DEMO_API_KEY: ${DEMO_API_KEY:-replace-with-a-long-random-demo-key}
-      API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:-replace-with-a-long-random-salt}
+      DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
+      DEMO_API_KEY: ${DEMO_API_KEY:?Set DEMO_API_KEY in the server-side .env file}
+      API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:?Set API_KEY_HASH_SALT in the server-side .env file}
     depends_on:
       postgres:
         condition: service_healthy
@@ -49,9 +49,9 @@ services:
       NODE_ENV: production
       API_PORT: 4000
       LOG_LEVEL: ${LOG_LEVEL:-info}
-      DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:-change-me}@postgres:5432/pulseboard?schema=public
+      DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
       REDIS_URL: redis://redis:6379
-      API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:-replace-with-a-long-random-salt}
+      API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:?Set API_KEY_HASH_SALT in the server-side .env file}
       CHECK_SCHEDULER_INTERVAL_MS: ${CHECK_SCHEDULER_INTERVAL_MS:-60000}
       HTTP_CHECK_TIMEOUT_MS: ${HTTP_CHECK_TIMEOUT_MS:-5000}
       WRITE_RATE_LIMIT_WINDOW_MS: ${WRITE_RATE_LIMIT_WINDOW_MS:-60000}
@@ -80,9 +80,9 @@ services:
     environment:
       NODE_ENV: production
       LOG_LEVEL: ${LOG_LEVEL:-info}
-      DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:-change-me}@postgres:5432/pulseboard?schema=public
+      DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
       REDIS_URL: redis://redis:6379
-      API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:-replace-with-a-long-random-salt}
+      API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:?Set API_KEY_HASH_SALT in the server-side .env file}
       CHECK_SCHEDULER_INTERVAL_MS: ${CHECK_SCHEDULER_INTERVAL_MS:-60000}
       HTTP_CHECK_TIMEOUT_MS: ${HTTP_CHECK_TIMEOUT_MS:-5000}
     restart: unless-stopped

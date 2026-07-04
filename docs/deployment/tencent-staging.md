@@ -28,11 +28,14 @@ Never commit:
 
 Use a server-side `.env` file created manually:
 
+The production compose file requires the staging secret values and should fail fast if `POSTGRES_PASSWORD`, `DEMO_API_KEY`, or `API_KEY_HASH_SALT` is missing.
+
 ```bash
 NODE_ENV=production
 API_PORT=4000
 LOG_LEVEL=info
-DATABASE_URL=postgresql://pulseboard:change-me@postgres:5432/pulseboard?schema=public
+POSTGRES_PASSWORD=<long-random-postgres-password>
+DATABASE_URL=postgresql://pulseboard:<long-random-postgres-password>@postgres:5432/pulseboard?schema=public
 REDIS_URL=redis://redis:6379
 DEMO_API_KEY=replace-with-a-long-random-demo-key
 API_KEY_HASH_SALT=replace-with-a-long-random-salt
@@ -69,17 +72,12 @@ Do not expose PostgreSQL or Redis ports publicly.
 ```bash
 git clone <repo-url> pulseboard
 cd pulseboard
-cp .env.example .env
-# edit .env on the server
-docker compose up --build -d
-docker compose ps
-```
-
-For a more production-like rehearsal behind Caddy or Nginx:
-
-```bash
+# create .env manually from the checklist; do not copy local defaults
 docker compose -f docker-compose.production.example.yml up --build -d
+docker compose -f docker-compose.production.example.yml ps
 ```
+
+The production example keeps PostgreSQL and Redis private to the Docker network and binds the API to `127.0.0.1:4000` for reverse proxy use.
 
 Verify:
 
@@ -125,8 +123,8 @@ Keep production-like operational behavior without introducing Kubernetes.
 
 ```bash
 git pull --ff-only
-docker compose up --build -d
-docker compose ps
+docker compose -f docker-compose.production.example.yml up --build -d
+docker compose -f docker-compose.production.example.yml ps
 curl http://127.0.0.1:4000/health/ready
 ```
 
@@ -135,7 +133,7 @@ curl http://127.0.0.1:4000/health/ready
 ```bash
 git log --oneline -5
 git checkout <previous-known-good-commit>
-docker compose up --build -d
+docker compose -f docker-compose.production.example.yml up --build -d
 curl http://127.0.0.1:4000/health/ready
 ```
 
@@ -144,8 +142,8 @@ For schema migrations, rollback should be treated carefully. Prefer forward fixe
 ## Cleanup
 
 ```bash
-docker compose down
-docker compose down -v # destructive: removes local PostgreSQL data
+docker compose -f docker-compose.production.example.yml down
+docker compose -f docker-compose.production.example.yml down -v # destructive: removes local PostgreSQL data
 ```
 
 Also remove:
