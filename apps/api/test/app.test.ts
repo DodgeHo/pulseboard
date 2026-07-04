@@ -46,6 +46,46 @@ describe('error responses', () => {
 });
 
 describeIntegration('workspace API flow', () => {
+  it('creates and revokes API keys for the authenticated user', async () => {
+    const app = createApp();
+    const headers = {
+      Authorization: `Bearer ${demoApiKey}`,
+      'Content-Type': 'application/json',
+    };
+
+    const created = await app.request('/v1/api-keys', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ name: 'Integration rotation key' }),
+    });
+    expect(created.status).toBe(201);
+    const createdBody = await created.json();
+    const createdKey = createdBody.data.key as string;
+    const createdId = createdBody.data.id as string;
+
+    expect(createdKey).toMatch(/^pb_/);
+    expect(createdBody.data.prefix).toBe(createdKey.slice(0, 10));
+
+    const newKeyHeaders = {
+      Authorization: `Bearer ${createdKey}`,
+      'Content-Type': 'application/json',
+    };
+    const workspaces = await app.request('/v1/workspaces', { headers: newKeyHeaders });
+    expect(workspaces.status).toBe(200);
+
+    const revoked = await app.request(`/v1/api-keys/${createdId}`, {
+      method: 'DELETE',
+      headers,
+    });
+    expect(revoked.status).toBe(200);
+    const revokedBody = await revoked.json();
+    expect(revokedBody.data.revokedAt).toBeTruthy();
+
+    const afterRevoke = await app.request('/v1/workspaces', { headers: newKeyHeaders });
+    expect(afterRevoke.status).toBe(401);
+    await expect(afterRevoke.json()).resolves.toMatchObject({ error: 'Invalid API key.' });
+  });
+
   it('creates, reads, updates, and deletes a workspace', async () => {
     const app = createApp();
     const headers = {

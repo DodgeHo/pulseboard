@@ -1,11 +1,18 @@
-FROM node:20-bookworm-slim
+ARG NODE_IMAGE=node:22-bookworm-slim
+FROM ${NODE_IMAGE}
+ARG NPM_REGISTRY=https://registry.npmjs.org/
 
 WORKDIR /app
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN corepack enable && corepack prepare pnpm@11.11.0 --activate
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN corepack enable && corepack prepare pnpm@11.9.0 --activate
+RUN pnpm config set registry ${NPM_REGISTRY}
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json tsconfig.tools.json ./
 COPY apps/api/package.json apps/api/package.json
@@ -18,7 +25,8 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+RUN pnpm db:generate
+
 EXPOSE 4000
 
 CMD ["pnpm", "dev:api"]
-

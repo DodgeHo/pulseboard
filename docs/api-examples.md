@@ -22,6 +22,34 @@ curl \
   "$PULSEBOARD_API_URL/v1/workspaces"
 ```
 
+## Rotate API Keys
+
+List API key metadata. Plaintext key values are never returned from this endpoint.
+
+```bash
+curl \
+  -H "Authorization: Bearer $DEMO_API_KEY" \
+  "$PULSEBOARD_API_URL/v1/api-keys"
+```
+
+Create a new API key. The `data.key` value is returned only once.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $DEMO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Local smoke test key"}' \
+  "$PULSEBOARD_API_URL/v1/api-keys"
+```
+
+Revoke a key after clients have moved to a replacement.
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer $DEMO_API_KEY" \
+  "$PULSEBOARD_API_URL/v1/api-keys/<api-key-id>"
+```
+
 ## Create a Workspace
 
 ```bash
@@ -104,5 +132,16 @@ Audit logs and usage metrics are tenant-scoped. Requests without `workspaceId` s
 pnpm demo:flow
 ```
 
-The script exercises the same public API path and prints created resources plus operational counters.
+The script exercises the public API like a small product walkthrough: it creates a temporary API key, provisions tenant resources, configures one healthy and one intentionally failing uptime check, waits for the worker to write check runs and open an incident, ingests a webhook event, reads audit and usage history, and revokes the temporary key.
 
+To build the compose stack and run the same flow from WSL/Linux:
+
+```bash
+pnpm compose:e2e
+```
+
+To run the API integration tests against the compose database and Redis services:
+
+```bash
+pnpm compose:integration
+```

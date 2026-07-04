@@ -18,6 +18,17 @@ export const openApiDocument = {
   paths: {
     '/health/live': { get: { security: [], summary: 'Liveness check', responses: { 200: { description: 'Alive' } } } },
     '/health/ready': { get: { security: [], summary: 'Readiness check', responses: { 200: { description: 'Ready' }, 503: { description: 'Not ready' } } } },
+    '/v1/api-keys': {
+      get: { summary: 'List API keys for the authenticated user', responses: { 200: { description: 'API key metadata list' } } },
+      post: {
+        summary: 'Create an API key',
+        description: 'Returns the plaintext API key only once. Store only the returned value in a secure secret manager.',
+        responses: { 201: { description: 'API key created' } },
+      },
+    },
+    '/v1/api-keys/{id}': {
+      delete: { summary: 'Revoke an API key', responses: { 200: { description: 'API key revoked' }, 404: { description: 'Not found' } } },
+    },
     '/v1/workspaces': {
       get: { summary: 'List workspaces', responses: { 200: { description: 'Workspace list' } } },
       post: { summary: 'Create workspace', responses: { 201: { description: 'Workspace created' } } },

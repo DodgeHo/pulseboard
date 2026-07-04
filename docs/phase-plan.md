@@ -12,16 +12,16 @@ Included:
 - Redis/BullMQ queues.
 - Worker for scheduled uptime checks and mocked notifications.
 - OpenAPI JSON and Scalar API reference.
-- Unit tests and representative API integration tests.
+- Unit tests, representative API integration tests, and handler-level worker tests for incident open/resolve behavior.
 - README, architecture notes, local development notes, and CI.
 
 Remaining hardening:
 
-- Run the full Docker Compose stack after the local Docker daemon is available.
-- Run integration tests against the compose database.
+- Full Docker Compose smoke flow passed locally through `scripts/local-compose-e2e.sh` on 2026-07-04.
+- API integration tests passed against the compose PostgreSQL and Redis services through `scripts/local-compose-integration.sh` on 2026-07-04.
 - Add follow-up Prisma migrations as the schema evolves; the initial migration is checked in.
-- Replace the in-process write limiter with Redis-backed distributed rate limiting before multi-instance deployment.
-- Expand the demo script into a richer smoke test once the local Docker daemon is available.
+- Verify Redis-backed distributed write rate limiting in the full compose stack before any multi-instance deployment.
+- Repeat compose smoke and integration checks after any Dockerfile, migration, worker, or queue changes.
 
 ## Phase 2: Tencent Cloud Staging Rehearsal
 

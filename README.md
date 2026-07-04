@@ -98,7 +98,19 @@ Run the local product flow after the compose stack is healthy:
 pnpm demo:flow
 ```
 
-The script creates a workspace, project, monitored service, uptime check, webhook event, and then reads usage metrics, audit logs, and incidents through the public API.
+The script creates a temporary API key, provisions a workspace/project/service, configures healthy and intentionally failing uptime checks, waits for the worker to record check runs and open an incident, ingests a webhook event, reads audit logs and usage metrics, and revokes the temporary key.
+
+For a full WSL/Linux compose smoke test, run:
+
+```bash
+pnpm compose:e2e
+```
+
+To run the API integration suite against the compose PostgreSQL and Redis services:
+
+```bash
+pnpm compose:integration
+```
 
 CI runs both fast unit/type checks and a Postgres/Redis-backed integration job that applies migrations, seeds the demo API key, and exercises the main API flows.
 

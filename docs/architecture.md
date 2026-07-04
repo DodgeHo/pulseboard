@@ -9,8 +9,8 @@ PulseBoard is a modular monolith with separate runtime processes for API and bac
 - Redis-backed BullMQ queues.
 - Worker-driven uptime checks with incident transitions.
 - OpenAPI JSON and Scalar API reference.
-- Unit tests for business rules and integration tests for representative API flows.
-- In-process write-path rate limiting as a local Phase 1 guardrail.
+- Unit tests for business rules, handler-level worker tests, and integration tests for representative API flows.
+- Redis-backed write-path rate limiting for authenticated mutation routes.
 
 ## Runtime Boundaries
 

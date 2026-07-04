@@ -20,26 +20,35 @@ import { apiKeyAuth, hashApiKey } from './auth.js';
 import type { ApiVariables } from './auth.js';
 import { logger } from './logger.js';
 import { openApiDocument } from './openapi.js';
-import { createWriteRateLimit } from './rate-limit.js';
+import { createRedisRateLimitStore, createWriteRateLimit } from './rate-limit.js';
 import { requestContext } from './request-context.js';
 import { errorResponse } from './responses.js';
 import { parseJson } from './validation.js';
 
 let queueSingleton: ReturnType<typeof createQueues> | null = null;
+let rateLimitRedis: Redis | null = null;
 
 function queues() {
   queueSingleton ??= createQueues();
   return queueSingleton;
 }
 
-export async function closeAppResources() {
-  if (!queueSingleton) return;
+function writeRateLimitStore() {
+  rateLimitRedis ??= new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379', {
+    maxRetriesPerRequest: 1,
+    lazyConnect: true,
+  });
+  return createRedisRateLimitStore(rateLimitRedis);
+}
 
+export async function closeAppResources() {
   await Promise.all([
-    queueSingleton.uptimeChecks.close(),
-    queueSingleton.notifications.close(),
+    queueSingleton?.uptimeChecks.close(),
+    queueSingleton?.notifications.close(),
+    rateLimitRedis?.quit().catch(() => rateLimitRedis?.disconnect()),
   ]);
   queueSingleton = null;
+  rateLimitRedis = null;
 }
 
 async function writeAudit(input: {
@@ -126,7 +135,7 @@ export function createApp() {
   });
 
   app.use('/v1/*', apiKeyAuth);
-  app.use('/v1/*', createWriteRateLimit());
+  app.use('/v1/*', createWriteRateLimit({ store: writeRateLimitStore() }));
 
   app.get('/v1/api-keys', async (c) => {
     const keys = await prisma.apiKey.findMany({

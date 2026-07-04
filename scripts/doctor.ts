@@ -19,7 +19,7 @@ interface Result {
 
 const checks: Check[] = [
   { name: 'Node.js', command: 'node', args: ['--version'], required: true },
-  { name: 'pnpm', command: 'pnpm', args: ['--version'], required: true },
+  { name: 'pnpm via Corepack', command: 'corepack', args: ['pnpm', '--version'], required: true },
   { name: 'Git', command: 'git', args: ['--version'], required: true },
   {
     name: 'Docker CLI',
