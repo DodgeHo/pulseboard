@@ -14,6 +14,8 @@ Use staging to prove:
 
 Do not use staging as the final public demo if latency or network accessibility is poor for overseas reviewers.
 
+Use the operator checklist in [`tencent-staging-checklist.md`](tencent-staging-checklist.md) before touching any real staging host.
+
 ## Secrets Policy
 
 Never commit:
