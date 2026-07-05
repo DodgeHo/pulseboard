@@ -64,8 +64,8 @@ Completed locally:
 - Incident transitions enqueue mocked notifications and write workspace-scoped audit logs.
 - Notification delivery records are marked `SENT` by the notification worker.
 - Handler-level tests cover incident open, incident resolve, below-threshold failures, due-check queueing, and notification audit behavior.
+- `pnpm demo:flow` shows a controlled incident lifecycle: healthy check, failing check, incident open, recovery check, incident resolve, webhook ingest, audit logs, usage metrics, and temporary key revocation.
 
 Remaining hardening:
 
-- Re-run compose E2E after the Phase 4 worker changes in a Linux environment.
-- Add a richer demo script path that shows both incident opening and recovery once the public flow supports controlled failing/recovering endpoints.
+- Re-run compose E2E after the Phase 5 demo flow changes in a Linux environment.

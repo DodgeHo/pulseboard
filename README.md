@@ -98,7 +98,7 @@ Run the local product flow after the compose stack is healthy:
 pnpm demo:flow
 ```
 
-The script creates a temporary API key, provisions a workspace/project/service, configures healthy and intentionally failing uptime checks, waits for the worker to record check runs and open an incident, ingests a webhook event, reads audit logs and usage metrics, and revokes the temporary key.
+The script creates a temporary API key, provisions a workspace/project/service, configures healthy and intentionally failing uptime checks, waits for the worker to record check runs, opens and resolves an incident through a controlled recovery, ingests a webhook event, reads audit logs and usage metrics, and revokes the temporary key.
 
 For a full WSL/Linux compose smoke test, run:
 

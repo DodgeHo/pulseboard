@@ -35,6 +35,7 @@ interface CheckRun {
   status: 'UP' | 'DOWN' | 'DEGRADED';
   statusCode?: number;
   latencyMs?: number;
+  checkedAt?: string;
 }
 
 interface UptimeCheck {
@@ -119,13 +120,18 @@ async function waitForReady() {
   throw new Error(`PulseBoard API did not become ready within 30s. Last error: ${String(lastError)}`);
 }
 
-async function waitForCheckRun(checkId: string, token: string) {
+async function waitForCheckRun(
+  checkId: string,
+  token: string,
+  options: { afterRunId?: string; status?: CheckRun['status'] } = {},
+) {
   const deadline = Date.now() + 45_000;
   let latest: UptimeCheck | null = null;
 
   while (Date.now() < deadline) {
     latest = (await request<ApiEnvelope<UptimeCheck>>(`/v1/uptime-checks/${checkId}`, {}, token)).data;
-    if ((latest.checkRuns?.length ?? 0) > 0) return latest.checkRuns?.[0];
+    const run = latest.checkRuns?.[0];
+    if (run && run.id !== options.afterRunId && (!options.status || run.status === options.status)) return run;
     await sleep(1500);
   }
 
@@ -143,6 +149,18 @@ async function waitForOpenIncident(token: string) {
   }
 
   throw new Error('Worker did not open the expected incident within 45s.');
+}
+
+async function waitForResolvedIncident(incidentId: string, token: string) {
+  const deadline = Date.now() + 45_000;
+
+  while (Date.now() < deadline) {
+    const incident = (await request<ApiEnvelope<Incident>>(`/v1/incidents/${incidentId}`, {}, token)).data;
+    if (incident.status === 'RESOLVED') return incident;
+    await sleep(1500);
+  }
+
+  throw new Error(`Worker did not resolve incident ${incidentId} within 45s.`);
 }
 
 async function main() {
@@ -258,6 +276,20 @@ async function main() {
 
   const incident = await waitForOpenIncident(token);
   console.log(`Incident opened: ${incident.title} (${incident.status}, ${incident.severity})`);
+
+  logStep('Recovery automation');
+  await request<ApiEnvelope<UptimeCheck>>(
+    `/v1/uptime-checks/${failingCheck.id}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ expectedStatus: 200 }),
+    },
+    token,
+  );
+  const recoveryRun = await waitForCheckRun(failingCheck.id, token, { afterRunId: failingRun?.id, status: 'UP' });
+  const resolvedIncident = await waitForResolvedIncident(incident.id, token);
+  console.log(`Recovery check run: ${recoveryRun?.status} HTTP ${recoveryRun?.statusCode ?? 'n/a'}`);
+  console.log(`Incident resolved: ${resolvedIncident.title} (${resolvedIncident.status})`);
 
   logStep('Webhook and operational history');
   const event = (

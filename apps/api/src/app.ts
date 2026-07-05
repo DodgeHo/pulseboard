@@ -486,13 +486,14 @@ export function createApp() {
     if (!check) return errorResponse(c, 404, 'Uptime check not found.');
 
     const updated = await prisma.uptimeCheck.update({ where: { id: check.id }, data: input });
+    await queues().uptimeChecks.add('perform-check', { uptimeCheckId: updated.id });
     await writeAudit({
       action: 'UPDATED',
       entityType: 'uptime_check',
       entityId: updated.id,
       workspaceId: check.service.project.workspaceId,
       actorId: c.get('userId'),
-      message: `Uptime check ${updated.name} was updated.`,
+      message: `Uptime check ${updated.name} was updated and queued.`,
     });
     return c.json({ data: updated });
   });

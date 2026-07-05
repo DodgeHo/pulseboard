@@ -181,6 +181,14 @@ describeIntegration('workspace API flow', () => {
     const checkDetail = await app.request(`/v1/uptime-checks/${check.id}`, { headers });
     expect(checkDetail.status).toBe(200);
 
+    const checkUpdate = await app.request(`/v1/uptime-checks/${check.id}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ expectedStatus: 204 }),
+    });
+    expect(checkUpdate.status).toBe(200);
+    await expect(checkUpdate.json()).resolves.toMatchObject({ data: { expectedStatus: 204 } });
+
     const webhookResponse = await app.request('/v1/webhooks/events', {
       method: 'POST',
       headers,

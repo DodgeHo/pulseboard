@@ -132,7 +132,7 @@ Audit logs and usage metrics are tenant-scoped. Requests without `workspaceId` s
 pnpm demo:flow
 ```
 
-The script exercises the public API like a small product walkthrough: it creates a temporary API key, provisions tenant resources, configures one healthy and one intentionally failing uptime check, waits for the worker to write check runs and open an incident, ingests a webhook event, reads audit and usage history, and revokes the temporary key.
+The script exercises the public API like a small product walkthrough: it creates a temporary API key, provisions tenant resources, configures one healthy and one intentionally failing uptime check, waits for the worker to write check runs, opens and resolves an incident through a controlled recovery, ingests a webhook event, reads audit and usage history, and revokes the temporary key.
 
 To build the compose stack and run the same flow from WSL/Linux:
 
