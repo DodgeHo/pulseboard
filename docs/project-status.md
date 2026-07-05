@@ -41,6 +41,8 @@ Recent verified checks include:
 - Tencent staging `pnpm demo:flow` previously passed inside the API container.
 - Manual `Deploy Tencent Staging` workflow run [`28742059040`](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) passed on 2026-07-05 with staging-only GitHub environment secrets, remote rebuild, health checks, incident open/resolve, and `Demo flow completed successfully`.
 - Staging API, PostgreSQL, Redis, and worker containers were healthy/running after the latest documentation and workflow updates.
+- GitHub Actions CI run [`28744263282`](https://github.com/DodgeHo/pulseboard/actions/runs/28744263282) passed for commit `d350e61` on 2026-07-05.
+- The Tencent staging checkout was fast-forwarded to `d350e61` on 2026-07-05 and remained clean, with `/health/live` and `/health/ready` passing locally on the host.
 
 ## Explicit Approval Gates
 
@@ -74,3 +76,5 @@ When ready to continue AWS preparation:
 ## Current Boundary
 
 The project is suitable to share as a code repository and interview discussion artifact now. It should not be described as a public production service until DNS, HTTPS, deployment secrets, budget alerts, and a final AWS or approved public host deployment are completed.
+
+From an interview-readiness perspective, the repository is complete for a backend/platform/cloud portfolio review. The remaining tasks are operational publication tasks, not core product implementation tasks, and they require account-level credentials or billable cloud-resource approval.

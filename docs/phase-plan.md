@@ -4,6 +4,8 @@
 
 Goal: a credible local-first SaaS backend that runs in WSL with Docker Compose.
 
+Status: complete for the current portfolio scope.
+
 Included:
 
 - Modular TypeScript monorepo.
@@ -26,6 +28,8 @@ Remaining hardening:
 ## Phase 2: Tencent Cloud Staging Rehearsal
 
 Use the existing Ubuntu server only as a staging rehearsal environment.
+
+Status: complete for private local-on-server validation.
 
 Before touching the server:
 
@@ -59,6 +63,8 @@ Remaining staging hardening:
 
 Use AWS only after Phase 1 is stable and Phase 2 has proven the Linux deployment path.
 
+Status: plan-ready, gated on external AWS budget, OIDC role, and explicit provisioning approval.
+
 Constraints:
 
 - Prefer Lightsail or a small EC2 instance.
@@ -88,6 +94,8 @@ Remaining approval gates:
 
 Goal: make the background processing path credible enough to discuss in backend/platform interviews.
 
+Status: complete for the current demo scope.
+
 Completed locally:
 
 - Worker opens incidents after configured consecutive failing checks and resolves them after configured recovery checks.
@@ -99,3 +107,23 @@ Completed locally:
 Completed on staging:
 
 - Compose E2E after the Phase 5 demo flow changes passed on the Tencent Ubuntu staging host on 2026-07-05.
+
+## Phase 5: Demo Narrative and Interview Readiness
+
+Goal: make the project easy to evaluate as a backend/platform/cloud portfolio artifact.
+
+Status: complete for repository review and private staging discussion.
+
+Completed:
+
+- Added a reviewer-oriented README with product scope, architecture, setup, demo flow, operational signals, deployment plan, cost posture, and tradeoffs.
+- Added [`interview-walkthrough.md`](interview-walkthrough.md) to guide reviewers through the API, worker, data model, demo flow, deployment documents, and AWS plan.
+- Added [`project-status.md`](project-status.md) to summarize completed surfaces, evidence, approval gates, and the boundary between a portfolio-grade demo and a public production service.
+- Expanded `pnpm demo:flow` into a realistic customer journey that covers workspace/project/service provisioning, check execution, incident open/resolve, webhook ingest, audit logs, usage metrics, and temporary API key revocation.
+- Kept public-cloud actions separate from code review readiness: the repository can be shared now, while DNS, HTTPS, AWS credentials, Terraform apply, and billable resources remain explicit approval gates.
+
+Remaining optional improvements:
+
+- Record a short terminal demo or screenshots after the public demo target is approved.
+- Add a small frontend only if the portfolio strategy changes; the current project is intentionally backend-first.
+- Enable public HTTPS only after DNS, TLS, budget, secrets, and rollback have been reviewed together.
