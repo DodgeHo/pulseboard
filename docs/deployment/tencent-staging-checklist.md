@@ -35,6 +35,8 @@ Use this checklist to rehearse a low-risk Linux staging deployment. It is intent
   export POSTGRES_IMAGE=public.ecr.aws/docker/library/postgres:16-alpine
   export REDIS_IMAGE=public.ecr.aws/docker/library/redis:7-alpine
   export NPM_REGISTRY=https://registry.npmjs.org/
+  export APT_DEBIAN_MIRROR=https://mirrors.cloud.tencent.com/debian
+  export APT_SECURITY_MIRROR=https://mirrors.cloud.tencent.com/debian-security
   export DOCKER_BUILDKIT=0
   export COMPOSE_DOCKER_CLI_BUILD=0
   bash scripts/local-compose-e2e.sh
@@ -42,7 +44,7 @@ Use this checklist to rehearse a low-risk Linux staging deployment. It is intent
   docker compose down
   ```
 
-  If npmjs.org access is unreliable from the staging network, temporarily use `NPM_REGISTRY=https://registry.npmmirror.com` for the rehearsal build and record that override in the completion notes.
+  If npmjs.org access is unreliable from the staging network, temporarily use `NPM_REGISTRY=https://registry.npmmirror.com` for the rehearsal build and record that override in the completion notes. Keep the Tencent apt mirror overrides when Debian package downloads from `deb.debian.org` are slow.
 
 - [ ] Record the commit that passed validation:
 

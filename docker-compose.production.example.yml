@@ -29,6 +29,8 @@ services:
       args:
         NODE_IMAGE: ${NODE_IMAGE:-node:22-bookworm-slim}
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
+        APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
+        APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
     command: sh -c "pnpm db:generate && pnpm db:deploy && pnpm db:seed"
     environment:
       DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
@@ -44,6 +46,8 @@ services:
       args:
         NODE_IMAGE: ${NODE_IMAGE:-node:22-bookworm-slim}
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
+        APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
+        APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
     command: pnpm --filter @pulseboard/api start
     environment:
       NODE_ENV: production
@@ -76,6 +80,8 @@ services:
       args:
         NODE_IMAGE: ${NODE_IMAGE:-node:22-bookworm-slim}
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
+        APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
+        APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
     command: pnpm --filter @pulseboard/worker start
     environment:
       NODE_ENV: production
