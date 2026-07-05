@@ -136,6 +136,7 @@ Phase 1 stays local with Windows + WSL + Docker Compose. Phase 2 can use the Ten
 Deployment notes:
 
 - [`docs/interview-walkthrough.md`](docs/interview-walkthrough.md)
+- [`docs/project-status.md`](docs/project-status.md)
 - [`docs/phase-plan.md`](docs/phase-plan.md)
 - [`docs/deployment/tencent-staging.md`](docs/deployment/tencent-staging.md)
 - [`docs/deployment/tencent-staging-deploy-secrets.md`](docs/deployment/tencent-staging-deploy-secrets.md)
