@@ -17,7 +17,7 @@
     "db:seed": "corepack pnpm --filter @pulseboard/db db:seed",
     "demo:flow": "tsx scripts/demo-flow.ts",
     "doctor": "tsx scripts/doctor.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.tools.json && corepack pnpm -r typecheck",
+    "typecheck": "corepack pnpm db:generate && tsc --noEmit -p tsconfig.tools.json && corepack pnpm -r typecheck",
     "test": "corepack pnpm -r test",
     "test:integration": "corepack pnpm --filter @pulseboard/api test:integration",
     "lint": "corepack pnpm typecheck"
