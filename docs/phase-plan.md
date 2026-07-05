@@ -65,6 +65,16 @@ Constraints:
 - Provide Terraform plan, cost estimate, and destroy documentation before creating resources.
 - Follow the low-cost AWS plan in [`deployment/aws-low-cost.md`](deployment/aws-low-cost.md).
 
+Completed preparation:
+
+- Added a plan-only Lightsail Terraform skeleton in [`../infra/aws-lightsail`](../infra/aws-lightsail) with SSH-only default exposure, optional HTTP/HTTPS/static IP gates, and destroy documentation.
+
+Remaining approval gates:
+
+- Run `terraform init`, `terraform fmt -check`, `terraform validate`, and `terraform plan` in an environment with Terraform installed.
+- Create or confirm an AWS Budget alert before any apply.
+- Do not run `terraform apply`, create DNS records, or expose public HTTPS without explicit approval.
+
 ## Phase 4: Worker Incident Automation Hardening
 
 Goal: make the background processing path credible enough to discuss in backend/platform interviews.

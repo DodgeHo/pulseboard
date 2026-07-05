@@ -1,0 +1,26 @@
+aws_region        = "us-east-1"
+availability_zone = "us-east-1a"
+name_prefix       = "pulseboard-demo"
+
+# Confirm current Lightsail blueprint and bundle IDs before applying:
+# aws lightsail get-blueprints --region us-east-1
+# aws lightsail get-bundles --region us-east-1
+blueprint_id = "ubuntu_22_04"
+bundle_id    = "nano_3_0"
+
+# Public key only. Never paste a private key into Terraform variables.
+ssh_public_key = "ssh-ed25519 AAAA_REPLACE_WITH_PUBLIC_KEY_ONLY operator@example"
+
+# Replace with your current public IP /32 before applying.
+ssh_allowed_cidrs = ["203.0.113.10/32"]
+
+# Keep public web ports closed until reverse proxy, TLS, rollback, and budget checks are ready.
+enable_http      = false
+enable_https     = false
+attach_static_ip = false
+
+tags = {
+  Project     = "PulseBoard"
+  Environment = "demo"
+  ManagedBy   = "Terraform"
+}
