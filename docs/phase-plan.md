@@ -41,6 +41,17 @@ Target:
 - GitHub Actions deployment rehearsal.
 - Clear destroy/rollback instructions.
 
+Completed staging rehearsal:
+
+- Docker Compose production example rebuilt and restarted successfully on the Tencent Ubuntu staging host on 2026-07-05.
+- Local-on-server API health checks passed through `127.0.0.1:4000` without exposing PostgreSQL, Redis, or the API publicly.
+- `pnpm demo:flow` passed inside the staging API container, including incident open, controlled recovery, incident resolution, webhook ingest, audit logs, usage metrics, and temporary key revocation.
+
+Remaining staging hardening:
+
+- HTTPS through a reverse proxy requires explicit approval before public exposure.
+- GitHub Actions deployment rehearsal still needs a safe deploy key or token strategy.
+
 ## Phase 3: Low-Cost AWS Demo
 
 Use AWS only after Phase 1 is stable and Phase 2 has proven the Linux deployment path.
@@ -66,6 +77,6 @@ Completed locally:
 - Handler-level tests cover incident open, incident resolve, below-threshold failures, due-check queueing, and notification audit behavior.
 - `pnpm demo:flow` shows a controlled incident lifecycle: healthy check, failing check, incident open, recovery check, incident resolve, webhook ingest, audit logs, usage metrics, and temporary key revocation.
 
-Remaining hardening:
+Completed on staging:
 
-- Re-run compose E2E after the Phase 5 demo flow changes in a Linux environment.
+- Compose E2E after the Phase 5 demo flow changes passed on the Tencent Ubuntu staging host on 2026-07-05.
