@@ -47,7 +47,7 @@ jobs:
       TF_VAR_ssh_public_key: ${{ secrets.AWS_LIGHTSAIL_SSH_PUBLIC_KEY }}
       TF_VAR_ssh_allowed_cidrs: ${{ secrets.AWS_LIGHTSAIL_SSH_ALLOWED_CIDRS }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validate plan-only configuration
         run: |
@@ -65,7 +65,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEMO_PLAN_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
 
       - name: Terraform format check
         run: terraform fmt -check
