@@ -36,6 +36,7 @@ Recent verified checks include:
 - GitHub Actions CI passed on `master` with `quality`, `integration`, and `infrastructure` jobs.
 - Terraform formatting, backend-free provider initialization, and `terraform validate` passed in CI for `infra/aws-lightsail`.
 - Manual `AWS Lightsail Plan` workflow exists for protected plan-only review through the `aws-demo-plan` environment. It has no apply job and requires separate AWS credential/environment setup.
+- GitHub environment `aws-demo-plan` exists with non-sensitive default variables for region, availability zone, Lightsail blueprint, bundle, and resource name prefix. No AWS secrets have been configured there yet.
 - Private Tencent staging health checks passed through `127.0.0.1:4000`.
 - Tencent staging `pnpm demo:flow` previously passed inside the API container.
 - Manual `Deploy Tencent Staging` workflow run [`28742059040`](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) passed on 2026-07-05 with staging-only GitHub environment secrets, remote rebuild, health checks, incident open/resolve, and `Demo flow completed successfully`.

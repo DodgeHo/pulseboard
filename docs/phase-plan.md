@@ -75,6 +75,7 @@ Completed preparation:
 - Added CI validation for Terraform formatting, provider initialization without a backend, and `terraform validate`.
 - Added a protected manual `AWS Lightsail Plan` GitHub Actions workflow for `terraform plan` through the `aws-demo-plan` environment. The workflow has no apply job.
 - Added the operator checklist in [`deployment/aws-plan-checklist.md`](deployment/aws-plan-checklist.md) for budget, OIDC role, Terraform variables, plan review, and public exposure gates.
+- Created the `aws-demo-plan` GitHub environment with non-sensitive default variables only. No AWS secrets or credentials are configured yet.
 
 Remaining approval gates:
 
