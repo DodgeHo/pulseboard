@@ -14,7 +14,8 @@ This document records the current public PulseBoard demo entry point on the exis
 
 ## Server Layout
 
-- Static homepage source in this repository: [`../../deploy/anlan/index.html`](../../deploy/anlan/index.html)
+- Frontend app source in this repository: [`../../apps/web`](../../apps/web)
+- Generated static homepage in this repository: [`../../deploy/anlan/index.html`](../../deploy/anlan/index.html)
 - Nginx config source in this repository: [`../../deploy/anlan/nginx/anlan.conf`](../../deploy/anlan/nginx/anlan.conf)
 - Server homepage target: `/var/www/html/index.html`
 - Server Nginx target: `/etc/nginx/sites-available/anlan.conf`
@@ -23,9 +24,11 @@ This document records the current public PulseBoard demo entry point on the exis
 
 ## Deployment Commands
 
-From the repository root on the operator machine:
+From the repository root on the operator machine, build the frontend first. The build generates a single-file homepage at `deploy/anlan/index.html` so the public root can show both the frontend experience and backend surface.
 
 ```bash
+pnpm build:web
+pnpm verify:web
 scp deploy/anlan/index.html 175.178.175.56:/tmp/pulseboard-anlan-index.html
 scp deploy/anlan/nginx/anlan.conf 175.178.175.56:/tmp/pulseboard-anlan.conf
 ```
@@ -57,6 +60,26 @@ sudo certbot certificates
 
 ## Verification
 
+Before uploading, run the local artifact gate. CI also runs this gate and checks that `deploy/anlan/index.html` is up to date with `apps/web` source changes:
+
+```bash
+pnpm verify:web
+```
+
+After the approved server install and Nginx reload, verify the public surface with the combined homepage/backend gate:
+
+```bash
+pnpm verify:public
+```
+
+The same checks can target another rehearsal domain by setting `PUBLIC_BASE_URL`, for example:
+
+```bash
+PUBLIC_BASE_URL=https://staging.example.com pnpm verify:public
+```
+
+Manual spot checks remain useful when investigating a failure:
+
 ```bash
 curl -I https://www.anlan.store
 curl -fsS https://anlan.store/health/live
@@ -71,6 +94,10 @@ sudo docker compose -f docker-compose.production.example.yml ps
 
 Expected results:
 
+- Homepage renders the frontend cockpit and backend probes together.
+- Language selector exposes 10 locales, with English first/default and Simplified Chinese last.
+- `/?lang=zh-TW`, `/?lang=zh-CN`, and `/?lang=ar` can be used for deterministic locale checks; Arabic should set the page direction to RTL.
+- Browser console should have no frontend page errors on the homepage.
 - `www` redirects to the bare domain.
 - Health endpoints return `ok` and `ready`.
 - API docs and OpenAPI JSON return `200`.

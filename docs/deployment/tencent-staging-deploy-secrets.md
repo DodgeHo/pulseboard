@@ -1,6 +1,6 @@
 # Tencent Staging Deploy Secrets Checklist
 
-Use this checklist before running the manual `Deploy Tencent Staging` GitHub Actions workflow. The workflow is intentionally manual and staging-only; it should not be used to expose the service publicly or create cloud resources.
+Use this checklist before running the manual `Deploy Tencent Staging` GitHub Actions workflow. The workflow is intentionally manual and staging-only. It may install the already-reviewed public homepage/Nginx files on an approved host, but it must not create DNS records, TLS certificates, Tencent Cloud resources, or AWS resources.
 
 ## Scope
 
@@ -13,6 +13,7 @@ It does not cover:
 - Tencent Cloud resource creation
 - AWS resource creation
 - production API keys or customer data
+- creating or approving the public host itself
 
 ## Required GitHub Environment
 
@@ -76,6 +77,7 @@ Before the workflow can succeed, the staging server should already have:
 - The repository at `~/pulseboard`.
 - A server-side `.env` file in `~/pulseboard` with staging values.
 - Docker Engine and Docker Compose installed.
+- Nginx installed if the public homepage install step will be used.
 - A clean Git worktree, except ignored files such as `.env`.
 - Permission for the deploy user to run the required `sudo docker compose` commands.
 
@@ -108,7 +110,7 @@ or a reviewed commit SHA:
 <validated-commit-sha>
 ```
 
-The workflow validates the ref shape, refuses to deploy over a dirty server worktree, fetches the requested ref, rebuilds the production compose stack, checks local-on-server health endpoints, and runs `pnpm demo:flow` inside the API container.
+The workflow validates the ref shape, builds and verifies the public homepage artifact, refuses to deploy over a dirty server worktree, fetches the requested ref, rebuilds the production compose stack, checks local-on-server health endpoints, runs `pnpm demo:flow` inside the API container, installs the public homepage/Nginx config with timestamped backups, reloads Nginx after `nginx -t`, and runs `pnpm verify:public`.
 
 ## Post-Run Evidence
 
@@ -118,6 +120,8 @@ Record only non-sensitive evidence:
 - Deployed ref
 - Health check result
 - Demo flow result
+- Public surface verification result
+- Public homepage/Nginx backup timestamp, if files were installed
 - Rollback ref, if a rollback rehearsal was run
 
 Do not record API keys, private keys, server passwords, DNS tokens, or provider credentials.

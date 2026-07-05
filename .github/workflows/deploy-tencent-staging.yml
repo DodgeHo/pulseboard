@@ -43,6 +43,23 @@ jobs:
         with:
           ref: ${{ inputs.deploy_ref }}
 
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Build and verify public homepage artifact
+        run: |
+          set -euo pipefail
+          pnpm install --frozen-lockfile
+          pnpm build:web
+          pnpm verify:web
+          git diff --exit-code -- deploy/anlan/index.html
+
       - name: Configure SSH
         env:
           STAGING_HOST: ${{ secrets.TENCENT_STAGING_HOST }}
@@ -73,7 +90,13 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-      - name: Deploy and verify
+      - name: Upload public site assets
+        run: |
+          set -euo pipefail
+          scp deploy/anlan/index.html pulseboard-staging:/tmp/pulseboard-anlan-index.html
+          scp deploy/anlan/nginx/anlan.conf pulseboard-staging:/tmp/pulseboard-anlan.conf
+
+      - name: Deploy and verify backend on staging host
         env:
           DEPLOY_REF: ${{ inputs.deploy_ref }}
         run: |
@@ -120,4 +143,22 @@ jobs:
             -e PULSEBOARD_API_URL=http://127.0.0.1:4000 \
             -e DEMO_API_KEY="$DEMO_API_KEY" \
             api pnpm demo:flow
+
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          if [ -f /var/www/html/index.html ]; then
+            sudo cp /var/www/html/index.html /var/www/html/index.html.backup-$ts
+          fi
+          if [ -f /etc/nginx/sites-available/anlan.conf ]; then
+            sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
+          fi
+
+          sudo install -m 0644 /tmp/pulseboard-anlan-index.html /var/www/html/index.html
+          sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf
+          sudo nginx -t
+          sudo systemctl reload nginx
           REMOTE
+
+      - name: Verify public homepage and backend surface
+        env:
+          PUBLIC_BASE_URL: ${{ vars.TENCENT_STAGING_PUBLIC_BASE_URL || 'https://anlan.store' }}
+        run: pnpm verify:public

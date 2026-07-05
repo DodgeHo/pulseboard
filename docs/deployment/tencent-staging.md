@@ -10,6 +10,7 @@ Use staging to prove:
 - HTTPS can be terminated by a reverse proxy.
 - Services restart after reboot.
 - Deployment can be repeated from a clean checkout.
+- The public homepage can be installed with backups and verified together with the backend surface.
 - Rollback and cleanup are documented.
 
 Do not use staging as the final public demo if latency or network accessibility is poor for overseas reviewers.
@@ -157,7 +158,11 @@ Required GitHub secrets:
 - `TENCENT_STAGING_SSH_KEY`: private deploy key for this staging host only
 - `TENCENT_STAGING_KNOWN_HOSTS`: pinned SSH host key entry
 
-The workflow refuses to deploy over a dirty server worktree, checks out the selected ref, rebuilds the production compose stack, verifies `127.0.0.1:4000` health endpoints, and runs `pnpm demo:flow` inside the API container. Do not add DNS or public HTTPS steps to this workflow until public exposure has been explicitly approved.
+The workflow builds and verifies the public homepage artifact on the GitHub runner, refuses to deploy over a dirty server worktree, checks out the selected ref, rebuilds the production compose stack, verifies `127.0.0.1:4000` health endpoints, runs `pnpm demo:flow` inside the API container, backs up and installs the public homepage/Nginx config, reloads Nginx after `nginx -t`, and finally runs `pnpm verify:public` against the configured public base URL. It does not create DNS, TLS, Tencent Cloud, or AWS resources; those must be approved and prepared separately.
+
+Optional GitHub environment variable:
+
+- `TENCENT_STAGING_PUBLIC_BASE_URL`: public URL used by `pnpm verify:public`; defaults to `https://anlan.store`.
 
 ## Cleanup
 

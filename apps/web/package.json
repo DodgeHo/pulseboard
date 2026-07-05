@@ -1,0 +1,17 @@
+{
+  "name": "@pulseboard/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/inline-build.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "verify": "node scripts/verify-artifact.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
