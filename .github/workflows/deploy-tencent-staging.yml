@@ -93,8 +93,25 @@ jobs:
           git checkout -B master FETCH_HEAD
 
           sudo env DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker compose -f docker-compose.production.example.yml up --build -d
-          curl -fsS http://127.0.0.1:4000/health/live
-          curl -fsS http://127.0.0.1:4000/health/ready
+
+          wait_for_url() {
+            url="$1"
+            for attempt in $(seq 1 30); do
+              if curl -fsS "$url"; then
+                printf '\n'
+                return 0
+              fi
+              sleep 2
+            done
+
+            echo "Timed out waiting for $url" >&2
+            sudo docker compose -f docker-compose.production.example.yml ps >&2
+            sudo docker compose -f docker-compose.production.example.yml logs --tail=80 api >&2
+            return 1
+          }
+
+          wait_for_url http://127.0.0.1:4000/health/live
+          wait_for_url http://127.0.0.1:4000/health/ready
 
           set -a
           . ./.env
