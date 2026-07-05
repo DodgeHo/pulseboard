@@ -41,6 +41,8 @@ Before provisioning:
 2. Record the expected monthly cost in the pull request or deployment notes.
 3. Confirm the destroy path.
 
+Use [`aws-cost-estimate.md`](aws-cost-estimate.md) as the review checklist before provisioning any AWS resource.
+
 Approximate expected shape:
 
 | Item | Choice | Cost posture |

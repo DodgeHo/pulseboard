@@ -69,6 +69,7 @@ Constraints:
 Completed preparation:
 
 - Added a plan-only Lightsail Terraform skeleton in [`../infra/aws-lightsail`](../infra/aws-lightsail) with SSH-only default exposure, optional HTTP/HTTPS/static IP gates, and destroy documentation.
+- Added a reviewed AWS cost estimate and budget guardrail in [`deployment/aws-cost-estimate.md`](deployment/aws-cost-estimate.md).
 
 Remaining approval gates:
 
