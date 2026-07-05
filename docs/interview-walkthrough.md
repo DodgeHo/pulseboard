@@ -64,7 +64,7 @@ The repository is designed to be checked with these commands:
 ```bash
 corepack pnpm typecheck
 corepack pnpm test
-corepack pnpm doctor
+corepack pnpm run doctor
 pnpm compose:e2e
 pnpm compose:integration
 ```

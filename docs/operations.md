@@ -79,6 +79,7 @@ Before creating AWS resources:
 - Produce a Terraform plan and review the monthly estimate.
 - Prefer Lightsail or one small EC2 instance.
 - Avoid EKS, RDS, NAT Gateway, and ALB for this demo unless there is a written reason.
+- Run `pnpm run doctor` and treat missing Terraform, AWS CLI, or GitHub CLI as cloud-readiness warnings, not local development failures.
 - Review [`deployment/aws-cost-estimate.md`](deployment/aws-cost-estimate.md) before provisioning.
 - Document `terraform destroy` and test it in a non-production account/project.
 - See [`deployment/aws-low-cost.md`](deployment/aws-low-cost.md).

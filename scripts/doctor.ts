@@ -49,14 +49,38 @@ const checks: Check[] = [
     required: false,
     hint: 'WSL is recommended for the local Linux-like development path on Windows.',
   },
+  {
+    name: 'Terraform CLI',
+    command: 'terraform',
+    args: ['version'],
+    required: false,
+    hint: 'Install Terraform before running the AWS Lightsail plan locally. GitHub CI still validates Terraform formatting and syntax.',
+  },
+  {
+    name: 'AWS CLI',
+    command: 'aws',
+    args: ['--version'],
+    required: false,
+    hint: 'Install and configure AWS CLI only when you are ready to run an approved Terraform plan. Do not print credentials.',
+  },
+  {
+    name: 'GitHub CLI',
+    command: 'gh',
+    args: ['--version'],
+    required: false,
+    hint: 'GitHub CLI is useful for checking CI, environments, and manual deployment workflows.',
+  },
+  {
+    name: 'GitHub CLI auth',
+    command: 'gh',
+    args: ['auth', 'status'],
+    required: false,
+    hint: 'Authenticate GitHub CLI before managing repository environments or secrets.',
+  },
 ];
 
 function run(check: Check): Result {
-  const commandLine = [check.command, ...check.args.map(quoteArg)].join(' ');
-  const result = spawnSync(commandLine, {
-    encoding: 'utf8',
-    shell: process.platform === 'win32',
-  });
+  const result = process.platform === 'win32' ? runOnWindows(check) : runOnPosix(check);
   const output = normalizeOutput(`${result.stdout ?? ''}${result.stderr ?? ''}`);
 
   if (result.status === 0) {
@@ -66,9 +90,27 @@ function run(check: Check): Result {
   return {
     name: check.name,
     status: check.required ? 'FAIL' : 'WARN',
-    output: output || `Command failed: ${check.command} ${check.args.join(' ')}`,
+    output: output || `Command failed: ${formatCommand(check)}`,
     hint: check.hint,
   };
+}
+
+function runOnWindows(check: Check) {
+  return spawnSync(formatCommand(check), {
+    encoding: 'utf8',
+    shell: true,
+  });
+}
+
+function runOnPosix(check: Check) {
+  return spawnSync(check.command, check.args, {
+    encoding: 'utf8',
+    shell: false,
+  });
+}
+
+function formatCommand(check: Check) {
+  return [check.command, ...check.args.map(quoteArg)].join(' ');
 }
 
 function quoteArg(arg: string) {
@@ -77,7 +119,11 @@ function quoteArg(arg: string) {
 }
 
 function normalizeOutput(output: string) {
-  return output.replace(/\0/g, '').trim().replace(/\s+/g, ' ');
+  return output
+    .replace(/\0/g, '')
+    .replace(/Token:\s+\S+/gi, 'Token: <redacted>')
+    .trim()
+    .replace(/\s+/g, ' ');
 }
 
 function print(result: Result) {

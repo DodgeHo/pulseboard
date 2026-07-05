@@ -12,6 +12,7 @@ Checked on Windows + WSL on 2026-07-01:
 - On 2026-07-04, the checked-in `packageManager` was corrected from unavailable `pnpm@11.11.0` to published `pnpm@11.9.0` after Corepack returned a registry 404 for 11.11.0.
 - On 2026-07-04, Docker startup failed because `/etc/docker/daemon.json` was invalid JSON. After fixing the commas in `registry-mirrors`, `systemctl start docker.service` succeeded.
 - On 2026-07-04, WSL networking failed when `.wslconfig` used `networkingMode=mirrored` and fell back to no network. Removing that override restored the default NAT route and generated `/mnt/wsl/resolv.conf`.
+- On 2026-07-05, WSL was updated with a Linux-native Node.js 22 installation through `nvm` and Corepack `pnpm@11.9.0`. Running project commands directly from `/mnt/f/...` can still cause Windows and WSL to recreate `node_modules` for different platforms. Prefer a WSL-native working copy such as `~/pulseboard` for Linux/Docker verification, and keep the Windows working copy for Windows-side editing and Git operations.
 
 ## Recommended WSL Fixes
 
@@ -68,13 +69,19 @@ pnpm -v
 
 If `corepack` still resolves to a Windows path, move Windows Node paths later in WSL `PATH` or install Node.js through a Linux-native tool such as `nvm`, `fnm`, or the distro package manager.
 
+If both Windows and WSL need to run package scripts, avoid sharing one `node_modules` directory across platforms. Use one of these workflows:
+
+- Windows editing and validation from `F:\Jobs overseas\pulseboard`.
+- WSL/Linux validation from a separate clone under `~/pulseboard`.
+- Or run one platform at a time and reinstall dependencies when switching platforms.
+
 ## Expected Local Commands
 
 ```bash
 cd /mnt/f/Jobs\ overseas/pulseboard
 cp .env.example .env
 pnpm install
-pnpm doctor
+pnpm run doctor
 pnpm compose:up
 ```
 
@@ -95,7 +102,7 @@ When Docker is healthy, the compose stack starts:
 ## Verification Commands
 
 ```bash
-pnpm doctor
+pnpm run doctor
 pnpm db:generate
 pnpm db:deploy
 pnpm typecheck

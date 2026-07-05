@@ -25,7 +25,7 @@ Use this checklist to rehearse a low-risk Linux staging deployment. It is intent
   corepack pnpm typecheck
   corepack pnpm test
   corepack pnpm lint
-  corepack pnpm doctor
+  corepack pnpm run doctor
   ```
 
 - [ ] Run the Docker Compose smoke path from WSL or Linux if possible:

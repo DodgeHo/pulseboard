@@ -59,9 +59,11 @@ Run from WSL Ubuntu:
 cd /mnt/f/Jobs\ overseas/pulseboard
 cp .env.example .env
 pnpm install
-pnpm doctor
+pnpm run doctor
 pnpm compose:up
 ```
+
+`pnpm run doctor` checks the required local toolchain plus optional cloud-readiness tools such as Terraform, AWS CLI, and GitHub CLI. Optional AWS/Terraform warnings do not block local development; they matter only when preparing an approved AWS plan.
 
 The API listens on `http://localhost:4000`.
 
