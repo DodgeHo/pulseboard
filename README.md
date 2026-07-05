@@ -80,6 +80,8 @@ Useful endpoints:
 
 API examples are available in [`docs/api-examples.md`](docs/api-examples.md).
 
+For a reviewer-oriented guide through the architecture, demo flow, and interview discussion points, see [`docs/interview-walkthrough.md`](docs/interview-walkthrough.md).
+
 Local demo API key:
 
 ```text
@@ -133,6 +135,7 @@ Phase 1 stays local with Windows + WSL + Docker Compose. Phase 2 can use the Ten
 
 Deployment notes:
 
+- [`docs/interview-walkthrough.md`](docs/interview-walkthrough.md)
 - [`docs/phase-plan.md`](docs/phase-plan.md)
 - [`docs/deployment/tencent-staging.md`](docs/deployment/tencent-staging.md)
 - [`docs/deployment/aws-low-cost.md`](docs/deployment/aws-low-cost.md)
