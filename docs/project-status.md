@@ -41,8 +41,8 @@ Recent verified checks include:
 - Tencent staging `pnpm demo:flow` previously passed inside the API container.
 - Manual `Deploy Tencent Staging` workflow run [`28742059040`](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) passed on 2026-07-05 with staging-only GitHub environment secrets, remote rebuild, health checks, incident open/resolve, and `Demo flow completed successfully`.
 - Staging API, PostgreSQL, Redis, and worker containers were healthy/running after the latest documentation and workflow updates.
-- GitHub Actions CI run [`28744263282`](https://github.com/DodgeHo/pulseboard/actions/runs/28744263282) passed for commit `d350e61` on 2026-07-05.
-- The Tencent staging checkout was fast-forwarded to `d350e61` on 2026-07-05 and remained clean, with `/health/live` and `/health/ready` passing locally on the host.
+- Recent GitHub Actions CI runs on `master` passed with quality, integration, and infrastructure jobs after the phase-readiness and workflow action updates.
+- The Tencent staging checkout was fast-forwarded after the latest repository updates on 2026-07-05 and remained clean, with `/health/live` and `/health/ready` passing locally on the host.
 
 ## Explicit Approval Gates
 
