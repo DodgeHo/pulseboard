@@ -12,7 +12,7 @@ Approximate readiness:
 - Worker and incident automation: complete for the demo scope.
 - Tencent staging rehearsal: complete for private local-on-server validation.
 - Manual staging deploy workflow: complete for the private staging rehearsal.
-- AWS demo: plan-only infrastructure and guardrails complete; no resources created.
+- AWS demo: plan-only infrastructure, workflow, checklist, and guardrails complete; no resources created.
 - Public HTTPS/DNS: not enabled yet.
 
 ## Completed Engineering Surfaces
@@ -35,6 +35,7 @@ Recent verified checks include:
 - `corepack pnpm typecheck` passed locally.
 - GitHub Actions CI passed on `master` with `quality`, `integration`, and `infrastructure` jobs.
 - Terraform formatting, backend-free provider initialization, and `terraform validate` passed in CI for `infra/aws-lightsail`.
+- Manual `AWS Lightsail Plan` workflow exists for protected plan-only review through the `aws-demo-plan` environment. It has no apply job and requires separate AWS credential/environment setup.
 - Private Tencent staging health checks passed through `127.0.0.1:4000`.
 - Tencent staging `pnpm demo:flow` previously passed inside the API container.
 - Manual `Deploy Tencent Staging` workflow run [`28742059040`](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) passed on 2026-07-05 with staging-only GitHub environment secrets, remote rebuild, health checks, incident open/resolve, and `Demo flow completed successfully`.
@@ -62,11 +63,12 @@ When maintaining staging automation:
 
 When ready to continue AWS preparation:
 
-1. Review [`deployment/aws-cost-estimate.md`](deployment/aws-cost-estimate.md).
-2. Create or confirm a low AWS Budget alert.
-3. Run `terraform plan` for [`../infra/aws-lightsail`](../infra/aws-lightsail) in an approved AWS environment.
-4. Review the plan and monthly cost before any apply.
-5. Keep DNS and HTTPS changes separate from infrastructure provisioning unless explicitly approved together.
+1. Follow [`deployment/aws-plan-checklist.md`](deployment/aws-plan-checklist.md).
+2. Review [`deployment/aws-cost-estimate.md`](deployment/aws-cost-estimate.md).
+3. Create or confirm a low AWS Budget alert.
+4. Run `terraform plan` for [`../infra/aws-lightsail`](../infra/aws-lightsail) locally or through the protected manual workflow in an approved AWS environment.
+5. Review the plan and monthly cost before any apply.
+6. Keep DNS and HTTPS changes separate from infrastructure provisioning unless explicitly approved together.
 
 ## Current Boundary
 

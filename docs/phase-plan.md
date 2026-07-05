@@ -73,10 +73,13 @@ Completed preparation:
 - Added a plan-only Lightsail Terraform skeleton in [`../infra/aws-lightsail`](../infra/aws-lightsail) with SSH-only default exposure, optional HTTP/HTTPS/static IP gates, and destroy documentation.
 - Added a reviewed AWS cost estimate and budget guardrail in [`deployment/aws-cost-estimate.md`](deployment/aws-cost-estimate.md).
 - Added CI validation for Terraform formatting, provider initialization without a backend, and `terraform validate`.
+- Added a protected manual `AWS Lightsail Plan` GitHub Actions workflow for `terraform plan` through the `aws-demo-plan` environment. The workflow has no apply job.
+- Added the operator checklist in [`deployment/aws-plan-checklist.md`](deployment/aws-plan-checklist.md) for budget, OIDC role, Terraform variables, plan review, and public exposure gates.
 
 Remaining approval gates:
 
-- Run and review `terraform plan` in an environment with AWS credentials.
+- Configure the `aws-demo-plan` GitHub environment or a local AWS profile with least-privilege plan credentials.
+- Run and review `terraform plan` in an approved environment with AWS credentials.
 - Create or confirm an AWS Budget alert before any apply.
 - Do not run `terraform apply`, create DNS records, or expose public HTTPS without explicit approval.
 

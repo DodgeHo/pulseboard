@@ -2,7 +2,7 @@
 
 This directory contains a low-cost Terraform skeleton for the eventual public PulseBoard demo host. It is intentionally conservative: by default it prepares a small Ubuntu Lightsail instance for Docker Compose and opens only SSH from explicitly allowed CIDR ranges.
 
-Do not run `terraform apply` until the AWS budget alert, cost review, rollback plan, and DNS/TLS plan have been approved.
+Do not run `terraform apply` until the AWS budget alert, cost review, rollback plan, and DNS/TLS plan have been approved. Use the operator checklist in [`../../docs/deployment/aws-plan-checklist.md`](../../docs/deployment/aws-plan-checklist.md) before running a plan with real AWS credentials.
 
 ## What This Creates
 
@@ -36,6 +36,8 @@ It does not create RDS, ElastiCache, EKS, NAT Gateway, ALB, Route 53 records, AC
 
 ## Plan Only
 
+Local plan, after AWS credentials and `terraform.tfvars` are ready:
+
 ```bash
 terraform init
 terraform fmt -check
@@ -44,6 +46,8 @@ terraform plan -var-file=terraform.tfvars
 ```
 
 Review the plan before applying. The expected plan should be small and should not include managed databases, load balancers, NAT gateways, Kubernetes clusters, DNS records, or certificates.
+
+The repository also includes a manual GitHub Actions workflow, [`../../.github/workflows/aws-lightsail-plan.yml`](../../.github/workflows/aws-lightsail-plan.yml), that runs the same review path through a protected `aws-demo-plan` environment. It is plan-only and has no apply job.
 
 ## Apply Gate
 

@@ -1,0 +1,80 @@
+name: AWS Lightsail Plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      enable_http:
+        description: Open port 80 in the reviewed Terraform plan.
+        type: boolean
+        default: false
+      enable_https:
+        description: Open port 443 in the reviewed Terraform plan.
+        type: boolean
+        default: false
+      attach_static_ip:
+        description: Include a Lightsail static IP in the reviewed Terraform plan.
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: aws-lightsail-plan
+  cancel-in-progress: false
+
+jobs:
+  terraform-plan:
+    name: Terraform plan only
+    runs-on: ubuntu-latest
+    environment: aws-demo-plan
+    defaults:
+      run:
+        shell: bash
+        working-directory: infra/aws-lightsail
+    env:
+      TF_IN_AUTOMATION: "true"
+      TF_INPUT: "false"
+      TF_VAR_aws_region: ${{ vars.AWS_REGION || 'us-east-1' }}
+      TF_VAR_availability_zone: ${{ vars.AWS_LIGHTSAIL_AVAILABILITY_ZONE || 'us-east-1a' }}
+      TF_VAR_name_prefix: ${{ vars.AWS_LIGHTSAIL_NAME_PREFIX || 'pulseboard-demo' }}
+      TF_VAR_blueprint_id: ${{ vars.AWS_LIGHTSAIL_BLUEPRINT_ID || 'ubuntu_22_04' }}
+      TF_VAR_bundle_id: ${{ vars.AWS_LIGHTSAIL_BUNDLE_ID || 'nano_3_0' }}
+      TF_VAR_enable_http: ${{ inputs.enable_http }}
+      TF_VAR_enable_https: ${{ inputs.enable_https }}
+      TF_VAR_attach_static_ip: ${{ inputs.attach_static_ip }}
+      TF_VAR_ssh_public_key: ${{ secrets.AWS_LIGHTSAIL_SSH_PUBLIC_KEY }}
+      TF_VAR_ssh_allowed_cidrs: ${{ secrets.AWS_LIGHTSAIL_SSH_ALLOWED_CIDRS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plan-only configuration
+        run: |
+          set -euo pipefail
+          test -n "${{ secrets.AWS_DEMO_PLAN_ROLE_ARN }}"
+          test -n "$TF_VAR_ssh_public_key"
+          test -n "$TF_VAR_ssh_allowed_cidrs"
+          if [[ "$TF_VAR_ssh_allowed_cidrs" != \[*\] ]]; then
+            echo "AWS_LIGHTSAIL_SSH_ALLOWED_CIDRS must be an HCL list, for example: [\"203.0.113.10/32\"]" >&2
+            exit 1
+          fi
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEMO_PLAN_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform format check
+        run: terraform fmt -check
+
+      - name: Terraform init without backend
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        run: terraform validate -no-color
+
+      - name: Terraform plan only
+        run: terraform plan -no-color -lock=false -input=false

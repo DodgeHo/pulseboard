@@ -65,7 +65,7 @@ Before creating resources, add Terraform that can:
 - output the public IP and deployment notes,
 - destroy all provisioned resources.
 
-A plan-only Lightsail skeleton lives in [`../../infra/aws-lightsail`](../../infra/aws-lightsail). Review and run `terraform plan` there before any AWS resource is created.
+A plan-only Lightsail skeleton lives in [`../../infra/aws-lightsail`](../../infra/aws-lightsail). Review [`aws-plan-checklist.md`](aws-plan-checklist.md) and run `terraform plan` there, or use the protected manual [`AWS Lightsail Plan`](../../.github/workflows/aws-lightsail-plan.yml) workflow, before any AWS resource is created.
 
 Required commands before apply:
 

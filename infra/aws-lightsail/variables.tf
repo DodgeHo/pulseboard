@@ -36,7 +36,7 @@ variable "bundle_id" {
 variable "ssh_public_key" {
   description = "Public SSH key material for the deploy operator. Never put a private key here."
   type        = string
-  sensitive   = false
+  sensitive   = true
 
   validation {
     condition     = can(regex("^ssh-(rsa|ed25519) ", var.ssh_public_key))
