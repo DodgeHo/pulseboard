@@ -118,7 +118,7 @@ async function main() {
   });
 
   console.log('Seed complete.');
-  console.log(`Demo API key: ${demoApiKey}`);
+  console.log('Demo API key was read from DEMO_API_KEY and stored as a hash.');
 }
 
 main()
@@ -129,4 +129,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-
