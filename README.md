@@ -80,6 +80,11 @@ Useful endpoints:
 - `GET /docs`
 - `GET /openapi.json`
 
+Public demo entry point:
+
+- `https://anlan.store/`
+- `https://anlan.store/docs`
+
 API examples are available in [`docs/api-examples.md`](docs/api-examples.md).
 
 For a reviewer-oriented guide through the architecture, demo flow, and interview discussion points, see [`docs/interview-walkthrough.md`](docs/interview-walkthrough.md).
@@ -142,6 +147,7 @@ Deployment notes:
 - [`docs/phase-plan.md`](docs/phase-plan.md)
 - [`docs/deployment/tencent-staging.md`](docs/deployment/tencent-staging.md)
 - [`docs/deployment/tencent-staging-deploy-secrets.md`](docs/deployment/tencent-staging-deploy-secrets.md)
+- [`docs/deployment/anlan-public-site.md`](docs/deployment/anlan-public-site.md)
 - [`docs/deployment/aws-low-cost.md`](docs/deployment/aws-low-cost.md)
 - [`docs/deployment/aws-cost-estimate.md`](docs/deployment/aws-cost-estimate.md)
 

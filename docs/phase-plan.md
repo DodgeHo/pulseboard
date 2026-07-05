@@ -53,10 +53,12 @@ Completed staging rehearsal:
 - Added a manual `Deploy Tencent Staging` GitHub Actions workflow that can deploy an approved ref over SSH, rebuild compose, run health checks, and execute `pnpm demo:flow` after environment secrets are configured.
 - Added a staging deploy secrets checklist in [`deployment/tencent-staging-deploy-secrets.md`](deployment/tencent-staging-deploy-secrets.md) for the GitHub environment, deploy key, pinned known host entry, and non-sensitive completion evidence.
 - Created the `tencent-staging` GitHub environment, configured staging-only deployment secrets, and passed the manual deployment rehearsal on 2026-07-05. Evidence: [`Deploy Tencent Staging` run 28742059040](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) rebuilt the stack, verified local-on-server health checks, opened and resolved a demo incident, and completed `pnpm demo:flow` successfully.
+- Published the PulseBoard portfolio homepage at `https://anlan.store/` on the existing Tencent Ubuntu host, with Nginx reverse proxy routes for `/docs`, `/openapi.json`, `/health/live`, `/health/ready`, and authenticated `/v1/*` API paths.
+- Expanded the existing Let's Encrypt certificate to include `www.anlan.store`, then canonicalized `www` to the bare domain.
 
 Remaining staging hardening:
 
-- HTTPS through a reverse proxy requires explicit approval before public exposure.
+- Further public hostnames, DNS changes, or extra exposed ports require explicit approval.
 - Keep the staging deploy key scoped to this rehearsal and rotate or remove it when the host is retired.
 
 ## Phase 3: Low-Cost AWS Demo
@@ -88,7 +90,7 @@ Remaining approval gates:
 - Configure the `aws-demo-plan` GitHub environment or a local AWS profile with least-privilege plan credentials.
 - Run and review `terraform plan` in an approved environment with AWS credentials.
 - Create or confirm an AWS Budget alert before any apply.
-- Do not run `terraform apply`, create DNS records, or expose public HTTPS without explicit approval.
+- Do not run `terraform apply`, create DNS records, or expose additional public AWS HTTPS endpoints without explicit approval.
 
 ## Phase 4: Worker Incident Automation Hardening
 
@@ -119,11 +121,12 @@ Completed:
 - Added a reviewer-oriented README with product scope, architecture, setup, demo flow, operational signals, deployment plan, cost posture, and tradeoffs.
 - Added [`interview-walkthrough.md`](interview-walkthrough.md) to guide reviewers through the API, worker, data model, demo flow, deployment documents, and AWS plan.
 - Added [`project-status.md`](project-status.md) to summarize completed surfaces, evidence, approval gates, and the boundary between a portfolio-grade demo and a public production service.
+- Added [`deployment/anlan-public-site.md`](deployment/anlan-public-site.md) and `deploy/anlan/` assets for the public homepage and Nginx reverse proxy.
 - Expanded `pnpm demo:flow` into a realistic customer journey that covers workspace/project/service provisioning, check execution, incident open/resolve, webhook ingest, audit logs, usage metrics, and temporary API key revocation.
-- Kept public-cloud actions separate from code review readiness: the repository can be shared now, while DNS, HTTPS, AWS credentials, Terraform apply, and billable resources remain explicit approval gates.
+- Kept AWS actions separate from code review readiness: the repository and public homepage can be shared now, while AWS credentials, Terraform apply, additional DNS, and billable resources remain explicit approval gates.
 
 Remaining optional improvements:
 
-- Record a short terminal demo or screenshots after the public demo target is approved.
+- Record a short terminal demo or screenshots from the public homepage and API docs.
 - Add a small frontend only if the portfolio strategy changes; the current project is intentionally backend-first.
-- Enable public HTTPS only after DNS, TLS, budget, secrets, and rollback have been reviewed together.
+- Move the public demo from the existing Tencent host to AWS only after budget, secrets, DNS, TLS, and rollback have been reviewed together.

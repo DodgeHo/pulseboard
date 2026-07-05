@@ -12,6 +12,23 @@ curl http://localhost:4000/health/ready
 - `/health/live` proves the API process is responding.
 - `/health/ready` proves the API can reach PostgreSQL and Redis.
 
+## Public Demo Checks
+
+The current public portfolio entry point is `https://anlan.store/` on the existing Tencent Ubuntu host.
+
+```bash
+curl -I https://www.anlan.store
+curl https://anlan.store/health/live
+curl https://anlan.store/health/ready
+curl -I https://anlan.store/docs
+curl https://anlan.store/openapi.json
+```
+
+- `www.anlan.store` should redirect to `https://anlan.store/`.
+- `/v1/*` API routes remain API-key protected.
+- PostgreSQL and Redis remain private to Docker Compose.
+- Existing study portal paths `/saa/`, `/sap/`, and `/ispm/` remain served by Nginx.
+
 ## Request Correlation
 
 The API returns an `X-Request-Id` header on every response. Clients may pass their own request id:

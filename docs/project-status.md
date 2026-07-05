@@ -4,7 +4,7 @@ This document summarizes the current PulseBoard delivery state for reviewers and
 
 ## Overall Status
 
-PulseBoard is complete as a local-first backend/platform portfolio project and has passed a private Linux staging rehearsal. The remaining work is intentionally gated on explicit approval because it involves public exposure, GitHub deployment secrets, DNS, AWS credentials, or billable cloud resources.
+PulseBoard is complete as a local-first backend/platform portfolio project, has passed a private Linux staging rehearsal, and is published as a public portfolio homepage on the existing `anlan.store` host. The remaining work is intentionally gated on explicit approval because it involves additional public exposure, GitHub deployment secrets, DNS changes, AWS credentials, or billable cloud resources.
 
 Approximate readiness:
 
@@ -12,8 +12,9 @@ Approximate readiness:
 - Worker and incident automation: complete for the demo scope.
 - Tencent staging rehearsal: complete for private local-on-server validation.
 - Manual staging deploy workflow: complete for the private staging rehearsal.
+- Public homepage and HTTPS reverse proxy on the existing Tencent host: complete for the current portfolio demo.
 - AWS demo: plan-only infrastructure, workflow, checklist, and guardrails complete; no resources created.
-- Public HTTPS/DNS: not enabled yet.
+- AWS public deployment: not enabled yet.
 
 ## Completed Engineering Surfaces
 
@@ -27,6 +28,7 @@ Approximate readiness:
 - CI jobs for typecheck, unit tests, integration tests, and Terraform validation.
 - Demo flow that exercises workspace/project/service provisioning, uptime checks, incident open/resolve, webhook ingest, audit logs, usage metrics, and temporary API key revocation.
 - Deployment documentation for local development, Tencent staging, AWS low-cost planning, cost guardrails, and operational runbooks.
+- Public `anlan.store` homepage and Nginx reverse proxy assets for the existing Tencent host.
 
 ## Verified Evidence
 
@@ -43,13 +45,16 @@ Recent verified checks include:
 - Staging API, PostgreSQL, Redis, and worker containers were healthy/running after the latest documentation and workflow updates.
 - Recent GitHub Actions CI runs on `master` passed with quality, integration, and infrastructure jobs after the phase-readiness and workflow action updates.
 - The Tencent staging checkout was fast-forwarded after the latest repository updates on 2026-07-05 and remained clean, with `/health/live` and `/health/ready` passing locally on the host.
+- `https://anlan.store/` serves the PulseBoard public homepage over HTTPS.
+- `https://anlan.store/docs`, `https://anlan.store/openapi.json`, `/health/live`, and `/health/ready` proxy successfully to the local API on the host.
+- `https://www.anlan.store/` has a valid certificate and redirects to `https://anlan.store/`.
 
 ## Explicit Approval Gates
 
 Do not cross these gates without human approval:
 
 - Rotating staging deploy SSH credentials or moving them to a different host.
-- Creating DNS records or exposing public HTTPS.
+- Creating or changing DNS records, adding new public hostnames, changing TLS coverage, or exposing additional ports beyond the current `anlan.store` setup.
 - Running `terraform plan` with real AWS credentials.
 - Creating an AWS Budget alert in the AWS account.
 - Running `terraform apply` or creating any AWS/Tencent resources.
@@ -75,6 +80,6 @@ When ready to continue AWS preparation:
 
 ## Current Boundary
 
-The project is suitable to share as a code repository and interview discussion artifact now. It should not be described as a public production service until DNS, HTTPS, deployment secrets, budget alerts, and a final AWS or approved public host deployment are completed.
+The project is suitable to share as a code repository, public demo homepage, and interview discussion artifact now. It should not be described as a production service or AWS-hosted service until AWS credentials, budget alerts, Terraform apply, final DNS/TLS choices, and ongoing operations are explicitly approved and completed.
 
 From an interview-readiness perspective, the repository is complete for a backend/platform/cloud portfolio review. The remaining tasks are operational publication tasks, not core product implementation tasks, and they require account-level credentials or billable cloud-resource approval.
