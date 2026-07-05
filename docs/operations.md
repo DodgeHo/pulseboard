@@ -33,7 +33,14 @@ Error responses also include `requestId`, so a reported API failure can be match
 
 ## Background Worker Signals
 
-Worker logs include queue scheduling, uptime check execution, incident transitions, notification sends, and failed BullMQ jobs. In Phase 1, the worker records check activity in PostgreSQL through `CheckRun`, `AuditLog`, and `UsageMetric`.
+Worker logs include queue scheduling, uptime check execution, incident transitions, notification sends, and failed BullMQ jobs. The worker records check activity in PostgreSQL through `CheckRun`, `AuditLog`, and `UsageMetric`.
+
+Incident automation follows a small state machine:
+
+- Consecutive `DOWN` or `DEGRADED` check runs open an incident once the check threshold is reached.
+- Consecutive `UP` check runs resolve an `OPEN` or `ACKNOWLEDGED` incident once the recovery threshold is reached.
+- Mock email or Slack notifications are stored in PostgreSQL and then marked `SENT` by the notification worker.
+- Audit logs are workspace-scoped for check runs, incident transitions, and incident-linked notifications.
 
 ## Local Recovery
 

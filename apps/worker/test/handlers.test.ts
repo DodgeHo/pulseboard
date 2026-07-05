@@ -38,11 +38,13 @@ function createQueuesStub() {
 
 function createPrismaStub(options: {
   recentStatuses: Array<'UP' | 'DOWN' | 'DEGRADED'>;
+  dueChecks?: Array<{ id: string }>;
   openIncident?: { id: string; title: string; status: 'OPEN' | 'ACKNOWLEDGED' };
+  notification?: Record<string, unknown> | null;
 }) {
   return {
     uptimeCheck: {
-      findMany: vi.fn().mockResolvedValue([]),
+      findMany: vi.fn().mockResolvedValue(options.dueChecks ?? []),
       findUnique: vi.fn().mockResolvedValue(baseCheck),
       update: vi.fn().mockResolvedValue(baseCheck),
     },
@@ -65,8 +67,8 @@ function createPrismaStub(options: {
     },
     notification: {
       create: vi.fn().mockResolvedValue({ id: 'notification_1' }),
-      findUnique: vi.fn(),
-      update: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue(options.notification ?? null),
+      update: vi.fn().mockResolvedValue({ id: 'notification_1', status: 'SENT' }),
     },
     auditLog: {
       create: vi.fn().mockResolvedValue({ id: 'audit_1' }),
@@ -151,6 +153,30 @@ describe('worker handlers', () => {
     });
   });
 
+  it('records a failed check without opening an incident before the threshold is reached', async () => {
+    const prisma = createPrismaStub({ recentStatuses: ['DOWN'] });
+    const queues = createQueuesStub();
+    const runHttpCheck = vi.fn().mockResolvedValue({
+      status: 'DOWN',
+      statusCode: 503,
+      latencyMs: 250,
+      errorMessage: 'Service unavailable',
+    }) satisfies HttpCheckRunner;
+    const handlers = createHandlers({ prisma, queues, runHttpCheck });
+
+    await handlers.performCheck('check_1');
+
+    expect(prisma.incident.create).not.toHaveBeenCalled();
+    expect(prisma.notification.create).not.toHaveBeenCalled();
+    expect(queues.notifications.add).not.toHaveBeenCalled();
+    expect(prisma.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        action: 'CHECK_RAN',
+        entityId: 'check_1',
+      }),
+    });
+  });
+
   it('resolves an open incident and queues a recovery notification after successful checks', async () => {
     const prisma = createPrismaStub({
       recentStatuses: ['UP'],
@@ -193,6 +219,82 @@ describe('worker handlers', () => {
         action: 'CHECK_RAN',
         entityId: 'check_1',
         metadata: expect.objectContaining({ statusCode: 200 }),
+      }),
+    });
+  });
+
+  it('queues due uptime checks for active services', async () => {
+    const prisma = createPrismaStub({
+      recentStatuses: [],
+      dueChecks: [{ id: 'check_1' }, { id: 'check_2' }],
+    });
+    const queues = createQueuesStub();
+    const runHttpCheck = vi.fn() satisfies HttpCheckRunner;
+    const handlers = createHandlers({ prisma, queues, runHttpCheck });
+
+    await handlers.runDueChecks();
+
+    expect(prisma.uptimeCheck.findMany).toHaveBeenCalledWith({
+      where: {
+        isActive: true,
+        nextRunAt: { lte: expect.any(Date) },
+        service: { status: 'ACTIVE' },
+      },
+      select: { id: true },
+      take: 100,
+      orderBy: { nextRunAt: 'asc' },
+    });
+    expect(queues.uptimeChecks.add).toHaveBeenCalledTimes(2);
+    expect(queues.uptimeChecks.add).toHaveBeenCalledWith(
+      'perform-check',
+      { uptimeCheckId: 'check_1' },
+      expect.objectContaining({ jobId: expect.stringMatching(/^perform-check_1-/) }),
+    );
+    expect(queues.uptimeChecks.add).toHaveBeenCalledWith(
+      'perform-check',
+      { uptimeCheckId: 'check_2' },
+      expect.objectContaining({ jobId: expect.stringMatching(/^perform-check_2-/) }),
+    );
+  });
+
+  it('marks notifications as sent and writes a workspace-scoped audit log', async () => {
+    const prisma = createPrismaStub({
+      recentStatuses: [],
+      notification: {
+        id: 'notification_1',
+        channel: 'EMAIL',
+        target: 'ops@example.com',
+        incident: {
+          service: {
+            project: {
+              workspaceId: 'workspace_1',
+            },
+          },
+        },
+      },
+    });
+    const queues = createQueuesStub();
+    const runHttpCheck = vi.fn() satisfies HttpCheckRunner;
+    const handlers = createHandlers({ prisma, queues, runHttpCheck });
+
+    await handlers.sendNotification('notification_1');
+
+    expect(prisma.notification.findUnique).toHaveBeenCalledWith({
+      where: { id: 'notification_1' },
+      include: { incident: { include: { service: { include: { project: true } } } } },
+    });
+    expect(prisma.notification.update).toHaveBeenCalledWith({
+      where: { id: 'notification_1' },
+      data: {
+        status: 'SENT',
+        sentAt: expect.any(Date),
+      },
+    });
+    expect(prisma.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        action: 'NOTIFICATION_SENT',
+        entityId: 'notification_1',
+        workspaceId: 'workspace_1',
       }),
     });
   });

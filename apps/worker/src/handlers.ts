@@ -149,6 +149,7 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
           message: decision.reason,
         },
       });
+      logger.info({ incidentId: incident.id, serviceId: check.serviceId, uptimeCheckId }, 'opened incident after uptime threshold');
     }
 
     if (decision.action === 'resolve' && openIncident) {
@@ -183,6 +184,7 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
           message: decision.reason,
         },
       });
+      logger.info({ incidentId: incident.id, serviceId: check.serviceId, uptimeCheckId }, 'resolved incident after recovery threshold');
     }
 
     await prisma.auditLog.create({
@@ -215,6 +217,7 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
   async function sendNotification(notificationId: string) {
     const notification = await prisma.notification.findUnique({
       where: { id: notificationId },
+      include: { incident: { include: { service: { include: { project: true } } } } },
     });
 
     if (!notification) return;
@@ -232,6 +235,7 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
         action: 'NOTIFICATION_SENT',
         entityType: 'notification',
         entityId: notification.id,
+        workspaceId: notification.incident?.service.project.workspaceId,
         actorType: 'worker',
         message: `Mock ${notification.channel.toLowerCase()} notification sent to ${notification.target}.`,
       },

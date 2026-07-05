@@ -53,3 +53,19 @@ Constraints:
 - Add AWS Budget alerts before provisioning.
 - Provide Terraform plan, cost estimate, and destroy documentation before creating resources.
 - Follow the low-cost AWS plan in [`deployment/aws-low-cost.md`](deployment/aws-low-cost.md).
+
+## Phase 4: Worker Incident Automation Hardening
+
+Goal: make the background processing path credible enough to discuss in backend/platform interviews.
+
+Completed locally:
+
+- Worker opens incidents after configured consecutive failing checks and resolves them after configured recovery checks.
+- Incident transitions enqueue mocked notifications and write workspace-scoped audit logs.
+- Notification delivery records are marked `SENT` by the notification worker.
+- Handler-level tests cover incident open, incident resolve, below-threshold failures, due-check queueing, and notification audit behavior.
+
+Remaining hardening:
+
+- Re-run compose E2E after the Phase 4 worker changes in a Linux environment.
+- Add a richer demo script path that shows both incident opening and recovery once the public flow supports controlled failing/recovering endpoints.
