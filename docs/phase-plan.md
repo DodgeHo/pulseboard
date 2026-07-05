@@ -48,11 +48,12 @@ Completed staging rehearsal:
 - `pnpm demo:flow` passed inside the staging API container, including incident open, controlled recovery, incident resolution, webhook ingest, audit logs, usage metrics, and temporary key revocation.
 - Added a manual `Deploy Tencent Staging` GitHub Actions workflow that can deploy an approved ref over SSH, rebuild compose, run health checks, and execute `pnpm demo:flow` after environment secrets are configured.
 - Added a staging deploy secrets checklist in [`deployment/tencent-staging-deploy-secrets.md`](deployment/tencent-staging-deploy-secrets.md) for the GitHub environment, deploy key, pinned known host entry, and non-sensitive completion evidence.
+- Created the `tencent-staging` GitHub environment, configured staging-only deployment secrets, and passed the manual deployment rehearsal on 2026-07-05. Evidence: [`Deploy Tencent Staging` run 28742059040](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) rebuilt the stack, verified local-on-server health checks, opened and resolved a demo incident, and completed `pnpm demo:flow` successfully.
 
 Remaining staging hardening:
 
 - HTTPS through a reverse proxy requires explicit approval before public exposure.
-- GitHub Actions deployment rehearsal still needs explicit approval to create staging-only deploy credentials, configure GitHub environment secrets, and run the manual workflow.
+- Keep the staging deploy key scoped to this rehearsal and rotate or remove it when the host is retired.
 
 ## Phase 3: Low-Cost AWS Demo
 

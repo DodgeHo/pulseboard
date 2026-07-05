@@ -11,7 +11,7 @@ Approximate readiness:
 - Local backend MVP: complete.
 - Worker and incident automation: complete for the demo scope.
 - Tencent staging rehearsal: complete for private local-on-server validation.
-- Manual staging deploy workflow: implemented, not run with real GitHub environment secrets yet.
+- Manual staging deploy workflow: complete for the private staging rehearsal.
 - AWS demo: plan-only infrastructure and guardrails complete; no resources created.
 - Public HTTPS/DNS: not enabled yet.
 
@@ -37,15 +37,14 @@ Recent verified checks include:
 - Terraform formatting, backend-free provider initialization, and `terraform validate` passed in CI for `infra/aws-lightsail`.
 - Private Tencent staging health checks passed through `127.0.0.1:4000`.
 - Tencent staging `pnpm demo:flow` previously passed inside the API container.
+- Manual `Deploy Tencent Staging` workflow run [`28742059040`](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) passed on 2026-07-05 with staging-only GitHub environment secrets, remote rebuild, health checks, incident open/resolve, and `Demo flow completed successfully`.
 - Staging API, PostgreSQL, Redis, and worker containers were healthy/running after the latest documentation and workflow updates.
 
 ## Explicit Approval Gates
 
 Do not cross these gates without human approval:
 
-- Creating or rotating staging deploy SSH credentials.
-- Adding GitHub environment secrets for `tencent-staging`.
-- Running the manual `Deploy Tencent Staging` workflow against the server.
+- Rotating staging deploy SSH credentials or moving them to a different host.
 - Creating DNS records or exposing public HTTPS.
 - Running `terraform plan` with real AWS credentials.
 - Creating an AWS Budget alert in the AWS account.
@@ -54,13 +53,12 @@ Do not cross these gates without human approval:
 
 ## Recommended Next Operator Steps
 
-When ready to continue staging automation:
+When maintaining staging automation:
 
 1. Review [`deployment/tencent-staging-deploy-secrets.md`](deployment/tencent-staging-deploy-secrets.md).
-2. Create a staging-only deploy key after approval.
-3. Add GitHub environment secrets under `tencent-staging`.
-4. Run the manual staging deploy workflow with a reviewed commit SHA.
-5. Record only non-sensitive evidence: workflow URL, deployed ref, health result, and demo flow result.
+2. Run the manual staging deploy workflow with a reviewed commit SHA after code changes that affect deployment.
+3. Record only non-sensitive evidence: workflow URL, deployed ref, health result, and demo flow result.
+4. Rotate or remove the staging-only deploy key when the host is retired.
 
 When ready to continue AWS preparation:
 
