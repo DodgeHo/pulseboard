@@ -69,6 +69,7 @@ Before using the Tencent Cloud Ubuntu server:
 - Put HTTPS and reverse proxy config in documented files before exposing the API.
 - Keep rollback simple: stop services, pull the previous image or commit, restart.
 - See [`deployment/tencent-staging.md`](deployment/tencent-staging.md).
+- Before using the manual GitHub Actions deployment workflow, see [`deployment/tencent-staging-deploy-secrets.md`](deployment/tencent-staging-deploy-secrets.md).
 
 ## AWS Guardrails
 

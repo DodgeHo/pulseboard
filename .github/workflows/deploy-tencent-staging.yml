@@ -19,6 +19,26 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Validate deploy ref
+        env:
+          DEPLOY_REF: ${{ inputs.deploy_ref }}
+        run: |
+          set -euo pipefail
+          if [ "${#DEPLOY_REF}" -gt 128 ]; then
+            echo "deploy_ref must be 128 characters or fewer." >&2
+            exit 1
+          fi
+          case "$DEPLOY_REF" in
+            ""|-*|*[^A-Za-z0-9._/@-]*|*..*|*@{*)
+              echo "deploy_ref has an unsafe Git ref shape." >&2
+              exit 1
+              ;;
+          esac
+          if ! git check-ref-format --allow-onelevel "$DEPLOY_REF"; then
+            echo "deploy_ref has an unsafe Git ref shape." >&2
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.deploy_ref }}
@@ -58,8 +78,9 @@ jobs:
           DEPLOY_REF: ${{ inputs.deploy_ref }}
         run: |
           set -euo pipefail
-          ssh pulseboard-staging "DEPLOY_REF='$DEPLOY_REF' bash -se" <<'REMOTE'
+          ssh pulseboard-staging bash -se -- "$DEPLOY_REF" <<'REMOTE'
           set -euo pipefail
+          DEPLOY_REF="$1"
           cd ~/pulseboard
 
           if [ -n "$(git status --porcelain)" ]; then

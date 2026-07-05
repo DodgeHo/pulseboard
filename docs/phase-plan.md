@@ -47,11 +47,12 @@ Completed staging rehearsal:
 - Local-on-server API health checks passed through `127.0.0.1:4000` without exposing PostgreSQL, Redis, or the API publicly.
 - `pnpm demo:flow` passed inside the staging API container, including incident open, controlled recovery, incident resolution, webhook ingest, audit logs, usage metrics, and temporary key revocation.
 - Added a manual `Deploy Tencent Staging` GitHub Actions workflow that can deploy an approved ref over SSH, rebuild compose, run health checks, and execute `pnpm demo:flow` after environment secrets are configured.
+- Added a staging deploy secrets checklist in [`deployment/tencent-staging-deploy-secrets.md`](deployment/tencent-staging-deploy-secrets.md) for the GitHub environment, deploy key, pinned known host entry, and non-sensitive completion evidence.
 
 Remaining staging hardening:
 
 - HTTPS through a reverse proxy requires explicit approval before public exposure.
-- GitHub Actions deployment rehearsal still needs a staging-only deploy key, pinned known host entry, GitHub environment approval, and an explicit manual run.
+- GitHub Actions deployment rehearsal still needs explicit approval to create staging-only deploy credentials, configure GitHub environment secrets, and run the manual workflow.
 
 ## Phase 3: Low-Cost AWS Demo
 
@@ -70,10 +71,11 @@ Completed preparation:
 
 - Added a plan-only Lightsail Terraform skeleton in [`../infra/aws-lightsail`](../infra/aws-lightsail) with SSH-only default exposure, optional HTTP/HTTPS/static IP gates, and destroy documentation.
 - Added a reviewed AWS cost estimate and budget guardrail in [`deployment/aws-cost-estimate.md`](deployment/aws-cost-estimate.md).
+- Added CI validation for Terraform formatting, provider initialization without a backend, and `terraform validate`.
 
 Remaining approval gates:
 
-- Run `terraform init`, `terraform fmt -check`, `terraform validate`, and `terraform plan` in an environment with Terraform installed.
+- Run and review `terraform plan` in an environment with AWS credentials.
 - Create or confirm an AWS Budget alert before any apply.
 - Do not run `terraform apply`, create DNS records, or expose public HTTPS without explicit approval.
 

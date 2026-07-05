@@ -14,7 +14,7 @@ Use staging to prove:
 
 Do not use staging as the final public demo if latency or network accessibility is poor for overseas reviewers.
 
-Use the operator checklist in [`tencent-staging-checklist.md`](tencent-staging-checklist.md) before touching any real staging host.
+Use the operator checklist in [`tencent-staging-checklist.md`](tencent-staging-checklist.md) before touching any real staging host. Use [`tencent-staging-deploy-secrets.md`](tencent-staging-deploy-secrets.md) before configuring the manual GitHub Actions deployment rehearsal.
 
 ## Secrets Policy
 
@@ -142,6 +142,8 @@ For schema migrations, rollback should be treated carefully. Prefer forward fixe
 ## Manual GitHub Actions Deployment Rehearsal
 
 The manual workflow in [`.github/workflows/deploy-tencent-staging.yml`](../../.github/workflows/deploy-tencent-staging.yml) can rehearse a staging deploy after the repository and server are stable. It is intentionally `workflow_dispatch` only and should not be run until the staging environment is approved for automated access.
+
+Before adding GitHub secrets or running the workflow, follow [`tencent-staging-deploy-secrets.md`](tencent-staging-deploy-secrets.md).
 
 Required GitHub environment:
 

@@ -138,6 +138,7 @@ Deployment notes:
 - [`docs/interview-walkthrough.md`](docs/interview-walkthrough.md)
 - [`docs/phase-plan.md`](docs/phase-plan.md)
 - [`docs/deployment/tencent-staging.md`](docs/deployment/tencent-staging.md)
+- [`docs/deployment/tencent-staging-deploy-secrets.md`](docs/deployment/tencent-staging-deploy-secrets.md)
 - [`docs/deployment/aws-low-cost.md`](docs/deployment/aws-low-cost.md)
 - [`docs/deployment/aws-cost-estimate.md`](docs/deployment/aws-cost-estimate.md)
 
