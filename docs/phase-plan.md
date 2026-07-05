@@ -46,11 +46,12 @@ Completed staging rehearsal:
 - Docker Compose production example rebuilt and restarted successfully on the Tencent Ubuntu staging host on 2026-07-05.
 - Local-on-server API health checks passed through `127.0.0.1:4000` without exposing PostgreSQL, Redis, or the API publicly.
 - `pnpm demo:flow` passed inside the staging API container, including incident open, controlled recovery, incident resolution, webhook ingest, audit logs, usage metrics, and temporary key revocation.
+- Added a manual `Deploy Tencent Staging` GitHub Actions workflow that can deploy an approved ref over SSH, rebuild compose, run health checks, and execute `pnpm demo:flow` after environment secrets are configured.
 
 Remaining staging hardening:
 
 - HTTPS through a reverse proxy requires explicit approval before public exposure.
-- GitHub Actions deployment rehearsal still needs a safe deploy key or token strategy.
+- GitHub Actions deployment rehearsal still needs a staging-only deploy key, pinned known host entry, GitHub environment approval, and an explicit manual run.
 
 ## Phase 3: Low-Cost AWS Demo
 

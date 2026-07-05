@@ -139,6 +139,24 @@ curl http://127.0.0.1:4000/health/ready
 
 For schema migrations, rollback should be treated carefully. Prefer forward fixes unless the failed migration is known to be reversible and no important data has been written.
 
+## Manual GitHub Actions Deployment Rehearsal
+
+The manual workflow in [`.github/workflows/deploy-tencent-staging.yml`](../../.github/workflows/deploy-tencent-staging.yml) can rehearse a staging deploy after the repository and server are stable. It is intentionally `workflow_dispatch` only and should not be run until the staging environment is approved for automated access.
+
+Required GitHub environment:
+
+- Environment name: `tencent-staging`
+- Optional protection rule: manual reviewer approval before deployment
+
+Required GitHub secrets:
+
+- `TENCENT_STAGING_HOST`: staging host name or IP
+- `TENCENT_STAGING_USER`: SSH user, usually `ubuntu`
+- `TENCENT_STAGING_SSH_KEY`: private deploy key for this staging host only
+- `TENCENT_STAGING_KNOWN_HOSTS`: pinned SSH host key entry
+
+The workflow refuses to deploy over a dirty server worktree, checks out the selected ref, rebuilds the production compose stack, verifies `127.0.0.1:4000` health endpoints, and runs `pnpm demo:flow` inside the API container. Do not add DNS or public HTTPS steps to this workflow until public exposure has been explicitly approved.
+
 ## Cleanup
 
 ```bash

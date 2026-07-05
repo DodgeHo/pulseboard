@@ -1,0 +1,85 @@
+name: Deploy Tencent Staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_ref:
+        description: Git ref, branch, tag, or SHA to deploy
+        required: true
+        default: master
+
+concurrency:
+  group: tencent-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: tencent-staging
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.deploy_ref }}
+
+      - name: Configure SSH
+        env:
+          STAGING_HOST: ${{ secrets.TENCENT_STAGING_HOST }}
+          STAGING_USER: ${{ secrets.TENCENT_STAGING_USER }}
+          STAGING_SSH_KEY: ${{ secrets.TENCENT_STAGING_SSH_KEY }}
+          STAGING_KNOWN_HOSTS: ${{ secrets.TENCENT_STAGING_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$STAGING_HOST"
+          test -n "$STAGING_USER"
+          test -n "$STAGING_SSH_KEY"
+          test -n "$STAGING_KNOWN_HOSTS"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$STAGING_SSH_KEY" > ~/.ssh/pulseboard_staging
+          chmod 600 ~/.ssh/pulseboard_staging
+          printf '%s\n' "$STAGING_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          cat > ~/.ssh/config <<EOF
+          Host pulseboard-staging
+            HostName $STAGING_HOST
+            User $STAGING_USER
+            IdentityFile ~/.ssh/pulseboard_staging
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Deploy and verify
+        env:
+          DEPLOY_REF: ${{ inputs.deploy_ref }}
+        run: |
+          set -euo pipefail
+          ssh pulseboard-staging "DEPLOY_REF='$DEPLOY_REF' bash -se" <<'REMOTE'
+          set -euo pipefail
+          cd ~/pulseboard
+
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Refusing to deploy over a dirty staging worktree." >&2
+            git status --short >&2
+            exit 1
+          fi
+
+          git fetch origin "$DEPLOY_REF"
+          git checkout -B master FETCH_HEAD
+
+          sudo env DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker compose -f docker-compose.production.example.yml up --build -d
+          curl -fsS http://127.0.0.1:4000/health/live
+          curl -fsS http://127.0.0.1:4000/health/ready
+
+          set -a
+          . ./.env
+          set +a
+          sudo docker compose -f docker-compose.production.example.yml exec -T \
+            -e PULSEBOARD_API_URL=http://127.0.0.1:4000 \
+            -e DEMO_API_KEY="$DEMO_API_KEY" \
+            api pnpm demo:flow
+          REMOTE
