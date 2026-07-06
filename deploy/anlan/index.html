@@ -1,448 +1,1499 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PulseBoard - Cloud-native SaaS Backend Demo</title>
+    <title>PulseBoard - Frontend + Backend Demo</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307111f'/%3E%3Cpath d='M14 38h10l5-20 8 32 5-12h8' fill='none' stroke='%236ee7f9' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
     <meta
       name="description"
-      content="PulseBoard is a cloud-native SaaS backend portfolio project for incident, uptime, and background-job monitoring."
+      content="PulseBoard is a cloud-native SaaS demo where the homepage shows both the frontend experience and the live backend platform surface."
     />
-    <style>
-      :root {
-        color-scheme: light;
-        --bg: #f6f7f9;
-        --surface: #ffffff;
-        --ink: #111827;
-        --muted: #4b5563;
-        --line: #d8dee8;
-        --accent: #0f766e;
-        --accent-strong: #134e4a;
-        --blue: #1d4ed8;
-        --amber: #b45309;
-        --shadow: 0 18px 48px rgba(17, 24, 39, 0.08);
-      }
+    <style>:root {
+  color-scheme: dark;
+  --bg: #05070d;
+  --bg-soft: #0b1020;
+  --card: rgba(13, 20, 38, 0.74);
+  --card-strong: rgba(18, 28, 52, 0.92);
+  --line: rgba(157, 174, 214, 0.18);
+  --line-strong: rgba(157, 174, 214, 0.32);
+  --text: #eef4ff;
+  --muted: #a7b4d0;
+  --dim: #73809d;
+  --cyan: #67e8f9;
+  --mint: #7dd3a7;
+  --violet: #a78bfa;
+  --amber: #f7c66b;
+  --rose: #fb7185;
+  --good: #34d399;
+  --warn: #fbbf24;
+  --bad: #fb7185;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  --radius-xl: 34px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+}
 
-      * {
-        box-sizing: border-box;
-      }
+* {
+  box-sizing: border-box;
+}
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: var(--bg);
-        color: var(--ink);
-        font-family:
-          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        line-height: 1.5;
-      }
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
 
-      a {
-        color: inherit;
-      }
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(103, 232, 249, 0.2), transparent 28rem),
+    radial-gradient(circle at 88% 8%, rgba(167, 139, 250, 0.2), transparent 28rem),
+    radial-gradient(circle at 50% 88%, rgba(125, 211, 167, 0.12), transparent 30rem),
+    linear-gradient(135deg, #05070d 0%, #08101e 48%, #070912 100%);
+  color: var(--text);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
 
-      .shell {
-        width: min(1120px, calc(100% - 32px));
-        margin: 0 auto;
-      }
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  content: "";
+  opacity: 0.34;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, #000, transparent 78%);
+}
 
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-        min-height: 72px;
-        border-bottom: 1px solid var(--line);
-      }
+body::after {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  opacity: 0.18;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
 
-      .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 750;
-        letter-spacing: 0;
-      }
+button,
+a {
+  color: inherit;
+}
 
-      .mark {
-        display: grid;
-        place-items: center;
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
-        background: var(--accent-strong);
-        color: #fff;
-        font-size: 16px;
-      }
+button {
+  font: inherit;
+}
 
-      .nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 10px;
-      }
+.app-shell {
+  width: min(1220px, calc(100% - 36px));
+  margin: 0 auto;
+}
 
-      .nav a,
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 40px;
-        padding: 0 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--surface);
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 650;
-        white-space: nowrap;
-      }
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 86px;
+}
 
-      .button.primary {
-        border-color: var(--accent-strong);
-        background: var(--accent-strong);
-        color: #fff;
-      }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: max-content;
+}
 
-      .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
-        gap: 42px;
-        align-items: center;
-        padding: 58px 0 42px;
-      }
+.brand-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(103, 232, 249, 0.4);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(103, 232, 249, 0.24), rgba(167, 139, 250, 0.2));
+  box-shadow: 0 0 34px rgba(103, 232, 249, 0.22);
+  font-weight: 900;
+}
 
-      .eyebrow {
-        color: var(--accent-strong);
-        font-size: 13px;
-        font-weight: 750;
-        letter-spacing: 0;
-        text-transform: uppercase;
-      }
+.brand-mark::after {
+  position: absolute;
+  inset: -40%;
+  content: "";
+  background: conic-gradient(from 0deg, transparent, rgba(103, 232, 249, 0.4), transparent 36%);
+  animation: spin 8s linear infinite;
+}
 
-      h1 {
-        max-width: 820px;
-        margin: 14px 0 16px;
-        font-size: clamp(42px, 6vw, 74px);
-        line-height: 0.96;
-        letter-spacing: 0;
-      }
+.brand-mark span {
+  position: relative;
+  z-index: 1;
+}
 
-      .lead {
-        max-width: 680px;
-        margin: 0;
-        color: var(--muted);
-        font-size: 18px;
-      }
+.brand-copy strong {
+  display: block;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
 
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 28px;
-      }
+.brand-copy small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
 
-      .live-panel {
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--surface);
-        box-shadow: var(--shadow);
-        overflow: hidden;
-      }
+.nav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
 
-      .panel-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 14px 16px;
-        border-bottom: 1px solid var(--line);
-        color: var(--muted);
-        font-size: 13px;
-      }
+.lang-select,
+.nav-link,
+.ghost-button,
+.primary-button,
+.frontend-home-button {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(10, 16, 30, 0.72);
+  color: var(--text);
+  text-decoration: none;
+  backdrop-filter: blur(18px);
+}
 
-      .status-dot {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--accent-strong);
-        font-weight: 700;
-      }
+.lang-select {
+  max-width: 150px;
+  padding: 0 12px;
+  cursor: pointer;
+}
 
-      .status-dot::before {
-        content: "";
-        width: 9px;
-        height: 9px;
-        border-radius: 999px;
-        background: #16a34a;
-        box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.14);
-      }
+.nav-link,
+.ghost-button,
+.primary-button,
+.frontend-home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 15px;
+  font-size: 14px;
+  font-weight: 720;
+}
 
-      .flow {
-        display: grid;
-        gap: 10px;
-        padding: 16px;
-      }
+.primary-button {
+  border-color: rgba(103, 232, 249, 0.62);
+  background: linear-gradient(135deg, rgba(103, 232, 249, 0.9), rgba(167, 139, 250, 0.86));
+  color: #06101d;
+  box-shadow: 0 14px 48px rgba(103, 232, 249, 0.18);
+}
 
-      .flow-row {
-        display: grid;
-        grid-template-columns: 118px 1fr auto;
-        gap: 12px;
-        align-items: center;
-        min-height: 52px;
-        padding: 10px 12px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fbfcfd;
-      }
+.frontend-home-button {
+  min-height: 58px;
+  padding: 0 28px;
+  border-color: rgba(52, 211, 153, 0.7);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.9), transparent 18%),
+    linear-gradient(135deg, rgba(52, 211, 153, 0.95), rgba(103, 232, 249, 0.9) 52%, rgba(167, 139, 250, 0.92));
+  color: #04111b;
+  font-size: clamp(15px, 2vw, 18px);
+  box-shadow: 0 18px 60px rgba(52, 211, 153, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(0);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
 
-      .flow-row span:first-child {
-        color: var(--muted);
-        font-size: 13px;
-        font-weight: 700;
-      }
+.frontend-home-button:hover {
+  box-shadow: 0 24px 76px rgba(103, 232, 249, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+  filter: saturate(1.08);
+  transform: translateY(-2px);
+}
 
-      .flow-row strong {
-        font-size: 14px;
-      }
+.frontend-home-button span {
+  font-size: 20px;
+}
 
-      .tag {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 70px;
-        min-height: 26px;
-        border-radius: 999px;
-        background: #e7f7f4;
-        color: var(--accent-strong);
-        font-size: 12px;
-        font-weight: 750;
-      }
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 0.86fr);
+  gap: 34px;
+  align-items: center;
+  padding: 34px 0 54px;
+}
 
-      .tag.blue {
-        background: #eaf1ff;
-        color: var(--blue);
-      }
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: 820;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-      .tag.amber {
-        background: #fff4df;
-        color: var(--amber);
-      }
+.kicker::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--good);
+  box-shadow: 0 0 0 7px rgba(52, 211, 153, 0.12), 0 0 26px rgba(52, 211, 153, 0.56);
+  content: "";
+}
 
-      .section {
-        padding: 34px 0;
-        border-top: 1px solid var(--line);
-      }
+h1 {
+  max-width: 860px;
+  margin: 0;
+  font-size: clamp(44px, 7vw, 86px);
+  line-height: 0.92;
+  letter-spacing: -0.065em;
+}
 
-      .section h2 {
-        margin: 0 0 18px;
-        font-size: 24px;
-        letter-spacing: 0;
-      }
+.gradient-text {
+  background: linear-gradient(120deg, #ffffff, #b6f7ff 40%, #d8c9ff 72%, #fff0c2);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-      }
+.lead {
+  max-width: 720px;
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: clamp(17px, 2vw, 21px);
+}
 
-      .item {
-        min-height: 158px;
-        padding: 18px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--surface);
-      }
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
 
-      .item h3 {
-        margin: 0 0 8px;
-        font-size: 17px;
-      }
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
 
-      .item p {
-        margin: 0;
-        color: var(--muted);
-      }
+.metric-pill {
+  min-height: 88px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(9, 15, 28, 0.62);
+  backdrop-filter: blur(16px);
+}
 
-      .proof {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-      }
+.metric-pill strong {
+  display: block;
+  font-size: 25px;
+  line-height: 1;
+}
 
-      .terminal {
-        min-height: 204px;
-        padding: 18px;
-        border-radius: 8px;
-        background: #111827;
-        color: #e5e7eb;
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-        font-size: 13px;
-        overflow-wrap: anywhere;
-      }
+.metric-pill span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
 
-      .terminal .ok {
-        color: #86efac;
-      }
+.command-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(16, 24, 46, 0.92), rgba(8, 13, 26, 0.86));
+  box-shadow: var(--shadow);
+}
 
-      .links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
+.command-card::before {
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(135deg, rgba(103, 232, 249, 0.22), transparent 38%, rgba(167, 139, 250, 0.18));
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  padding: 1px;
+}
 
-      footer {
-        padding: 30px 0 42px;
-        color: var(--muted);
-        font-size: 14px;
-      }
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
 
-      @media (max-width: 860px) {
-        .hero,
-        .grid,
-        .proof {
-          grid-template-columns: 1fr;
-        }
+.window-dots {
+  display: inline-flex;
+  gap: 7px;
+}
 
-        .hero {
-          padding-top: 36px;
-        }
+.window-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--rose);
+}
 
-        .topbar {
-          align-items: flex-start;
-          flex-direction: column;
-          padding: 16px 0;
-        }
+.window-dots i:nth-child(2) {
+  background: var(--amber);
+}
 
-        .nav {
-          justify-content: flex-start;
-        }
+.window-dots i:nth-child(3) {
+  background: var(--good);
+}
 
-        .flow-row {
-          grid-template-columns: 1fr;
-        }
+.card-head code {
+  color: var(--muted);
+  font-size: 12px;
+}
 
-        .tag {
-          width: fit-content;
-        }
-      }
-    </style>
+.terminal {
+  min-height: 360px;
+  padding: 20px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+}
+
+.terminal-line {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(157, 174, 214, 0.08);
+  color: #dce8ff;
+}
+
+.terminal-line:last-child {
+  border-bottom: 0;
+}
+
+.prompt {
+  color: var(--cyan);
+}
+
+.latency {
+  color: var(--dim);
+}
+
+.dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 10px 0 18px;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(22px);
+}
+
+.panel::after {
+  position: absolute;
+  inset: auto 18px 18px auto;
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(103, 232, 249, 0.14), transparent 68%);
+  content: "";
+  filter: blur(2px);
+}
+
+.panel-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.panel-label {
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 860;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.panel h2 {
+  margin: 6px 0 0;
+  font-size: clamp(26px, 4vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.panel-copy {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  min-width: max-content;
+  padding: 8px 11px;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.1);
+  color: #b7f8d8;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.status-badge::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+
+.frontend-home-panel {
+  scroll-margin-top: 112px;
+}
+
+.frontend-home-panel:focus {
+  outline: 2px solid rgba(103, 232, 249, 0.62);
+  outline-offset: 6px;
+}
+
+.feature-stack,
+.backend-stack {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+}
+
+.feature-card,
+.endpoint-row {
+  border: 1px solid rgba(157, 174, 214, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.feature-card {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  padding: 14px;
+}
+
+.feature-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(103, 232, 249, 0.1);
+  color: var(--cyan);
+  font-size: 18px;
+}
+
+.feature-card strong,
+.endpoint-row strong {
+  display: block;
+}
+
+.feature-card span,
+.endpoint-row span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.endpoint-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+}
+
+.endpoint-path {
+  color: #dbeafe;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+.endpoint-status {
+  min-width: 84px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(115, 128, 157, 0.14);
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 820;
+}
+
+.endpoint-status.good {
+  background: rgba(52, 211, 153, 0.12);
+  color: #a7f3d0;
+}
+
+.endpoint-status.bad {
+  background: rgba(251, 113, 133, 0.12);
+  color: #fecdd3;
+}
+
+.endpoint-status.warn {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fde68a;
+}
+
+.integration-band {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 18px;
+  margin: 18px 0 64px;
+}
+
+.signal-map,
+.timeline {
+  min-height: 320px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(9, 15, 28, 0.68);
+  backdrop-filter: blur(20px);
+}
+
+.signal-orbit {
+  position: relative;
+  min-height: 210px;
+  margin-top: 22px;
+}
+
+.node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  border: 1px solid rgba(103, 232, 249, 0.42);
+  border-radius: 26px;
+  background: rgba(103, 232, 249, 0.09);
+  color: #e0fbff;
+  font-size: 12px;
+  font-weight: 850;
+  text-align: center;
+  box-shadow: 0 0 44px rgba(103, 232, 249, 0.14);
+}
+
+.node.api {
+  left: calc(50% - 41px);
+  top: 62px;
+  border-color: rgba(167, 139, 250, 0.5);
+  background: rgba(167, 139, 250, 0.11);
+}
+
+.node.frontend {
+  left: 4%;
+  top: 26px;
+}
+
+.node.worker {
+  right: 4%;
+  top: 26px;
+}
+
+.node.db {
+  left: 18%;
+  bottom: 0;
+}
+
+.node.redis {
+  right: 18%;
+  bottom: 0;
+}
+
+.signal-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(76%, 460px);
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.7), transparent);
+  animation: shimmer 3.8s ease-in-out infinite;
+}
+
+.signal-line.one {
+  transform: rotate(18deg) translateX(-50%);
+}
+
+.signal-line.two {
+  transform: rotate(-18deg) translateX(-50%);
+  animation-delay: -1.3s;
+}
+
+.signal-line.three {
+  transform: rotate(90deg) translateX(-50%);
+  animation-delay: -2.4s;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 13px;
+  margin-top: 18px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid rgba(157, 174, 214, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.timeline-item time {
+  color: var(--cyan);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+}
+
+.timeline-item strong {
+  display: block;
+}
+
+.timeline-item span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 28px 0 46px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer a {
+  color: #d8e8ff;
+  text-decoration: none;
+}
+
+[dir="rtl"] .brand,
+[dir="rtl"] .feature-card,
+[dir="rtl"] .endpoint-row,
+[dir="rtl"] .timeline-item {
+  direction: rtl;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes shimmer {
+  50% {
+    opacity: 0.28;
+    filter: blur(1px);
+  }
+}
+
+@media (max-width: 980px) {
+  .topbar,
+  .nav-actions,
+  .footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hero,
+  .dual-grid,
+  .integration-band {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 18px;
+  }
+}
+
+@media (max-width: 620px) {
+  .app-shell {
+    width: min(100% - 24px, 1220px);
+  }
+
+  .metrics-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header,
+  .endpoint-row {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header {
+    flex-direction: column;
+  }
+
+  .terminal-line {
+    grid-template-columns: 1fr;
+  }
+
+  .node {
+    position: relative;
+    inset: auto !important;
+    width: auto;
+    height: 58px;
+  }
+
+  .signal-orbit {
+    display: grid;
+    gap: 10px;
+  }
+
+  .signal-line {
+    display: none;
+  }
+}</style>
   </head>
   <body>
-    <header class="shell topbar">
-      <a class="brand" href="/" aria-label="PulseBoard home">
-        <span class="mark">PB</span>
-        <span>PulseBoard</span>
-      </a>
-      <nav class="nav" aria-label="Primary navigation">
-        <a href="/docs">API Docs</a>
-        <a href="/openapi.json">OpenAPI</a>
-        <a href="/health/ready">Health</a>
-        <a href="https://github.com/DodgeHo/pulseboard">GitHub</a>
-      </nav>
-    </header>
+    <div id="app"></div>
+    <script type="module">const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];
+const en = {
+    languageName: 'English',
+    navDocs: 'API Docs',
+    navOpenApi: 'OpenAPI',
+    navHealth: 'Live health',
+    eyebrow: 'Cloud-native SaaS control room',
+    titleA: 'One homepage.',
+    titleB: 'Two products in motion.',
+    lead: 'PulseBoard is not a decorative landing page. It is an operations cockpit that shows the frontend experience and the backend platform contract on the same screen.',
+    primaryCta: 'Open API reference',
+    secondaryCta: 'Probe backend now',
+    frontendHomeCta: 'Open customer-facing site',
+    metricLatency: 'live probe latency',
+    metricPaths: 'OpenAPI paths',
+    metricLanguages: 'interface languages',
+    frontendLabel: 'Frontend plane',
+    frontendTitle: 'A live operator surface',
+    frontendStatus: 'rendering now',
+    frontendCopy: 'The UI behaves like a small mission-control board: animated signals, language switching, endpoint probes, and deployment-aware navigation.',
+    backendLabel: 'Backend plane',
+    backendTitle: 'The API is part of the homepage',
+    backendStatus: 'same-origin probes',
+    backendCopy: 'Health, readiness, OpenAPI, docs, auth-protected routes, Redis-backed rate limits, workers, and PostgreSQL state are surfaced instead of hidden behind a marketing page.',
+    featureRealtime: 'Live status layer',
+    featureRealtimeCopy: 'Browser probes the deployed backend and updates the command panel without a page reload.',
+    featureI18n: 'Locale-aware interface',
+    featureI18nCopy: 'Ten languages are available with English first and Simplified Chinese last.',
+    featureOperator: 'Portfolio with receipts',
+    featureOperatorCopy: 'The homepage links directly to docs, OpenAPI, health checks, and backend routes.',
+    liveEndpoint: 'Liveness check',
+    readyEndpoint: 'Readiness check',
+    openapiEndpoint: 'OpenAPI document',
+    docsEndpoint: 'Scalar API docs',
+    checking: 'checking',
+    online: 'online',
+    offline: 'offline',
+    docs: 'open',
+    mapTitle: 'Signal path',
+    mapCopy: 'Frontend and backend are presented as one deployment: browser, API, worker, PostgreSQL, and Redis.',
+    nodeFrontend: 'Frontend',
+    nodeApi: 'Hono API',
+    nodeWorker: 'Worker',
+    nodeDb: 'Postgres',
+    nodeRedis: 'Redis',
+    timelineTitle: 'What this page proves',
+    timelineCopy: 'The first screen is an evidence board: it explains the stack and checks the live backend surface.',
+    timelineOne: 'Boot',
+    timelineOneCopy: 'Static frontend renders from the public domain while the API remains bound behind Nginx.',
+    timelineTwo: 'Probe',
+    timelineTwoCopy: 'The browser checks liveness, readiness, docs, and OpenAPI on the same origin.',
+    timelineThree: 'Operate',
+    timelineThreeCopy: 'Interviewers can inspect the UI, then jump straight into the backend contract.',
+    footer: 'Built as a practical backend/platform/cloud portfolio demo - modest, inspectable, and reversible.',
+};
+const overrides = {
+    en: {},
+    'zh-TW': {
+        languageName: '繁體中文',
+        navDocs: 'API 文件',
+        navHealth: '即時健康',
+        eyebrow: 'Cloud-native SaaS 控制室',
+        titleA: '一個首頁。',
+        titleB: '兩個產品同場運行。',
+        lead: 'PulseBoard 不是裝飾性的 landing page，而是一個操作座艙：前端體驗與後端平台契約會在同一個畫面被看見。',
+        primaryCta: '開啟 API 文件',
+        secondaryCta: '立即探測後端',
+        frontendHomeCta: '開啟客戶版網站',
+        metricLatency: '即時探測延遲',
+        metricPaths: 'OpenAPI 路徑',
+        metricLanguages: '介面語言',
+        frontendLabel: '前端平面',
+        frontendTitle: '正在運作的操作介面',
+        frontendStatus: '即時渲染',
+        frontendCopy: 'UI 像一個小型任務控制台：動態訊號、多語切換、端點探測，以及理解部署狀態的導覽。',
+        backendLabel: '後端平面',
+        backendTitle: 'API 是首頁的一部分',
+        backendStatus: '同源探測',
+        backendCopy: '健康檢查、readiness、OpenAPI、文件、受保護路由、Redis rate limit、worker 與 PostgreSQL 狀態，都被展示出來而不是藏在行銷頁後面。',
+        featureRealtime: '即時狀態層',
+        featureRealtimeCopy: '瀏覽器探測已部署後端，並在不重新載入頁面的情況下更新命令面板。',
+        featureI18n: '多語介面',
+        featureI18nCopy: '提供十種語言，英文第一，簡體中文最後。',
+        featureOperator: '有證據的作品集',
+        featureOperatorCopy: '首頁直接連到 docs、OpenAPI、健康檢查與後端路由。',
+        liveEndpoint: '存活檢查',
+        readyEndpoint: '就緒檢查',
+        openapiEndpoint: 'OpenAPI 文件',
+        docsEndpoint: 'Scalar API 文件',
+        checking: '檢查中',
+        online: '在線',
+        offline: '離線',
+        docs: '開啟',
+        mapTitle: '訊號路徑',
+        mapCopy: '前端與後端以同一個部署呈現：browser、API、worker、PostgreSQL 與 Redis。',
+        nodeFrontend: '前端',
+        timelineTitle: '這個頁面證明什麼',
+        timelineCopy: '第一屏是一塊證據板：說明技術棧，也檢查即時後端表面。',
+        timelineOne: '啟動',
+        timelineOneCopy: '靜態前端由公開域名渲染，API 則由 Nginx 保持在後方。',
+        timelineTwo: '探測',
+        timelineTwoCopy: '瀏覽器同源檢查 liveness、readiness、docs 與 OpenAPI。',
+        timelineThree: '操作',
+        timelineThreeCopy: '面試官可以先看 UI，再直接檢查後端契約。',
+        footer: '務實的 backend/platform/cloud 作品集 demo：克制、可檢查、可回滾。',
+    },
+    ja: {
+        languageName: '日本語',
+        navDocs: 'API ドキュメント',
+        navHealth: 'ライブヘルス',
+        eyebrow: 'Cloud-native SaaS コントロールルーム',
+        titleA: 'ひとつのホームページ。',
+        titleB: 'ふたつのプロダクトが同時に動く。',
+        lead: 'PulseBoard は飾りだけのランディングページではありません。フロントエンド体験とバックエンド契約を同じ画面で見せる運用コックピットです。',
+        primaryCta: 'API リファレンスを開く',
+        secondaryCta: 'バックエンドを探査',
+        frontendHomeCta: '顧客向けサイトを開く',
+        metricLatency: 'ライブ探査レイテンシ',
+        metricPaths: 'OpenAPI パス',
+        metricLanguages: 'UI 言語',
+        frontendLabel: 'フロントエンド面',
+        frontendTitle: '稼働中のオペレーター画面',
+        frontendStatus: 'レンダリング中',
+        frontendCopy: 'UI は小さなミッションコントロールのように、動的シグナル、言語切替、エンドポイント探査、デプロイを意識した導線を備えます。',
+        backendLabel: 'バックエンド面',
+        backendTitle: 'API もホームページの一部',
+        backendStatus: '同一オリジン探査',
+        backendCopy: 'ヘルス、readiness、OpenAPI、docs、保護ルート、Redis rate limit、worker、PostgreSQL 状態をマーケティングの裏に隠さず表示します。',
+        featureRealtime: 'ライブ状態レイヤー',
+        featureI18n: 'ロケール対応 UI',
+        featureOperator: '証拠つきポートフォリオ',
+        liveEndpoint: 'Liveness チェック',
+        readyEndpoint: 'Readiness チェック',
+        openapiEndpoint: 'OpenAPI ドキュメント',
+        docsEndpoint: 'Scalar API ドキュメント',
+        checking: '確認中',
+        online: 'オンライン',
+        offline: 'オフライン',
+        docs: '開く',
+        mapTitle: 'シグナル経路',
+        mapCopy: 'フロントエンドとバックエンドを、browser、API、worker、PostgreSQL、Redis を含むひとつのデプロイとして見せます。',
+        nodeFrontend: 'フロントエンド',
+        timelineTitle: 'このページが証明すること',
+        timelineCopy: 'ファーストビューは証拠ボードです。スタックを説明し、ライブのバックエンド表面を検査します。',
+        timelineOne: '起動',
+        timelineTwo: '探査',
+        timelineThree: '運用',
+        footer: '実用的な backend/platform/cloud ポートフォリオ demo として構築しました。',
+    },
+    ko: {
+        languageName: '한국어',
+        navDocs: 'API 문서',
+        navHealth: '라이브 헬스',
+        eyebrow: 'Cloud-native SaaS 컨트롤룸',
+        titleA: '하나의 홈페이지.',
+        titleB: '두 제품이 동시에 움직입니다.',
+        lead: 'PulseBoard는 장식용 랜딩 페이지가 아닙니다. 프런트엔드 경험과 백엔드 플랫폼 계약을 한 화면에서 보여 주는 운영 콕핏입니다.',
+        primaryCta: 'API 레퍼런스 열기',
+        secondaryCta: '백엔드 탐색',
+        frontendHomeCta: '고객용 사이트 열기',
+        metricLatency: '라이브 탐색 지연',
+        metricPaths: 'OpenAPI 경로',
+        metricLanguages: '인터페이스 언어',
+        frontendLabel: '프런트엔드 플레인',
+        frontendTitle: '실시간 운영 화면',
+        frontendStatus: '렌더링 중',
+        frontendCopy: 'UI는 작은 미션 컨트롤처럼 동적 신호, 언어 전환, 엔드포인트 탐색, 배포 인식 내비게이션을 제공합니다.',
+        backendLabel: '백엔드 플레인',
+        backendTitle: 'API도 홈페이지의 일부입니다',
+        backendStatus: '동일 출처 탐색',
+        backendCopy: 'health, readiness, OpenAPI, docs, 보호 라우트, Redis rate limit, worker, PostgreSQL 상태를 마케팅 페이지 뒤에 숨기지 않고 보여 줍니다.',
+        featureRealtime: '라이브 상태 레이어',
+        featureI18n: '로케일 지원 인터페이스',
+        featureOperator: '증거가 있는 포트폴리오',
+        liveEndpoint: 'Liveness 체크',
+        readyEndpoint: 'Readiness 체크',
+        openapiEndpoint: 'OpenAPI 문서',
+        docsEndpoint: 'Scalar API 문서',
+        checking: '확인 중',
+        online: '온라인',
+        offline: '오프라인',
+        docs: '열기',
+        mapTitle: '신호 경로',
+        mapCopy: '프런트엔드와 백엔드를 browser, API, worker, PostgreSQL, Redis가 포함된 하나의 배포로 보여 줍니다.',
+        nodeFrontend: '프런트엔드',
+        timelineTitle: '이 페이지가 증명하는 것',
+        timelineCopy: '첫 화면은 증거 보드입니다. 스택을 설명하고 라이브 백엔드 표면을 확인합니다.',
+        timelineOne: '부팅',
+        timelineTwo: '탐색',
+        timelineThree: '운영',
+        footer: '실용적인 backend/platform/cloud 포트폴리오 demo로 만들었습니다.',
+    },
+    es: {
+        languageName: 'Español',
+        navDocs: 'Docs API',
+        navHealth: 'Salud en vivo',
+        eyebrow: 'Sala de control SaaS cloud-native',
+        titleA: 'Una página inicial.',
+        titleB: 'Dos productos en movimiento.',
+        lead: 'PulseBoard no es una landing decorativa. Es una cabina operativa que muestra la experiencia frontend y el contrato backend en la misma pantalla.',
+        primaryCta: 'Abrir referencia API',
+        secondaryCta: 'Probar backend ahora',
+        frontendHomeCta: 'Abrir sitio para clientes',
+        metricLatency: 'latencia de prueba',
+        metricPaths: 'rutas OpenAPI',
+        metricLanguages: 'idiomas de interfaz',
+        frontendLabel: 'Plano frontend',
+        frontendTitle: 'Superficie operativa viva',
+        frontendStatus: 'renderizando',
+        frontendCopy: 'La UI actúa como un pequeño mission-control: señales animadas, cambio de idioma, pruebas de endpoints y navegación consciente del despliegue.',
+        backendLabel: 'Plano backend',
+        backendTitle: 'La API forma parte de la home',
+        backendStatus: 'pruebas same-origin',
+        backendCopy: 'Health, readiness, OpenAPI, docs, rutas protegidas, rate limits con Redis, workers y PostgreSQL aparecen sin esconderse detrás del marketing.',
+        featureRealtime: 'Capa de estado en vivo',
+        featureI18n: 'Interfaz por locale',
+        featureOperator: 'Portfolio con evidencia',
+        liveEndpoint: 'Chequeo liveness',
+        readyEndpoint: 'Chequeo readiness',
+        openapiEndpoint: 'Documento OpenAPI',
+        docsEndpoint: 'Docs Scalar API',
+        checking: 'comprobando',
+        online: 'online',
+        offline: 'offline',
+        docs: 'abrir',
+        mapTitle: 'Ruta de señal',
+        mapCopy: 'Frontend y backend se presentan como un despliegue: browser, API, worker, PostgreSQL y Redis.',
+        nodeFrontend: 'Frontend',
+        timelineTitle: 'Qué prueba esta página',
+        timelineCopy: 'La primera pantalla es un tablero de evidencia: explica el stack y comprueba el backend vivo.',
+        timelineOne: 'Arranque',
+        timelineTwo: 'Prueba',
+        timelineThree: 'Operación',
+        footer: 'Demo práctica de portfolio backend/platform/cloud: sobria, inspeccionable y reversible.',
+    },
+    fr: {
+        languageName: 'Français',
+        navDocs: 'Docs API',
+        navHealth: 'Santé live',
+        eyebrow: 'Salle de contrôle SaaS cloud-native',
+        titleA: 'Une seule page.',
+        titleB: 'Deux produits en mouvement.',
+        lead: 'PulseBoard n’est pas une landing décorative. C’est un cockpit opérationnel qui montre l’expérience frontend et le contrat backend sur le même écran.',
+        primaryCta: 'Ouvrir la référence API',
+        secondaryCta: 'Tester le backend',
+        frontendHomeCta: 'Ouvrir le site client',
+        metricLatency: 'latence de sonde',
+        metricPaths: 'chemins OpenAPI',
+        metricLanguages: 'langues UI',
+        frontendLabel: 'Plan frontend',
+        frontendTitle: 'Surface opérateur vivante',
+        frontendStatus: 'rendu actif',
+        frontendCopy: 'L’UI agit comme un petit mission-control : signaux animés, changement de langue, sondes d’endpoints et navigation consciente du déploiement.',
+        backendLabel: 'Plan backend',
+        backendTitle: 'L’API fait partie de la homepage',
+        backendStatus: 'sondes same-origin',
+        backendCopy: 'Health, readiness, OpenAPI, docs, routes protégées, rate limits Redis, workers et état PostgreSQL sont visibles au lieu d’être cachés derrière du marketing.',
+        featureRealtime: 'Couche d’état live',
+        featureI18n: 'Interface localisée',
+        featureOperator: 'Portfolio avec preuves',
+        liveEndpoint: 'Contrôle liveness',
+        readyEndpoint: 'Contrôle readiness',
+        openapiEndpoint: 'Document OpenAPI',
+        docsEndpoint: 'Docs Scalar API',
+        checking: 'vérification',
+        online: 'en ligne',
+        offline: 'hors ligne',
+        docs: 'ouvrir',
+        mapTitle: 'Chemin du signal',
+        mapCopy: 'Frontend et backend sont présentés comme un seul déploiement : browser, API, worker, PostgreSQL et Redis.',
+        nodeFrontend: 'Frontend',
+        timelineTitle: 'Ce que prouve cette page',
+        timelineCopy: 'Le premier écran est un tableau de preuves : il explique le stack et vérifie le backend live.',
+        timelineOne: 'Boot',
+        timelineTwo: 'Sonde',
+        timelineThree: 'Opérer',
+        footer: 'Demo portfolio backend/platform/cloud pratique : sobre, inspectable et réversible.',
+    },
+    de: {
+        languageName: 'Deutsch',
+        navDocs: 'API-Doku',
+        navHealth: 'Live-Health',
+        eyebrow: 'Cloud-native SaaS-Kontrollraum',
+        titleA: 'Eine Homepage.',
+        titleB: 'Zwei Produkte in Bewegung.',
+        lead: 'PulseBoard ist keine dekorative Landingpage. Es ist ein Operations-Cockpit, das Frontend-Erlebnis und Backend-Vertrag auf demselben Bildschirm zeigt.',
+        primaryCta: 'API-Referenz öffnen',
+        secondaryCta: 'Backend jetzt prüfen',
+        frontendHomeCta: 'Kundenseite oeffnen',
+        metricLatency: 'Live-Probe-Latenz',
+        metricPaths: 'OpenAPI-Pfade',
+        metricLanguages: 'Interface-Sprachen',
+        frontendLabel: 'Frontend-Ebene',
+        frontendTitle: 'Eine lebendige Operator-Oberfläche',
+        frontendStatus: 'rendert jetzt',
+        frontendCopy: 'Die UI wirkt wie ein kleines Mission-Control: animierte Signale, Sprachwechsel, Endpoint-Probes und deployment-bewusste Navigation.',
+        backendLabel: 'Backend-Ebene',
+        backendTitle: 'Die API ist Teil der Homepage',
+        backendStatus: 'Same-Origin-Probes',
+        backendCopy: 'Health, readiness, OpenAPI, docs, geschützte Routen, Redis Rate Limits, Worker und PostgreSQL-Status werden gezeigt statt hinter Marketing versteckt.',
+        featureRealtime: 'Live-Status-Schicht',
+        featureI18n: 'Locale-bewusstes Interface',
+        featureOperator: 'Portfolio mit Belegen',
+        liveEndpoint: 'Liveness-Check',
+        readyEndpoint: 'Readiness-Check',
+        openapiEndpoint: 'OpenAPI-Dokument',
+        docsEndpoint: 'Scalar API-Doku',
+        checking: 'prüft',
+        online: 'online',
+        offline: 'offline',
+        docs: 'öffnen',
+        mapTitle: 'Signalpfad',
+        mapCopy: 'Frontend und Backend erscheinen als ein Deployment: browser, API, worker, PostgreSQL und Redis.',
+        nodeFrontend: 'Frontend',
+        timelineTitle: 'Was diese Seite beweist',
+        timelineCopy: 'Der erste Screen ist ein Evidence Board: Er erklärt den Stack und prüft die Live-Backend-Oberfläche.',
+        timelineOne: 'Boot',
+        timelineTwo: 'Probe',
+        timelineThree: 'Betrieb',
+        footer: 'Praktisches backend/platform/cloud Portfolio-Demo: zurückhaltend, prüfbar und reversibel.',
+    },
+    'pt-BR': {
+        languageName: 'Português (BR)',
+        navDocs: 'Docs API',
+        navHealth: 'Saúde ao vivo',
+        eyebrow: 'Sala de controle SaaS cloud-native',
+        titleA: 'Uma homepage.',
+        titleB: 'Dois produtos em movimento.',
+        lead: 'PulseBoard não é uma landing page decorativa. É um cockpit operacional que mostra a experiência frontend e o contrato backend na mesma tela.',
+        primaryCta: 'Abrir referência API',
+        secondaryCta: 'Testar backend agora',
+        frontendHomeCta: 'Abrir site para clientes',
+        metricLatency: 'latência da sonda',
+        metricPaths: 'rotas OpenAPI',
+        metricLanguages: 'idiomas da interface',
+        frontendLabel: 'Plano frontend',
+        frontendTitle: 'Superfície operacional viva',
+        frontendStatus: 'renderizando agora',
+        frontendCopy: 'A UI funciona como um pequeno mission-control: sinais animados, troca de idioma, sondas de endpoints e navegação consciente do deploy.',
+        backendLabel: 'Plano backend',
+        backendTitle: 'A API faz parte da homepage',
+        backendStatus: 'sondas same-origin',
+        backendCopy: 'Health, readiness, OpenAPI, docs, rotas protegidas, rate limits Redis, workers e PostgreSQL aparecem sem ficar atrás de marketing.',
+        featureRealtime: 'Camada de status ao vivo',
+        featureI18n: 'Interface por locale',
+        featureOperator: 'Portfólio com evidências',
+        liveEndpoint: 'Check liveness',
+        readyEndpoint: 'Check readiness',
+        openapiEndpoint: 'Documento OpenAPI',
+        docsEndpoint: 'Docs Scalar API',
+        checking: 'verificando',
+        online: 'online',
+        offline: 'offline',
+        docs: 'abrir',
+        mapTitle: 'Caminho do sinal',
+        mapCopy: 'Frontend e backend aparecem como um único deploy: browser, API, worker, PostgreSQL e Redis.',
+        nodeFrontend: 'Frontend',
+        timelineTitle: 'O que esta página prova',
+        timelineCopy: 'A primeira tela é um painel de evidências: explica o stack e verifica o backend ao vivo.',
+        timelineOne: 'Boot',
+        timelineTwo: 'Sonda',
+        timelineThree: 'Operar',
+        footer: 'Demo prático de portfolio backend/platform/cloud: sóbrio, inspecionável e reversível.',
+    },
+    ar: {
+        languageName: 'العربية',
+        navDocs: 'وثائق API',
+        navHealth: 'الصحة الحية',
+        eyebrow: 'غرفة تحكم SaaS سحابية',
+        titleA: 'صفحة واحدة.',
+        titleB: 'منتجان يعملان معاً.',
+        lead: 'PulseBoard ليست صفحة تسويقية فقط، بل قمرة تشغيل تعرض تجربة الواجهة الأمامية وعقد المنصة الخلفية على الشاشة نفسها.',
+        primaryCta: 'فتح مرجع API',
+        secondaryCta: 'اختبار الخلفية الآن',
+        frontendHomeCta: 'افتح موقع العملاء',
+        metricLatency: 'زمن فحص حي',
+        metricPaths: 'مسارات OpenAPI',
+        metricLanguages: 'لغات الواجهة',
+        frontendLabel: 'طبقة الواجهة',
+        frontendTitle: 'سطح تشغيل حي',
+        frontendStatus: 'يتم العرض الآن',
+        frontendCopy: 'تعمل الواجهة مثل لوحة تحكم صغيرة: إشارات متحركة، تبديل لغة، فحص نقاط النهاية، وتنقل واعي بالنشر.',
+        backendLabel: 'طبقة الخلفية',
+        backendTitle: 'الـ API جزء من الصفحة',
+        backendStatus: 'فحوصات من نفس الأصل',
+        backendCopy: 'تظهر الصحة، الجاهزية، OpenAPI، docs، المسارات المحمية، حدود Redis، العمال، وحالة PostgreSQL بدلاً من إخفائها خلف التسويق.',
+        featureRealtime: 'طبقة حالة حية',
+        featureI18n: 'واجهة متعددة اللغات',
+        featureOperator: 'ملف أعمال مع أدلة',
+        liveEndpoint: 'فحص liveness',
+        readyEndpoint: 'فحص readiness',
+        openapiEndpoint: 'مستند OpenAPI',
+        docsEndpoint: 'وثائق Scalar API',
+        checking: 'جار الفحص',
+        online: 'متصل',
+        offline: 'غير متصل',
+        docs: 'فتح',
+        mapTitle: 'مسار الإشارة',
+        mapCopy: 'تظهر الواجهة والخلفية كنشر واحد: browser و API و worker و PostgreSQL و Redis.',
+        nodeFrontend: 'الواجهة',
+        timelineTitle: 'ما الذي تثبته هذه الصفحة',
+        timelineCopy: 'الشاشة الأولى لوحة أدلة: تشرح المكدس وتفحص سطح الخلفية الحي.',
+        timelineOne: 'إقلاع',
+        timelineTwo: 'فحص',
+        timelineThree: 'تشغيل',
+        footer: 'Demo عملي لمحفظة backend/platform/cloud: هادئ، قابل للفحص، وقابل للتراجع.',
+    },
+    'zh-CN': {
+        languageName: '简体中文',
+        navDocs: 'API 文档',
+        navHealth: '实时健康',
+        eyebrow: 'Cloud-native SaaS 控制室',
+        titleA: '一个首页。',
+        titleB: '两个产品同时运转。',
+        lead: 'PulseBoard 不是装饰性的 landing page，而是一个操作座舱：前端体验和后端平台契约会在同一个画面被看见。',
+        primaryCta: '打开 API 文档',
+        secondaryCta: '立即探测后端',
+        frontendHomeCta: '打开客户版网站',
+        metricLatency: '实时探测延迟',
+        metricPaths: 'OpenAPI 路径',
+        metricLanguages: '界面语言',
+        frontendLabel: '前端平面',
+        frontendTitle: '正在运行的操作界面',
+        frontendStatus: '实时渲染',
+        frontendCopy: 'UI 像一个小型任务控制台：动态信号、多语言切换、端点探测，以及理解部署状态的导航。',
+        backendLabel: '后端平面',
+        backendTitle: 'API 是首页的一部分',
+        backendStatus: '同源探测',
+        backendCopy: '健康检查、readiness、OpenAPI、文档、受保护路由、Redis rate limit、worker 与 PostgreSQL 状态，都会被展示出来而不是藏在营销页后面。',
+        featureRealtime: '实时状态层',
+        featureRealtimeCopy: '浏览器探测已部署后端，并在不刷新页面的情况下更新命令面板。',
+        featureI18n: '多语言界面',
+        featureI18nCopy: '提供十种语言，英文第一，简体中文最后。',
+        featureOperator: '有证据的作品集',
+        featureOperatorCopy: '首页直接连接 docs、OpenAPI、健康检查与后端路由。',
+        liveEndpoint: '存活检查',
+        readyEndpoint: '就绪检查',
+        openapiEndpoint: 'OpenAPI 文档',
+        docsEndpoint: 'Scalar API 文档',
+        checking: '检查中',
+        online: '在线',
+        offline: '离线',
+        docs: '打开',
+        mapTitle: '信号路径',
+        mapCopy: '前端和后端以同一个部署呈现：browser、API、worker、PostgreSQL 与 Redis。',
+        nodeFrontend: '前端',
+        timelineTitle: '这个页面证明什么',
+        timelineCopy: '第一屏是一块证据板：说明技术栈，也检查实时后端表面。',
+        timelineOne: '启动',
+        timelineOneCopy: '静态前端由公开域名渲染，API 则由 Nginx 保持在后方。',
+        timelineTwo: '探测',
+        timelineTwoCopy: '浏览器同源检查 liveness、readiness、docs 与 OpenAPI。',
+        timelineThree: '操作',
+        timelineThreeCopy: '面试官可以先看 UI，再直接检查后端契约。',
+        footer: '务实的 backend/platform/cloud 作品集 demo：克制、可检查、可回滚。',
+    },
+};
+function getCopy(locale) {
+    return { ...en, ...overrides[locale] };
+}
 
-    <main class="shell">
+const endpointConfig = {
+    live: { path: '/health/live', labelKey: 'liveEndpoint' },
+    ready: { path: '/health/ready', labelKey: 'readyEndpoint' },
+    openapi: { path: '/openapi.json', labelKey: 'openapiEndpoint' },
+    docs: { path: '/docs', labelKey: 'docsEndpoint' },
+};
+let currentLocale = readLocale();
+let endpointStates = {
+    live: 'checking',
+    ready: 'checking',
+    openapi: 'checking',
+    docs: 'docs',
+};
+let latencyMs = 0;
+let openApiPathCount = 0;
+let lastProbeAt = '--:--:--';
+function readLocale() {
+    const requested = new URLSearchParams(window.location.search).get('lang');
+    if (requested && localeOrder.includes(requested))
+        return requested;
+    const stored = window.localStorage.getItem('pulseboard-locale');
+    if (stored && localeOrder.includes(stored))
+        return stored;
+    return 'en';
+}
+function copy() {
+    return getCopy(currentLocale);
+}
+function escapeHtml(value) {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+function stateLabel(state) {
+    return copy()[state];
+}
+function stateClass(state) {
+    if (state === 'online' || state === 'docs')
+        return 'good';
+    if (state === 'checking')
+        return 'warn';
+    return 'bad';
+}
+function renderLanguageOptions() {
+    return localeOrder
+        .map((locale) => `<option value="${locale}" ${locale === currentLocale ? 'selected' : ''}>${getCopy(locale).languageName}</option>`)
+        .join('');
+}
+function endpointRow(key) {
+    const config = endpointConfig[key];
+    const state = endpointStates[key];
+    return `
+    <a class="endpoint-row" href="${config.path}" target="_blank" rel="noreferrer">
+      <span>
+        <strong>${escapeHtml(copy()[config.labelKey])}</strong>
+        <span class="endpoint-path">${config.path}</span>
+      </span>
+      <span class="endpoint-status ${stateClass(state)}">${escapeHtml(stateLabel(state))}</span>
+    </a>`;
+}
+function renderTerminal() {
+    const rows = [
+        { command: 'GET /health/live', value: endpointStates.live, latency: latencyMs ? `${latencyMs}ms` : '--' },
+        { command: 'GET /health/ready', value: endpointStates.ready, latency: lastProbeAt },
+        { command: 'GET /openapi.json', value: endpointStates.openapi, latency: openApiPathCount ? `${openApiPathCount} paths` : '--' },
+        { command: 'GET /docs', value: 'docs', latency: 'Scalar' },
+        { command: 'UI locale order', value: 'online', latency: `${localeOrder[0]} → ${localeOrder.at(-1)}` },
+    ];
+    return rows
+        .map((row) => `
+        <div class="terminal-line">
+          <span class="prompt">›</span>
+          <span>${escapeHtml(row.command)} <strong class="endpoint-status ${stateClass(row.value)}">${escapeHtml(stateLabel(row.value))}</strong></span>
+          <span class="latency">${escapeHtml(row.latency)}</span>
+        </div>`)
+        .join('');
+}
+function render() {
+    const c = copy();
+    const app = document.querySelector('#app');
+    if (!app)
+        return;
+    document.documentElement.lang = currentLocale;
+    document.documentElement.dir = currentLocale === 'ar' ? 'rtl' : 'ltr';
+    app.innerHTML = `
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="PulseBoard">
+          <span class="brand-mark"><span>PB</span></span>
+          <span class="brand-copy"><strong>PulseBoard</strong><small>Frontend + Backend Demo</small></span>
+        </a>
+        <nav class="nav-actions" aria-label="Primary">
+          <select class="lang-select" aria-label="Language selector">${renderLanguageOptions()}</select>
+          <a class="nav-link" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.navDocs)}</a>
+          <a class="nav-link" href="/openapi.json" target="_blank" rel="noreferrer">${escapeHtml(c.navOpenApi)}</a>
+          <a class="nav-link" href="/health/ready" target="_blank" rel="noreferrer">${escapeHtml(c.navHealth)}</a>
+        </nav>
+      </header>
+
       <section class="hero" aria-labelledby="hero-title">
         <div>
-          <div class="eyebrow">Cloud-native SaaS backend demo</div>
-          <h1 id="hero-title">PulseBoard</h1>
-          <p class="lead">
-            A portfolio-grade backend for incident, uptime, and background-job monitoring: Hono API,
-            PostgreSQL, Redis, BullMQ workers, Docker Compose deployment, CI, staging rehearsal, and
-            plan-only AWS infrastructure guardrails.
-          </p>
-          <div class="actions">
-            <a class="button primary" href="/docs">Open API docs</a>
-            <a class="button" href="https://github.com/DodgeHo/pulseboard">View repository</a>
+          <div class="kicker">${escapeHtml(c.eyebrow)}</div>
+          <h1 id="hero-title"><span class="gradient-text">${escapeHtml(c.titleA)}</span><br />${escapeHtml(c.titleB)}</h1>
+          <p class="lead">${escapeHtml(c.lead)}</p>
+          <div class="hero-actions">
+            <a class="frontend-home-button" href="/frontend/" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">&nearr;</span></a>
+            <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} &nearr;</a>
+            <button class="ghost-button" type="button" data-action="probe">${escapeHtml(c.secondaryCta)}</button>
+          </div>
+          <div class="metrics-strip" aria-label="Live metrics">
+            <div class="metric-pill"><strong>${latencyMs || '--'}ms</strong><span>${escapeHtml(c.metricLatency)}</span></div>
+            <div class="metric-pill"><strong>${openApiPathCount || '--'}</strong><span>${escapeHtml(c.metricPaths)}</span></div>
+            <div class="metric-pill"><strong>${localeOrder.length}</strong><span>${escapeHtml(c.metricLanguages)}</span></div>
           </div>
         </div>
-
-        <aside class="live-panel" aria-label="Live architecture summary">
-          <div class="panel-head">
-            <span>Live staging path</span>
-            <span class="status-dot">Ready</span>
-          </div>
-          <div class="flow">
-            <div class="flow-row">
-              <span>Edge</span>
-              <strong>Nginx with HTTPS</strong>
-              <span class="tag">Public</span>
-            </div>
-            <div class="flow-row">
-              <span>API</span>
-              <strong>Hono service on localhost</strong>
-              <span class="tag blue">Docker</span>
-            </div>
-            <div class="flow-row">
-              <span>State</span>
-              <strong>PostgreSQL plus Redis queues</strong>
-              <span class="tag blue">Private</span>
-            </div>
-            <div class="flow-row">
-              <span>Workers</span>
-              <strong>Incident open and resolve automation</strong>
-              <span class="tag amber">Async</span>
-            </div>
-          </div>
+        <aside class="command-card" aria-label="Backend probe console">
+          <div class="card-head"><span class="window-dots"><i></i><i></i><i></i></span><code>edge / pulseboard</code></div>
+          <div class="terminal">${renderTerminal()}</div>
         </aside>
       </section>
 
-      <section class="section" aria-labelledby="signals-title">
-        <h2 id="signals-title">Engineering Signals</h2>
-        <div class="grid">
-          <article class="item">
-            <h3>Multi-tenant API Surface</h3>
-            <p>Workspaces, projects, services, uptime checks, incidents, webhooks, audit logs, usage metrics, and API keys.</p>
-          </article>
-          <article class="item">
-            <h3>Durable Async Processing</h3>
-            <p>Redis-backed BullMQ workers run checks, apply incident thresholds, resolve recoveries, and record notifications.</p>
-          </article>
-          <article class="item">
-            <h3>Deployment Discipline</h3>
-            <p>Linux staging, health checks, Docker Compose, GitHub Actions, Terraform validation, cost guardrails, and rollback notes.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" aria-labelledby="proof-title">
-        <h2 id="proof-title">Review Surface</h2>
-        <div class="proof">
-          <div class="terminal" aria-label="Verification commands">
-            <div>$ corepack pnpm typecheck</div>
-            <div class="ok">passed</div>
-            <br />
-            <div>$ corepack pnpm test</div>
-            <div class="ok">passed</div>
-            <br />
-            <div>$ pnpm demo:flow</div>
-            <div class="ok">incident opened, recovered, and resolved</div>
+      <section class="dual-grid" aria-label="Frontend and backend surfaces">
+        <article class="panel frontend-home-panel" id="frontend-home" tabindex="-1">
+          <div class="panel-header"><div><div class="panel-label">${escapeHtml(c.frontendLabel)}</div><h2>${escapeHtml(c.frontendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.frontendStatus)}</span></div>
+          <p class="panel-copy">${escapeHtml(c.frontendCopy)}</p>
+          <div class="feature-stack" style="margin-top: 22px">
+            <div class="feature-card"><span class="feature-icon">◌</span><span><strong>${escapeHtml(c.featureRealtime)}</strong><span>${escapeHtml(c.featureRealtimeCopy)}</span></span></div>
+            <div class="feature-card"><span class="feature-icon">文</span><span><strong>${escapeHtml(c.featureI18n)}</strong><span>${escapeHtml(c.featureI18nCopy)}</span></span></div>
+            <div class="feature-card"><span class="feature-icon">↗</span><span><strong>${escapeHtml(c.featureOperator)}</strong><span>${escapeHtml(c.featureOperatorCopy)}</span></span></div>
           </div>
-          <div class="item">
-            <h3>What to inspect first</h3>
-            <p>
-              Start with the README, API docs, worker handlers, Prisma schema, demo flow, operations runbook,
-              Tencent staging notes, and AWS Lightsail plan-only infrastructure.
-            </p>
-            <div class="actions">
-              <a class="button" href="/docs">API Docs</a>
-              <a class="button" href="/openapi.json">OpenAPI JSON</a>
-            </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header"><div><div class="panel-label">${escapeHtml(c.backendLabel)}</div><h2>${escapeHtml(c.backendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.backendStatus)}</span></div>
+          <p class="panel-copy">${escapeHtml(c.backendCopy)}</p>
+          <div class="backend-stack" style="margin-top: 22px">
+            ${endpointRow('live')}
+            ${endpointRow('ready')}
+            ${endpointRow('openapi')}
+            ${endpointRow('docs')}
           </div>
-        </div>
+        </article>
       </section>
 
-      <section class="section" aria-labelledby="other-title">
-        <h2 id="other-title">Existing Study Portals</h2>
-        <div class="links">
-          <a class="button" href="/saa/">SAA</a>
-          <a class="button" href="/sap/">SAP</a>
-          <a class="button" href="/ispm/">ISPM</a>
-        </div>
+      <section class="integration-band" aria-label="Deployment architecture and evidence timeline">
+        <article class="signal-map">
+          <div class="panel-label">${escapeHtml(c.mapTitle)}</div>
+          <p class="panel-copy">${escapeHtml(c.mapCopy)}</p>
+          <div class="signal-orbit" aria-hidden="true">
+            <span class="signal-line one"></span><span class="signal-line two"></span><span class="signal-line three"></span>
+            <span class="node frontend">${escapeHtml(c.nodeFrontend)}</span><span class="node api">${escapeHtml(c.nodeApi)}</span><span class="node worker">${escapeHtml(c.nodeWorker)}</span><span class="node db">${escapeHtml(c.nodeDb)}</span><span class="node redis">${escapeHtml(c.nodeRedis)}</span>
+          </div>
+        </article>
+        <article class="timeline">
+          <div class="panel-label">${escapeHtml(c.timelineTitle)}</div>
+          <p class="panel-copy">${escapeHtml(c.timelineCopy)}</p>
+          <div class="timeline-list">
+            <div class="timeline-item"><time>00:00</time><span><strong>${escapeHtml(c.timelineOne)}</strong><span>${escapeHtml(c.timelineOneCopy)}</span></span></div>
+            <div class="timeline-item"><time>00:01</time><span><strong>${escapeHtml(c.timelineTwo)}</strong><span>${escapeHtml(c.timelineTwoCopy)}</span></span></div>
+            <div class="timeline-item"><time>00:02</time><span><strong>${escapeHtml(c.timelineThree)}</strong><span>${escapeHtml(c.timelineThreeCopy)}</span></span></div>
+          </div>
+        </article>
       </section>
-    </main>
 
-    <footer class="shell">
-      PulseBoard is a backend/platform portfolio project. Public cloud provisioning, DNS changes, and paid resources remain separate approval gates.
-    </footer>
+      <footer class="footer">
+        <span>${escapeHtml(c.footer)}</span>
+        <span><a href="/openapi.json" target="_blank" rel="noreferrer">OpenAPI</a> · <a href="/docs" target="_blank" rel="noreferrer">Scalar</a> · <a href="/health/ready" target="_blank" rel="noreferrer">Ready</a></span>
+      </footer>
+    </main>`;
+    app.querySelector('.lang-select')?.addEventListener('change', (event) => {
+        const next = event.currentTarget.value;
+        if (!localeOrder.includes(next))
+            return;
+        currentLocale = next;
+        window.localStorage.setItem('pulseboard-locale', next);
+        render();
+    });
+    app.querySelector('[data-action="probe"]')?.addEventListener('click', () => {
+        void probeBackend();
+    });
+}
+async function fetchWithTimeout(path, timeoutMs = 3500) {
+    const started = performance.now();
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const response = await fetch(path, { cache: 'no-store', signal: controller.signal });
+        return { response, latency: Math.round(performance.now() - started) };
+    }
+    finally {
+        window.clearTimeout(timeout);
+    }
+}
+async function probeBackend() {
+    endpointStates = { ...endpointStates, live: 'checking', ready: 'checking', openapi: 'checking' };
+    render();
+    try {
+        const live = await fetchWithTimeout('/health/live');
+        endpointStates.live = live.response.ok ? 'online' : 'offline';
+        latencyMs = live.latency;
+    }
+    catch {
+        endpointStates.live = 'offline';
+        latencyMs = 0;
+    }
+    try {
+        const ready = await fetchWithTimeout('/health/ready');
+        endpointStates.ready = ready.response.ok ? 'online' : 'offline';
+    }
+    catch {
+        endpointStates.ready = 'offline';
+    }
+    try {
+        const openapi = await fetchWithTimeout('/openapi.json');
+        endpointStates.openapi = openapi.response.ok ? 'online' : 'offline';
+        if (openapi.response.ok) {
+            const document = (await openapi.response.json());
+            openApiPathCount = Object.keys(document.paths ?? {}).length;
+        }
+    }
+    catch {
+        endpointStates.openapi = 'offline';
+    }
+    endpointStates.docs = 'docs';
+    lastProbeAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    render();
+}
+render();
+void probeBackend();
+window.setInterval(() => {
+    void probeBackend();
+}, 30000);</script>
   </body>
 </html>
