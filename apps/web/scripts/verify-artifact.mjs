@@ -44,6 +44,8 @@ expect('generated artifact surfaces frontend plane', html.includes('Frontend pla
 expect('generated artifact links customer-facing frontend site', html.includes('Open customer-facing site') && html.includes('href="/frontend/"'));
 expect('generated frontend customer site exists', frontendHtml.includes('<title>PulseBoard Operations Cloud - Customer Site</title>'));
 expect('generated frontend customer site has commercial content', frontendHtml.includes('Book a product demo') && frontendHtml.includes('Pricing') && frontendHtml.includes('Questions a buyer would actually ask'));
+expect('generated frontend customer site has scroll-driven 3D tower', frontendHtml.includes('Scroll-driven 3D storytelling') && frontendHtml.includes('scroll-theater') && frontendHtml.includes('towerCore') && frontendHtml.includes('camera-x') && frontendHtml.includes('Opening orbit: full building'));
+expect('generated frontend customer site maps tower to backend architecture', frontendHtml.includes('PostgreSQL') && frontendHtml.includes('Redis + BullMQ') && frontendHtml.includes('API Edge') && frontendHtml.includes('Final pullback: complete SaaS demo'));
 expect('generated frontend customer site links backend proof', frontendHtml.includes('Backend proof') && frontendHtml.includes('href="/"'));
 expect('generated frontend customer site has language system', frontendHtml.includes('localeOrder') && frontendHtml.includes('zh-CN') && frontendHtml.includes('zh-TW'));
 expect('generated artifact surfaces backend plane', html.includes('Backend plane'));

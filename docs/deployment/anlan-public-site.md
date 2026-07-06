@@ -5,6 +5,7 @@ This document records the current public PulseBoard demo entry point on the exis
 ## Public Endpoints
 
 - Homepage: `https://anlan.store/`
+- Customer-facing frontend homepage: `https://anlan.store/frontend/`
 - API docs: `https://anlan.store/docs`
 - OpenAPI JSON: `https://anlan.store/openapi.json`
 - Readiness: `https://anlan.store/health/ready`
@@ -15,21 +16,24 @@ This document records the current public PulseBoard demo entry point on the exis
 ## Server Layout
 
 - Frontend app source in this repository: [`../../apps/web`](../../apps/web)
-- Generated static homepage in this repository: [`../../deploy/anlan/index.html`](../../deploy/anlan/index.html)
+- Generated static cockpit homepage in this repository: [`../../deploy/anlan/index.html`](../../deploy/anlan/index.html)
+- Generated customer-facing frontend homepage in this repository: [`../../deploy/anlan/frontend/index.html`](../../deploy/anlan/frontend/index.html)
 - Nginx config source in this repository: [`../../deploy/anlan/nginx/anlan.conf`](../../deploy/anlan/nginx/anlan.conf)
-- Server homepage target: `/var/www/html/index.html`
+- Server cockpit homepage target: `/var/www/html/index.html`
+- Server customer-facing frontend target: `/var/www/html/frontend/index.html`
 - Server Nginx target: `/etc/nginx/sites-available/anlan.conf`
 - Existing study portal paths preserved: `/saa/`, `/sap/`, `/ispm/`
 - PulseBoard API remains bound locally through Docker Compose: `127.0.0.1:4000`
 
 ## Deployment Commands
 
-From the repository root on the operator machine, build the frontend first. The build generates a single-file homepage at `deploy/anlan/index.html` so the public root can show both the frontend experience and backend surface.
+From the repository root on the operator machine, build the frontend first. The build generates the cockpit homepage at `deploy/anlan/index.html` and the customer-facing SaaS homepage at `deploy/anlan/frontend/index.html`.
 
 ```bash
 pnpm build:web
 pnpm verify:web
 scp deploy/anlan/index.html 175.178.175.56:/tmp/pulseboard-anlan-index.html
+scp deploy/anlan/frontend/index.html 175.178.175.56:/tmp/pulseboard-anlan-frontend-index.html
 scp deploy/anlan/nginx/anlan.conf 175.178.175.56:/tmp/pulseboard-anlan.conf
 ```
 
@@ -38,8 +42,11 @@ On the server, install with backups before reload:
 ```bash
 ts=$(date -u +%Y%m%dT%H%M%SZ)
 sudo cp /var/www/html/index.html /var/www/html/index.html.backup-$ts
+if [ -f /var/www/html/frontend/index.html ]; then sudo cp /var/www/html/frontend/index.html /var/www/html/frontend/index.html.backup-$ts; fi
 sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
 sudo install -m 0644 /tmp/pulseboard-anlan-index.html /var/www/html/index.html
+sudo install -d -m 0755 /var/www/html/frontend
+sudo install -m 0644 /tmp/pulseboard-anlan-frontend-index.html /var/www/html/frontend/index.html
 sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf
 sudo nginx -t
 sudo systemctl reload nginx
@@ -60,7 +67,7 @@ sudo certbot certificates
 
 ## Verification
 
-Before uploading, run the local artifact gate. CI also runs this gate and checks that `deploy/anlan/index.html` is up to date with `apps/web` source changes:
+Before uploading, run the local artifact gate. CI also runs this gate and checks that `deploy/anlan/index.html` and `deploy/anlan/frontend/index.html` are up to date with `apps/web` source changes:
 
 ```bash
 pnpm verify:web
@@ -82,6 +89,7 @@ Manual spot checks remain useful when investigating a failure:
 
 ```bash
 curl -I https://www.anlan.store
+curl -I https://anlan.store/frontend/
 curl -fsS https://anlan.store/health/live
 curl -fsS https://anlan.store/health/ready
 curl -I https://anlan.store/docs
@@ -95,6 +103,7 @@ sudo docker compose -f docker-compose.production.example.yml ps
 Expected results:
 
 - Homepage renders the frontend cockpit and backend probes together.
+- `/frontend/` renders the customer-facing SaaS homepage with a scroll-driven 3D reliability tower, commercial product sections, pricing, FAQ, and backend-proof CTA.
 - Language selector exposes 10 locales, with English first/default and Simplified Chinese last.
 - `/?lang=zh-TW`, `/?lang=zh-CN`, and `/?lang=ar` can be used for deterministic locale checks; Arabic should set the page direction to RTL.
 - Browser console should have no frontend page errors on the homepage.
@@ -111,6 +120,7 @@ Restore the latest timestamped backup and reload Nginx:
 
 ```bash
 sudo install -m 0644 /var/www/html/index.html.backup-<timestamp> /var/www/html/index.html
+sudo install -m 0644 /var/www/html/frontend/index.html.backup-<timestamp> /var/www/html/frontend/index.html
 sudo install -m 0644 /etc/nginx/sites-available/anlan.conf.backup-<timestamp> /etc/nginx/sites-available/anlan.conf
 sudo nginx -t
 sudo systemctl reload nginx

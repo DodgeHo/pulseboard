@@ -58,7 +58,7 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build:web
           pnpm verify:web
-          git diff --exit-code -- deploy/anlan/index.html
+          git diff --exit-code -- deploy/anlan/index.html deploy/anlan/frontend/index.html
 
       - name: Configure SSH
         env:
@@ -94,6 +94,7 @@ jobs:
         run: |
           set -euo pipefail
           scp deploy/anlan/index.html pulseboard-staging:/tmp/pulseboard-anlan-index.html
+          scp deploy/anlan/frontend/index.html pulseboard-staging:/tmp/pulseboard-anlan-frontend-index.html
           scp deploy/anlan/nginx/anlan.conf pulseboard-staging:/tmp/pulseboard-anlan.conf
 
       - name: Deploy and verify backend on staging host
@@ -148,11 +149,16 @@ jobs:
           if [ -f /var/www/html/index.html ]; then
             sudo cp /var/www/html/index.html /var/www/html/index.html.backup-$ts
           fi
+          if [ -f /var/www/html/frontend/index.html ]; then
+            sudo cp /var/www/html/frontend/index.html /var/www/html/frontend/index.html.backup-$ts
+          fi
           if [ -f /etc/nginx/sites-available/anlan.conf ]; then
             sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
           fi
 
           sudo install -m 0644 /tmp/pulseboard-anlan-index.html /var/www/html/index.html
+          sudo install -d -m 0755 /var/www/html/frontend
+          sudo install -m 0644 /tmp/pulseboard-anlan-frontend-index.html /var/www/html/frontend/index.html
           sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf
           sudo nginx -t
           sudo systemctl reload nginx

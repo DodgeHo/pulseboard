@@ -81,8 +81,10 @@ async function verifyFrontendSite() {
   expect('frontend customer site returns 200', response.status === 200, `${response.status} ${response.statusText}`);
   expect('frontend customer site is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
   expect('frontend customer site title is product site', body.includes('<title>PulseBoard Operations Cloud - Customer Site</title>'));
-  expect('frontend customer site has commercial hero', body.includes('Know your uptime.') && body.includes('Win customer trust.'));
-  expect('frontend customer site has rich business sections', body.includes('Pricing') && body.includes('Questions a buyer would actually ask') && body.includes('Book a product demo'));
+  expect('frontend customer site has commercial hero', body.includes('A customer-ready operations website') && body.includes('Book a product demo'));
+  expect('frontend customer site has rich business sections', body.includes('Pricing') && body.includes('Questions a buyer would actually ask') && body.includes('Explore the 3D command tower'));
+  expect('frontend customer site has scroll-driven 3D tower', body.includes('Scroll-driven 3D storytelling') && body.includes('scroll-theater') && body.includes('towerCore') && body.includes('camera-x') && body.includes('Opening orbit: full building'));
+  expect('frontend customer site maps tower to backend architecture', body.includes('PostgreSQL') && body.includes('Redis + BullMQ') && body.includes('API Edge') && body.includes('Final pullback: complete SaaS demo'));
   expect('frontend customer site keeps language system', body.includes('localeOrder') && body.includes('zh-CN') && body.includes('zh-TW'));
   expect('frontend customer site links backend proof', body.includes('Backend proof') && body.includes('href="/"'));
 }
