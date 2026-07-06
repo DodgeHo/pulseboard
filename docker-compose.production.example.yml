@@ -98,5 +98,26 @@ services:
       redis:
         condition: service_healthy
 
+
+  public-site:
+    build:
+      context: .
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-bookworm-slim}
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
+        APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
+        APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
+    command: >
+      sh -c "set -eu;
+      ts=$$(date -u +%Y%m%dT%H%M%SZ);
+      if [ -f /host-web/index.html ]; then
+        cp /host-web/index.html /host-web/index.html.backup-$$ts;
+      fi;
+      install -m 0644 /app/deploy/anlan/index.html /host-web/index.html;
+      echo public site installed to /var/www/html/index.html"
+    volumes:
+      - /var/www/html:/host-web
+    restart: "no"
+
 volumes:
   postgres_data:
