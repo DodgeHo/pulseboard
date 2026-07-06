@@ -11,6 +11,8 @@
     "compose:integration": "bash scripts/local-compose-integration.sh",
     "dev:api": "corepack pnpm --filter @pulseboard/api dev",
     "dev:worker": "corepack pnpm --filter @pulseboard/worker dev",
+    "dev:web": "corepack pnpm --filter @pulseboard/web dev",
+    "build:web": "corepack pnpm --filter @pulseboard/web build",
     "db:generate": "corepack pnpm --filter @pulseboard/db db:generate",
     "db:push": "corepack pnpm --filter @pulseboard/db db:push",
     "db:deploy": "corepack pnpm --filter @pulseboard/db db:deploy",
@@ -20,7 +22,9 @@
     "typecheck": "corepack pnpm db:generate && tsc --noEmit -p tsconfig.tools.json && corepack pnpm -r typecheck",
     "test": "corepack pnpm -r test",
     "test:integration": "corepack pnpm --filter @pulseboard/api test:integration",
-    "lint": "corepack pnpm typecheck"
+    "lint": "corepack pnpm typecheck",
+    "verify:web": "corepack pnpm --filter @pulseboard/web verify",
+    "verify:public": "node scripts/verify-public-surface.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.19.0",
