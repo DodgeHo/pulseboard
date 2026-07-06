@@ -143,6 +143,20 @@ function render() {
         <article class="panel frontend-home-panel" id="frontend-home" tabindex="-1">
           <div class="panel-header"><div><div class="panel-label">${escapeHtml(c.frontendLabel)}</div><h2>${escapeHtml(c.frontendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.frontendStatus)}</span></div>
           <p class="panel-copy">${escapeHtml(c.frontendCopy)}</p>
+          <div class="vertical-tower-preview" aria-label="Vertical 3D PulseBoard reliability tower preview">
+            <div class="preview-skyline" aria-hidden="true">
+              <span class="preview-spire"></span>
+              <span class="preview-floor" style="--i:0">API Edge</span>
+              <span class="preview-floor" style="--i:1">OpenAPI</span>
+              <span class="preview-floor" style="--i:2">Services</span>
+              <span class="preview-floor" style="--i:3">Incidents</span>
+              <span class="preview-floor" style="--i:4">Webhooks</span>
+              <span class="preview-floor" style="--i:5">Worker</span>
+              <span class="preview-floor" style="--i:6">Readiness</span>
+              <span class="preview-base">PostgreSQL · Redis · BullMQ</span>
+            </div>
+            <a class="tower-preview-cta" href="/frontend/#tower">Enter scroll-driven tower <span aria-hidden="true">&nearr;</span></a>
+          </div>
           <div class="feature-stack" style="margin-top: 22px">
             <div class="feature-card"><span class="feature-icon">◌</span><span><strong>${escapeHtml(c.featureRealtime)}</strong><span>${escapeHtml(c.featureRealtimeCopy)}</span></span></div>
             <div class="feature-card"><span class="feature-icon">文</span><span><strong>${escapeHtml(c.featureI18n)}</strong><span>${escapeHtml(c.featureI18nCopy)}</span></span></div>

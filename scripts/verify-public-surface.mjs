@@ -62,6 +62,7 @@ async function verifyHomepage() {
   expect('homepage title is frontend + backend demo', body.includes('<title>PulseBoard - Frontend + Backend Demo</title>'));
   expect('homepage includes app root', body.includes('id="app"'));
   expect('homepage includes frontend plane', body.includes('Frontend plane'));
+  expect('homepage includes vertical tower preview', body.includes('vertical-tower-preview') && body.includes('Enter scroll-driven tower'));
   expect('homepage links customer-facing frontend site', body.includes('Open customer-facing site') && body.includes('href="/frontend/"'));
   expect('homepage includes backend plane', body.includes('Backend plane'));
   expect('homepage includes English-first locale order', body.includes(localeOrderNeedle));
@@ -83,8 +84,9 @@ async function verifyFrontendSite() {
   expect('frontend customer site title is product site', body.includes('<title>PulseBoard Operations Cloud - Customer Site</title>'));
   expect('frontend customer site has commercial hero', body.includes('A customer-ready operations website') && body.includes('Book a product demo'));
   expect('frontend customer site has rich business sections', body.includes('Pricing') && body.includes('Questions a buyer would actually ask') && body.includes('Explore the 3D command tower'));
-  expect('frontend customer site has scroll-driven 3D tower', body.includes('Scroll-driven 3D storytelling') && body.includes('scroll-theater') && body.includes('towerCore') && body.includes('camera-x') && body.includes('Opening orbit: full building'));
+  expect('frontend customer site has scroll-driven 3D tower', body.includes('Scroll-driven 3D storytelling') && body.includes('scroll-theater') && body.includes('towerCore') && body.includes('camera-x') && body.includes('Opening orbit: vertical full tower'));
   expect('frontend customer site maps tower to backend architecture', body.includes('PostgreSQL') && body.includes('Redis + BullMQ') && body.includes('API Edge') && body.includes('Final pullback: complete SaaS demo'));
+  expect('frontend customer site uses upright tower language', body.includes('vertical reliability tower') && body.includes('standing reliability tower') && body.includes('upright PulseBoard tower'));
   expect('frontend customer site keeps language system', body.includes('localeOrder') && body.includes('zh-CN') && body.includes('zh-TW'));
   expect('frontend customer site links backend proof', body.includes('Backend proof') && body.includes('href="/"'));
 }
