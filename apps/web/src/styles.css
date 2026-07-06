@@ -29,6 +29,7 @@
 
 html {
   min-height: 100%;
+  scroll-behavior: smooth;
   background: var(--bg);
 }
 
@@ -149,7 +150,8 @@ button {
 .lang-select,
 .nav-link,
 .ghost-button,
-.primary-button {
+.primary-button,
+.frontend-home-button {
   min-height: 40px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -167,7 +169,8 @@ button {
 
 .nav-link,
 .ghost-button,
-.primary-button {
+.primary-button,
+.frontend-home-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -182,6 +185,30 @@ button {
   background: linear-gradient(135deg, rgba(103, 232, 249, 0.9), rgba(167, 139, 250, 0.86));
   color: #06101d;
   box-shadow: 0 14px 48px rgba(103, 232, 249, 0.18);
+}
+
+.frontend-home-button {
+  min-height: 58px;
+  padding: 0 28px;
+  border-color: rgba(52, 211, 153, 0.7);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.9), transparent 18%),
+    linear-gradient(135deg, rgba(52, 211, 153, 0.95), rgba(103, 232, 249, 0.9) 52%, rgba(167, 139, 250, 0.92));
+  color: #04111b;
+  font-size: clamp(15px, 2vw, 18px);
+  box-shadow: 0 18px 60px rgba(52, 211, 153, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(0);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.frontend-home-button:hover {
+  box-shadow: 0 24px 76px rgba(103, 232, 249, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+  filter: saturate(1.08);
+  transform: translateY(-2px);
+}
+
+.frontend-home-button span {
+  font-size: 20px;
 }
 
 .hero {
@@ -435,6 +462,16 @@ h1 {
   background: currentColor;
   content: "";
   animation: pulse 1.8s ease-in-out infinite;
+}
+
+
+.frontend-home-panel {
+  scroll-margin-top: 112px;
+}
+
+.frontend-home-panel:focus {
+  outline: 2px solid rgba(103, 232, 249, 0.62);
+  outline-offset: 6px;
 }
 
 .feature-stack,

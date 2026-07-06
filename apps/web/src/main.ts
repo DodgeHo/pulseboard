@@ -123,6 +123,7 @@ function render() {
           <h1 id="hero-title"><span class="gradient-text">${escapeHtml(c.titleA)}</span><br />${escapeHtml(c.titleB)}</h1>
           <p class="lead">${escapeHtml(c.lead)}</p>
           <div class="hero-actions">
+            <a class="frontend-home-button" href="#frontend-home" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">↓</span></a>
             <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} ↗</a>
             <button class="ghost-button" type="button" data-action="probe">${escapeHtml(c.secondaryCta)}</button>
           </div>
@@ -139,7 +140,7 @@ function render() {
       </section>
 
       <section class="dual-grid" aria-label="Frontend and backend surfaces">
-        <article class="panel">
+        <article class="panel frontend-home-panel" id="frontend-home" tabindex="-1">
           <div class="panel-header"><div><div class="panel-label">${escapeHtml(c.frontendLabel)}</div><h2>${escapeHtml(c.frontendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.frontendStatus)}</span></div>
           <p class="panel-copy">${escapeHtml(c.frontendCopy)}</p>
           <div class="feature-stack" style="margin-top: 22px">

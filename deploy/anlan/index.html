@@ -43,6 +43,7 @@
 
 html {
   min-height: 100%;
+  scroll-behavior: smooth;
   background: var(--bg);
 }
 
@@ -163,7 +164,8 @@ button {
 .lang-select,
 .nav-link,
 .ghost-button,
-.primary-button {
+.primary-button,
+.frontend-home-button {
   min-height: 40px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -181,7 +183,8 @@ button {
 
 .nav-link,
 .ghost-button,
-.primary-button {
+.primary-button,
+.frontend-home-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -196,6 +199,30 @@ button {
   background: linear-gradient(135deg, rgba(103, 232, 249, 0.9), rgba(167, 139, 250, 0.86));
   color: #06101d;
   box-shadow: 0 14px 48px rgba(103, 232, 249, 0.18);
+}
+
+.frontend-home-button {
+  min-height: 58px;
+  padding: 0 28px;
+  border-color: rgba(52, 211, 153, 0.7);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.9), transparent 18%),
+    linear-gradient(135deg, rgba(52, 211, 153, 0.95), rgba(103, 232, 249, 0.9) 52%, rgba(167, 139, 250, 0.92));
+  color: #04111b;
+  font-size: clamp(15px, 2vw, 18px);
+  box-shadow: 0 18px 60px rgba(52, 211, 153, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transform: translateY(0);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.frontend-home-button:hover {
+  box-shadow: 0 24px 76px rgba(103, 232, 249, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+  filter: saturate(1.08);
+  transform: translateY(-2px);
+}
+
+.frontend-home-button span {
+  font-size: 20px;
 }
 
 .hero {
@@ -449,6 +476,16 @@ h1 {
   background: currentColor;
   content: "";
   animation: pulse 1.8s ease-in-out infinite;
+}
+
+
+.frontend-home-panel {
+  scroll-margin-top: 112px;
+}
+
+.frontend-home-panel:focus {
+  outline: 2px solid rgba(103, 232, 249, 0.62);
+  outline-offset: 6px;
 }
 
 .feature-stack,
@@ -774,6 +811,7 @@ const en = {
     lead: 'PulseBoard is not a decorative landing page. It is an operations cockpit that shows the frontend experience and the backend platform contract on the same screen.',
     primaryCta: 'Open API reference',
     secondaryCta: 'Probe backend now',
+    frontendHomeCta: 'Enter frontend homepage',
     metricLatency: 'live probe latency',
     metricPaths: 'OpenAPI paths',
     metricLanguages: 'interface languages',
@@ -828,6 +866,7 @@ const overrides = {
         lead: 'PulseBoard 不是裝飾性的 landing page，而是一個操作座艙：前端體驗與後端平台契約會在同一個畫面被看見。',
         primaryCta: '開啟 API 文件',
         secondaryCta: '立即探測後端',
+        frontendHomeCta: '進入前端首頁',
         metricLatency: '即時探測延遲',
         metricPaths: 'OpenAPI 路徑',
         metricLanguages: '介面語言',
@@ -876,6 +915,7 @@ const overrides = {
         lead: 'PulseBoard は飾りだけのランディングページではありません。フロントエンド体験とバックエンド契約を同じ画面で見せる運用コックピットです。',
         primaryCta: 'API リファレンスを開く',
         secondaryCta: 'バックエンドを探査',
+        frontendHomeCta: 'フロントエンドホームへ',
         metricLatency: 'ライブ探査レイテンシ',
         metricPaths: 'OpenAPI パス',
         metricLanguages: 'UI 言語',
@@ -918,6 +958,7 @@ const overrides = {
         lead: 'PulseBoard는 장식용 랜딩 페이지가 아닙니다. 프런트엔드 경험과 백엔드 플랫폼 계약을 한 화면에서 보여 주는 운영 콕핏입니다.',
         primaryCta: 'API 레퍼런스 열기',
         secondaryCta: '백엔드 탐색',
+        frontendHomeCta: '프론트엔드 홈으로',
         metricLatency: '라이브 탐색 지연',
         metricPaths: 'OpenAPI 경로',
         metricLanguages: '인터페이스 언어',
@@ -960,6 +1001,7 @@ const overrides = {
         lead: 'PulseBoard no es una landing decorativa. Es una cabina operativa que muestra la experiencia frontend y el contrato backend en la misma pantalla.',
         primaryCta: 'Abrir referencia API',
         secondaryCta: 'Probar backend ahora',
+        frontendHomeCta: 'Entrar al inicio frontend',
         metricLatency: 'latencia de prueba',
         metricPaths: 'rutas OpenAPI',
         metricLanguages: 'idiomas de interfaz',
@@ -1002,6 +1044,7 @@ const overrides = {
         lead: 'PulseBoard n’est pas une landing décorative. C’est un cockpit opérationnel qui montre l’expérience frontend et le contrat backend sur le même écran.',
         primaryCta: 'Ouvrir la référence API',
         secondaryCta: 'Tester le backend',
+        frontendHomeCta: 'Ouvrir l’accueil frontend',
         metricLatency: 'latence de sonde',
         metricPaths: 'chemins OpenAPI',
         metricLanguages: 'langues UI',
@@ -1044,6 +1087,7 @@ const overrides = {
         lead: 'PulseBoard ist keine dekorative Landingpage. Es ist ein Operations-Cockpit, das Frontend-Erlebnis und Backend-Vertrag auf demselben Bildschirm zeigt.',
         primaryCta: 'API-Referenz öffnen',
         secondaryCta: 'Backend jetzt prüfen',
+        frontendHomeCta: 'Frontend-Startseite oeffnen',
         metricLatency: 'Live-Probe-Latenz',
         metricPaths: 'OpenAPI-Pfade',
         metricLanguages: 'Interface-Sprachen',
@@ -1086,6 +1130,7 @@ const overrides = {
         lead: 'PulseBoard não é uma landing page decorativa. É um cockpit operacional que mostra a experiência frontend e o contrato backend na mesma tela.',
         primaryCta: 'Abrir referência API',
         secondaryCta: 'Testar backend agora',
+        frontendHomeCta: 'Entrar na pagina frontend',
         metricLatency: 'latência da sonda',
         metricPaths: 'rotas OpenAPI',
         metricLanguages: 'idiomas da interface',
@@ -1128,6 +1173,7 @@ const overrides = {
         lead: 'PulseBoard ليست صفحة تسويقية فقط، بل قمرة تشغيل تعرض تجربة الواجهة الأمامية وعقد المنصة الخلفية على الشاشة نفسها.',
         primaryCta: 'فتح مرجع API',
         secondaryCta: 'اختبار الخلفية الآن',
+        frontendHomeCta: 'افتح الصفحة الأمامية',
         metricLatency: 'زمن فحص حي',
         metricPaths: 'مسارات OpenAPI',
         metricLanguages: 'لغات الواجهة',
@@ -1170,6 +1216,7 @@ const overrides = {
         lead: 'PulseBoard 不是装饰性的 landing page，而是一个操作座舱：前端体验和后端平台契约会在同一个画面被看见。',
         primaryCta: '打开 API 文档',
         secondaryCta: '立即探测后端',
+        frontendHomeCta: '进入前端首页',
         metricLatency: '实时探测延迟',
         metricPaths: 'OpenAPI 路径',
         metricLanguages: '界面语言',
@@ -1321,6 +1368,7 @@ function render() {
           <h1 id="hero-title"><span class="gradient-text">${escapeHtml(c.titleA)}</span><br />${escapeHtml(c.titleB)}</h1>
           <p class="lead">${escapeHtml(c.lead)}</p>
           <div class="hero-actions">
+            <a class="frontend-home-button" href="#frontend-home" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">↓</span></a>
             <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} ↗</a>
             <button class="ghost-button" type="button" data-action="probe">${escapeHtml(c.secondaryCta)}</button>
           </div>
@@ -1337,7 +1385,7 @@ function render() {
       </section>
 
       <section class="dual-grid" aria-label="Frontend and backend surfaces">
-        <article class="panel">
+        <article class="panel frontend-home-panel" id="frontend-home" tabindex="-1">
           <div class="panel-header"><div><div class="panel-label">${escapeHtml(c.frontendLabel)}</div><h2>${escapeHtml(c.frontendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.frontendStatus)}</span></div>
           <p class="panel-copy">${escapeHtml(c.frontendCopy)}</p>
           <div class="feature-stack" style="margin-top: 22px">

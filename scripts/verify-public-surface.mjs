@@ -62,6 +62,7 @@ async function verifyHomepage() {
   expect('homepage title is frontend + backend demo', body.includes('<title>PulseBoard - Frontend + Backend Demo</title>'));
   expect('homepage includes app root', body.includes('id="app"'));
   expect('homepage includes frontend plane', body.includes('Frontend plane'));
+  expect('homepage includes frontend homepage CTA', body.includes('Enter frontend homepage') && body.includes('href="#frontend-home"') && body.includes('id="frontend-home"'));
   expect('homepage includes backend plane', body.includes('Backend plane'));
   expect('homepage includes English-first locale order', body.includes(localeOrderNeedle));
   expect('homepage includes Traditional Chinese locale', body.includes(traditionalChineseLabel));

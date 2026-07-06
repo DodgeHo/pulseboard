@@ -40,6 +40,7 @@ expect('generated artifact exposes Simplified Chinese last locale', html.include
 expect('generated artifact exposes Arabic locale', html.includes(arabicLabel));
 expect('generated artifact title identifies frontend and backend demo', html.includes('<title>PulseBoard - Frontend + Backend Demo</title>'));
 expect('generated artifact surfaces frontend plane', html.includes('Frontend plane'));
+expect('generated artifact includes frontend homepage CTA', html.includes('Enter frontend homepage') && html.includes('href="#frontend-home"') && html.includes('id="frontend-home"'));
 expect('generated artifact surfaces backend plane', html.includes('Backend plane'));
 expect('generated artifact probes liveness endpoint', html.includes('/health/live'));
 expect('generated artifact probes readiness endpoint', html.includes('/health/ready'));

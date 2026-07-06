@@ -21,6 +21,7 @@ describe('web i18n contract', () => {
       'languageName',
       'titleA',
       'titleB',
+      'frontendHomeCta',
       'frontendLabel',
       'backendLabel',
       'liveEndpoint',
