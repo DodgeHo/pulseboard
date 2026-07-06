@@ -17,6 +17,7 @@ const text = (...codePoints) => String.fromCodePoint(...codePoints);
 const traditionalChineseLabel = text(0x7e41, 0x9ad4, 0x4e2d, 0x6587);
 const simplifiedChineseLabel = text(0x7b80, 0x4f53, 0x4e2d, 0x6587);
 const arabicLabel = text(0x0627, 0x0644, 0x0639, 0x0631, 0x0628, 0x064a, 0x0629);
+const localeOrderNeedle = "const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];";
 const mojibakeNeedles = [
   text(0x921, 0x6a5),
   text(0x921, 0x6ab),
@@ -59,8 +60,16 @@ expect('generated artifact supports deterministic locale URL param', html.includ
 expect('generated artifact sets Arabic RTL direction', html.includes("currentLocale === 'ar' ? 'rtl' : 'ltr'"));
 
 for (const needle of mojibakeNeedles) {
-  expect(`generated artifact has no mojibake marker U+${[...needle].map((char) => char.codePointAt(0).toString(16).toUpperCase()).join(' U+')}`, !html.includes(needle));
+  const codepoints = [...needle].map((char) => char.codePointAt(0).toString(16).toUpperCase()).join(' U+');
+  expect(`generated artifact has no mojibake marker U+${codepoints}`, !html.includes(needle));
+  expect(`generated frontend artifact has no mojibake marker U+${codepoints}`, !frontendHtml.includes(needle));
 }
+
+expect('generated frontend customer site exposes full locale list', frontendHtml.includes(localeOrderNeedle));
+expect('generated frontend customer site exposes Traditional Chinese label', frontendHtml.includes(traditionalChineseLabel));
+expect('generated frontend customer site exposes Simplified Chinese label', frontendHtml.includes(simplifiedChineseLabel));
+expect('generated frontend customer site exposes Arabic label', frontendHtml.includes(arabicLabel));
+expect('generated frontend customer site has localized buyer copy', frontendHtml.includes(text(0x4e00, 0x4e2a, 0x5ba2, 0x6237, 0x770b, 0x5f97, 0x61c2, 0x7684, 0x8fd0, 0x7ef4, 0x7f51, 0x7ad9)) && frontendHtml.includes(text(0x8fd0, 0x7ef4, 0x4eea, 0x8868, 0x76d8)));
 
 const scriptMatch = html.match(/<script type="module">(?<script>[\s\S]*)<\/script>/);
 expect('generated artifact inline script can be extracted', Boolean(scriptMatch?.groups?.script));
@@ -71,6 +80,17 @@ if (scriptMatch?.groups?.script) {
   const check = spawnSync(process.execPath, ['--check', tempScript], { encoding: 'utf8' });
   await rm(tempScript, { force: true });
   expect(`generated artifact inline script parses (${check.stderr || check.stdout || 'node --check failed'})`, check.status === 0);
+}
+
+const frontendScriptMatch = frontendHtml.match(/<script>(?<script>[\s\S]*)<\/script>\s*<\/body>/);
+expect('generated frontend inline script can be extracted', Boolean(frontendScriptMatch?.groups?.script));
+
+if (frontendScriptMatch?.groups?.script) {
+  const tempScript = join(tmpdir(), `pulseboard-frontend-artifact-${Date.now()}.js`);
+  await writeFile(tempScript, frontendScriptMatch.groups.script, 'utf8');
+  const check = spawnSync(process.execPath, ['--check', tempScript], { encoding: 'utf8' });
+  await rm(tempScript, { force: true });
+  expect(`generated frontend inline script parses (${check.stderr || check.stdout || 'node --check failed'})`, check.status === 0);
 }
 
 if (failures.length > 0) {
