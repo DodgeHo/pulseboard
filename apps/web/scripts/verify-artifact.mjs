@@ -25,6 +25,9 @@ const mojibakeNeedles = [
   text(0x7efb, 0x4fbb),
   text(0x6d93),
   text(0xfffd),
+  'f?brica',
+  'Mant?n',
+  'Gedr?ckt',
 ];
 
 function expect(name, condition) {
@@ -70,6 +73,9 @@ expect('generated frontend customer site exposes Traditional Chinese label', fro
 expect('generated frontend customer site exposes Simplified Chinese label', frontendHtml.includes(simplifiedChineseLabel));
 expect('generated frontend customer site exposes Arabic label', frontendHtml.includes(arabicLabel));
 expect('generated frontend customer site has localized buyer copy', frontendHtml.includes(text(0x4e00, 0x4e2a, 0x5ba2, 0x6237, 0x770b, 0x5f97, 0x61c2, 0x7684, 0x8fd0, 0x7ef4, 0x7f51, 0x7ad9)) && frontendHtml.includes(text(0x8fd0, 0x7ef4, 0x4eea, 0x8868, 0x76d8)));
+expect('generated frontend customer site includes extended Simplified Chinese runtime translations', frontendHtml.includes('PulseBoard 可靠性工坊') && frontendHtml.includes('为什么用软件工厂展示后端 demo'));
+expect('generated frontend customer site includes extended Traditional Chinese runtime translations', frontendHtml.includes('PulseBoard 可靠性工坊') && frontendHtml.includes('為什麼用軟體工廠展示後端 demo'));
+expect('generated frontend customer site includes extended Arabic runtime translations', frontendHtml.includes('ورشة موثوقية PulseBoard') && frontendHtml.includes('لماذا نستخدم مصنع برمجيات'));
 
 const scriptMatch = html.match(/<script type="module">(?<script>[\s\S]*)<\/script>/);
 expect('generated artifact inline script can be extracted', Boolean(scriptMatch?.groups?.script));

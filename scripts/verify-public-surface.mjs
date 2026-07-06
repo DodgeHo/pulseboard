@@ -7,6 +7,7 @@ const traditionalChineseLabel = text(0x7e41, 0x9ad4, 0x4e2d, 0x6587);
 const simplifiedChineseLabel = text(0x7b80, 0x4f53, 0x4e2d, 0x6587);
 const arabicLabel = text(0x0627, 0x0644, 0x0639, 0x0631, 0x0628, 0x064a, 0x0629);
 const localeOrderNeedle = "const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];";
+const frontendMojibakeNeedles = ['f?brica', 'Mant?n', 'Gedr?ckt', text(0xfffd)];
 
 function normalizeBaseUrl(value) {
   const url = new URL(value);
@@ -89,6 +90,12 @@ async function verifyFrontendSite() {
   expect('frontend customer site uses software factory language', body.includes('software factory') && body.includes('production lines') && body.includes('plant floor'));
   expect('frontend customer site keeps language system', body.includes('localeOrder') && body.includes('zh-CN') && body.includes('zh-TW'));
   expect('frontend customer site links backend proof', body.includes('Backend proof') && body.includes('href="/"'));
+  for (const needle of frontendMojibakeNeedles) {
+    expect(`frontend customer site has no mojibake marker ${needle}`, !body.includes(needle));
+  }
+  expect('frontend customer site includes extended Simplified Chinese translations', body.includes('PulseBoard 可靠性工坊') && body.includes('为什么用软件工厂展示后端 demo'));
+  expect('frontend customer site includes extended Traditional Chinese translations', body.includes('PulseBoard 可靠性工坊') && body.includes('為什麼用軟體工廠展示後端 demo'));
+  expect('frontend customer site includes extended Arabic translations', body.includes('ورشة موثوقية PulseBoard') && body.includes('لماذا نستخدم مصنع برمجيات'));
 }
 
 async function verifyBackendSurface() {
