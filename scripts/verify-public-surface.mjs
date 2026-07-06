@@ -62,7 +62,7 @@ async function verifyHomepage() {
   expect('homepage title is frontend + backend demo', body.includes('<title>PulseBoard - Frontend + Backend Demo</title>'));
   expect('homepage includes app root', body.includes('id="app"'));
   expect('homepage includes frontend plane', body.includes('Frontend plane'));
-  expect('homepage includes frontend homepage CTA', body.includes('Enter frontend homepage') && body.includes('href="#frontend-home"') && body.includes('id="frontend-home"'));
+  expect('homepage links customer-facing frontend site', body.includes('Open customer-facing site') && body.includes('href="/frontend/"'));
   expect('homepage includes backend plane', body.includes('Backend plane'));
   expect('homepage includes English-first locale order', body.includes(localeOrderNeedle));
   expect('homepage includes Traditional Chinese locale', body.includes(traditionalChineseLabel));
@@ -74,6 +74,17 @@ async function verifyHomepage() {
   expect('homepage includes API docs path', body.includes('/docs'));
   expect('homepage supports deterministic locale URL param', body.includes("get('lang')"));
   expect('homepage supports Arabic RTL direction', body.includes("currentLocale === 'ar' ? 'rtl' : 'ltr'"));
+}
+
+async function verifyFrontendSite() {
+  const { response, body } = await fetchText('/frontend/');
+  expect('frontend customer site returns 200', response.status === 200, `${response.status} ${response.statusText}`);
+  expect('frontend customer site is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+  expect('frontend customer site title is product site', body.includes('<title>PulseBoard Operations Cloud - Customer Site</title>'));
+  expect('frontend customer site has commercial hero', body.includes('Know your uptime.') && body.includes('Win customer trust.'));
+  expect('frontend customer site has rich business sections', body.includes('Pricing') && body.includes('Questions a buyer would actually ask') && body.includes('Book a product demo'));
+  expect('frontend customer site keeps language system', body.includes('localeOrder') && body.includes('zh-CN') && body.includes('zh-TW'));
+  expect('frontend customer site links backend proof', body.includes('Backend proof') && body.includes('href="/"'));
 }
 
 async function verifyBackendSurface() {
@@ -117,6 +128,7 @@ async function verifyWwwRedirect() {
 
 try {
   await verifyHomepage();
+  await verifyFrontendSite();
   await verifyBackendSurface();
   await verifyWwwRedirect();
 } catch (error) {

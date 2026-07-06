@@ -811,7 +811,7 @@ const en = {
     lead: 'PulseBoard is not a decorative landing page. It is an operations cockpit that shows the frontend experience and the backend platform contract on the same screen.',
     primaryCta: 'Open API reference',
     secondaryCta: 'Probe backend now',
-    frontendHomeCta: 'Enter frontend homepage',
+    frontendHomeCta: 'Open customer-facing site',
     metricLatency: 'live probe latency',
     metricPaths: 'OpenAPI paths',
     metricLanguages: 'interface languages',
@@ -866,7 +866,7 @@ const overrides = {
         lead: 'PulseBoard 不是裝飾性的 landing page，而是一個操作座艙：前端體驗與後端平台契約會在同一個畫面被看見。',
         primaryCta: '開啟 API 文件',
         secondaryCta: '立即探測後端',
-        frontendHomeCta: '進入前端首頁',
+        frontendHomeCta: '開啟客戶版網站',
         metricLatency: '即時探測延遲',
         metricPaths: 'OpenAPI 路徑',
         metricLanguages: '介面語言',
@@ -915,7 +915,7 @@ const overrides = {
         lead: 'PulseBoard は飾りだけのランディングページではありません。フロントエンド体験とバックエンド契約を同じ画面で見せる運用コックピットです。',
         primaryCta: 'API リファレンスを開く',
         secondaryCta: 'バックエンドを探査',
-        frontendHomeCta: 'フロントエンドホームへ',
+        frontendHomeCta: '顧客向けサイトを開く',
         metricLatency: 'ライブ探査レイテンシ',
         metricPaths: 'OpenAPI パス',
         metricLanguages: 'UI 言語',
@@ -958,7 +958,7 @@ const overrides = {
         lead: 'PulseBoard는 장식용 랜딩 페이지가 아닙니다. 프런트엔드 경험과 백엔드 플랫폼 계약을 한 화면에서 보여 주는 운영 콕핏입니다.',
         primaryCta: 'API 레퍼런스 열기',
         secondaryCta: '백엔드 탐색',
-        frontendHomeCta: '프론트엔드 홈으로',
+        frontendHomeCta: '고객용 사이트 열기',
         metricLatency: '라이브 탐색 지연',
         metricPaths: 'OpenAPI 경로',
         metricLanguages: '인터페이스 언어',
@@ -1001,7 +1001,7 @@ const overrides = {
         lead: 'PulseBoard no es una landing decorativa. Es una cabina operativa que muestra la experiencia frontend y el contrato backend en la misma pantalla.',
         primaryCta: 'Abrir referencia API',
         secondaryCta: 'Probar backend ahora',
-        frontendHomeCta: 'Entrar al inicio frontend',
+        frontendHomeCta: 'Abrir sitio para clientes',
         metricLatency: 'latencia de prueba',
         metricPaths: 'rutas OpenAPI',
         metricLanguages: 'idiomas de interfaz',
@@ -1044,7 +1044,7 @@ const overrides = {
         lead: 'PulseBoard n’est pas une landing décorative. C’est un cockpit opérationnel qui montre l’expérience frontend et le contrat backend sur le même écran.',
         primaryCta: 'Ouvrir la référence API',
         secondaryCta: 'Tester le backend',
-        frontendHomeCta: 'Ouvrir l’accueil frontend',
+        frontendHomeCta: 'Ouvrir le site client',
         metricLatency: 'latence de sonde',
         metricPaths: 'chemins OpenAPI',
         metricLanguages: 'langues UI',
@@ -1087,7 +1087,7 @@ const overrides = {
         lead: 'PulseBoard ist keine dekorative Landingpage. Es ist ein Operations-Cockpit, das Frontend-Erlebnis und Backend-Vertrag auf demselben Bildschirm zeigt.',
         primaryCta: 'API-Referenz öffnen',
         secondaryCta: 'Backend jetzt prüfen',
-        frontendHomeCta: 'Frontend-Startseite oeffnen',
+        frontendHomeCta: 'Kundenseite oeffnen',
         metricLatency: 'Live-Probe-Latenz',
         metricPaths: 'OpenAPI-Pfade',
         metricLanguages: 'Interface-Sprachen',
@@ -1130,7 +1130,7 @@ const overrides = {
         lead: 'PulseBoard não é uma landing page decorativa. É um cockpit operacional que mostra a experiência frontend e o contrato backend na mesma tela.',
         primaryCta: 'Abrir referência API',
         secondaryCta: 'Testar backend agora',
-        frontendHomeCta: 'Entrar na pagina frontend',
+        frontendHomeCta: 'Abrir site para clientes',
         metricLatency: 'latência da sonda',
         metricPaths: 'rotas OpenAPI',
         metricLanguages: 'idiomas da interface',
@@ -1173,7 +1173,7 @@ const overrides = {
         lead: 'PulseBoard ليست صفحة تسويقية فقط، بل قمرة تشغيل تعرض تجربة الواجهة الأمامية وعقد المنصة الخلفية على الشاشة نفسها.',
         primaryCta: 'فتح مرجع API',
         secondaryCta: 'اختبار الخلفية الآن',
-        frontendHomeCta: 'افتح الصفحة الأمامية',
+        frontendHomeCta: 'افتح موقع العملاء',
         metricLatency: 'زمن فحص حي',
         metricPaths: 'مسارات OpenAPI',
         metricLanguages: 'لغات الواجهة',
@@ -1216,7 +1216,7 @@ const overrides = {
         lead: 'PulseBoard 不是装饰性的 landing page，而是一个操作座舱：前端体验和后端平台契约会在同一个画面被看见。',
         primaryCta: '打开 API 文档',
         secondaryCta: '立即探测后端',
-        frontendHomeCta: '进入前端首页',
+        frontendHomeCta: '打开客户版网站',
         metricLatency: '实时探测延迟',
         metricPaths: 'OpenAPI 路径',
         metricLanguages: '界面语言',
@@ -1368,8 +1368,8 @@ function render() {
           <h1 id="hero-title"><span class="gradient-text">${escapeHtml(c.titleA)}</span><br />${escapeHtml(c.titleB)}</h1>
           <p class="lead">${escapeHtml(c.lead)}</p>
           <div class="hero-actions">
-            <a class="frontend-home-button" href="#frontend-home" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">↓</span></a>
-            <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} ↗</a>
+            <a class="frontend-home-button" href="/frontend/" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">&nearr;</span></a>
+            <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} &nearr;</a>
             <button class="ghost-button" type="button" data-action="probe">${escapeHtml(c.secondaryCta)}</button>
           </div>
           <div class="metrics-strip" aria-label="Live metrics">

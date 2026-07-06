@@ -123,8 +123,8 @@ function render() {
           <h1 id="hero-title"><span class="gradient-text">${escapeHtml(c.titleA)}</span><br />${escapeHtml(c.titleB)}</h1>
           <p class="lead">${escapeHtml(c.lead)}</p>
           <div class="hero-actions">
-            <a class="frontend-home-button" href="#frontend-home" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">↓</span></a>
-            <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} ↗</a>
+            <a class="frontend-home-button" href="/frontend/" aria-label="${escapeHtml(c.frontendHomeCta)}">${escapeHtml(c.frontendHomeCta)} <span aria-hidden="true">&nearr;</span></a>
+            <a class="primary-button" href="/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)} &nearr;</a>
             <button class="ghost-button" type="button" data-action="probe">${escapeHtml(c.secondaryCta)}</button>
           </div>
           <div class="metrics-strip" aria-label="Live metrics">

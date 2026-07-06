@@ -7,6 +7,7 @@ const appRoot = resolve(here, '..');
 const repoRoot = resolve(appRoot, '..', '..');
 
 const template = await readFile(resolve(appRoot, 'src', 'index.html'), 'utf8');
+const frontendTemplate = await readFile(resolve(appRoot, 'src', 'frontend.html'), 'utf8');
 const css = await readFile(resolve(appRoot, 'src', 'styles.css'), 'utf8');
 const i18n = await readFile(resolve(appRoot, 'dist', 'assets', 'i18n.js'), 'utf8');
 const main = await readFile(resolve(appRoot, 'dist', 'assets', 'main.js'), 'utf8');
@@ -26,9 +27,13 @@ const webDist = resolve(appRoot, 'dist');
 const deployDist = resolve(repoRoot, 'deploy', 'anlan');
 
 await mkdir(webDist, { recursive: true });
+await mkdir(resolve(webDist, 'frontend'), { recursive: true });
 await mkdir(deployDist, { recursive: true });
+await mkdir(resolve(deployDist, 'frontend'), { recursive: true });
 await writeFile(resolve(webDist, 'index.html'), html, 'utf8');
+await writeFile(resolve(webDist, 'frontend', 'index.html'), frontendTemplate, 'utf8');
 await writeFile(resolve(deployDist, 'index.html'), html, 'utf8');
+await writeFile(resolve(deployDist, 'frontend', 'index.html'), frontendTemplate, 'utf8');
 
 await rm(resolve(appRoot, 'dist', 'assets'), { recursive: true, force: true });
 

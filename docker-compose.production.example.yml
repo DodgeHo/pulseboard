@@ -114,7 +114,12 @@ services:
         cp /host-web/index.html /host-web/index.html.backup-$$ts;
       fi;
       install -m 0644 /app/deploy/anlan/index.html /host-web/index.html;
-      echo public site installed to /var/www/html/index.html"
+      mkdir -p /host-web/frontend;
+      if [ -f /host-web/frontend/index.html ]; then
+        cp /host-web/frontend/index.html /host-web/frontend/index.html.backup-$$ts;
+      fi;
+      install -m 0644 /app/deploy/anlan/frontend/index.html /host-web/frontend/index.html;
+      echo public site installed to /var/www/html/index.html and /var/www/html/frontend/index.html"
     volumes:
       - /var/www/html:/host-web
     restart: "no"
