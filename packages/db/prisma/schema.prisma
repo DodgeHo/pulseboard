@@ -33,7 +33,16 @@ enum NotificationChannel {
 
 enum NotificationStatus {
   QUEUED
+  PROCESSING
   SENT
+  FAILED
+  DEAD_LETTER
+}
+
+enum CheckExecutionStatus {
+  PENDING
+  RUNNING
+  SUCCEEDED
   FAILED
 }
 
@@ -47,28 +56,30 @@ enum AuditAction {
   INCIDENT_ACKNOWLEDGED
   INCIDENT_RESOLVED
   NOTIFICATION_SENT
+  NOTIFICATION_FAILED
+  NOTIFICATION_REPLAYED
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  name         String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  memberships  WorkspaceMember[]
-  apiKeys      ApiKey[]
+  id          String            @id @default(uuid())
+  email       String            @unique
+  name        String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  memberships WorkspaceMember[]
+  apiKeys     ApiKey[]
 }
 
 model Workspace {
-  id          String   @id @default(uuid())
-  name        String
-  slug        String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  projects    Project[]
-  members     WorkspaceMember[]
-  auditLogs   AuditLog[]
-  usageMetrics UsageMetric[]
+  id            String            @id @default(uuid())
+  name          String
+  slug          String            @unique
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  projects      Project[]
+  members       WorkspaceMember[]
+  auditLogs     AuditLog[]
+  usageMetrics  UsageMetric[]
   webhookEvents WebhookEvent[]
 }
 
@@ -85,25 +96,25 @@ model WorkspaceMember {
 }
 
 model ApiKey {
-  id          String    @id @default(uuid())
-  name        String
-  prefix      String
-  keyHash     String    @unique
-  createdAt   DateTime  @default(now())
-  lastUsedAt  DateTime?
-  revokedAt   DateTime?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
+  id         String    @id @default(uuid())
+  name       String
+  prefix     String
+  keyHash    String    @unique
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
 }
 
 model Project {
-  id          String    @id @default(uuid())
+  id          String             @id @default(uuid())
   name        String
   slug        String
   description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  workspace   Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
   services    MonitoredService[]
 
@@ -112,91 +123,144 @@ model Project {
 }
 
 model MonitoredService {
-  id          String        @id @default(uuid())
-  name        String
-  slug        String
-  description String?
-  baseUrl     String
-  status      ServiceStatus @default(ACTIVE)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String
+  id           String        @id @default(uuid())
+  name         String
+  slug         String
+  description  String?
+  baseUrl      String
+  status       ServiceStatus @default(ACTIVE)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String
   uptimeChecks UptimeCheck[]
-  incidents   Incident[]
-  checkRuns   CheckRun[]
+  incidents    Incident[]
+  checkRuns    CheckRun[]
 
   @@unique([projectId, slug])
   @@index([projectId])
 }
 
 model UptimeCheck {
-  id                    String   @id @default(uuid())
-  name                  String
-  method                String   @default("GET")
-  url                   String
-  expectedStatus        Int      @default(200)
-  intervalSeconds       Int      @default(60)
-  timeoutMs             Int      @default(5000)
-  consecutiveFailuresToOpen Int  @default(2)
-  consecutiveSuccessesToResolve Int @default(1)
-  isActive              Boolean  @default(true)
-  nextRunAt             DateTime @default(now())
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  service               MonitoredService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  serviceId             String
-  checkRuns             CheckRun[]
+  id                            String           @id @default(uuid())
+  name                          String
+  method                        String           @default("GET")
+  url                           String
+  expectedStatus                Int              @default(200)
+  intervalSeconds               Int              @default(60)
+  timeoutMs                     Int              @default(5000)
+  consecutiveFailuresToOpen     Int              @default(2)
+  consecutiveSuccessesToResolve Int              @default(1)
+  isActive                      Boolean          @default(true)
+  nextRunAt                     DateTime         @default(now())
+  createdAt                     DateTime         @default(now())
+  updatedAt                     DateTime         @updatedAt
+  service                       MonitoredService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId                     String
+  checkRuns                     CheckRun[]
+  executions                    CheckExecution[]
 
   @@index([serviceId])
   @@index([isActive, nextRunAt])
 }
 
 model CheckRun {
-  id             String      @id @default(uuid())
+  id             String           @id @default(uuid())
+  idempotencyKey String           @unique
   status         CheckStatus
   statusCode     Int?
   latencyMs      Int?
   errorMessage   String?
-  checkedAt      DateTime    @default(now())
-  uptimeCheck    UptimeCheck @relation(fields: [uptimeCheckId], references: [id], onDelete: Cascade)
+  checkedAt      DateTime         @default(now())
+  uptimeCheck    UptimeCheck      @relation(fields: [uptimeCheckId], references: [id], onDelete: Cascade)
   uptimeCheckId  String
   service        MonitoredService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId      String
+  execution      CheckExecution?
 
   @@index([uptimeCheckId, checkedAt])
   @@index([serviceId, checkedAt])
 }
 
+model CheckExecution {
+  id             String               @id @default(uuid())
+  idempotencyKey String               @unique
+  status         CheckExecutionStatus @default(PENDING)
+  scheduledFor   DateTime
+  attemptCount   Int                  @default(0)
+  leaseOwner     String?
+  leaseExpiresAt DateTime?
+  lastError      String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  uptimeCheck    UptimeCheck          @relation(fields: [uptimeCheckId], references: [id], onDelete: Cascade)
+  uptimeCheckId  String
+  checkRun       CheckRun?            @relation(fields: [checkRunId], references: [id], onDelete: SetNull)
+  checkRunId     String?              @unique
+
+  @@index([status, scheduledFor])
+  @@index([uptimeCheckId, scheduledFor])
+}
+
 model Incident {
-  id             String          @id @default(uuid())
-  title          String
-  status         IncidentStatus  @default(OPEN)
-  severity       String          @default("minor")
-  summary        String?
-  openedAt       DateTime        @default(now())
-  acknowledgedAt DateTime?
-  resolvedAt     DateTime?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  service        MonitoredService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  serviceId      String
-  notifications  Notification[]
+  id                    String           @id @default(uuid())
+  title                 String
+  status                IncidentStatus   @default(OPEN)
+  severity              String           @default("minor")
+  summary               String?
+  openedAt              DateTime         @default(now())
+  acknowledgedAt        DateTime?
+  resolvedAt            DateTime?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  service               MonitoredService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId             String
+  notifications         Notification[]
+  openIdempotencyKey    String?          @unique
+  resolveIdempotencyKey String?          @unique
 
   @@index([serviceId, status])
 }
 
 model Notification {
-  id          String              @id @default(uuid())
-  channel     NotificationChannel
-  status      NotificationStatus  @default(QUEUED)
-  target      String
-  payload     Json
-  sentAt      DateTime?
-  errorMessage String?
-  createdAt   DateTime            @default(now())
-  incident    Incident?           @relation(fields: [incidentId], references: [id], onDelete: SetNull)
-  incidentId  String?
+  id                String                @id @default(uuid())
+  idempotencyKey    String                @unique
+  channel           NotificationChannel
+  status            NotificationStatus    @default(QUEUED)
+  target            String
+  payload           Json
+  sentAt            DateTime?
+  errorMessage      String?
+  attemptCount      Int                   @default(0)
+  cycleAttemptCount Int                   @default(0)
+  maxAttempts       Int                   @default(5)
+  nextAttemptAt     DateTime              @default(now())
+  lastAttemptAt     DateTime?
+  leaseOwner        String?
+  leaseExpiresAt    DateTime?
+  deadLetteredAt    DateTime?
+  replayedAt        DateTime?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  incident          Incident?             @relation(fields: [incidentId], references: [id], onDelete: SetNull)
+  incidentId        String?
+  attempts          NotificationAttempt[]
+
+  @@index([status, nextAttemptAt])
+}
+
+model NotificationAttempt {
+  id             String       @id @default(uuid())
+  attemptNumber  Int
+  succeeded      Boolean
+  errorMessage   String?
+  responseStatus Int?
+  createdAt      DateTime     @default(now())
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  notificationId String
+
+  @@unique([notificationId, attemptNumber])
+  @@index([notificationId, createdAt])
 }
 
 model WebhookEvent {
@@ -214,30 +278,31 @@ model WebhookEvent {
 }
 
 model AuditLog {
-  id          String      @id @default(uuid())
-  action      AuditAction
-  entityType  String
-  entityId    String
-  actorType   String
-  actorId     String?
-  message     String
-  metadata    Json?
-  createdAt   DateTime    @default(now())
-  workspace   Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
-  workspaceId String?
+  id             String      @id @default(uuid())
+  idempotencyKey String?     @unique
+  action         AuditAction
+  entityType     String
+  entityId       String
+  actorType      String
+  actorId        String?
+  message        String
+  metadata       Json?
+  createdAt      DateTime    @default(now())
+  workspace      Workspace?  @relation(fields: [workspaceId], references: [id], onDelete: SetNull)
+  workspaceId    String?
 
   @@index([workspaceId, createdAt])
   @@index([entityType, entityId])
 }
 
 model UsageMetric {
-  id          String    @id @default(uuid())
-  name        String
-  value       Int
-  recordedAt  DateTime  @default(now())
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String
+  id             String    @id @default(uuid())
+  idempotencyKey String?   @unique
+  name           String
+  value          Int
+  recordedAt     DateTime  @default(now())
+  workspace      Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId    String
 
   @@index([workspaceId, name, recordedAt])
 }
-

@@ -1,4 +1,4 @@
-# Local Development Notes
+﻿# Local Development Notes
 
 ## Current Host Findings
 
@@ -113,3 +113,61 @@ curl -H "Authorization: Bearer pb_local_demo_key_change_me" http://localhost:400
 pnpm demo:flow
 pnpm compose:e2e
 ```
+## Reliability Core Verification
+
+After changing worker, queue, Prisma, incident, or notification code, run the full static/unit suite:
+
+```bash
+corepack pnpm db:generate
+corepack pnpm typecheck
+corepack pnpm test
+corepack pnpm lint
+corepack pnpm doctor
+git diff --check
+```
+
+Run the migration and database-backed API tests against disposable local Compose services:
+
+```bash
+docker compose config
+docker compose up --build -d
+corepack pnpm test:integration
+corepack pnpm demo:flow
+curl -fsS http://localhost:4000/health/live
+curl -fsS http://localhost:4000/health/ready
+docker compose down
+```
+
+`docker compose down` intentionally keeps the named PostgreSQL volume. Do not add `--volumes` unless the database is explicitly disposable and data loss is acceptable.
+
+Before applying migration `0002_reliability_core_hardening` to an existing database, confirm there are no pre-existing duplicate active incidents:
+
+```sql
+SELECT "serviceId", COUNT(*) AS active_count
+FROM "Incident"
+WHERE "status" IN ('OPEN', 'ACKNOWLEDGED')
+GROUP BY "serviceId"
+HAVING COUNT(*) > 1;
+```
+
+The migration deliberately fails on the partial unique index if this query returns rows. Resolve the data through an explicit operator decision; do not silently delete or close incidents in the migration.
+
+### Inspect and replay notifications
+
+An incident detail response includes notifications and ordered delivery attempts:
+
+```bash
+curl -fsS \
+  -H 'Authorization: Bearer <local-demo-key>' \
+  http://localhost:4000/v1/incidents/<incident-id>
+```
+
+Replay only a `FAILED` or `DEAD_LETTER` notification:
+
+```bash
+curl -fsS -X POST \
+  -H 'Authorization: Bearer <local-demo-key>' \
+  http://localhost:4000/v1/notifications/<notification-id>/replay
+```
+
+A successful replay request returns HTTP `202`, preserves the lifetime `attemptCount`, resets `cycleAttemptCount`, clears the last error/dead-letter timestamp, and puts the notification back in `QUEUED`. The recurring dispatcher recovers the row if the immediate BullMQ enqueue is unavailable.

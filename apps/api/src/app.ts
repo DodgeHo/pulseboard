@@ -9,7 +9,7 @@ import {
   workspaceInputSchema,
 } from '@pulseboard/core';
 import { prisma } from '@pulseboard/db';
-import type { Prisma } from '@pulseboard/db';
+import { Prisma } from '@pulseboard/db';
 import { createQueues } from '@pulseboard/queues';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
@@ -88,6 +88,27 @@ async function recordUsageMetric(input: { workspaceId: string; name: string; val
       value: input.value ?? 1,
     },
   });
+}
+
+function canTransitionIncident(from: 'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED', to: 'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED') {
+  if (from === to) return true;
+  if (from === 'OPEN') return to === 'ACKNOWLEDGED' || to === 'RESOLVED';
+  if (from === 'ACKNOWLEDGED') return to === 'RESOLVED';
+  return false;
+}
+
+async function queueCheckExecution(input: { uptimeCheckId: string; idempotencyKey: string; scheduledFor: Date }) {
+  const execution = await prisma.checkExecution.upsert({
+    where: { idempotencyKey: input.idempotencyKey },
+    create: input,
+    update: {},
+  });
+  await queues().uptimeChecks.add(
+    'perform-check',
+    { executionId: execution.id },
+    { jobId: `check-execution-${execution.id}` },
+  );
+  return execution;
 }
 
 export function createApp() {
@@ -450,10 +471,16 @@ export function createApp() {
     });
     if (!service) return errorResponse(c, 404, 'Service not found.');
 
+    const scheduledFor = new Date();
+    const intervalSeconds = input.intervalSeconds ?? 60;
     const uptimeCheck = await prisma.uptimeCheck.create({
-      data: { ...input, serviceId: service.id, nextRunAt: new Date() },
+      data: { ...input, serviceId: service.id, nextRunAt: new Date(scheduledFor.getTime() + intervalSeconds * 1_000) },
     });
-    await queues().uptimeChecks.add('perform-check', { uptimeCheckId: uptimeCheck.id });
+    await queueCheckExecution({
+      uptimeCheckId: uptimeCheck.id,
+      scheduledFor,
+      idempotencyKey: `api:create-check:${c.var.requestId}:${uptimeCheck.id}`,
+    });
     await writeAudit({
       action: 'CREATED',
       entityType: 'uptime_check',
@@ -485,8 +512,16 @@ export function createApp() {
     });
     if (!check) return errorResponse(c, 404, 'Uptime check not found.');
 
-    const updated = await prisma.uptimeCheck.update({ where: { id: check.id }, data: input });
-    await queues().uptimeChecks.add('perform-check', { uptimeCheckId: updated.id });
+    const scheduledFor = new Date();
+    const updated = await prisma.uptimeCheck.update({
+      where: { id: check.id },
+      data: { ...input, nextRunAt: new Date(scheduledFor.getTime() + (input.intervalSeconds ?? check.intervalSeconds) * 1_000) },
+    });
+    await queueCheckExecution({
+      uptimeCheckId: updated.id,
+      scheduledFor,
+      idempotencyKey: `api:update-check:${c.var.requestId}:${updated.id}`,
+    });
     await writeAudit({
       action: 'UPDATED',
       entityType: 'uptime_check',
@@ -534,7 +569,7 @@ export function createApp() {
   app.get('/v1/incidents/:id', async (c) => {
     const incident = await prisma.incident.findFirst({
       where: { id: c.req.param('id'), service: { project: { workspace: { members: { some: { userId: c.get('userId') } } } } } },
-      include: { service: true, notifications: true },
+      include: { service: true, notifications: { include: { attempts: { orderBy: { attemptNumber: 'asc' } } } } },
     });
     if (!incident) return errorResponse(c, 404, 'Incident not found.');
     return c.json({ data: incident });
@@ -550,25 +585,93 @@ export function createApp() {
     });
     if (!incident) return errorResponse(c, 404, 'Incident not found.');
 
-    const statusDates =
-      input.status === 'ACKNOWLEDGED'
-        ? { acknowledgedAt: new Date() }
-        : input.status === 'RESOLVED'
-          ? { resolvedAt: new Date() }
-          : {};
-    const updated = await prisma.incident.update({
-      where: { id: incident.id },
-      data: { ...input, ...statusDates },
+    if (input.status && !canTransitionIncident(incident.status, input.status)) {
+      return errorResponse(c, 409, `Incident cannot transition from ${incident.status} to ${input.status}.`);
+    }
+
+    const updated = await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw(Prisma.sql`SELECT id FROM "Incident" WHERE id = ${incident.id} FOR UPDATE`);
+      const current = await tx.incident.findUniqueOrThrow({ where: { id: incident.id } });
+      if (input.status && !canTransitionIncident(current.status, input.status)) return null;
+
+      const statusChanged = Boolean(input.status && input.status !== current.status);
+      const statusDates =
+        statusChanged && input.status === 'ACKNOWLEDGED'
+          ? { acknowledgedAt: new Date() }
+          : statusChanged && input.status === 'RESOLVED'
+            ? { resolvedAt: new Date() }
+            : {};
+      const next = await tx.incident.update({
+        where: { id: current.id },
+        data: { ...input, ...statusDates },
+      });
+      const action = statusChanged
+        ? input.status === 'RESOLVED'
+          ? 'INCIDENT_RESOLVED'
+          : 'INCIDENT_ACKNOWLEDGED'
+        : 'UPDATED';
+      const auditKey = statusChanged
+        ? `audit:api-incident-transition:${next.id}:${next.status}`
+        : `audit:api-incident-update:${c.var.requestId}:${next.id}`;
+      await tx.auditLog.upsert({
+        where: { idempotencyKey: auditKey },
+        create: {
+          idempotencyKey: auditKey, action, entityType: 'incident', entityId: next.id,
+          workspaceId: incident.service.project.workspaceId, actorType: 'user', actorId: c.get('userId'),
+          message: statusChanged
+            ? `Incident ${next.id} changed from ${current.status} to ${next.status}.`
+            : `Incident ${next.id} details were updated.`,
+        },
+        update: {},
+      });
+      return next;
     });
-    await writeAudit({
-      action: input.status === 'RESOLVED' ? 'INCIDENT_RESOLVED' : input.status === 'ACKNOWLEDGED' ? 'INCIDENT_ACKNOWLEDGED' : 'UPDATED',
-      entityType: 'incident',
-      entityId: updated.id,
-      workspaceId: incident.service.project.workspaceId,
-      actorId: c.get('userId'),
-      message: `Incident ${updated.id} changed to ${updated.status}.`,
-    });
+    if (!updated) return errorResponse(c, 409, 'Incident status changed concurrently; reload and retry.');
     return c.json({ data: updated });
+  });
+
+  app.post('/v1/notifications/:id/replay', async (c) => {
+    const notification = await prisma.notification.findFirst({
+      where: {
+        id: c.req.param('id'),
+        incident: { service: { project: { workspace: { members: { some: { userId: c.get('userId') } } } } } },
+      },
+      include: { incident: { include: { service: { include: { project: true } } } } },
+    });
+    if (!notification) return errorResponse(c, 404, 'Notification not found.');
+    if (notification.status !== 'FAILED' && notification.status !== 'DEAD_LETTER') {
+      return errorResponse(c, 409, 'Only failed or dead-letter notifications can be replayed.');
+    }
+
+    const replayed = await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw(Prisma.sql`SELECT id FROM "Notification" WHERE id = ${notification.id} FOR UPDATE`);
+      const current = await tx.notification.findUniqueOrThrow({ where: { id: notification.id } });
+      if (current.status !== 'FAILED' && current.status !== 'DEAD_LETTER') return null;
+      const next = await tx.notification.update({
+        where: { id: current.id },
+        data: {
+          status: 'QUEUED', cycleAttemptCount: 0, nextAttemptAt: new Date(), errorMessage: null,
+          deadLetteredAt: null, replayedAt: new Date(), leaseOwner: null, leaseExpiresAt: null,
+        },
+      });
+      await tx.auditLog.create({
+        data: {
+          idempotencyKey: `audit:notification-replay:${current.id}:${c.var.requestId}`,
+          action: 'NOTIFICATION_REPLAYED', entityType: 'notification', entityId: current.id,
+          workspaceId: notification.incident?.service.project.workspaceId, actorType: 'user', actorId: c.get('userId'),
+          message: `Notification ${current.id} was manually replayed after ${current.attemptCount} attempts.`,
+        },
+      });
+      return next;
+    });
+    if (!replayed) return errorResponse(c, 409, 'Notification status changed concurrently; reload and retry.');
+
+    await queues().notifications.add(
+      'send-notification',
+      { notificationId: replayed.id },
+      { jobId: `notification-${replayed.id}-${replayed.attemptCount + 1}` },
+    );
+    return c.json({ data: replayed }, 202);
   });
 
   app.post('/v1/webhooks/events', async (c) => {

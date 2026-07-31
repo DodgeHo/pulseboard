@@ -9,12 +9,11 @@ export const queueNames = {
 
 export type UptimeJob =
   | { name: 'run-due-checks'; data: Record<string, never> }
-  | { name: 'perform-check'; data: { uptimeCheckId: string } };
+  | { name: 'perform-check'; data: { executionId: string } };
 
-export type NotificationJob = {
-  name: 'send-notification';
-  data: { notificationId: string };
-};
+export type NotificationJob =
+  | { name: 'send-notification'; data: { notificationId: string } }
+  | { name: 'dispatch-notifications'; data: Record<string, never> };
 
 export function createQueues() {
   const connection = createRedisConnection();

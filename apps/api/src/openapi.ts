@@ -72,6 +72,12 @@ export const openApiDocument = {
       get: { summary: 'Get incident', responses: { 200: { description: 'Incident detail' } } },
       patch: { summary: 'Update incident status', responses: { 200: { description: 'Incident updated' } } },
     },
+    '/v1/notifications/{id}/replay': {
+      post: {
+        summary: 'Replay a failed or dead-letter notification',
+        responses: { 202: { description: 'Notification requeued' }, 409: { description: 'Notification is not replayable' } },
+      },
+    },
     '/v1/webhooks/events': {
       post: { summary: 'Ingest webhook event', responses: { 202: { description: 'Webhook accepted' } } },
     },

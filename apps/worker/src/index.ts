@@ -26,7 +26,7 @@ const uptimeWorker = new Worker(
       return;
     }
     if (job.name === 'perform-check') {
-      await handlers.performCheck(job.data.uptimeCheckId);
+      await handlers.performCheck(job.data.executionId);
       return;
     }
     logger.warn({ jobName: job.name }, 'unknown uptime job');
@@ -37,6 +37,10 @@ const uptimeWorker = new Worker(
 const notificationWorker = new Worker(
   queueNames.notifications,
   async (job) => {
+    if (job.name === 'dispatch-notifications') {
+      await handlers.dispatchNotifications();
+      return;
+    }
     if (job.name === 'send-notification') {
       await handlers.sendNotification(job.data.notificationId);
       return;
@@ -50,6 +54,7 @@ uptimeWorker.on('failed', (job, error) => logger.error({ jobId: job?.id, error }
 notificationWorker.on('failed', (job, error) => logger.error({ jobId: job?.id, error }, 'notification job failed'));
 
 await handlers.scheduleRecurringChecks();
+await handlers.scheduleRecurringNotifications();
 logger.info('PulseBoard worker started');
 
 async function shutdown() {

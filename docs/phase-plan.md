@@ -1,4 +1,4 @@
-# Phase Plan
+﻿# Phase Plan
 
 ## Phase 1: Local Backend MVP
 
@@ -61,7 +61,31 @@ Remaining staging hardening:
 - Further public hostnames, DNS changes, or extra exposed ports require explicit approval.
 - Keep the staging deploy key scoped to this rehearsal and rotate or remove it when the host is retired.
 
-## Phase 3: Low-Cost AWS Demo
+## Phase 3: Reliability Core Hardening
+
+Goal: remain correct under at-least-once jobs, concurrent workers, transaction failures, and replayed notification delivery.
+
+Status: implemented and covered by automated unit/integration scenarios; production deployment evidence is recorded separately from this roadmap.
+
+Included:
+
+- Durable `CheckExecution` records with stable schedule-derived idempotency keys.
+- Scheduler compare-and-swap updates so concurrent scheduler scans create one execution per due timestamp.
+- Database-backed worker leases, including recovery and redispatch of expired `RUNNING` executions.
+- A service-row lock and one transaction for check result, incident transition, notification outbox, audit event, usage metric, and execution completion.
+- A PostgreSQL partial unique index that permits at most one `OPEN` or `ACKNOWLEDGED` incident per service.
+- Explicit, tested incident state transitions for API updates.
+- Unique idempotency keys for check runs, execution records, incident open/resolve effects, notifications, audit logs, and usage metrics.
+- Notification delivery attempts, exponential retry scheduling, lease recovery, dead-letter state, and authenticated manual replay.
+- Tests for duplicate/concurrent execution claims, active-incident uniqueness, rollback after injected transaction failure, temporary delivery failure, permanent dead-lettering, and replay.
+- ADR [`adr/0001-reliability-core-hardening.md`](adr/0001-reliability-core-hardening.md).
+
+Known boundaries:
+
+- Exactly-once external HTTP calls are impossible without receiver cooperation; webhook consumers should deduplicate on notification id.
+- A check probe can be repeated after lease expiry, although its PostgreSQL effects remain idempotent.
+- The polling dispatcher is intentionally retained instead of introducing another broker or service.
+## Optional Cloud Track: Low-Cost AWS Demo (formerly Phase 3)
 
 Use AWS only after Phase 1 is stable and Phase 2 has proven the Linux deployment path.
 
@@ -92,7 +116,7 @@ Remaining approval gates:
 - Create or confirm an AWS Budget alert before any apply.
 - Do not run `terraform apply`, create DNS records, or expose additional public AWS HTTPS endpoints without explicit approval.
 
-## Phase 4: Worker Incident Automation Hardening
+## Reliability Foundation (formerly Phase 4)
 
 Goal: make the background processing path credible enough to discuss in backend/platform interviews.
 
@@ -110,7 +134,7 @@ Completed on staging:
 
 - Compose E2E after the Phase 5 demo flow changes passed on the Tencent Ubuntu staging host on 2026-07-05.
 
-## Phase 5: Demo Narrative and Interview Readiness
+## Portfolio Track: Demo Narrative and Interview Readiness (formerly Phase 5)
 
 Goal: make the project easy to evaluate as a backend/platform/cloud portfolio artifact.
 

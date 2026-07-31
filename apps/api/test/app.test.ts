@@ -221,6 +221,34 @@ describeIntegration('workspace API flow', () => {
     expect(incidentUpdate.status).toBe(200);
     await expect(incidentUpdate.json()).resolves.toMatchObject({ data: { status: 'ACKNOWLEDGED' } });
 
+    await expect(
+      prisma.incident.create({
+        data: { serviceId: service.id, title: 'Duplicate active incident must fail', severity: 'major' },
+      }),
+    ).rejects.toMatchObject({ code: 'P2002' });
+
+    const resolved = await app.request(`/v1/incidents/${incident.id}`, {
+      method: 'PATCH', headers, body: JSON.stringify({ status: 'RESOLVED' }),
+    });
+    expect(resolved.status).toBe(200);
+    const invalidReopen = await app.request(`/v1/incidents/${incident.id}`, {
+      method: 'PATCH', headers, body: JSON.stringify({ status: 'OPEN' }),
+    });
+    expect(invalidReopen.status).toBe(409);
+
+    const failedNotification = await prisma.notification.create({
+      data: {
+        idempotencyKey: `integration:failed-notification:${suffix}`, incidentId: incident.id, channel: 'WEBHOOK',
+        target: 'https://example.invalid/webhook', payload: { incidentId: incident.id }, status: 'DEAD_LETTER',
+        attemptCount: 3, cycleAttemptCount: 3, deadLetteredAt: new Date(), errorMessage: 'integration failure',
+      },
+    });
+    const replay = await app.request(`/v1/notifications/${failedNotification.id}/replay`, { method: 'POST', headers });
+    expect(replay.status).toBe(202);
+    await expect(replay.json()).resolves.toMatchObject({
+      data: { status: 'QUEUED', cycleAttemptCount: 0, errorMessage: null },
+    });
+
     const auditLogs = await app.request(`/v1/audit-logs?workspaceId=${workspace.id}`, { headers });
     expect(auditLogs.status).toBe(200);
     const auditBody = await auditLogs.json();
