@@ -174,8 +174,10 @@ async function verifyLegacyRedirects() {
     ['/v1/workspaces', '/demo/api/v1/workspaces']
   ]) {
     const { response } = await fetchText(oldPath, { redirect: 'manual' });
+    const location = response.headers.get('location') ?? '';
+    const redirectedPath = location ? new URL(location, endpoint(oldPath)).pathname : '';
     expect(oldPath + ' redirects', response.status >= 300 && response.status < 400, response.status + ' ' + response.statusText);
-    expect(oldPath + ' redirects to ' + newPath, (response.headers.get('location') ?? '').startsWith(newPath), response.headers.get('location') ?? '<missing>');
+    expect(oldPath + ' redirects to ' + newPath, redirectedPath === newPath, location || '<missing>');
   }
 }
 
