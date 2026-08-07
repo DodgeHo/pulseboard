@@ -39,6 +39,17 @@ PulseBoard remains a complete project, but its public surface moves under `/demo
 
 The API process may keep its internal `/v1/*`, `/docs`, and `/health/*` routes. Nginx owns the public namespace and rewrites requests to the internal service.
 
+## Portal Language Contract
+
+The project portal supports four complete interface locales:
+
+- English (`en`) — the deterministic default for every first-time visitor.
+- Traditional Chinese (`zh-Hant`).
+- Simplified Chinese (`zh-Hans`).
+- Japanese (`ja`).
+
+Locale selection is visible, keyboard-operable, persisted only after an explicit visitor choice, and updates the document language. The portal must not infer a first-visit locale from browser preferences, IP location, or route.
+
 ## Project Inventory
 
 ### PulseBoard
@@ -48,6 +59,19 @@ A production-shaped reliability SaaS portfolio project with a Hono API, PostgreS
 ### Career Radar
 
 An invite-only, multi-user job discovery and inbox service deployed at `/jobs/`. Its Nginx reverse-proxy route is an existing cross-project dependency and must be preserved by every portal or PulseBoard deployment.
+
+### Featured GitHub Projects
+
+The portal also links to public source repositories that are not deployed under `anlan.store`. These entries must be marked as external GitHub projects rather than as online application routes:
+
+- [`VMD_cpp`](https://github.com/DodgeHo/VMD_cpp): a C++/Eigen implementation of Variational Mode Decomposition.
+- [`PAL4_EnglishMod`](https://github.com/DodgeHo/PAL4_EnglishMod): an English-localization project for *Sword and Fairy 4*.
+- [`IELTS_writing_GPT`](https://github.com/DodgeHo/IELTS_writing_GPT): a GPT-assisted IELTS writing evaluation and improvement tool.
+- [`dynamic_rrt_connect`](https://github.com/DodgeHo/dynamic_rrt_connect): a Python implementation of bidirectional dynamic obstacle avoidance.
+
+### Personal Profile Entry
+
+The portal header includes one clearly labeled outbound entry to [Lang He's LinkedIn profile](https://www.linkedin.com/in/lang-he-a94655120/). It uses the recognizable LinkedIn mark as an icon, but the accessible label and visible copy make clear that it is **Lang He's personal profile**, not a generic social or LinkedIn friendship link. It opens as an external destination with safe link attributes.
 
 ### Certification Practice Banks
 
@@ -71,7 +95,9 @@ The portal must describe these honestly as study tools. It must not invent usage
 ## Success Criteria
 
 - The root route is visibly `ANLAN.STORE`, not PulseBoard.
-- All five project entries are available in the first usable project index.
+- All deployed projects and the four featured GitHub projects are findable from the root page.
+- The header offers a clearly named, keyboard-accessible LinkedIn personal-profile link once its public URL is supplied.
+- First-time visitors see English; each of the four locale choices translates all portal UI, project descriptions, filters, controls, and availability messages.
 - PulseBoard is fully reachable under `/demo/` with no accidental dependency on root paths.
 - Existing `/jobs/`, `/saa/`, `/sap/`, and `/ispm/` routes continue to work.
 - The portal uses real PulseBoard captures as visual evidence.
@@ -94,3 +120,4 @@ The portal must describe these honestly as study tools. It must not invent usage
 - Do not embed secrets, private IPs, tokens, or cloud credentials in public files.
 - Keep the public portal usable without a JavaScript framework or external CDN dependency.
 - Keep cards at or below an 8px radius and avoid nested card layouts, decorative gradients, and one-color visual systems.
+- Do not use browser-locale detection as a substitute for the English-first language contract.

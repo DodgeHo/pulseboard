@@ -80,12 +80,15 @@ async function verifyPortal() {
   const { response, body } = await fetchText('/');
   expect('portal returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect('portal is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('portal title identifies ANLAN.STORE', body.includes('<title>ANLAN.STORE - Live Project Directory</title>'));
-  expect('portal exposes project directory identity', body.includes('ANLAN.STORE') && body.includes('Live project<br>directory.'));
-  expect('portal links PulseBoard demo', body.includes('href="/demo/"'));
-  expect('portal links Career Radar', body.includes('href="/jobs/"') && body.includes('Career Radar') && body.includes('Invite-only'));
-  expect('portal links all study routes', body.includes('href="/saa/"') && body.includes('href="/sap/"') && body.includes('href="/ispm/"'));
-  expect('portal includes working filter controls', body.includes('data-filter="systems"') && body.includes('applyFilter'));
+  expect('portal title identifies ANLAN.STORE', body.includes('<title>ANLAN.STORE — Project Frequencies</title>'));
+  expect('portal exposes approved colorful Signal Lattice identity', body.includes('ANLAN.STORE') && body.includes('DEPLOYED WORK.<br>OPEN SIGNALS.') && body.includes('id="signal-lattice"'));
+  expect('portal links the supplied personal LinkedIn profile clearly', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('Lang He · LinkedIn profile') && body.includes('LinkedIn profile'));
+  expect('portal includes complete four-language locale controls', body.includes('data-locale="en"') && body.includes('data-locale="zh-Hant"') && body.includes('data-locale="zh-Hans"') && body.includes('data-locale="ja"'));
+  expect('portal defaults to English and only persists an explicit locale choice', body.includes("let currentLocale = 'en'") && body.includes("const localeStorageKey = 'anlan.portal.locale'") && body.includes('safeStoredLocale') && body.includes('document.documentElement.lang = currentLocale'));
+  expect('portal retains PulseBoard and Career Radar routes', body.includes("route: '/demo/'") && body.includes("route: '/jobs/'") && body.includes('PulseBoard') && body.includes('Career Radar'));
+  expect('portal retains all study routes', body.includes("route: '/saa/'") && body.includes("route: '/sap/'") && body.includes("route: '/ispm/'"));
+  expect('portal includes verified GitHub source projects', body.includes('VMD_cpp') && body.includes('PAL4_EnglishMod') && body.includes('https://github.com/DodgeHo/VMD_cpp') && body.includes('https://github.com/DodgeHo/PAL4_EnglishMod') && body.includes('IELTS_writing_GPT') && body.includes('dynamic_rrt_connect'));
+  expect('portal includes working filter controls', body.includes('data-filter="source"') && body.includes('applyFilter'));
   expect('portal includes both PulseBoard captures', (body.match(/data:image\/png;base64,/g) ?? []).length === 2);
   expect('portal has no unresolved build placeholders', !/__PORTAL_[A-Z_]+__/.test(body) && !/__PULSEBOARD_[A-Z_]+__/.test(body));
 }

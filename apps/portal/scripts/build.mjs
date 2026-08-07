@@ -14,19 +14,23 @@ const readDataUri = async (path, mimeType) => {
   return "data:" + mimeType + ";base64," + bytes.toString("base64");
 };
 
-const [template, css, javascript, operationsImage, customerImage] = await Promise.all([
+const [template, css, javascript, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
   readText(resolve(sourceRoot, "index.html")),
   readText(resolve(sourceRoot, "styles.css")),
   readText(resolve(sourceRoot, "main.js")),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-ops.png"), "image/png"),
-  readDataUri(resolve(sourceRoot, "assets/pulseboard-customer.png"), "image/png")
+  readDataUri(resolve(sourceRoot, "assets/pulseboard-customer.png"), "image/png"),
+  readDataUri(resolve(sourceRoot, "assets/fonts/Inter-400.woff"), "font/woff"),
+  readDataUri(resolve(sourceRoot, "assets/fonts/Inter-600.woff"), "font/woff")
 ]);
 
 const replacements = new Map([
   ["__PORTAL_CSS__", css],
   ["__PORTAL_JS__", javascript],
   ["__PULSEBOARD_OPS_IMAGE__", operationsImage],
-  ["__PULSEBOARD_CUSTOMER_IMAGE__", customerImage]
+  ["__PULSEBOARD_CUSTOMER_IMAGE__", customerImage],
+  ["__INTER_REGULAR_FONT__", interRegular],
+  ["__INTER_SEMIBOLD_FONT__", interSemibold]
 ]);
 
 let artifact = template;

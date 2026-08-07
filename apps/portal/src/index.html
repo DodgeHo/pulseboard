@@ -3,170 +3,94 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Anlan.store is a live directory of deployed systems and study tools.">
-  <meta name="theme-color" content="#f4f3ee">
-  <title>ANLAN.STORE - Live Project Directory</title>
+  <meta name="description" content="ANLAN.STORE is a multilingual signal directory for deployed systems and open-source engineering work.">
+  <meta name="theme-color" content="#060817">
+  <title>ANLAN.STORE — Project Frequencies</title>
   <style>__PORTAL_CSS__</style>
 </head>
 <body>
-  <a class="skip-link" href="#projects">Skip to projects</a>
-  <div class="site-shell" id="top">
-    <header class="masthead">
-      <a class="wordmark" href="#top" aria-label="ANLAN.STORE home">
-        <span class="wordmark-mark" aria-hidden="true">A</span>
-        <span><strong>ANLAN.STORE</strong><small>Deployed work index</small></span>
+<!--
+THESIS: ANLAN.STORE is a colorful technical directory that lets a recruiter identify live systems, source work, and proof without decoding a lifestyle portfolio.
+OWN-WORLD: Project Scope turns a directory rail, live signal scope, and horizontal evidence rows into one precise instrument rather than a dashboard of equal cards.
+STORY: The visitor scans the project rail, reads the central claim, sees a live signal resolve, then chooses a deployed route or public repository with a single clear action.
+FIRST VIEWPORT: A stable left rail names the work, the headline holds the purpose, the right scope provides active-route evidence, and the personal LinkedIn profile is clearly named in the header.
+FORM: Signal Lattice, seed 6855c86d, composition C. The canvas draws actual signal paths, samples, and band marks; HTML carries every fact and control.
+COLOR: Midnight is the use scene. Cobalt, ultraviolet, cyan, and electric orange distinguish signal families, not decoration.
+ACCESSIBILITY: English is deterministic first visit; explicit language choices update all copy, document language, focus labels, and only then persist.
+FINISH: This surface is unfinished until its visual review, verifier, documentation, deployment, and public-route audit are complete.
+-->
+  <a class="skip-link" href="#project-index" id="skip-link">Skip to project index</a>
+  <canvas class="signal-canvas" id="signal-lattice" aria-hidden="true"></canvas>
+
+  <div class="portal-shell" id="top">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="ANLAN.STORE home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>ANLAN.STORE</span>
       </a>
-      <nav class="masthead-nav" aria-label="Portal sections">
-        <a href="#projects">Projects</a>
-        <a href="#pulseboard">System</a>
-        <a href="#study-tools">Study tools</a>
-      </nav>
-      <span class="review-date">Reviewed 2026-08-07</span>
+
+      <p class="topbar-state" id="topbar-state">PROJECT FREQUENCIES</p>
+
+      <div class="topbar-actions">
+        <a class="profile-link" href="https://www.linkedin.com/in/lang-he-a94655120/" target="_blank" rel="noreferrer" aria-label="Open Lang He’s LinkedIn profile (external)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 3.4A1.8 1.8 0 1 1 5.2 7a1.8 1.8 0 0 1 0-3.6ZM3.7 8.4h3V20h-3V8.4Zm4.9 0h2.9V10c.4-.8 1.5-1.9 3.5-1.9 3.7 0 4.4 2.4 4.4 5.6V20h-3v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20h-3V8.4Z" fill="currentColor"/></svg>
+          <span id="profile-link-label">Lang He · LinkedIn profile</span>
+          <svg class="external-mark" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"/></svg>
+        </a>
+        <div class="locale-switcher" role="group" aria-label="Choose portal language" id="locale-switcher">
+          <button type="button" data-locale="en" aria-pressed="true" aria-label="English">EN</button>
+          <button type="button" data-locale="zh-Hant" aria-pressed="false" aria-label="繁體中文">繁中</button>
+          <button type="button" data-locale="zh-Hans" aria-pressed="false" aria-label="简体中文">简中</button>
+          <button type="button" data-locale="ja" aria-pressed="false" aria-label="日本語">日本語</button>
+        </div>
+      </div>
     </header>
 
-    <main>
-      <section class="directory-intro" aria-labelledby="directory-title">
-        <div>
-          <p class="eyebrow">Deployment atlas / public routes</p>
-          <h1 id="directory-title">Live project<br>directory.</h1>
+    <main class="scope-layout">
+      <aside class="project-rail" aria-labelledby="rail-title">
+        <div class="rail-heading">
+          <span class="rail-slash" aria-hidden="true">/</span>
+          <h2 id="rail-title">PROJECT DIRECTORY</h2>
         </div>
-        <div class="intro-copy">
-          <p>One domain, several inspectable builds. Open a systems project for backend evidence and job discovery, or launch a focused certification practice bank.</p>
-          <dl class="directory-summary">
-            <div><dt>Entries</dt><dd>05</dd></div>
-            <div><dt>Categories</dt><dd>02</dd></div>
-            <div><dt>Domain</dt><dd>anlan.store</dd></div>
-          </dl>
+        <nav aria-label="Project directory" id="rail-nav"><ol class="rail-list" id="rail-list"></ol></nav>
+        <a class="rail-all-link" href="#project-index" id="rail-all-link"><span>/</span><span>VIEW ALL PROJECTS</span><b aria-hidden="true">›</b></a>
+      </aside>
+
+      <section class="scope-main" aria-labelledby="portal-title">
+        <div class="scope-copy">
+          <h1 id="portal-title">DEPLOYED WORK.<br>OPEN SIGNALS.</h1>
+          <p class="scope-lede" id="hero-lede">A multilingual index of deployed systems, engineering experiments, and public proof. Inspect a live route or trace a repository.</p>
+          <div class="hero-actions">
+            <a class="signal-action signal-action-primary" href="#project-index" id="hero-live-action"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.1-6 4.1 12L16 9l1.7 3H21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></svg><span>EXPLORE LIVE WORK</span></a>
+            <a class="signal-action" href="#project-vmd" id="hero-source-action"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 8.7 5 12l3.4 3.3M15.6 8.7 19 12l-3.4 3.3M13.6 6 10.4 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></svg><span>BROWSE SOURCE PROJECTS</span></a>
+          </div>
         </div>
+
+        <section class="live-scope" aria-labelledby="live-scope-title">
+          <div class="scope-titlebar"><h2 id="live-scope-title">LIVE SIGNAL SCOPE</h2><span class="live-dot"><i></i><span id="live-label">LIVE</span></span></div>
+          <div class="scope-plot" aria-hidden="true"><canvas id="scope-wave"></canvas></div>
+          <div class="scope-readout" id="scope-readout"></div>
+        </section>
       </section>
 
-      <section class="project-directory" id="projects" aria-labelledby="projects-title">
-        <header class="section-bar">
-          <div>
-            <p class="section-index">Index 01</p>
-            <h2 id="projects-title">Choose a deployed surface</h2>
-          </div>
-          <div class="filter-segments" role="group" aria-label="Filter projects">
-            <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" class="filter-button" data-filter="systems" aria-pressed="false">Systems</button>
-            <button type="button" class="filter-button" data-filter="study" aria-pressed="false">Study</button>
+      <section class="project-index" id="project-index" aria-labelledby="project-index-title">
+        <header class="index-head">
+          <div><h2 id="project-index-title">PROJECT SCOPE</h2><p id="index-summary">Nine project frequencies across deployed work and open source.</p></div>
+          <div class="filter-controls" role="group" aria-label="Filter projects" id="filter-controls">
+            <button type="button" data-filter="all" aria-pressed="true">ALL</button>
+            <button type="button" data-filter="live" aria-pressed="false">LIVE</button>
+            <button type="button" data-filter="source" aria-pressed="false">SOURCE</button>
+            <button type="button" data-filter="study" aria-pressed="false">STUDY</button>
           </div>
         </header>
-
-        <article class="project-entry project-featured" id="pulseboard" data-project data-category="systems" data-route="/demo/">
-          <div class="project-copy">
-            <div class="project-heading">
-              <p class="project-type">Systems / reliability SaaS</p>
-              <span class="route-status is-checking" data-route-status="/demo/"><i aria-hidden="true"></i><span>Checking route</span></span>
-            </div>
-            <h3>PulseBoard</h3>
-            <p class="project-lede">A production-shaped backend portfolio you can interrogate: live probes, OpenAPI, API-key boundaries, queues, workers, PostgreSQL, Redis, and deployment runbooks.</p>
-            <div class="route-line"><span>Public route</span><code>/demo/</code></div>
-            <ul class="stack-list" aria-label="PulseBoard stack">
-              <li>Hono</li><li>PostgreSQL</li><li>Redis</li><li>BullMQ</li><li>Docker</li>
-            </ul>
-            <div class="project-actions">
-              <a class="action-primary" href="/demo/">Open PulseBoard</a>
-              <a class="action-secondary" href="/demo/docs">API docs</a>
-              <a class="action-secondary" href="/demo/frontend/">Customer view</a>
-            </div>
-            <div class="proof-links" aria-label="PulseBoard evidence links">
-              <a href="/demo/health/ready">Readiness</a>
-              <a href="/demo/openapi.json">OpenAPI JSON</a>
-              <a href="/demo/health/live">Liveness</a>
-            </div>
-          </div>
-
-          <div class="project-visual" aria-label="PulseBoard interface preview">
-            <div class="preview-toolbar">
-              <span>Live capture / anlan.store</span>
-              <div class="preview-segments" role="group" aria-label="Choose PulseBoard preview">
-                <button type="button" class="preview-button is-active" data-preview-target="ops" aria-pressed="true">Operations</button>
-                <button type="button" class="preview-button" data-preview-target="customer" aria-pressed="false">Customer</button>
-              </div>
-            </div>
-            <div class="preview-frame">
-              <img class="preview-image is-active" data-preview="ops" src="__PULSEBOARD_OPS_IMAGE__" alt="PulseBoard Live Ops Console showing runtime evidence and health probe rows">
-              <img class="preview-image" data-preview="customer" src="__PULSEBOARD_CUSTOMER_IMAGE__" alt="PulseBoard customer reliability surface in Japanese">
-            </div>
-          </div>
-        </article>
-
-        <article class="project-entry career-entry" id="career-radar" data-project data-category="systems" data-route="/jobs/">
-          <div class="career-identity">
-            <p class="project-type">Systems / job discovery</p>
-            <div class="career-monogram" aria-hidden="true">CR</div>
-            <div>
-              <h3>Career Radar</h3>
-              <p class="career-alias">职海雷达 · キャリアレーダー</p>
-            </div>
-          </div>
-          <div class="career-copy">
-            <div class="project-heading">
-              <span class="access-label">Invite-only</span>
-              <span class="route-status is-checking" data-route-status="/jobs/"><i aria-hidden="true"></i><span>Checking route</span></span>
-            </div>
-            <p>An account-isolated job discovery and inbox service with saved roles, unread state, and scheduled digests.</p>
-            <div class="route-line"><span>Public route</span><code>/jobs/</code></div>
-            <a class="action-primary" href="/jobs/">Open Career Radar</a>
-          </div>
-        </article>
-
-        <div class="study-band" id="study-tools" data-project-group>
-          <header class="study-heading">
-            <div>
-              <p class="section-index">Index 02</p>
-              <h2>Certification practice banks</h2>
-            </div>
-            <p>Three Flutter web entry points share one focused practice experience while loading a different active question bank.</p>
-          </header>
-
-          <div class="study-grid">
-            <article class="project-entry study-entry study-saa" data-project data-category="study" data-route="/saa/">
-              <div class="study-code" aria-hidden="true">SAA</div>
-              <div class="project-heading">
-                <p class="project-type">Study / cloud architecture</p>
-                <span class="route-status is-checking" data-route-status="/saa/"><i aria-hidden="true"></i><span>Checking route</span></span>
-              </div>
-              <h3>SAA Practice</h3>
-              <p>Focused question-bank practice with learning progress tracking for the SAA route.</p>
-              <div class="route-line"><span>Public route</span><code>/saa/</code></div>
-              <a class="action-primary" href="/saa/">Open SAA bank</a>
-            </article>
-
-            <article class="project-entry study-entry study-sap" data-project data-category="study" data-route="/sap/">
-              <div class="study-code" aria-hidden="true">SAP</div>
-              <div class="project-heading">
-                <p class="project-type">Study / architecture depth</p>
-                <span class="route-status is-checking" data-route-status="/sap/"><i aria-hidden="true"></i><span>Checking route</span></span>
-              </div>
-              <h3>SAP Practice</h3>
-              <p>A separate advanced architecture practice entry using the same progress-aware study shell.</p>
-              <div class="route-line"><span>Public route</span><code>/sap/</code></div>
-              <a class="action-primary" href="/sap/">Open SAP bank</a>
-            </article>
-
-            <article class="project-entry study-entry study-ispm" data-project data-category="study" data-route="/ispm/">
-              <div class="study-code" aria-hidden="true">ISPM</div>
-              <div class="project-heading">
-                <p class="project-type">Study / service management</p>
-                <span class="route-status is-checking" data-route-status="/ispm/"><i aria-hidden="true"></i><span>Checking route</span></span>
-              </div>
-              <h3>ISPM Practice</h3>
-              <p>A dedicated service-management practice route with the same question and progress workflow.</p>
-              <div class="route-line"><span>Public route</span><code>/ispm/</code></div>
-              <a class="action-primary" href="/ispm/">Open ISPM bank</a>
-            </article>
-          </div>
-        </div>
-
-        <p class="empty-state" data-empty-state hidden>No projects match this filter.</p>
+        <div class="project-rows" id="project-list"></div>
+        <p class="empty-state" id="empty-state" hidden>No projects match this filter. Choose another signal group.</p>
       </section>
     </main>
 
     <footer class="portal-footer">
-      <span>ANLAN.STORE / public deployment index</span>
-      <span><a href="#top">Back to top</a> / five live entries</span>
+      <span id="footer-left">ANLAN.STORE / SIGNAL LATTICE DIRECTORY</span>
+      <a href="#top" id="footer-top">BACK TO TOP ↑</a>
     </footer>
   </div>
   <script>__PORTAL_JS__</script>
