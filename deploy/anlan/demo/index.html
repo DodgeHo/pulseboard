@@ -1,0 +1,1115 @@
+﻿<!doctype html>
+<html lang="en" data-theme="ops-console">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PulseBoard - Live Ops Console</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23fffdf8'/%3E%3Cpath d='M12 39h10l5-18 8 28 5-10h12' fill='none' stroke='%2326734d' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M12 15h40' stroke='%2319201d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="PulseBoard is a cloud-native SaaS backend portfolio with live health probes, OpenAPI, Redis, workers, PostgreSQL, and staging deployment evidence."
+    />
+    <style>:root {
+  color-scheme: light;
+  font-family: Inter, Aptos, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --pb-bg: #eef1ed;
+  --pb-ink: #111816;
+  --pb-muted: #66716b;
+  --pb-soft: #f8faf7;
+  --pb-panel: #ffffff;
+  --pb-panel-alt: #e3e8e2;
+  --pb-rail: #101614;
+  --pb-rail-2: #17231e;
+  --pb-rule: #cbd3ca;
+  --pb-green: #1f7a4d;
+  --pb-green-soft: #d8efe1;
+  --pb-amber: #9b6816;
+  --pb-amber-soft: #f4e7c8;
+  --pb-blue: #245f78;
+  --pb-blue-soft: #d9e9ef;
+  --pb-red: #9b3d38;
+  --pb-red-soft: #ecd9d6;
+  --pb-radius-sm: 4px;
+  --pb-radius-md: 8px;
+  --pb-shadow: 0 18px 46px rgba(17, 24, 22, 0.1);
+  background: var(--pb-bg);
+  color: var(--pb-ink);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(90deg, rgba(17, 24, 22, 0.05) 1px, transparent 1px) 0 0 / 52px 52px,
+    linear-gradient(180deg, #f8faf7 0, var(--pb-bg) 42%, #e5ebe5 100%);
+  color: var(--pb-ink);
+}
+
+button, a, select { font: inherit; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p { margin: 0; }
+
+.app-shell {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 18px 0 34px;
+}
+
+.topbar, .brand, .nav-actions, .hero-actions, .console-head, .console-foot, .panel-header, .footer {
+  display: flex;
+  align-items: center;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 68px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(17, 24, 22, 0.16);
+  background: rgba(238, 241, 237, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.brand { gap: 12px; min-width: max-content; }
+.brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #f5fbf6;
+  background: var(--pb-rail);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--pb-radius-md);
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-weight: 800;
+}
+.brand-copy { display: grid; gap: 1px; }
+.brand-copy small, .rail-label, .section-label, .panel-label, .evidence-state, .endpoint-name span, .footer, .release-ledger span, .lifecycle-step time, .boundary-list span {
+  color: var(--pb-muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+.brand-copy small { color: #52615a; }
+
+.nav-actions { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.nav-link, .lang-select, .primary-button, .secondary-button, .ghost-button {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-sm);
+  background: rgba(248, 250, 247, 0.84);
+  color: var(--pb-ink);
+}
+.nav-link, .primary-button, .secondary-button, .ghost-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 750;
+}
+.nav-link:hover, .secondary-button:hover, .ghost-button:hover, .text-link:hover { border-color: rgba(36, 95, 120, 0.45); color: var(--pb-blue); }
+.lang-select { cursor: pointer; }
+
+.ops-hero {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) minmax(360px, 0.72fr);
+  gap: 18px;
+  min-height: calc(100vh - 122px);
+  padding: 34px 0 24px;
+  align-items: stretch;
+}
+
+.command-rail, .probe-console {
+  overflow: hidden;
+  border-radius: var(--pb-radius-md);
+  box-shadow: var(--pb-shadow);
+}
+.command-rail {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 18px;
+  color: #e9f4ed;
+  background: linear-gradient(180deg, var(--pb-rail), var(--pb-rail-2));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.rail-label, .command-rail span { color: #91a39a; }
+.rail-label, .section-label, .panel-label, .evidence-state {
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.rail-meter, .deploy-gate {
+  display: grid;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--pb-radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+}
+.rail-meter strong { font-size: 1.22rem; }
+.deploy-gate { margin-top: 12px; }
+.deploy-gate strong { font-size: 0.86rem; line-height: 1.45; }
+
+.hero-copy {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  padding: 42px;
+  background: var(--pb-panel);
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-md);
+  box-shadow: var(--pb-shadow);
+}
+.kicker {
+  width: max-content;
+  max-width: 100%;
+  margin-bottom: 18px;
+  padding: 7px 10px;
+  color: var(--pb-green);
+  background: var(--pb-green-soft);
+  border: 1px solid rgba(31, 122, 77, 0.22);
+  border-radius: var(--pb-radius-sm);
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+h1 {
+  max-width: 780px;
+  font-size: clamp(2.6rem, 6.2vw, 6.8rem);
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+.lead {
+  max-width: 760px;
+  margin-top: 22px;
+  color: #3f4b45;
+  font-size: clamp(1.02rem, 1.7vw, 1.19rem);
+  line-height: 1.72;
+}
+.hero-actions { flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.primary-button { color: #f8faf7; background: var(--pb-rail); border-color: var(--pb-rail); }
+.secondary-button { color: var(--pb-blue); background: var(--pb-blue-soft); border-color: rgba(36, 95, 120, 0.18); }
+.ghost-button { cursor: pointer; }
+
+.probe-console {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: #fdfefb;
+  border: 1px solid var(--pb-rule);
+}
+.console-head, .console-foot {
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--pb-rule);
+}
+.console-head span { font-weight: 800; text-transform: uppercase; }
+.console-foot { flex-wrap: wrap; border-top: 1px solid var(--pb-rule); border-bottom: 0; }
+code, .terminal, .endpoint-row code, .lifecycle-step time, .release-ledger strong, .boundary-list span {
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+}
+.terminal { display: grid; align-content: start; padding: 10px 0; color: var(--pb-ink); }
+.terminal-line {
+  display: grid;
+  grid-template-columns: 28px minmax(138px, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(203, 211, 202, 0.72);
+  font-size: 0.85rem;
+}
+.terminal-line:last-child { border-bottom: 0; }
+.prompt { color: var(--pb-blue); font-weight: 800; }
+.latency { color: var(--pb-muted); text-align: right; }
+.endpoint-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--pb-radius-sm);
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.endpoint-status.good { color: var(--pb-green); background: var(--pb-green-soft); border-color: rgba(31, 122, 77, 0.26); }
+.endpoint-status.warn { color: var(--pb-amber); background: var(--pb-amber-soft); border-color: rgba(155, 104, 22, 0.22); }
+.endpoint-status.bad { color: var(--pb-red); background: var(--pb-red-soft); border-color: rgba(155, 61, 56, 0.26); }
+
+.evidence-rail, .architecture-band, .surface-grid, .operations-band { margin-top: 22px; }
+.evidence-rail, .architecture-band, .surface-panel, .lifecycle-card, .deployment-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-md);
+  box-shadow: 0 1px 0 rgba(17, 24, 22, 0.06);
+}
+.evidence-rail, .architecture-band { padding: 24px; }
+.section-heading {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--pb-rule);
+}
+.section-heading h2, .panel-header h2, .lifecycle-card h2, .deployment-card h2 {
+  font-size: clamp(1.45rem, 2.6vw, 2.15rem);
+  line-height: 1.05;
+}
+.evidence-rail ul {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.evidence-item { min-height: 150px; padding: 18px 16px; border-right: 1px solid var(--pb-rule); }
+.evidence-item:last-child { border-right: 0; }
+.evidence-item strong, .evidence-item span:last-child { display: block; }
+.evidence-item strong { margin: 10px 0 9px; font-size: 1rem; }
+.evidence-item span:last-child { color: #46524d; line-height: 1.45; }
+
+.surface-grid, .operations-band { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.surface-panel, .lifecycle-card, .deployment-card { padding: 24px; }
+.panel-header { justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--pb-rule); }
+.panel-header + p, .lifecycle-card p, .deployment-card p { margin-top: 18px; color: #45524b; line-height: 1.65; }
+.status-badge {
+  min-width: max-content;
+  padding: 6px 10px;
+  color: var(--pb-blue);
+  background: var(--pb-blue-soft);
+  border: 1px solid rgba(36, 95, 120, 0.18);
+  border-radius: var(--pb-radius-sm);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+.release-ledger, .backend-stack, .boundary-list { display: grid; gap: 8px; margin-top: 22px; }
+.release-ledger {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-sm);
+  overflow: hidden;
+}
+.release-ledger div { display: grid; gap: 6px; padding: 14px; border-right: 1px solid var(--pb-rule); background: rgba(227, 232, 226, 0.46); }
+.release-ledger div:last-child { border-right: 0; }
+.release-ledger strong { font-size: 0.83rem; }
+.text-link { display: inline-flex; width: max-content; margin-top: 18px; color: var(--pb-blue); font-weight: 800; }
+.endpoint-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(120px, auto) auto;
+  gap: 14px;
+  align-items: center;
+  min-height: 62px;
+  padding: 12px 14px;
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-sm);
+  background: rgba(238, 241, 237, 0.56);
+}
+.endpoint-row:hover { border-color: rgba(36, 95, 120, 0.38); }
+.endpoint-name { display: grid; gap: 3px; }
+.endpoint-row code { color: var(--pb-blue); font-size: 0.82rem; }
+
+.architecture-band { display: grid; gap: 24px; }
+.architecture-map {
+  display: grid;
+  grid-template-columns: 1fr 28px 1fr 28px 1fr 28px 1fr 28px 1fr;
+  align-items: center;
+  gap: 0;
+}
+.architecture-node {
+  display: grid;
+  min-height: 118px;
+  align-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--pb-panel-alt);
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-md);
+}
+.architecture-node strong { font-size: 1rem; }
+.architecture-node span { color: #53615a; font-size: 0.82rem; }
+.architecture-node.api, .architecture-node.worker { background: #dbe9e3; }
+.architecture-node.redis { background: #efe8d5; }
+.architecture-link { height: 2px; background: var(--pb-rule); }
+
+.lifecycle-card ol { display: grid; gap: 12px; padding: 0; margin: 22px 0 0; list-style: none; }
+.lifecycle-step {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid var(--pb-rule);
+  border-radius: var(--pb-radius-sm);
+  background: rgba(238, 241, 237, 0.5);
+}
+.lifecycle-step time { color: var(--pb-green); font-weight: 800; }
+.lifecycle-step > span, .lifecycle-step > span > span { display: grid; gap: 4px; }
+.lifecycle-step > span > span { color: #4c5852; line-height: 1.45; }
+.boundary-list span { padding: 12px; color: #405049; background: rgba(227, 232, 226, 0.6); border: 1px solid var(--pb-rule); border-radius: var(--pb-radius-sm); }
+.footer { justify-content: space-between; gap: 18px; padding: 24px 0 0; }
+.footer a { color: var(--pb-blue); font-weight: 800; }
+
+[dir="rtl"] .evidence-item { border-right: 0; border-left: 1px solid var(--pb-rule); }
+[dir="rtl"] .evidence-item:last-child { border-left: 0; }
+[dir="rtl"] .release-ledger div { border-right: 0; border-left: 1px solid var(--pb-rule); }
+[dir="rtl"] .release-ledger div:last-child { border-left: 0; }
+
+@media (max-width: 1120px) {
+  .ops-hero { grid-template-columns: 1fr; min-height: 0; }
+  .command-rail { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .rail-label, .deploy-gate { grid-column: 1 / -1; }
+}
+
+@media (max-width: 880px) {
+  .app-shell { width: min(100% - 24px, 680px); }
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .nav-actions { justify-content: flex-start; }
+  .hero-copy { padding: 30px 24px; }
+  h1 { font-size: clamp(2.35rem, 14vw, 4.6rem); }
+  .command-rail, .evidence-rail ul, .surface-grid, .operations-band, .architecture-map, .release-ledger { grid-template-columns: 1fr; }
+  .evidence-item, [dir="rtl"] .evidence-item { border-right: 0; border-left: 0; border-bottom: 1px solid var(--pb-rule); }
+  .evidence-item:last-child { border-bottom: 0; }
+  .architecture-link { width: 2px; height: 28px; justify-self: center; }
+  .endpoint-row, .terminal-line { grid-template-columns: 1fr; justify-items: start; }
+  .latency { text-align: left; }
+  .section-heading { grid-template-columns: 1fr; }
+  .panel-header { align-items: flex-start; flex-direction: column; }
+  .release-ledger div, [dir="rtl"] .release-ledger div { border-right: 0; border-left: 0; border-bottom: 1px solid var(--pb-rule); }
+  .release-ledger div:last-child { border-bottom: 0; }
+  .footer { align-items: flex-start; flex-direction: column; }
+}
+
+@media (max-width: 520px) {
+  .nav-link, .lang-select, .primary-button, .secondary-button, .ghost-button { width: 100%; }
+  .nav-actions, .hero-actions { width: 100%; }
+  .brand { min-width: 0; }
+}</style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];
+const en = {
+    languageName: 'English',
+    navDocs: 'API Docs',
+    navOpenApi: 'OpenAPI',
+    navHealth: 'Live health',
+    eyebrow: 'Production evidence cockpit',
+    titleA: 'PulseBoard Live Ops Console.',
+    titleB: 'A backend portfolio you can interrogate.',
+    lead: 'PulseBoard presents a production-shaped SaaS backend as an inspectable operations surface: live health probes, OpenAPI, Redis-backed limits, background workers, PostgreSQL state, and a staged deployment path.',
+    primaryCta: 'Open API reference',
+    secondaryCta: 'Run live probe',
+    frontendHomeCta: 'Open customer view',
+    metricLatency: 'probe latency',
+    metricPaths: 'OpenAPI paths',
+    metricLanguages: 'interface languages',
+    frontendLabel: 'Customer surface',
+    frontendTitle: 'Product UI tied to real backend evidence',
+    frontendStatus: 'static route',
+    frontendCopy: 'The customer-facing page now behaves as a multilingual product surface while keeping proof links close enough for reviewers to inspect the system.',
+    backendLabel: 'Backend plane',
+    backendTitle: 'The API is visible in the homepage workflow',
+    backendStatus: 'same-origin probes',
+    backendCopy: 'Health, readiness, OpenAPI, docs, auth-protected routes, Redis-backed rate limits, workers, and PostgreSQL state are surfaced as portfolio evidence.',
+    featureRealtime: 'Live status layer',
+    featureRealtimeCopy: 'The browser probes the deployed backend and updates the console without a page reload.',
+    featureI18n: 'Locale-aware interface',
+    featureI18nCopy: 'Ten languages remain available with English first and Simplified Chinese last.',
+    featureOperator: 'Portfolio with receipts',
+    featureOperatorCopy: 'The public site links directly to docs, OpenAPI, health checks, and backend routes.',
+    liveEndpoint: 'Liveness check',
+    readyEndpoint: 'Readiness check',
+    openapiEndpoint: 'OpenAPI document',
+    docsEndpoint: 'Scalar API docs',
+    checking: 'checking',
+    online: 'online',
+    offline: 'offline',
+    docs: 'open',
+    mapTitle: 'Runtime topology',
+    mapCopy: 'Browser, API, worker, PostgreSQL, and Redis are shown as one inspectable deployment path.',
+    nodeFrontend: 'Frontend',
+    nodeApi: 'Hono API',
+    nodeWorker: 'Worker',
+    nodeDb: 'PostgreSQL',
+    nodeRedis: 'Redis',
+    timelineTitle: 'Incident work is modeled end to end',
+    timelineCopy: 'The page shows why the backend exists: service intake, queued processing, and auditable resolution.',
+    timelineOne: 'Ingest',
+    timelineOneCopy: 'Requests enter through API-key protected workspace and incident routes.',
+    timelineTwo: 'Queue',
+    timelineTwoCopy: 'Redis-backed workers move delayed operational work outside the request path.',
+    timelineThree: 'Resolve',
+    timelineThreeCopy: 'Incident state remains inspectable through docs, OpenAPI, and demo evidence.',
+    footer: 'Built as a practical backend, platform, and cloud portfolio demo.',
+};
+const copies = {
+    en,
+    'zh-TW': {
+        ...en,
+        languageName: '繁體中文',
+        navDocs: 'API 文件',
+        navHealth: '即時健康',
+        eyebrow: '生產證據控制台',
+        titleA: 'PulseBoard 即時營運控制台。',
+        titleB: '可被審查的後端作品集。',
+        lead: 'PulseBoard 把接近生產環境的 SaaS 後端呈現為可檢查的營運介面：健康探測、OpenAPI、Redis 限流、背景 worker、PostgreSQL 狀態與 staging 部署路徑。',
+        primaryCta: '開啟 API 文件',
+        secondaryCta: '執行即時探測',
+        frontendHomeCta: '開啟客戶視圖',
+        metricLatency: '探測延遲',
+        metricPaths: 'OpenAPI 路徑',
+        metricLanguages: '介面語言',
+        frontendLabel: '客戶介面',
+        frontendTitle: '連到真實後端證據的產品 UI',
+        frontendStatus: '靜態路由',
+        frontendCopy: '客戶頁面現在是完整多語產品介面，同時保留靠近後端證據的檢查入口。',
+        backendLabel: '後端平面',
+        backendTitle: 'API 直接成為首頁工作流的一部分',
+        backendStatus: '同源探測',
+        backendCopy: '健康檢查、readiness、OpenAPI、文件、受保護路由、Redis 限流、worker 與 PostgreSQL 狀態都作為作品集證據呈現。',
+        checking: '檢查中',
+        online: '在線',
+        offline: '離線',
+        docs: '開啟',
+        mapTitle: '執行拓撲',
+        mapCopy: 'Browser、API、worker、PostgreSQL 與 Redis 被放在同一條可檢查的部署路徑上。',
+        nodeFrontend: '前端',
+        nodeWorker: 'Worker',
+        timelineTitle: '事件處理從頭到尾都有模型',
+        timelineCopy: '頁面說清楚後端存在的理由：服務建檔、佇列處理與可稽核的解決流程。',
+        timelineOne: '建檔',
+        timelineTwo: '佇列',
+        timelineThree: '解決',
+        footer: '為 backend、platform、cloud 求職打造的實用作品集 demo。',
+    },
+    ja: {
+        ...en,
+        languageName: '日本語',
+        navDocs: 'API ドキュメント',
+        navHealth: 'ライブヘルス',
+        eyebrow: '本番証跡コックピット',
+        titleA: 'PulseBoard ライブ運用コンソール。',
+        titleB: '検査できるバックエンドポートフォリオ。',
+        lead: 'PulseBoard は本番に近い SaaS バックエンドを、ライブヘルス、OpenAPI、Redis 制限、バックグラウンド worker、PostgreSQL 状態、staging 手順まで確認できる運用画面として見せます。',
+        primaryCta: 'API リファレンスを開く',
+        secondaryCta: 'ライブ探査を実行',
+        frontendHomeCta: '顧客ビューを開く',
+        metricLatency: '探査レイテンシ',
+        metricPaths: 'OpenAPI パス',
+        metricLanguages: 'UI 言語',
+        frontendLabel: '顧客画面',
+        frontendTitle: '実際のバックエンド証跡につながる製品 UI',
+        frontendStatus: '静的ルート',
+        frontendCopy: '顧客向けページは多言語の製品画面として動き、レビュアーがすぐにバックエンド証跡を確認できます。',
+        backendLabel: 'バックエンド面',
+        backendTitle: 'API がホームのワークフローに組み込まれています',
+        backendStatus: '同一オリジン探査',
+        backendCopy: 'ヘルス、readiness、OpenAPI、docs、保護ルート、Redis rate limit、worker、PostgreSQL 状態をポートフォリオ証跡として表示します。',
+        checking: '確認中',
+        online: 'オンライン',
+        offline: 'オフライン',
+        docs: '開く',
+        mapTitle: 'ランタイム構成',
+        mapCopy: 'Browser、API、worker、PostgreSQL、Redis を、検査可能な一つのデプロイ経路として表示します。',
+        nodeFrontend: 'フロントエンド',
+        nodeWorker: 'ワーカー',
+        timelineTitle: 'インシデント処理を端から端まで表現',
+        timelineCopy: 'サービス登録、キュー処理、監査できる解決フローというバックエンドの役割を示します。',
+        timelineOne: '取り込み',
+        timelineTwo: 'キュー',
+        timelineThree: '解決',
+        footer: 'backend、platform、cloud 求職向けの実用ポートフォリオ demo。',
+    },
+    ko: {
+        ...en,
+        languageName: '한국어',
+        navDocs: 'API 문서',
+        navHealth: '실시간 상태',
+        eyebrow: '프로덕션 증거 콘솔',
+        titleA: 'PulseBoard 라이브 운영 콘솔.',
+        titleB: '검증 가능한 백엔드 포트폴리오.',
+        lead: 'PulseBoard는 프로덕션에 가까운 SaaS 백엔드를 라이브 헬스 체크, OpenAPI, Redis 기반 제한, 백그라운드 worker, PostgreSQL 상태, staging 배포 흐름까지 확인 가능한 운영 화면으로 보여줍니다.',
+        primaryCta: 'API 문서 열기',
+        secondaryCta: '실시간 점검 실행',
+        frontendHomeCta: '고객 화면 열기',
+        metricLatency: '점검 지연 시간',
+        metricPaths: 'OpenAPI 경로',
+        metricLanguages: '인터페이스 언어',
+        frontendLabel: '고객 화면',
+        frontendTitle: '실제 백엔드 증거와 연결된 제품 UI',
+        frontendStatus: '정적 라우트',
+        frontendCopy: '고객용 페이지는 다국어 제품 화면으로 동작하며 리뷰어가 백엔드 증거를 바로 확인할 수 있게 합니다.',
+        backendLabel: '백엔드 영역',
+        backendTitle: 'API가 홈페이지 워크플로에 포함됩니다',
+        backendStatus: '동일 출처 점검',
+        backendCopy: 'health, readiness, OpenAPI, docs, 보호된 라우트, Redis rate limit, worker, PostgreSQL 상태를 포트폴리오 증거로 드러냅니다.',
+        checking: '확인 중',
+        online: '온라인',
+        offline: '오프라인',
+        docs: '열기',
+        mapTitle: '런타임 토폴로지',
+        mapCopy: 'Browser, API, worker, PostgreSQL, Redis를 하나의 검증 가능한 배포 경로로 보여줍니다.',
+        nodeFrontend: '프론트엔드',
+        nodeWorker: '워커',
+        timelineTitle: '인시던트 작업을 끝까지 모델링',
+        timelineCopy: '서비스 입력, 큐 처리, 감사 가능한 해결 흐름이라는 백엔드의 이유를 보여줍니다.',
+        timelineOne: '수집',
+        timelineTwo: '큐',
+        timelineThree: '해결',
+        footer: 'backend, platform, cloud 지원을 위한 실용 포트폴리오 demo입니다.',
+    },
+    es: {
+        ...en,
+        languageName: 'Español',
+        navDocs: 'Docs API',
+        navHealth: 'Salud en vivo',
+        eyebrow: 'Consola de evidencia productiva',
+        titleA: 'PulseBoard Live Ops Console.',
+        titleB: 'Un portfolio backend que se puede interrogar.',
+        lead: 'PulseBoard presenta un backend SaaS con forma de producción como una superficie operativa inspeccionable: health checks, OpenAPI, límites con Redis, workers, estado PostgreSQL y ruta de staging.',
+        primaryCta: 'Abrir referencia API',
+        secondaryCta: 'Ejecutar prueba en vivo',
+        frontendHomeCta: 'Abrir vista de cliente',
+        metricLatency: 'latencia de prueba',
+        metricPaths: 'rutas OpenAPI',
+        metricLanguages: 'idiomas de interfaz',
+        frontendLabel: 'Vista de cliente',
+        frontendTitle: 'UI de producto conectada a evidencia backend real',
+        frontendStatus: 'ruta estática',
+        frontendCopy: 'La página de cliente funciona como superficie multilingüe y mantiene cerca los enlaces de prueba para revisar el sistema.',
+        backendLabel: 'Plano backend',
+        backendTitle: 'La API forma parte del flujo de la home',
+        backendStatus: 'pruebas mismo origen',
+        backendCopy: 'Health, readiness, OpenAPI, docs, rutas protegidas, rate limits con Redis, workers y PostgreSQL aparecen como evidencia de portfolio.',
+        checking: 'comprobando',
+        online: 'en línea',
+        offline: 'sin conexión',
+        docs: 'abrir',
+        mapTitle: 'Topología runtime',
+        mapCopy: 'Browser, API, worker, PostgreSQL y Redis se muestran como una ruta de despliegue inspeccionable.',
+        timelineTitle: 'El trabajo de incidentes está modelado de punta a punta',
+        timelineCopy: 'La página muestra por qué existe el backend: intake de servicios, cola de trabajo y resolución auditable.',
+        timelineOne: 'Ingresar',
+        timelineTwo: 'Cola',
+        timelineThree: 'Resolver',
+        footer: 'Demo práctico para candidaturas backend, platform y cloud.',
+    },
+    fr: {
+        ...en,
+        languageName: 'Français',
+        navDocs: 'Docs API',
+        navHealth: 'Santé en direct',
+        eyebrow: 'Console de preuves de production',
+        titleA: 'Console Live Ops PulseBoard.',
+        titleB: 'Un portfolio backend que l’on peut inspecter.',
+        lead: 'PulseBoard présente un backend SaaS proche de la production comme une surface opérationnelle inspectable : sondes de santé, OpenAPI, limites Redis, workers, état PostgreSQL et chemin staging.',
+        primaryCta: 'Ouvrir la référence API',
+        secondaryCta: 'Lancer la sonde live',
+        frontendHomeCta: 'Ouvrir la vue client',
+        metricLatency: 'latence de sonde',
+        metricPaths: 'chemins OpenAPI',
+        metricLanguages: 'langues interface',
+        frontendLabel: 'Vue client',
+        frontendTitle: 'UI produit reliée à de vraies preuves backend',
+        frontendStatus: 'route statique',
+        frontendCopy: 'La page client fonctionne comme surface multilingue et garde les liens de preuve à portée de revue.',
+        backendLabel: 'Plan backend',
+        backendTitle: 'L’API fait partie du flux de la page',
+        backendStatus: 'sondes même origine',
+        backendCopy: 'Health, readiness, OpenAPI, docs, routes protégées, rate limits Redis, workers et état PostgreSQL sont visibles comme preuves.',
+        checking: 'vérification',
+        online: 'en ligne',
+        offline: 'hors ligne',
+        docs: 'ouvrir',
+        mapTitle: 'Topologie runtime',
+        mapCopy: 'Browser, API, worker, PostgreSQL et Redis apparaissent comme un chemin de déploiement inspectable.',
+        timelineTitle: 'Le cycle incident est modélisé de bout en bout',
+        timelineCopy: 'La page montre la raison d’être du backend : intake service, file de traitement et résolution auditable.',
+        timelineOne: 'Recevoir',
+        timelineTwo: 'File',
+        timelineThree: 'Résoudre',
+        footer: 'Demo pratique pour candidatures backend, platform et cloud.',
+    },
+    de: {
+        ...en,
+        languageName: 'Deutsch',
+        navDocs: 'API-Doku',
+        navHealth: 'Live-Health',
+        eyebrow: 'Produktionsnachweis-Konsole',
+        titleA: 'PulseBoard Live-Ops-Konsole.',
+        titleB: 'Ein Backend-Portfolio zum Prüfen.',
+        lead: 'PulseBoard zeigt ein produktionsnahes SaaS-Backend als prüfbare Betriebsoberfläche: Health-Probes, OpenAPI, Redis-Limits, Worker, PostgreSQL-Zustand und Staging-Pfad.',
+        primaryCta: 'API-Referenz öffnen',
+        secondaryCta: 'Live-Probe ausführen',
+        frontendHomeCta: 'Kundenansicht öffnen',
+        metricLatency: 'Probe-Latenz',
+        metricPaths: 'OpenAPI-Pfade',
+        metricLanguages: 'UI-Sprachen',
+        frontendLabel: 'Kundenfläche',
+        frontendTitle: 'Produkt-UI mit echten Backend-Belegen',
+        frontendStatus: 'statische Route',
+        frontendCopy: 'Die Kundenseite funktioniert als mehrsprachige Produktfläche und hält Prüflinks nah am System.',
+        backendLabel: 'Backend-Ebene',
+        backendTitle: 'Die API ist Teil des Homepage-Workflows',
+        backendStatus: 'Same-Origin-Probes',
+        backendCopy: 'Health, readiness, OpenAPI, docs, geschützte Routen, Redis rate limits, worker und PostgreSQL-Zustand werden als Portfolio-Belege sichtbar.',
+        checking: 'prüft',
+        online: 'online',
+        offline: 'offline',
+        docs: 'öffnen',
+        mapTitle: 'Runtime-Topologie',
+        mapCopy: 'Browser, API, worker, PostgreSQL und Redis werden als ein prüfbarer Deployment-Pfad gezeigt.',
+        timelineTitle: 'Incident-Arbeit ist durchgehend modelliert',
+        timelineCopy: 'Die Seite zeigt den Zweck des Backends: Service-Intake, Queue-Verarbeitung und auditierbare Lösung.',
+        timelineOne: 'Aufnehmen',
+        timelineTwo: 'Queue',
+        timelineThree: 'Lösen',
+        footer: 'Praktische Demo für Backend-, Platform- und Cloud-Bewerbungen.',
+    },
+    'pt-BR': {
+        ...en,
+        languageName: 'Português (BR)',
+        navDocs: 'Docs da API',
+        navHealth: 'Saúde ao vivo',
+        eyebrow: 'Console de evidências de produção',
+        titleA: 'Console Live Ops PulseBoard.',
+        titleB: 'Um portfólio backend que dá para investigar.',
+        lead: 'PulseBoard apresenta um backend SaaS com cara de produção como uma superfície operacional inspecionável: health checks, OpenAPI, limites com Redis, workers, estado PostgreSQL e caminho de staging.',
+        primaryCta: 'Abrir referência API',
+        secondaryCta: 'Rodar sonda ao vivo',
+        frontendHomeCta: 'Abrir visão do cliente',
+        metricLatency: 'latência da sonda',
+        metricPaths: 'rotas OpenAPI',
+        metricLanguages: 'idiomas de interface',
+        frontendLabel: 'Visão do cliente',
+        frontendTitle: 'UI de produto ligada a evidência backend real',
+        frontendStatus: 'rota estática',
+        frontendCopy: 'A página do cliente funciona como superfície multilíngue e mantém links de prova perto para revisão.',
+        backendLabel: 'Plano backend',
+        backendTitle: 'A API faz parte do fluxo da home',
+        backendStatus: 'sondas same-origin',
+        backendCopy: 'Health, readiness, OpenAPI, docs, rotas protegidas, rate limits Redis, workers e estado PostgreSQL aparecem como evidência.',
+        checking: 'verificando',
+        online: 'online',
+        offline: 'offline',
+        docs: 'abrir',
+        mapTitle: 'Topologia runtime',
+        mapCopy: 'Browser, API, worker, PostgreSQL e Redis aparecem como um caminho de deploy inspecionável.',
+        timelineTitle: 'O trabalho de incidentes é modelado de ponta a ponta',
+        timelineCopy: 'A página mostra por que o backend existe: entrada de serviço, fila de processamento e resolução auditável.',
+        timelineOne: 'Entrada',
+        timelineTwo: 'Fila',
+        timelineThree: 'Resolver',
+        footer: 'Demo prática para vagas backend, platform e cloud.',
+    },
+    ar: {
+        ...en,
+        languageName: 'العربية',
+        navDocs: 'وثائق API',
+        navHealth: 'حالة مباشرة',
+        eyebrow: 'وحدة أدلة تشغيلية',
+        titleA: 'لوحة تشغيل PulseBoard المباشرة.',
+        titleB: 'ملف Backend قابل للفحص.',
+        lead: 'يعرض PulseBoard خلفية SaaS قريبة من الإنتاج كواجهة تشغيل قابلة للفحص: فحوص الصحة، OpenAPI، حدود Redis، العمال الخلفيون، حالة PostgreSQL ومسار staging.',
+        primaryCta: 'فتح مرجع API',
+        secondaryCta: 'تشغيل فحص مباشر',
+        frontendHomeCta: 'فتح واجهة العميل',
+        metricLatency: 'زمن الفحص',
+        metricPaths: 'مسارات OpenAPI',
+        metricLanguages: 'لغات الواجهة',
+        frontendLabel: 'واجهة العميل',
+        frontendTitle: 'واجهة منتج مرتبطة بأدلة Backend حقيقية',
+        frontendStatus: 'مسار ثابت',
+        frontendCopy: 'تعمل صفحة العميل كواجهة متعددة اللغات وتبقي روابط الأدلة قريبة كي يتمكن المراجع من فحص النظام.',
+        backendLabel: 'طبقة Backend',
+        backendTitle: 'واجهة API جزء من تدفق الصفحة الرئيسية',
+        backendStatus: 'فحوص نفس المصدر',
+        backendCopy: 'تظهر فحوص الصحة وreadiness وOpenAPI والوثائق والمسارات المحمية وحدود Redis والعمال وحالة PostgreSQL كأدلة للملف.',
+        checking: 'جار الفحص',
+        online: 'متصل',
+        offline: 'غير متصل',
+        docs: 'فتح',
+        mapTitle: 'طوبولوجيا التشغيل',
+        mapCopy: 'يظهر Browser وAPI وworker وPostgreSQL وRedis كمسار نشر واحد قابل للفحص.',
+        nodeFrontend: 'الواجهة',
+        nodeApi: 'Hono API',
+        nodeWorker: 'العامل',
+        nodeDb: 'PostgreSQL',
+        nodeRedis: 'Redis',
+        timelineTitle: 'عمل الحوادث ممثل من البداية للنهاية',
+        timelineCopy: 'توضح الصفحة سبب وجود الخلفية: استقبال الخدمات، معالجة الطابور، وحل قابل للتدقيق.',
+        timelineOne: 'استقبال',
+        timelineTwo: 'طابور',
+        timelineThree: 'حل',
+        footer: 'Demo عملي للتقديم على وظائف backend وplatform وcloud.',
+    },
+    'zh-CN': {
+        ...en,
+        languageName: '简体中文',
+        navDocs: 'API 文档',
+        navHealth: '实时健康',
+        eyebrow: '生产证据控制台',
+        titleA: 'PulseBoard 实时运维控制台。',
+        titleB: '一个可以被追问的后端作品集。',
+        lead: 'PulseBoard 把接近生产环境的 SaaS 后端做成可检查的运维界面：实时健康探测、OpenAPI、Redis 限流、后台 worker、PostgreSQL 状态，以及 staging 部署路径。',
+        primaryCta: '打开 API 文档',
+        secondaryCta: '运行实时探测',
+        frontendHomeCta: '打开客户视图',
+        metricLatency: '探测延迟',
+        metricPaths: 'OpenAPI 路径',
+        metricLanguages: '界面语言',
+        frontendLabel: '客户界面',
+        frontendTitle: '连接真实后端证据的产品 UI',
+        frontendStatus: '静态路由',
+        frontendCopy: '客户页面现在是完整的多语言产品界面，同时把后端证据入口放在审查者容易看到的位置。',
+        backendLabel: '后端平面',
+        backendTitle: 'API 是首页工作流的一部分',
+        backendStatus: '同源探测',
+        backendCopy: '健康检查、readiness、OpenAPI、文档、受保护路由、Redis 限流、worker 和 PostgreSQL 状态都会作为作品集证据展示。',
+        checking: '检查中',
+        online: '在线',
+        offline: '离线',
+        docs: '打开',
+        mapTitle: '运行拓扑',
+        mapCopy: 'Browser、API、worker、PostgreSQL 和 Redis 被展示为一条可以检查的部署路径。',
+        nodeFrontend: '前端',
+        nodeWorker: 'Worker',
+        timelineTitle: '事件处理从头到尾都有模型',
+        timelineCopy: '页面说明后端存在的理由：服务录入、队列处理，以及可审计的解决流程。',
+        timelineOne: '录入',
+        timelineTwo: '队列',
+        timelineThree: '解决',
+        footer: '为 backend、platform、cloud 求职打造的实用作品集 demo。',
+    },
+};
+function getCopy(locale) {
+    return copies[locale] ?? copies.en;
+}
+
+const endpointConfig = {
+    live: { path: '/demo/health/live', labelKey: 'liveEndpoint', note: 'process responds' },
+    ready: { path: '/demo/health/ready', labelKey: 'readyEndpoint', note: 'dependencies ready' },
+    openapi: { path: '/demo/openapi.json', labelKey: 'openapiEndpoint', note: 'contract exposed' },
+    docs: { path: '/demo/docs', labelKey: 'docsEndpoint', note: 'Scalar docs' },
+};
+const evidenceItems = [
+    { label: 'PostgreSQL', value: 'tenant state and incident records', state: 'running' },
+    { label: 'Redis + BullMQ', value: 'rate limits and durable jobs', state: 'running' },
+    { label: 'Hono API', value: 'auth boundaries and OpenAPI contract', state: 'live' },
+    { label: 'Worker', value: 'background incident automation', state: 'active' },
+    { label: 'Tencent staging', value: 'operator checklist before host changes', state: 'gated' },
+];
+const lifecycleItems = [
+    { step: 'Ingest', detail: 'API-key protected routes receive workspace, service, and incident requests.' },
+    { step: 'Queue', detail: 'Redis-backed jobs move delayed operational work outside the request path.' },
+    { step: 'Resolve', detail: 'Worker automation records transitions and leaves API-visible evidence.' },
+];
+let currentLocale = readLocale();
+let endpointStates = {
+    live: 'checking',
+    ready: 'checking',
+    openapi: 'checking',
+    docs: 'docs',
+};
+let latencyMs = 0;
+let openApiPathCount = 0;
+let lastProbeAt = '--:--:--';
+function readLocale() {
+    const requested = new URLSearchParams(window.location.search).get('lang');
+    if (requested && localeOrder.includes(requested))
+        return requested;
+    const stored = window.localStorage.getItem('pulseboard-locale');
+    if (stored && localeOrder.includes(stored))
+        return stored;
+    return 'en';
+}
+function copy() {
+    return getCopy(currentLocale);
+}
+function escapeHtml(value) {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+function stateLabel(state) {
+    return copy()[state];
+}
+function stateClass(state) {
+    if (state === 'online' || state === 'docs')
+        return 'good';
+    if (state === 'checking')
+        return 'warn';
+    return 'bad';
+}
+function renderLanguageOptions() {
+    return localeOrder
+        .map((locale) => `<option value="${locale}" ${locale === currentLocale ? 'selected' : ''}>${escapeHtml(getCopy(locale).languageName)}</option>`)
+        .join('');
+}
+function endpointRow(key) {
+    const config = endpointConfig[key];
+    const state = endpointStates[key];
+    return `
+    <a class="endpoint-row" href="${config.path}" target="_blank" rel="noreferrer">
+      <span class="endpoint-name">
+        <strong>${escapeHtml(copy()[config.labelKey])}</strong>
+        <span>${escapeHtml(config.note)}</span>
+      </span>
+      <code>${config.path}</code>
+      <span class="endpoint-status ${stateClass(state)}">${escapeHtml(stateLabel(state))}</span>
+    </a>`;
+}
+function renderTerminal() {
+    const rows = [
+        { command: 'GET /demo/health/live', value: endpointStates.live, meta: latencyMs ? `${latencyMs}ms` : '--' },
+        { command: 'GET /demo/health/ready', value: endpointStates.ready, meta: lastProbeAt },
+        { command: 'GET /demo/openapi.json', value: endpointStates.openapi, meta: openApiPathCount ? `${openApiPathCount} paths` : '--' },
+        { command: 'GET /demo/docs', value: 'docs', meta: 'Scalar' },
+    ];
+    return rows
+        .map((row) => `
+        <div class="terminal-line">
+          <span class="prompt">pb</span>
+          <span>${escapeHtml(row.command)}</span>
+          <strong class="endpoint-status ${stateClass(row.value)}">${escapeHtml(stateLabel(row.value))}</strong>
+          <span class="latency">${escapeHtml(row.meta)}</span>
+        </div>`)
+        .join('');
+}
+function renderEvidenceRail() {
+    return evidenceItems
+        .map((item) => `
+        <li class="evidence-item">
+          <span class="evidence-state">${escapeHtml(item.state)}</span>
+          <strong>${escapeHtml(item.label)}</strong>
+          <span>${escapeHtml(item.value)}</span>
+        </li>`)
+        .join('');
+}
+function renderLifecycle() {
+    return lifecycleItems
+        .map((item, index) => `
+        <li class="lifecycle-step">
+          <time>0${index + 1}</time>
+          <span><strong>${escapeHtml(item.step)}</strong><span>${escapeHtml(item.detail)}</span></span>
+        </li>`)
+        .join('');
+}
+function renderArchitecture() {
+    const nodes = [
+        { name: copy().nodeFrontend, role: 'static cockpit', className: 'frontend' },
+        { name: copy().nodeApi, role: 'Hono API', className: 'api' },
+        { name: copy().nodeRedis, role: 'rate limit + jobs', className: 'redis' },
+        { name: copy().nodeWorker, role: 'incident automation', className: 'worker' },
+        { name: copy().nodeDb, role: 'tenant data', className: 'db' },
+    ];
+    return nodes
+        .map((node) => `
+        <div class="architecture-node ${node.className}">
+          <strong>${escapeHtml(node.name)}</strong>
+          <span>${escapeHtml(node.role)}</span>
+        </div>`)
+        .join('<span class="architecture-link" aria-hidden="true"></span>');
+}
+function render() {
+    const c = copy();
+    const app = document.querySelector('#app');
+    if (!app)
+        return;
+    document.documentElement.lang = currentLocale;
+    document.documentElement.dir = currentLocale === 'ar' ? 'rtl' : 'ltr';
+    app.innerHTML = `
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/demo/" aria-label="PulseBoard">
+          <span class="brand-mark">PB</span>
+          <span class="brand-copy"><strong>PulseBoard</strong><small>Live Ops Console</small></span>
+        </a>
+        <nav class="nav-actions" aria-label="Primary">
+          <a class="nav-link" href="#system">Runtime</a>
+          <a class="nav-link" href="#architecture">Topology</a>
+          <a class="nav-link" href="#deployment">Deploy gate</a>
+          <a class="nav-link" href="/demo/frontend/">Customer view</a>
+          <select class="lang-select" aria-label="Language selector">${renderLanguageOptions()}</select>
+        </nav>
+      </header>
+
+      <section class="ops-hero" aria-labelledby="hero-title">
+        <aside class="command-rail" aria-label="Operational snapshot">
+          <div class="rail-label">production surface</div>
+          <div class="rail-meter"><span>API</span><strong>${escapeHtml(stateLabel(endpointStates.ready))}</strong></div>
+          <div class="rail-meter"><span>OpenAPI</span><strong>${openApiPathCount || '--'} paths</strong></div>
+          <div class="rail-meter"><span>Locales</span><strong>${localeOrder.length}</strong></div>
+          <div class="deploy-gate"><span>deploy gate</span><strong>backup -> nginx test -> reload</strong></div>
+        </aside>
+
+        <div class="hero-copy">
+          <div class="kicker">${escapeHtml(c.eyebrow)}</div>
+          <h1 id="hero-title">${escapeHtml(c.titleA)}<br />${escapeHtml(c.titleB)}</h1>
+          <p class="lead">${escapeHtml(c.lead)}</p>
+          <div class="hero-actions">
+            <a class="primary-button" href="/demo/docs" target="_blank" rel="noreferrer">${escapeHtml(c.primaryCta)}</a>
+            <a class="secondary-button" href="/demo/openapi.json" target="_blank" rel="noreferrer">${escapeHtml(c.navOpenApi)}</a>
+            <button class="ghost-button" type="button" data-action="probe">${escapeHtml(c.secondaryCta)}</button>
+          </div>
+        </div>
+
+        <aside class="probe-console" aria-label="Backend probe console">
+          <div class="console-head">
+            <span>probe terminal</span>
+            <code>anlan.store</code>
+          </div>
+          <div class="terminal">${renderTerminal()}</div>
+          <div class="console-foot">
+            <span>${escapeHtml(c.metricLatency)}: <strong>${latencyMs || '--'}ms</strong></span>
+            <span>${escapeHtml(c.metricPaths)}: <strong>${openApiPathCount || '--'}</strong></span>
+            <span>${escapeHtml(c.metricLanguages)}: <strong>${localeOrder.length}</strong></span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="evidence-rail" id="system" aria-label="Backend evidence rail">
+        <div class="section-heading">
+          <span class="section-label">Runtime Ledger</span>
+          <h2>Backend plane, shown with receipts.</h2>
+        </div>
+        <ul>${renderEvidenceRail()}</ul>
+      </section>
+
+      <section class="surface-grid" aria-label="Frontend and backend surfaces">
+        <article class="surface-panel">
+          <div class="panel-header"><div><span class="panel-label">${escapeHtml(c.frontendLabel)}</span><h2>${escapeHtml(c.frontendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.frontendStatus)}</span></div>
+          <p>${escapeHtml(c.frontendCopy)}</p>
+          <div class="release-ledger" aria-label="Frontend release ledger">
+            <div><span>route</span><strong>/demo/frontend/</strong></div>
+            <div><span>languages</span><strong>${localeOrder.length}</strong></div>
+            <div><span>proof link</span><strong>Backend proof</strong></div>
+          </div>
+          <a class="text-link" href="/demo/frontend/">${escapeHtml(c.frontendHomeCta)}</a>
+        </article>
+
+        <article class="surface-panel">
+          <div class="panel-header"><div><span class="panel-label">${escapeHtml(c.backendLabel)}</span><h2>${escapeHtml(c.backendTitle)}</h2></div><span class="status-badge">${escapeHtml(c.backendStatus)}</span></div>
+          <p>${escapeHtml(c.backendCopy)}</p>
+          <div class="backend-stack">${endpointRow('live')}${endpointRow('ready')}${endpointRow('openapi')}${endpointRow('docs')}</div>
+        </article>
+      </section>
+
+      <section class="architecture-band" id="architecture" aria-label="Deployment architecture">
+        <div class="section-heading">
+          <span class="section-label">${escapeHtml(c.mapTitle)}</span>
+          <h2>${escapeHtml(c.mapCopy)}</h2>
+        </div>
+        <div class="architecture-map">${renderArchitecture()}</div>
+      </section>
+
+      <section class="operations-band" aria-label="Incident lifecycle and deployment boundary">
+        <article class="lifecycle-card">
+          <span class="section-label">Incident Runway</span>
+          <h2>${escapeHtml(c.timelineTitle)}</h2>
+          <p>${escapeHtml(c.timelineCopy)}</p>
+          <ol>${renderLifecycle()}</ol>
+        </article>
+        <article class="deployment-card" id="deployment">
+          <span class="section-label">Deployment Boundary</span>
+          <h2>Staging-ready, deliberately gated.</h2>
+          <p>No secrets, IPs, cloud credentials, DNS tokens, or Terraform actions are embedded in the public site. The Tencent rehearsal checklist remains the handoff point before host changes.</p>
+          <div class="boundary-list">
+            <span>local build: verified artifact</span>
+            <span>server deploy: backup before install</span>
+            <span>rollback: static files and nginx config</span>
+          </div>
+        </article>
+      </section>
+
+      <footer class="footer">
+        <span>${escapeHtml(c.footer)}</span>
+        <span><a href="/demo/openapi.json" target="_blank" rel="noreferrer">OpenAPI</a> / <a href="/demo/docs" target="_blank" rel="noreferrer">Scalar</a> / <a href="/demo/health/ready" target="_blank" rel="noreferrer">Ready</a></span>
+      </footer>
+    </main>`;
+    app.querySelector('.lang-select')?.addEventListener('change', (event) => {
+        const next = event.currentTarget.value;
+        if (!localeOrder.includes(next))
+            return;
+        currentLocale = next;
+        window.localStorage.setItem('pulseboard-locale', next);
+        render();
+    });
+    app.querySelector('[data-action="probe"]')?.addEventListener('click', () => {
+        void probeBackend();
+    });
+}
+async function fetchWithTimeout(path, timeoutMs = 3500) {
+    const started = performance.now();
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const response = await fetch(path, { cache: 'no-store', signal: controller.signal });
+        return { response, latency: Math.round(performance.now() - started) };
+    }
+    finally {
+        window.clearTimeout(timeout);
+    }
+}
+async function probeBackend() {
+    endpointStates = { ...endpointStates, live: 'checking', ready: 'checking', openapi: 'checking' };
+    render();
+    try {
+        const live = await fetchWithTimeout('/demo/health/live');
+        endpointStates.live = live.response.ok ? 'online' : 'offline';
+        latencyMs = live.latency;
+    }
+    catch {
+        endpointStates.live = 'offline';
+        latencyMs = 0;
+    }
+    try {
+        const ready = await fetchWithTimeout('/demo/health/ready');
+        endpointStates.ready = ready.response.ok ? 'online' : 'offline';
+    }
+    catch {
+        endpointStates.ready = 'offline';
+    }
+    try {
+        const openapi = await fetchWithTimeout('/demo/openapi.json');
+        endpointStates.openapi = openapi.response.ok ? 'online' : 'offline';
+        if (openapi.response.ok) {
+            const document = (await openapi.response.json());
+            openApiPathCount = Object.keys(document.paths ?? {}).length;
+        }
+        else {
+            openApiPathCount = 0;
+        }
+    }
+    catch {
+        endpointStates.openapi = 'offline';
+        openApiPathCount = 0;
+    }
+    lastProbeAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    render();
+}
+render();
+void probeBackend();</script>
+  </body>
+</html>

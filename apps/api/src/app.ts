@@ -117,12 +117,12 @@ export function createApp() {
   app.use('*', cors());
   app.use('*', requestContext);
 
-  app.get('/', (c) => c.json({ name: 'PulseBoard API', docs: '/docs' }));
+  app.get('/', (c) => c.json({ name: 'PulseBoard API', docs: '/demo/docs' }));
   app.get('/openapi.json', (c) => c.json(openApiDocument));
   app.get(
     '/docs',
     Scalar({
-      url: '/openapi.json',
+      url: '/demo/openapi.json',
       theme: 'saturn',
       pageTitle: 'PulseBoard API Reference',
     }),

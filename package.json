@@ -12,7 +12,9 @@
     "dev:api": "corepack pnpm --filter @pulseboard/api dev",
     "dev:worker": "corepack pnpm --filter @pulseboard/worker dev",
     "dev:web": "corepack pnpm --filter @pulseboard/web dev",
+    "build:portal": "corepack pnpm --filter @pulseboard/portal build",
     "build:web": "corepack pnpm --filter @pulseboard/web build",
+    "build:public": "corepack pnpm build:portal && corepack pnpm build:web",
     "db:generate": "corepack pnpm --filter @pulseboard/db db:generate",
     "db:push": "corepack pnpm --filter @pulseboard/db db:push",
     "db:deploy": "corepack pnpm --filter @pulseboard/db db:deploy",
@@ -23,8 +25,12 @@
     "test": "corepack pnpm -r test",
     "test:integration": "corepack pnpm --filter @pulseboard/api test:integration",
     "lint": "corepack pnpm typecheck",
+    "verify:portal": "corepack pnpm --filter @pulseboard/portal verify",
     "verify:web": "corepack pnpm --filter @pulseboard/web verify",
-    "verify:public": "node scripts/verify-public-surface.mjs"
+    "verify:artifacts": "corepack pnpm verify:portal && corepack pnpm verify:web",
+    "verify:public": "node scripts/verify-public-surface.mjs",
+    "preview:public": "node scripts/preview-public-surface.mjs",
+    "verify:public:local": "node scripts/preview-public-surface.mjs --verify"
   },
   "devDependencies": {
     "@types/node": "^20.19.0",

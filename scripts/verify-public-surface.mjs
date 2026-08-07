@@ -7,7 +7,16 @@ const traditionalChineseLabel = text(0x7e41, 0x9ad4, 0x4e2d, 0x6587);
 const simplifiedChineseLabel = text(0x7b80, 0x4f53, 0x4e2d, 0x6587);
 const arabicLabel = text(0x0627, 0x0644, 0x0639, 0x0631, 0x0628, 0x064a, 0x0629);
 const localeOrderNeedle = "const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];";
-const frontendMojibakeNeedles = ['f?brica', 'Mant?n', 'Gedr?ckt', text(0xfffd)];
+const retiredStyleNeedles = [
+  'gradient-text',
+  'towerCore',
+  'camera-x',
+  'Opening orbit: software factory floor',
+  'Scroll-driven 3D storytelling',
+  'vertical-tower-preview',
+  'Reliability Desk',
+  'Evidence Rail'
+];
 
 function normalizeBaseUrl(value) {
   const url = new URL(value);
@@ -18,15 +27,15 @@ function normalizeBaseUrl(value) {
 }
 
 function endpoint(path) {
-  return `${baseUrl}${path}`;
+  return baseUrl + path;
 }
 
 function expect(name, condition, detail = '') {
-  if (!condition) failures.push(detail ? `${name}: ${detail}` : name);
+  if (!condition) failures.push(detail ? name + ': ' + detail : name);
 }
 
 function observe(name, value) {
-  observations.push(`${name}: ${value}`);
+  observations.push(name + ': ' + value);
 }
 
 async function fetchText(path, options = {}) {
@@ -36,10 +45,10 @@ async function fetchText(path, options = {}) {
     const response = await fetch(endpoint(path), {
       redirect: options.redirect ?? 'follow',
       headers: { accept: options.accept ?? '*/*' },
-      signal: controller.signal,
+      signal: controller.signal
     });
     const body = await response.text();
-    observe(`${path} status`, `${response.status} ${response.statusText}`);
+    observe(path + ' status', response.status + ' ' + response.statusText);
     return { response, body };
   } finally {
     clearTimeout(timeout);
@@ -51,108 +60,143 @@ async function fetchJson(path) {
   try {
     return { ...result, json: JSON.parse(result.body) };
   } catch (error) {
-    failures.push(`${path} JSON parse failed: ${error.message}`);
+    failures.push(path + ' JSON parse failed: ' + error.message);
     return { ...result, json: null };
   }
 }
 
-async function verifyHomepage() {
-  const { response, body } = await fetchText('/');
-  expect('homepage returns 200', response.status === 200, `${response.status} ${response.statusText}`);
-  expect('homepage is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('homepage title is frontend + backend demo', body.includes('<title>PulseBoard - Frontend + Backend Demo</title>'));
-  expect('homepage includes app root', body.includes('id="app"'));
-  expect('homepage includes frontend plane', body.includes('Frontend plane'));
-  expect('homepage includes vertical tower preview', body.includes('vertical-tower-preview') && body.includes('Enter scroll-driven tower'));
-  expect('homepage links customer-facing frontend site', body.includes('Open customer-facing site') && body.includes('href="/frontend/"'));
-  expect('homepage includes backend plane', body.includes('Backend plane'));
-  expect('homepage includes English-first locale order', body.includes(localeOrderNeedle));
-  expect('homepage includes Traditional Chinese locale', body.includes(traditionalChineseLabel));
-  expect('homepage includes Simplified Chinese locale', body.includes(simplifiedChineseLabel));
-  expect('homepage includes Arabic locale', body.includes(arabicLabel));
-  expect('homepage includes liveness probe path', body.includes('/health/live'));
-  expect('homepage includes readiness probe path', body.includes('/health/ready'));
-  expect('homepage includes OpenAPI probe path', body.includes('/openapi.json'));
-  expect('homepage includes API docs path', body.includes('/docs'));
-  expect('homepage supports deterministic locale URL param', body.includes("get('lang')"));
-  expect('homepage supports Arabic RTL direction', body.includes("currentLocale === 'ar' ? 'rtl' : 'ltr'"));
+function verifyLocaleSurface(body, scope) {
+  expect(scope + ' includes English-first locale order', body.includes(localeOrderNeedle));
+  expect(scope + ' includes Traditional Chinese locale', body.includes(traditionalChineseLabel));
+  expect(scope + ' includes Simplified Chinese locale', body.includes(simplifiedChineseLabel));
+  expect(scope + ' includes Arabic locale', body.includes(arabicLabel));
+  expect(scope + ' has no replacement characters', !body.includes(text(0xfffd)));
+  for (const needle of retiredStyleNeedles) {
+    expect(scope + ' retired old marker: ' + needle, !body.includes(needle));
+  }
 }
 
-async function verifyFrontendSite() {
-  const { response, body } = await fetchText('/frontend/');
-  expect('frontend customer site returns 200', response.status === 200, `${response.status} ${response.statusText}`);
-  expect('frontend customer site is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('frontend customer site title is product site', body.includes('<title>PulseBoard Operations Cloud - Customer Site</title>'));
-  expect('frontend customer site has commercial hero', body.includes('A customer-ready operations website') && body.includes('Book a product demo'));
-  expect('frontend customer site has rich business sections', body.includes('Pricing') && body.includes('Questions a buyer would actually ask') && body.includes('Explore the software factory'));
-  expect('frontend customer site has scroll-driven 3D software factory', body.includes('Scroll-driven 3D storytelling') && body.includes('scroll-theater') && body.includes('towerCore') && body.includes('camera-x') && body.includes('Opening orbit: software factory floor'));
-  expect('frontend customer site maps software factory to backend architecture', body.includes('PostgreSQL') && body.includes('Redis + BullMQ') && body.includes('API Edge') && body.includes('Final pullback: industrialized SaaS demo'));
-  expect('frontend customer site uses software factory language', body.includes('software factory') && body.includes('production lines') && body.includes('plant floor'));
-  expect('frontend customer site keeps language system', body.includes('localeOrder') && body.includes('zh-CN') && body.includes('zh-TW'));
-  expect('frontend customer site links backend proof', body.includes('Backend proof') && body.includes('href="/"'));
-  for (const needle of frontendMojibakeNeedles) {
-    expect(`frontend customer site has no mojibake marker ${needle}`, !body.includes(needle));
-  }
-  expect('frontend customer site includes extended Simplified Chinese translations', body.includes('PulseBoard 可靠性工坊') && body.includes('为什么用软件工厂展示后端 demo'));
-  expect('frontend customer site includes extended Traditional Chinese translations', body.includes('PulseBoard 可靠性工坊') && body.includes('為什麼用軟體工廠展示後端 demo'));
-  expect('frontend customer site includes extended Arabic translations', body.includes('ورشة موثوقية PulseBoard') && body.includes('لماذا نستخدم مصنع برمجيات'));
+async function verifyPortal() {
+  const { response, body } = await fetchText('/');
+  expect('portal returns 200', response.status === 200, response.status + ' ' + response.statusText);
+  expect('portal is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+  expect('portal title identifies ANLAN.STORE', body.includes('<title>ANLAN.STORE - Live Project Directory</title>'));
+  expect('portal exposes project directory identity', body.includes('ANLAN.STORE') && body.includes('Live project<br>directory.'));
+  expect('portal links PulseBoard demo', body.includes('href="/demo/"'));
+  expect('portal links all study routes', body.includes('href="/saa/"') && body.includes('href="/sap/"') && body.includes('href="/ispm/"'));
+  expect('portal includes working filter controls', body.includes('data-filter="systems"') && body.includes('applyFilter'));
+  expect('portal includes both PulseBoard captures', (body.match(/data:image\/png;base64,/g) ?? []).length === 2);
+  expect('portal has no unresolved build placeholders', !/__PORTAL_[A-Z_]+__/.test(body) && !/__PULSEBOARD_[A-Z_]+__/.test(body));
+}
+
+async function verifyPulseBoard() {
+  const { response, body } = await fetchText('/demo/');
+  expect('PulseBoard demo returns 200', response.status === 200, response.status + ' ' + response.statusText);
+  expect('PulseBoard demo is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+  expect('PulseBoard demo title is Live Ops Console', body.includes('<title>PulseBoard - Live Ops Console</title>'));
+  expect('PulseBoard demo has operational hero', body.includes('PulseBoard Live Ops Console.') && body.includes('A backend portfolio you can interrogate.'));
+  expect('PulseBoard demo surfaces runtime evidence', body.includes('probe terminal') && body.includes('Runtime Ledger') && body.includes('Incident Runway'));
+  expect('PulseBoard demo links customer route', body.includes('href="/demo/frontend/"'));
+  expect('PulseBoard demo uses namespaced probes', body.includes('/demo/health/live') && body.includes('/demo/health/ready'));
+  expect('PulseBoard demo uses namespaced docs', body.includes('/demo/openapi.json') && body.includes('/demo/docs'));
+  expect('PulseBoard demo supports RTL Arabic', body.includes("currentLocale === 'ar' ? 'rtl' : 'ltr'"));
+  verifyLocaleSurface(body, 'PulseBoard demo');
+}
+
+async function verifyCustomerSurface() {
+  const { response, body } = await fetchText('/demo/frontend/');
+  expect('customer surface returns 200', response.status === 200, response.status + ' ' + response.statusText);
+  expect('customer surface is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+  expect('customer surface title is Reliability Works', body.includes('<title>PulseBoard Reliability Works</title>'));
+  expect('customer surface has product workflow', body.includes('Workflow') && body.includes('Automation queue') && body.includes('Evidence links'));
+  expect('customer surface has release and lifecycle sections', body.includes('Release posture') && body.includes('Lifecycle'));
+  expect('customer surface uses namespaced backend links', body.includes('/demo/health/ready') && body.includes('/demo/openapi.json') && body.includes('/demo/docs'));
+  expect('customer surface links back to PulseBoard', body.includes('href="/demo/"'));
+  expect('customer surface supports RTL Arabic', body.includes("active === 'ar' ? 'rtl' : 'ltr'"));
+  verifyLocaleSurface(body, 'customer surface');
 }
 
 async function verifyBackendSurface() {
-  const live = await fetchJson('/health/live');
-  expect('liveness returns 200', live.response.status === 200, `${live.response.status} ${live.response.statusText}`);
+  const live = await fetchJson('/demo/health/live');
+  expect('liveness returns 200', live.response.status === 200, live.response.status + ' ' + live.response.statusText);
   expect('liveness body status is ok', live.json?.status === 'ok', live.body.slice(0, 160));
 
-  const ready = await fetchJson('/health/ready');
-  expect('readiness returns 200', ready.response.status === 200, `${ready.response.status} ${ready.response.statusText}`);
+  const ready = await fetchJson('/demo/health/ready');
+  expect('readiness returns 200', ready.response.status === 200, ready.response.status + ' ' + ready.response.statusText);
   expect('readiness body status is ready', ready.json?.status === 'ready', ready.body.slice(0, 160));
 
-  const openapi = await fetchJson('/openapi.json');
-  expect('OpenAPI returns 200', openapi.response.status === 200, `${openapi.response.status} ${openapi.response.statusText}`);
+  const openapi = await fetchJson('/demo/openapi.json');
+  expect('OpenAPI returns 200', openapi.response.status === 200, openapi.response.status + ' ' + openapi.response.statusText);
   const paths = openapi.json?.paths && typeof openapi.json.paths === 'object' ? Object.keys(openapi.json.paths) : [];
   observe('OpenAPI path count', paths.length);
-  expect('OpenAPI includes liveness path', paths.includes('/health/live'));
-  expect('OpenAPI includes readiness path', paths.includes('/health/ready'));
-  expect('OpenAPI includes API key lifecycle path', paths.includes('/v1/api-keys'));
-  expect('OpenAPI includes workspace path', paths.includes('/v1/workspaces'));
+  expect('OpenAPI includes public liveness path', paths.includes('/demo/health/live'));
+  expect('OpenAPI includes public readiness path', paths.includes('/demo/health/ready'));
+  expect('OpenAPI includes public API key path', paths.includes('/demo/api/v1/api-keys'));
+  expect('OpenAPI includes public workspace path', paths.includes('/demo/api/v1/workspaces'));
 
-  const docs = await fetchText('/docs', { accept: 'text/html' });
-  expect('API docs returns 200', docs.response.status === 200, `${docs.response.status} ${docs.response.statusText}`);
-  expect('API docs page references PulseBoard API', docs.body.includes('PulseBoard API') || docs.body.includes('api-reference'));
+  const docs = await fetchText('/demo/docs', { accept: 'text/html' });
+  expect('API docs returns 200', docs.response.status === 200, docs.response.status + ' ' + docs.response.statusText);
+  expect('API docs references PulseBoard API', docs.body.includes('PulseBoard API') || docs.body.includes('api-reference'));
+  expect('API docs loads namespaced OpenAPI', docs.body.includes('/demo/openapi.json'));
 
-  const unauthorized = await fetchJson('/v1/workspaces');
-  expect('protected workspace route returns 401 without API key', unauthorized.response.status === 401, `${unauthorized.response.status} ${unauthorized.response.statusText}`);
+  const unauthorized = await fetchJson('/demo/api/v1/workspaces');
+  expect('protected workspace route returns 401 without API key', unauthorized.response.status === 401, unauthorized.response.status + ' ' + unauthorized.response.statusText);
   expect('protected workspace route does not leak data', !Array.isArray(unauthorized.json), unauthorized.body.slice(0, 160));
+}
+
+async function verifyStudyRoutes() {
+  for (const path of ['/saa/', '/sap/', '/ispm/']) {
+    const { response, body } = await fetchText(path, { accept: 'text/html' });
+    expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
+    expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+    expect(path + ' retains Flutter app shell', body.includes('flutter') || body.includes('flt-glass-pane'));
+  }
+}
+
+async function verifyLegacyRedirects() {
+  for (const [oldPath, newPath] of [
+    ['/frontend/', '/demo/frontend/'],
+    ['/docs', '/demo/docs'],
+    ['/openapi.json', '/demo/openapi.json'],
+    ['/health/live', '/demo/health/live'],
+    ['/v1/workspaces', '/demo/api/v1/workspaces']
+  ]) {
+    const { response } = await fetchText(oldPath, { redirect: 'manual' });
+    expect(oldPath + ' redirects', response.status >= 300 && response.status < 400, response.status + ' ' + response.statusText);
+    expect(oldPath + ' redirects to ' + newPath, (response.headers.get('location') ?? '').startsWith(newPath), response.headers.get('location') ?? '<missing>');
+  }
 }
 
 async function verifyWwwRedirect() {
   const url = new URL(baseUrl);
   if (url.hostname !== 'anlan.store') return;
-
   const wwwUrl = new URL(baseUrl);
   wwwUrl.hostname = 'www.anlan.store';
   const response = await fetch(wwwUrl.toString(), { redirect: 'manual' });
-  observe('www redirect status', `${response.status} ${response.statusText}`);
-  expect('www redirects to bare domain', response.status >= 300 && response.status < 400, `${response.status} ${response.statusText}`);
+  observe('www redirect status', response.status + ' ' + response.statusText);
+  expect('www redirects to bare domain', response.status >= 300 && response.status < 400, response.status + ' ' + response.statusText);
   expect('www redirect location is bare domain', (response.headers.get('location') ?? '').startsWith('https://anlan.store/'), response.headers.get('location') ?? '<missing>');
 }
 
 try {
-  await verifyHomepage();
-  await verifyFrontendSite();
+  await verifyPortal();
+  await verifyPulseBoard();
+  await verifyCustomerSurface();
   await verifyBackendSurface();
+  await verifyStudyRoutes();
+  await verifyLegacyRedirects();
   await verifyWwwRedirect();
 } catch (error) {
-  failures.push(`verification crashed: ${error instanceof Error ? error.message : String(error)}`);
+  failures.push('verification crashed: ' + (error instanceof Error ? error.message : String(error)));
 }
 
-console.log(`PulseBoard public surface verification target: ${baseUrl}`);
-for (const observation of observations) console.log(`- ${observation}`);
+console.log('Anlan public surface verification target: ' + baseUrl);
+for (const observation of observations) console.log('- ' + observation);
 
 if (failures.length > 0) {
-  console.error('PulseBoard public surface verification failed:');
-  for (const failure of failures) console.error(`- ${failure}`);
+  console.error('Anlan public surface verification failed:');
+  for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
 
-console.log('PulseBoard public surface verified.');
+console.log('Anlan project portal and PulseBoard demo verified.');

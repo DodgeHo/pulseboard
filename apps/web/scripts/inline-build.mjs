@@ -24,7 +24,7 @@ const html = template
   .replace('__PULSEBOARD_JS__', js.trim());
 
 const webDist = resolve(appRoot, 'dist');
-const deployDist = resolve(repoRoot, 'deploy', 'anlan');
+const deployDist = resolve(repoRoot, 'deploy', 'anlan', 'demo');
 
 await mkdir(webDist, { recursive: true });
 await mkdir(resolve(webDist, 'frontend'), { recursive: true });

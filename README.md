@@ -83,8 +83,9 @@ Useful endpoints:
 
 Public demo entry point:
 
-- `https://anlan.store/`
-- `https://anlan.store/docs`
+- `https://anlan.store/` (project portal)
+- `https://anlan.store/demo/` (PulseBoard)
+- `https://anlan.store/demo/docs` (API docs)
 
 API examples are available in [`docs/api-examples.md`](docs/api-examples.md).
 
@@ -122,41 +123,43 @@ To run the API integration suite against the compose PostgreSQL and Redis servic
 pnpm compose:integration
 ```
 
-CI runs fast unit/type checks, builds and verifies the generated frontend artifact, checks that `deploy/anlan/index.html` is up to date, and runs a Postgres/Redis-backed integration job that applies migrations, seeds the demo API key, and exercises the main API flows.
+CI runs fast unit/type checks, builds and verifies the root project portal plus the namespaced PulseBoard artifacts, checks that `deploy/anlan/index.html` and `deploy/anlan/demo/` are up to date, and runs a Postgres/Redis-backed integration job that applies migrations, seeds the demo API key, and exercises the main API flows.
 
 
-## Frontend Demo
+## Public Portal and PulseBoard Demo
 
-The public homepage is a real frontend surface, not a marketing-only landing page. It renders a dynamic operations cockpit that shows both:
+`anlan.store` has two distinct public layers:
 
-- the frontend experience: animated signal map, endpoint console, responsive layout, and a 10-language interface;
-- the backend surface: same-origin probes for liveness, readiness, OpenAPI, and Scalar API docs.
+- `/` is the `ANLAN.STORE` project directory, with direct entries for PulseBoard, SAA, SAP, and ISPM.
+- `/demo/` is the PulseBoard Live Ops Console, with its customer UI at `/demo/frontend/` and backend evidence under `/demo/health/*`, `/demo/openapi.json`, `/demo/docs`, and `/demo/api/v1/*`.
 
-Language order is intentional: English is first and is also the default locale, Traditional Chinese is included, and Simplified Chinese is last. A locale can be previewed with `?lang=<locale>`, for example `?lang=zh-TW`.
+PulseBoard keeps its 10-language interface. English is first and remains the default, Traditional Chinese is included, and Simplified Chinese is last. A locale can be selected with `?lang=<locale>`, for example `/demo/?lang=zh-TW`.
 
-Build the frontend and update the deployable `anlan.store` single-file homepage:
-
-```bash
-pnpm build:web
-```
-
-Verify the generated single-file artifact before deployment:
+Build every public static artifact:
 
 ```bash
-pnpm verify:web
+pnpm build:public
 ```
 
-Preview the built frontend locally:
+Verify the generated portal and PulseBoard artifacts before deployment:
+
+```bash
+pnpm verify:artifacts
+```
+
+For local PulseBoard source development:
 
 ```bash
 pnpm dev:web
 ```
 
-After an approved `anlan.store` install, verify the public homepage and backend surface together:
+After an approved host install, verify the portal, `/demo/` namespace, backend surface, study tools, and redirects together:
 
 ```bash
 pnpm verify:public
 ```
+
+See [`docs/deployment/anlan-public-site.md`](docs/deployment/anlan-public-site.md) for the route contract, backup-first install steps, verification expectations, and rollback procedure.
 
 ## Background Jobs
 

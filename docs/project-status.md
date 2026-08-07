@@ -44,9 +44,9 @@ Recent verified checks include:
 - Manual `Deploy Tencent Staging` workflow run [`28742059040`](https://github.com/DodgeHo/pulseboard/actions/runs/28742059040) passed on 2026-07-05 with staging-only GitHub environment secrets, remote rebuild, health checks, incident open/resolve, and `Demo flow completed successfully`.
 - Staging API, PostgreSQL, Redis, and worker containers were healthy/running after the latest documentation and workflow updates.
 - Recent GitHub Actions CI runs on `master` passed with quality, integration, and infrastructure jobs after the phase-readiness and workflow action updates.
-- The Tencent staging checkout was fast-forwarded after the latest repository updates on 2026-07-05 and remained clean, with `/health/live` and `/health/ready` passing locally on the host.
+- The Tencent staging checkout was fast-forwarded after the latest repository updates on 2026-07-05 and remained clean, with `/demo/health/live` and `/demo/health/ready` passing locally on the host.
 - `https://anlan.store/` serves the PulseBoard public homepage over HTTPS.
-- `https://anlan.store/docs`, `https://anlan.store/openapi.json`, `/health/live`, and `/health/ready` proxy successfully to the local API on the host.
+- `https://anlan.store/demo/docs`, `https://anlan.store/demo/openapi.json`, `/demo/health/live`, and `/demo/health/ready` proxy successfully to the local API on the host.
 - `https://www.anlan.store/` has a valid certificate and redirects to `https://anlan.store/`.
 
 ## Explicit Approval Gates

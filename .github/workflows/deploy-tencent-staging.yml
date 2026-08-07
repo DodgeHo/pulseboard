@@ -52,13 +52,13 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Build and verify public homepage artifact
+      - name: Build and verify public site artifacts
         run: |
           set -euo pipefail
           pnpm install --frozen-lockfile
-          pnpm build:web
-          pnpm verify:web
-          git diff --exit-code -- deploy/anlan/index.html deploy/anlan/frontend/index.html
+          pnpm build:public
+          pnpm verify:artifacts
+          git diff --exit-code -- deploy/anlan/index.html deploy/anlan/demo/index.html deploy/anlan/demo/frontend/index.html
 
       - name: Configure SSH
         env:
@@ -93,8 +93,9 @@ jobs:
       - name: Upload public site assets
         run: |
           set -euo pipefail
-          scp deploy/anlan/index.html pulseboard-staging:/tmp/pulseboard-anlan-index.html
-          scp deploy/anlan/frontend/index.html pulseboard-staging:/tmp/pulseboard-anlan-frontend-index.html
+          scp deploy/anlan/index.html pulseboard-staging:/tmp/anlan-portal-index.html
+          scp deploy/anlan/demo/index.html pulseboard-staging:/tmp/pulseboard-demo-index.html
+          scp deploy/anlan/demo/frontend/index.html pulseboard-staging:/tmp/pulseboard-demo-frontend-index.html
           scp deploy/anlan/nginx/anlan.conf pulseboard-staging:/tmp/pulseboard-anlan.conf
 
       - name: Deploy and verify backend on staging host
@@ -149,22 +150,26 @@ jobs:
           if [ -f /var/www/html/index.html ]; then
             sudo cp /var/www/html/index.html /var/www/html/index.html.backup-$ts
           fi
-          if [ -f /var/www/html/frontend/index.html ]; then
-            sudo cp /var/www/html/frontend/index.html /var/www/html/frontend/index.html.backup-$ts
+          if [ -f /var/www/html/demo/index.html ]; then
+            sudo cp /var/www/html/demo/index.html /var/www/html/demo/index.html.backup-$ts
+          fi
+          if [ -f /var/www/html/demo/frontend/index.html ]; then
+            sudo cp /var/www/html/demo/frontend/index.html /var/www/html/demo/frontend/index.html.backup-$ts
           fi
           if [ -f /etc/nginx/sites-available/anlan.conf ]; then
             sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
           fi
 
-          sudo install -m 0644 /tmp/pulseboard-anlan-index.html /var/www/html/index.html
-          sudo install -d -m 0755 /var/www/html/frontend
-          sudo install -m 0644 /tmp/pulseboard-anlan-frontend-index.html /var/www/html/frontend/index.html
+          sudo install -d -m 0755 /var/www/html/demo/frontend
+          sudo install -m 0644 /tmp/anlan-portal-index.html /var/www/html/index.html
+          sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
+          sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
           sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf
           sudo nginx -t
           sudo systemctl reload nginx
           REMOTE
 
-      - name: Verify public homepage and backend surface
+      - name: Verify portal, PulseBoard demo, and backend surface
         env:
           PUBLIC_BASE_URL: ${{ vars.TENCENT_STAGING_PUBLIC_BASE_URL || 'https://anlan.store' }}
         run: pnpm verify:public

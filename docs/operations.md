@@ -18,10 +18,10 @@ The current public portfolio entry point is `https://anlan.store/` on the existi
 
 ```bash
 curl -I https://www.anlan.store
-curl https://anlan.store/health/live
-curl https://anlan.store/health/ready
-curl -I https://anlan.store/docs
-curl https://anlan.store/openapi.json
+curl https://anlan.store/demo/health/live
+curl https://anlan.store/demo/health/ready
+curl -I https://anlan.store/demo/docs
+curl https://anlan.store/demo/openapi.json
 ```
 
 - `www.anlan.store` should redirect to `https://anlan.store/`.
