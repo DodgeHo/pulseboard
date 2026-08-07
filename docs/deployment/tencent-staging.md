@@ -158,7 +158,7 @@ Required GitHub secrets:
 - `TENCENT_STAGING_SSH_KEY`: private deploy key for this staging host only
 - `TENCENT_STAGING_KNOWN_HOSTS`: pinned SSH host key entry
 
-The workflow builds and verifies the project portal and namespaced PulseBoard artifacts on the GitHub runner, refuses to deploy over a dirty server worktree, checks out the selected ref, rebuilds the production compose stack, verifies `127.0.0.1:4000` health endpoints, runs `pnpm demo:flow` inside the API container, backs up and installs the portal, `/demo/` artifacts, and Nginx config, reloads Nginx after `nginx -t`, and finally runs `pnpm verify:public` against the configured public base URL. It does not create DNS, TLS, Tencent Cloud, or AWS resources; those must be approved and prepared separately.
+The workflow builds and verifies the project portal and namespaced PulseBoard artifacts on the GitHub runner, refuses to deploy over a dirty server worktree by default, checks out the selected ref, rebuilds the production compose stack, verifies `127.0.0.1:4000` health endpoints, runs `pnpm demo:flow` inside the API container, backs up and installs the portal, `/demo/` artifacts, and Nginx config, reloads Nginx after `nginx -t`, and finally runs `pnpm verify:public` against the configured public base URL. If a reviewed deployment must proceed over a dirty staging checkout, explicitly enable `preserve_dirty_worktree`; the workflow records the current HEAD and status, exports tracked patches, archives untracked files, and creates a Git stash under a timestamped `$HOME/pulseboard-deploy-backups/` record before checkout. It does not create DNS, TLS, Tencent Cloud, or AWS resources; those must be approved and prepared separately.
 
 Optional GitHub environment variable:
 
