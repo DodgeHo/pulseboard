@@ -168,9 +168,9 @@ jobs:
           set +a
           # Keep compose exec from consuming the remaining SSH heredoc.
           sudo docker compose -f docker-compose.production.example.yml exec -T \
-             -e PULSEBOARD_API_URL=http://127.0.0.1:4000 \
-             -e DEMO_API_KEY="$DEMO_API_KEY" \
-             api pnpm demo:flow </dev/null
+            -e PULSEBOARD_API_URL=http://127.0.0.1:4000 \
+            -e DEMO_API_KEY="$DEMO_API_KEY" \
+            api pnpm demo:flow </dev/null
 
           ts=$(date -u +%Y%m%dT%H%M%SZ)
           if [ -f /var/www/html/index.html ]; then
