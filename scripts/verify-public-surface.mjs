@@ -17,6 +17,23 @@ const retiredStyleNeedles = [
   'Reliability Desk',
   'Evidence Rail'
 ];
+const portalKeywordNeedles = [
+  "railKeywords: ['Hono', 'PostgreSQL', 'Redis']",
+  "railKeywords: ['invite-only', 'inbox', 'digests']",
+  "railKeywords: ['AWS', 'questions', 'progress']",
+  "railKeywords: ['AWS', 'architecture', 'advanced']",
+  "railKeywords: ['ITSM', 'study', 'unlinked']",
+  "railKeywords: ['C++', 'Eigen', 'VMD']",
+  "railKeywords: ['Python', 'localization', 'MIT']",
+  "railKeywords: ['GPT', 'writing', 'Python']",
+  "railKeywords: ['Python', 'robotics', 'RRT']"
+];
+const portalLocaleMarkers = [
+  text(0x4e2d, 0x56fd, 0x8a9e, 0x540d, 0x306f, 0x9053, 0x5b89, 0x703e),
+  text(0x50c5, 0x9650, 0x53d7, 0x9080),
+  text(0x4ec5, 0x9650, 0x53d7, 0x9080),
+  text(0x62db, 0x5f85, 0x5236)
+];
 
 function normalizeBaseUrl(value) {
   const url = new URL(value);
@@ -81,13 +98,14 @@ async function verifyPortal() {
   expect('portal returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect('portal is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
   expect('portal title identifies ANLAN.STORE', body.includes('<title>ANLAN.STORE — Project Frequencies</title>'));
-  expect('portal exposes approved colorful Signal Lattice identity', body.includes('ANLAN.STORE') && body.includes('DEPLOYED WORK.<br>OPEN SIGNALS.') && body.includes('id="signal-lattice"'));
-  expect('portal links the supplied personal LinkedIn profile clearly', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('Lang He · LinkedIn profile') && body.includes('LinkedIn profile'));
+  expect('portal introduces Dodge in the approved colorful Signal Lattice identity', body.includes('ANLAN.STORE') && body.includes('DODGE HO.<br>BUILDS IN PUBLIC.') && body.includes('道安澜') && body.includes('道安瀾') && body.includes('id="signal-lattice"'));
+  expect('portal links the supplied personal LinkedIn profile clearly', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('My LinkedIn profile') && body.includes('LinkedIn profile'));
   expect('portal includes complete four-language locale controls', body.includes('data-locale="en"') && body.includes('data-locale="zh-Hant"') && body.includes('data-locale="zh-Hans"') && body.includes('data-locale="ja"'));
   expect('portal defaults to English and only persists an explicit locale choice', body.includes("let currentLocale = 'en'") && body.includes("const localeStorageKey = 'anlan.portal.locale'") && body.includes('safeStoredLocale') && body.includes('document.documentElement.lang = currentLocale'));
   expect('portal retains PulseBoard and Career Radar routes', body.includes("route: '/demo/'") && body.includes("route: '/jobs/'") && body.includes('PulseBoard') && body.includes('Career Radar'));
-  expect('portal retains all study routes', body.includes("route: '/saa/'") && body.includes("route: '/sap/'") && body.includes("route: '/ispm/'"));
+  expect('portal retains promoted study routes but deliberately has no ISPM route action', body.includes("route: '/saa/'") && body.includes("route: '/sap/'") && !body.includes("route: '/ispm/'") && !body.includes('href="/ispm/"') && !body.includes('href="#project-ispm"'));
   expect('portal includes verified GitHub source projects', body.includes('VMD_cpp') && body.includes('PAL4_EnglishMod') && body.includes('https://github.com/DodgeHo/VMD_cpp') && body.includes('https://github.com/DodgeHo/PAL4_EnglishMod') && body.includes('IELTS_writing_GPT') && body.includes('dynamic_rrt_connect'));
+  expect('portal exposes all nine technical keyword sets and non-uniform project hierarchy', portalKeywordNeedles.every((needle) => body.includes(needle)) && portalLocaleMarkers.every((marker) => body.includes(marker)) && body.includes("layout: 'feature'") && body.includes("layout: 'major'") && body.includes("layout: 'study-small'") && body.includes("layout: 'quiet'") && body.includes("layout: 'research'") && body.includes("layout: 'source-compact'") && body.includes("layout: 'source-wide'"));
   expect('portal includes working filter controls', body.includes('data-filter="source"') && body.includes('applyFilter'));
   expect('portal includes both PulseBoard captures', (body.match(/data:image\/png;base64,/g) ?? []).length === 2);
   expect('portal has no unresolved build placeholders', !/__PORTAL_[A-Z_]+__/.test(body) && !/__PULSEBOARD_[A-Z_]+__/.test(body));

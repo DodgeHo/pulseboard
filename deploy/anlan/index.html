@@ -26,7 +26,7 @@
   --night-raised: #090d20;
   --ink: #f4f8ff;
   --muted: #9cb3cf;
-  --faint: #456182;
+  --faint: #8ca5c2;
   --rule: #173b63;
   --rule-strong: #2874b0;
   --cyan: #17d6ff;
@@ -227,8 +227,9 @@ canvas { display: block; }
 .rail-list { margin: 0; padding: 0; list-style: none; }
 
 .rail-item { border-bottom: 1px solid var(--rule); }
-.rail-item a {
-  min-height: 67px;
+.rail-item a,
+.rail-record {
+  min-height: 78px;
   display: grid;
   grid-template-columns: 31px minmax(0, 1fr);
   align-content: center;
@@ -238,11 +239,12 @@ canvas { display: block; }
   text-decoration: none;
   transition: background-color 160ms ease, color 160ms ease;
 }
-.rail-item a::after {
+.rail-item a::after,
+.rail-record::after {
   grid-column: 2;
   width: min(100%, 135px);
-  height: 5px;
-  margin-top: 6px;
+  height: 3px;
+  margin-top: 3px;
   background: var(--rail-color, var(--cobalt));
   content: "";
 }
@@ -250,6 +252,9 @@ canvas { display: block; }
 .rail-item a[aria-current="true"] { background: #0d1831; color: var(--ink); box-shadow: inset 3px 0 0 var(--rail-color, var(--orange)); }
 .rail-number { color: var(--rail-color, var(--orange)); font-family: var(--font-measure); font-size: 12px; }
 .rail-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-measure); font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+.rail-keywords { grid-column: 2; overflow: hidden; color: var(--faint); font-family: var(--font-measure); font-size: 9px; letter-spacing: .02em; text-overflow: ellipsis; white-space: nowrap; }
+.rail-item.is-unlinked { background: rgba(9, 13, 32, .42); }
+.rail-item.is-unlinked .rail-record { color: #7890ad; cursor: default; }
 
 .rail-all-link {
   min-height: 71px;
@@ -284,10 +289,10 @@ canvas { display: block; }
 }
 
 .scope-copy h1 {
-  max-width: 11ch;
+  max-width: 16ch;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(58px, 7vw, 116px);
+  font-size: clamp(52px, 6vw, 96px);
   font-weight: 600;
   letter-spacing: -.04em;
   line-height: .86;
@@ -301,6 +306,16 @@ canvas { display: block; }
   font-size: 15px;
   line-height: 1.75;
 }
+
+.identity-facts {
+  width: min(100%, 480px);
+  display: grid;
+  margin: 24px 0 0;
+  border-top: 1px solid var(--rule);
+}
+.identity-facts div { display: grid; grid-template-columns: 94px minmax(0, 1fr); gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(23, 59, 99, .72); }
+.identity-facts dt { color: var(--project-color, var(--cyan)); font-family: var(--font-measure); font-size: 9px; font-weight: 700; letter-spacing: .05em; }
+.identity-facts dd { margin: 0; color: #d5e2f4; font-size: 12px; font-weight: 600; }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
 .signal-action {
@@ -378,15 +393,18 @@ canvas { display: block; }
 .filter-controls button:hover { background: #0a1d34; color: var(--ink); }
 .filter-controls button[aria-pressed="true"] { background: var(--violet); color: #fff; }
 
-.project-rows { display: grid; }
+.project-rows { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
 .project-row {
   position: relative;
+  grid-column: 1 / -1;
   min-width: 0;
   display: grid;
-  grid-template-columns: 45px minmax(180px, .9fr) minmax(230px, 1.22fr) minmax(145px, .55fr) auto;
-  align-items: center;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-content: start;
+  align-items: start;
   gap: 17px;
-  padding: 23px 0;
+  min-height: 220px;
+  padding: 27px 18px;
   border-bottom: 1px solid var(--rule);
   transition: background-color 160ms ease;
 }
@@ -396,6 +414,8 @@ canvas { display: block; }
 .project-title { margin: 0; color: var(--ink); font-size: clamp(20px, 2.25vw, 34px); font-weight: 600; letter-spacing: -.03em; line-height: 1; }
 .project-alias { margin: 7px 0 0; color: var(--project-color, var(--cyan)); font-family: var(--font-measure); font-size: 10px; }
 .project-copy { min-width: 0; }
+.project-row:not(.layout-feature) .project-copy { grid-column: 2 / -1; }
+.project-row:not(.layout-feature) .row-action { grid-column: 2; grid-row: 3; justify-self: start; margin-top: 3px; }
 .project-description { max-width: 59ch; margin: 0; color: #b9c9df; font-size: 13px; line-height: 1.62; }
 .project-route { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; color: var(--faint); font-size: 10px; }
 .project-route code { color: var(--ink); font-family: inherit; }
@@ -426,6 +446,22 @@ canvas { display: block; }
 }
 .row-action:hover { background: var(--project-color, var(--cyan)); border-color: var(--project-color, var(--cyan)); color: #07101f; }
 .row-action svg { width: 15px; height: 15px; }
+
+.layout-feature { grid-column: 1 / -1; min-height: 330px; grid-template-columns: 45px minmax(180px, .86fr) minmax(240px, 1.25fr) minmax(145px, .48fr) auto; align-items: center; padding-top: 33px; padding-bottom: 33px; background: rgba(7, 19, 42, .45); }
+.layout-feature .project-title { font-size: clamp(32px, 4vw, 58px); }
+.layout-feature .project-copy { align-self: center; }
+.layout-major { grid-column: span 7; min-height: 266px; background: rgba(17, 30, 54, .28); }
+.layout-major .project-title { font-size: clamp(29px, 3vw, 43px); }
+.layout-study { grid-column: span 5; min-height: 266px; }
+.layout-study-small { grid-column: span 3; min-height: 238px; }
+.layout-study-small .project-title, .layout-quiet .project-title, .layout-source-compact .project-title { font-size: clamp(18px, 1.8vw, 25px); }
+.layout-quiet { grid-column: span 3; min-height: 238px; background: rgba(9, 13, 32, .54); }
+.layout-quiet .project-description { color: #8299b7; }
+.layout-research { grid-column: span 6; min-height: 238px; background: rgba(16, 19, 53, .46); }
+.layout-research .project-title { font-size: clamp(26px, 2.7vw, 39px); }
+.layout-source { grid-column: span 5; min-height: 230px; }
+.layout-source-compact { grid-column: span 3; min-height: 230px; }
+.layout-source-wide { grid-column: span 4; min-height: 230px; background: rgba(7, 25, 44, .36); }
 
 .pulse-evidence {
   grid-column: 2 / -1;
@@ -470,7 +506,10 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .scope-copy { min-height: 418px; border-right: 0; border-bottom: 1px solid var(--rule-strong); }
   .live-scope { min-height: 390px; }
   .project-index { padding-right: 20px; padding-left: 20px; }
-  .project-row { grid-template-columns: 35px minmax(160px, .8fr) minmax(0, 1.2fr) auto; }
+  .project-row { grid-column: span 6; grid-template-columns: 32px minmax(0, 1fr) auto; min-height: 246px; }
+  .layout-feature { grid-column: 1 / -1; grid-template-columns: 38px minmax(150px, .72fr) minmax(220px, 1.2fr) auto; min-height: 316px; }
+  .layout-major, .layout-study, .layout-study-small, .layout-quiet, .layout-research, .layout-source, .layout-source-compact, .layout-source-wide { grid-column: span 6; }
+  .layout-research { grid-column: 1 / -1; }
   .project-tags { display: none; }
   .pulse-evidence { grid-column: 2 / -1; }
 }
@@ -484,8 +523,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .project-rail { order: 2; grid-row: auto; min-height: auto; border-right: 0; border-bottom: 1px solid var(--rule-strong); }
   .project-index { order: 3; }
   .rail-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .rail-item:nth-child(n+7) { display: none; }
-  .rail-item a { min-height: 62px; padding: 8px 10px; }
+  .rail-item a, .rail-record { min-height: 69px; padding: 8px 10px; }
   .rail-name { font-size: 9px; }
   .rail-all-link { min-height: 56px; }
   .scope-main, .project-index { grid-column: auto; }
@@ -495,7 +533,9 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .index-head { min-height: auto; align-items: flex-start; flex-direction: column; padding: 23px 0; }
   .filter-controls { width: 100%; }
   .filter-controls button { flex: 1; }
-  .project-row { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; padding: 20px 0; }
+  .project-row, .layout-major, .layout-study, .layout-study-small, .layout-quiet, .layout-research, .layout-source, .layout-source-compact, .layout-source-wide { grid-column: 1 / -1; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; min-height: 0; padding: 23px 0; }
+  .layout-feature { grid-column: 1 / -1; grid-template-columns: 32px minmax(0, 1fr) auto; min-height: 0; padding: 27px 0; }
+  .layout-feature .project-copy { grid-column: 2 / -1; }
   .project-copy { grid-column: 2 / -1; }
   .project-description { max-width: none; }
   .pulse-evidence { grid-column: 2 / -1; grid-template-columns: 1fr; }
@@ -526,7 +566,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .index-head p { line-height: 1.55; }
   .filter-controls { overflow-x: auto; flex-wrap: nowrap; }
   .filter-controls button { flex: 1 0 62px; }
-  .project-row { grid-template-columns: 28px minmax(0, 1fr); }
+  .project-row, .layout-feature { grid-template-columns: 28px minmax(0, 1fr); }
   .row-action { grid-column: 2; justify-self: start; }
   .project-copy { grid-column: 2; }
   .pulse-evidence { grid-column: 1 / -1; }
@@ -542,10 +582,10 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
 </head>
 <body>
 <!--
-THESIS: ANLAN.STORE is a colorful technical directory that lets a recruiter identify live systems, source work, and proof without decoding a lifestyle portfolio.
+THESIS: ANLAN.STORE is Dodge Ho / 道安澜's colorful public open-source project space, letting a recruiter understand the builder, scan technical signals, and inspect proof without decoding a lifestyle portfolio.
 OWN-WORLD: Project Scope turns a directory rail, live signal scope, and horizontal evidence rows into one precise instrument rather than a dashboard of equal cards.
-STORY: The visitor scans the project rail, reads the central claim, sees a live signal resolve, then chooses a deployed route or public repository with a single clear action.
-FIRST VIEWPORT: A stable left rail names the work, the headline holds the purpose, the right scope provides active-route evidence, and the personal LinkedIn profile is clearly named in the header.
+STORY: The visitor meets Dodge first, scans technical keywords in the project rail, sees a live signal resolve, then follows a varied evidence field into deployed routes or public repositories.
+FIRST VIEWPORT: A stable left rail names the work and its technologies, the headline introduces Dodge's public project space, the right scope provides active-route evidence, and My LinkedIn profile is clearly named in the header.
 FORM: Signal Lattice, seed 6855c86d, composition C. The canvas draws actual signal paths, samples, and band marks; HTML carries every fact and control.
 COLOR: Midnight is the use scene. Cobalt, ultraviolet, cyan, and electric orange distinguish signal families, not decoration.
 ACCESSIBILITY: English is deterministic first visit; explicit language choices update all copy, document language, focus labels, and only then persist.
@@ -564,9 +604,9 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       <p class="topbar-state" id="topbar-state">PROJECT FREQUENCIES</p>
 
       <div class="topbar-actions">
-        <a class="profile-link" href="https://www.linkedin.com/in/lang-he-a94655120/" target="_blank" rel="noreferrer" aria-label="Open Lang He’s LinkedIn profile (external)">
+        <a class="profile-link" href="https://www.linkedin.com/in/lang-he-a94655120/" target="_blank" rel="noreferrer" aria-label="Open My LinkedIn profile (external)">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 3.4A1.8 1.8 0 1 1 5.2 7a1.8 1.8 0 0 1 0-3.6ZM3.7 8.4h3V20h-3V8.4Zm4.9 0h2.9V10c.4-.8 1.5-1.9 3.5-1.9 3.7 0 4.4 2.4 4.4 5.6V20h-3v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20h-3V8.4Z" fill="currentColor"/></svg>
-          <span id="profile-link-label">Lang He · LinkedIn profile</span>
+          <span id="profile-link-label">My LinkedIn profile</span>
           <svg class="external-mark" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"/></svg>
         </a>
         <div class="locale-switcher" role="group" aria-label="Choose portal language" id="locale-switcher">
@@ -590,8 +630,9 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
 
       <section class="scope-main" aria-labelledby="portal-title">
         <div class="scope-copy">
-          <h1 id="portal-title">DEPLOYED WORK.<br>OPEN SIGNALS.</h1>
-          <p class="scope-lede" id="hero-lede">A multilingual index of deployed systems, engineering experiments, and public proof. Inspect a live route or trace a repository.</p>
+          <h1 id="portal-title">DODGE HO.<br>BUILDS IN PUBLIC.</h1>
+          <p class="scope-lede" id="hero-lede">I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.</p>
+          <dl class="identity-facts" id="identity-facts"></dl>
           <div class="hero-actions">
             <a class="signal-action signal-action-primary" href="#project-index" id="hero-live-action"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.1-6 4.1 12L16 9l1.7 3H21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></svg><span>EXPLORE LIVE WORK</span></a>
             <a class="signal-action" href="#project-vmd" id="hero-source-action"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 8.7 5 12l3.4 3.3M15.6 8.7 19 12l-3.4 3.3M13.6 6 10.4 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></svg><span>BROWSE SOURCE PROJECTS</span></a>
@@ -633,24 +674,28 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   const copy = {
     en: {
       documentTitle: 'ANLAN.STORE — Project Frequencies',
-      topbar: 'PROJECT FREQUENCIES',
-      profile: 'Lang He · LinkedIn profile',
-      profileAria: 'Open Lang He’s LinkedIn profile (external)',
+      topbar: 'DODGE / PROJECT FREQUENCIES',
+      profile: 'My LinkedIn profile',
+      profileAria: 'Open My LinkedIn profile (external)',
       skip: 'Skip to project index',
       chooseLanguage: 'Choose portal language',
       railTitle: 'PROJECT DIRECTORY',
       projectDirectory: 'Project directory',
       railAll: 'VIEW ALL PROJECTS',
       heroLabel: 'LIVE SYSTEMS · OPEN SOURCE',
-      heroTitle: 'DEPLOYED WORK.<br>OPEN SIGNALS.',
-      heroLede: 'A multilingual index of deployed systems, engineering experiments, and public proof. Inspect a live route or trace a repository.',
+      heroTitle: 'DODGE HO.<br>BUILDS IN PUBLIC.',
+      heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
+      identityFacts: [['IDENTITY', 'Dodge Ho · 道安澜'], ['PRACTICE', 'Systems · signals · tools'], ['SPACE', 'Public open-source work']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['Invite-only', 'Job inbox', 'Digests'], saa: ['AWS', 'Question bank', 'Progress'], sap: ['AWS', 'Architecture', 'Advanced'], ispm: ['ITSM', 'Study', 'Unlinked'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT']
+      },
       liveAction: 'EXPLORE LIVE WORK',
       sourceAction: 'BROWSE SOURCE PROJECTS',
       scopeTitle: 'LIVE SIGNAL SCOPE',
       live: 'LIVE',
       scopeRows: [['SIGNAL MODE', 'MULTI-SURFACE'], ['ROUTE STATE', 'AUDITABLE'], ['LANGUAGE LAYER', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'PROJECT SCOPE',
-      indexSummary: 'Nine project frequencies across deployed work and open source.',
+      indexSummary: 'Nine project signals, scaled by live evidence, research depth, and study focus.',
       filterProjects: 'Filter projects',
       filters: { all: 'ALL', live: 'LIVE', source: 'SOURCE', study: 'STUDY' },
       availability: { checking: 'CHECKING ROUTE', online: 'ROUTE ONLINE', unavailable: 'CHECK ROUTE' },
@@ -684,23 +729,27 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
     'zh-Hant': {
       documentTitle: 'ANLAN.STORE — 專案訊號目錄',
       topbar: '專案訊號頻段',
-      profile: 'Lang He · LinkedIn 個人資料',
-      profileAria: '開啟 Lang He 的 LinkedIn 個人資料（外部連結）',
+      profile: '我的 LinkedIn 個人資料',
+      profileAria: '開啟我的 LinkedIn 個人資料（外部連結）',
       skip: '跳至專案目錄',
       chooseLanguage: '選擇入口網站語言',
       railTitle: '專案目錄',
       projectDirectory: '專案目錄',
       railAll: '查看所有專案',
       heroLabel: '線上系統 · 開源專案',
-      heroTitle: '已部署作品。<br>公開訊號。',
-      heroLede: '這是一個多語系索引，收錄已部署系統、工程實驗與公開證據。可直接檢查線上路由或追溯原始碼庫。',
+      heroTitle: '道安瀾。<br>公開構建。',
+      heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
+      identityFacts: [['身份', 'Dodge Ho · 道安瀾'], ['實踐', '系統 · 訊號 · 工具'], ['空間', '公開開源作品']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['僅限受邀', '職缺收件匣', '摘要'], saa: ['AWS', '題庫', '進度'], sap: ['AWS', '架構', '進階'], ispm: ['ITSM', '學習', '未連結'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT']
+      },
       liveAction: '探索線上作品',
       sourceAction: '瀏覽開源專案',
       scopeTitle: '即時訊號範圍',
       live: '運作中',
       scopeRows: [['訊號模式', '多重介面'], ['路由狀態', '可稽核'], ['語言層', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '專案範圍',
-      indexSummary: '九組專案訊號，涵蓋已部署作品與開源專案。',
+      indexSummary: '九組專案訊號，依線上證據、研究深度與學習焦點配置尺度。',
       filterProjects: '篩選專案',
       filters: { all: '全部', live: '線上', source: '開源', study: '學習' },
       availability: { checking: '檢查路由中', online: '路由正常', unavailable: '請檢查路由' },
@@ -734,23 +783,27 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
     'zh-Hans': {
       documentTitle: 'ANLAN.STORE — 项目信号目录',
       topbar: '项目信号频段',
-      profile: 'Lang He · LinkedIn 个人资料',
-      profileAria: '打开 Lang He 的 LinkedIn 个人资料（外部链接）',
+      profile: '我的 LinkedIn 个人资料',
+      profileAria: '打开我的 LinkedIn 个人资料（外部链接）',
       skip: '跳至项目索引',
       chooseLanguage: '选择门户语言',
       railTitle: '项目目录',
       projectDirectory: '项目目录',
       railAll: '查看所有项目',
       heroLabel: '在线系统 · 开源项目',
-      heroTitle: '已部署作品。<br>开放信号。',
-      heroLede: '这是一个多语言索引，收录已部署系统、工程实验与公开证据。可直接检查在线路由或追溯源代码仓库。',
+      heroTitle: '道安澜。<br>公开构建。',
+      heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
+      identityFacts: [['身份', 'Dodge Ho · 道安澜'], ['实践', '系统 · 信号 · 工具'], ['空间', '公开开源作品']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['仅限受邀', '职位收件箱', '摘要'], saa: ['AWS', '题库', '进度'], sap: ['AWS', '架构', '进阶'], ispm: ['ITSM', '学习', '未链接'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT']
+      },
       liveAction: '探索在线作品',
       sourceAction: '浏览开源项目',
       scopeTitle: '实时信号范围',
       live: '运行中',
       scopeRows: [['信号模式', '多重界面'], ['路由状态', '可审计'], ['语言层', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '项目范围',
-      indexSummary: '九组项目信号，涵盖已部署作品与开源项目。',
+      indexSummary: '九组项目信号，依在线证据、研究深度与学习焦点配置尺度。',
       filterProjects: '筛选项目',
       filters: { all: '全部', live: '在线', source: '开源', study: '学习' },
       availability: { checking: '正在检查路由', online: '路由正常', unavailable: '请检查路由' },
@@ -784,23 +837,27 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
     ja: {
       documentTitle: 'ANLAN.STORE — プロジェクト信号目録',
       topbar: 'プロジェクト周波数',
-      profile: 'Lang He · LinkedIn プロフィール',
-      profileAria: 'Lang He の LinkedIn プロフィールを開く（外部リンク）',
+      profile: '私の LinkedIn プロフィール',
+      profileAria: '私の LinkedIn プロフィールを開く（外部リンク）',
       skip: 'プロジェクト一覧へ移動',
       chooseLanguage: 'ポータル言語を選択',
       railTitle: 'プロジェクト目録',
       projectDirectory: 'プロジェクト目録',
       railAll: 'すべてのプロジェクト',
       heroLabel: 'ライブシステム · オープンソース',
-      heroTitle: 'デプロイ済みの仕事。<br>開かれた信号。',
-      heroLede: 'デプロイ済みシステム、エンジニアリング実験、公開された根拠を集めた多言語インデックスです。ライブの経路を調べるか、リポジトリを追跡できます。',
+      heroTitle: '道安瀾。<br>公開でつくる。',
+      heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
+      identityFacts: [['アイデンティティ', '道安瀾（ドッジ・ホー）'], ['実践', 'システム · 信号 · ツール'], ['空間', '公開オープンソース作品']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['招待制', '求人受信箱', 'ダイジェスト'], saa: ['AWS', '問題バンク', '進捗'], sap: ['AWS', 'アーキテクチャ', '上級'], ispm: ['ITSM', '学習', '未リンク'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT']
+      },
       liveAction: 'ライブ作品を見る',
       sourceAction: 'ソースプロジェクトを見る',
       scopeTitle: 'ライブ信号スコープ',
       live: '稼働中',
       scopeRows: [['信号モード', 'マルチサーフェス'], ['経路状態', '監査可能'], ['言語レイヤー', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'プロジェクト範囲',
-      indexSummary: 'デプロイ済み作品とオープンソースにまたがる 9 つのプロジェクト信号。',
+      indexSummary: 'ライブの根拠、研究の深さ、学習の焦点に応じて尺度を変えた 9 つのプロジェクト信号。',
       filterProjects: 'プロジェクトを絞り込む',
       filters: { all: 'すべて', live: 'ライブ', source: 'ソース', study: '学習' },
       availability: { checking: '経路を確認中', online: '経路はオンライン', unavailable: '経路を確認' },
@@ -834,15 +891,15 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   };
 
   const projects = [
-    { id: 'pulseboard', category: 'live', color: 'cyan', name: 'PulseBoard', route: '/demo/', action: '/demo/', actionKey: 'open', tags: ['Hono', 'PostgreSQL', 'Redis', 'BullMQ', 'Docker'], links: [{ href: '/demo/docs', key: 'docs' }] },
-    { id: 'career', category: 'live', color: 'orange', name: 'Career Radar', alias: '职海雷达 · キャリアレーダー', route: '/jobs/', action: '/jobs/', actionKey: 'open', tags: ['invite-only', 'inbox', 'digests'] },
-    { id: 'saa', category: 'study', color: 'cobalt', name: 'SAA Practice', route: '/saa/', action: '/saa/', actionKey: 'open', tags: ['AWS', 'practice', 'progress'] },
-    { id: 'sap', category: 'study', color: 'violet', name: 'SAP Practice', route: '/sap/', action: '/sap/', actionKey: 'open', tags: ['AWS', 'advanced', 'practice'] },
-    { id: 'ispm', category: 'study', color: 'orange', name: 'ISPM Practice', route: '/ispm/', action: '/ispm/', actionKey: 'open', tags: ['ITSM', 'practice', 'progress'] },
-    { id: 'vmd', category: 'source', color: 'violet', name: 'VMD_cpp', route: 'https://github.com/DodgeHo/VMD_cpp', action: 'https://github.com/DodgeHo/VMD_cpp', actionKey: 'external', tags: ['C++', 'Eigen', 'signal processing'] },
-    { id: 'pal4', category: 'source', color: 'orange', name: 'PAL4 translation', alias: 'PAL4_EnglishMod', route: 'https://github.com/DodgeHo/PAL4_EnglishMod', action: 'https://github.com/DodgeHo/PAL4_EnglishMod', actionKey: 'external', tags: ['Python', 'localization', 'MIT'] },
-    { id: 'ielts', category: 'source', color: 'cobalt', name: 'IELTS writing GPT', alias: 'IELTS_writing_GPT', route: 'https://github.com/DodgeHo/IELTS_writing_GPT', action: 'https://github.com/DodgeHo/IELTS_writing_GPT', actionKey: 'external', tags: ['GPT', 'writing', 'Python'] },
-    { id: 'rrt', category: 'source', color: 'cyan', name: 'Dynamic RRT Connect', alias: 'dynamic_rrt_connect', route: 'https://github.com/DodgeHo/dynamic_rrt_connect', action: 'https://github.com/DodgeHo/dynamic_rrt_connect', actionKey: 'external', tags: ['Python', 'robotics', 'planning'] }
+    { id: 'pulseboard', category: 'live', layout: 'feature', color: 'cyan', name: 'PulseBoard', route: '/demo/', action: '/demo/', actionKey: 'open', railKeywords: ['Hono', 'PostgreSQL', 'Redis'], tags: ['Hono', 'PostgreSQL', 'Redis', 'BullMQ', 'Docker'], links: [{ href: '/demo/docs', key: 'docs' }] },
+    { id: 'career', category: 'live', layout: 'major', color: 'orange', name: 'Career Radar', alias: '职海雷达 · キャリアレーダー', route: '/jobs/', action: '/jobs/', actionKey: 'open', railKeywords: ['invite-only', 'inbox', 'digests'], tags: ['invite-only', 'inbox', 'digests'] },
+    { id: 'saa', category: 'study', layout: 'study', color: 'cobalt', name: 'SAA Practice', route: '/saa/', action: '/saa/', actionKey: 'open', railKeywords: ['AWS', 'questions', 'progress'], tags: ['AWS', 'practice', 'progress'] },
+    { id: 'sap', category: 'study', layout: 'study-small', color: 'violet', name: 'SAP Practice', route: '/sap/', action: '/sap/', actionKey: 'open', railKeywords: ['AWS', 'architecture', 'advanced'], tags: ['AWS', 'advanced', 'practice'] },
+    { id: 'ispm', category: 'study', layout: 'quiet', color: 'orange', name: 'ISPM Practice', railLinked: false, railKeywords: ['ITSM', 'study', 'unlinked'], tags: ['ITSM', 'practice', 'progress'] },
+    { id: 'vmd', category: 'source', layout: 'research', color: 'violet', name: 'VMD_cpp', route: 'https://github.com/DodgeHo/VMD_cpp', action: 'https://github.com/DodgeHo/VMD_cpp', actionKey: 'external', railKeywords: ['C++', 'Eigen', 'VMD'], tags: ['C++', 'Eigen', 'signal processing'] },
+    { id: 'pal4', category: 'source', layout: 'source', color: 'orange', name: 'PAL4 translation', alias: 'PAL4_EnglishMod', route: 'https://github.com/DodgeHo/PAL4_EnglishMod', action: 'https://github.com/DodgeHo/PAL4_EnglishMod', actionKey: 'external', railKeywords: ['Python', 'localization', 'MIT'], tags: ['Python', 'localization', 'MIT'] },
+    { id: 'ielts', category: 'source', layout: 'source-compact', color: 'cobalt', name: 'IELTS writing GPT', alias: 'IELTS_writing_GPT', route: 'https://github.com/DodgeHo/IELTS_writing_GPT', action: 'https://github.com/DodgeHo/IELTS_writing_GPT', actionKey: 'external', railKeywords: ['GPT', 'writing', 'Python'], tags: ['GPT', 'writing', 'Python'] },
+    { id: 'rrt', category: 'source', layout: 'source-wide', color: 'cyan', name: 'Dynamic RRT Connect', alias: 'dynamic_rrt_connect', route: 'https://github.com/DodgeHo/dynamic_rrt_connect', action: 'https://github.com/DodgeHo/dynamic_rrt_connect', actionKey: 'external', railKeywords: ['Python', 'robotics', 'RRT'], tags: ['Python', 'robotics', 'planning'] }
   ];
 
   const localeButtons = Array.from(document.querySelectorAll('[data-locale]'));
@@ -864,15 +921,17 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   };
 
   const renderRail = () => {
-    railList.innerHTML = projects.map((project, index) => `
-      <li class="rail-item" style="--rail-color:${projectColors[project.color]}">
-        <a href="#project-${project.id}" data-rail-project="${project.id}">
-          <span class="rail-number">${String(index + 1).padStart(2, '0')}</span><span class="rail-name">${project.name}</span>
-        </a>
-      </li>`).join('');
+    railList.innerHTML = projects.map((project, index) => {
+      const keywords = t().railKeywords[project.id] ?? project.railKeywords;
+      const content = `<span class="rail-number">${String(index + 1).padStart(2, '0')}</span><span class="rail-name">${project.name}</span><span class="rail-keywords">${keywords.join(' · ')}</span>`;
+      const destination = project.railLinked === false
+        ? `<span class="rail-record" aria-label="${project.name}">${content}</span>`
+        : `<a href="#project-${project.id}" data-rail-project="${project.id}">${content}</a>`;
+      return `<li class="rail-item${project.railLinked === false ? ' is-unlinked' : ''}" style="--rail-color:${projectColors[project.color]}">${destination}</li>`;
+    }).join('');
   };
 
-  const makeStatus = (project) => project.category !== 'live' ? '' : `
+  const makeStatus = (project) => project.category !== 'live' || !project.route ? '' : `
     <span class="status-label is-checking" data-route-status="${project.route}"><i aria-hidden="true"></i><span>${t().availability.checking}</span></span>`;
 
   const makeEvidence = () => `
@@ -891,14 +950,15 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   const renderProjects = () => {
     projectList.innerHTML = projects.map((project, index) => {
       const external = project.category === 'source';
-      const action = external
+      const action = !project.action ? '' : external
         ? `<a class="row-action" href="${project.action}" target="_blank" rel="noreferrer">${t()[project.actionKey]}${iconExternal}</a>`
         : `<a class="row-action" href="${project.action}">${t()[project.actionKey]}</a>`;
       const sourceOrRoute = external ? t().repository : t().route;
-      return `<article class="project-row" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
+      const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
+      return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
         <div><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
-        <div class="project-copy"><p class="project-description">${t().descriptions[project.id]}</p><p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
+        <div class="project-copy"><p class="project-description">${t().descriptions[project.id]}</p>${routeLine}<ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}
       </article>`;
@@ -919,6 +979,10 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
 
   const renderScopeReadout = () => {
     document.querySelector('#scope-readout').innerHTML = t().scopeRows.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('');
+  };
+
+  const renderIdentityFacts = () => {
+    document.querySelector('#identity-facts').innerHTML = t().identityFacts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('');
   };
 
   const applyFilter = (filter) => {
@@ -955,7 +1019,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   };
 
   const checkRoutes = async () => {
-    const routes = [...new Set(projects.filter((project) => project.category === 'live').map((project) => project.route))];
+    const routes = [...new Set(projects.filter((project) => project.category === 'live' && project.route).map((project) => project.route))];
     if (window.location.protocol === 'file:') {
       routes.forEach((path) => setRouteStatus(path, 'checking'));
       return;
@@ -989,6 +1053,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
     document.querySelector('#footer-top').textContent = t().backToTop;
     document.querySelector('#empty-state').textContent = t().empty;
     filterButtons.forEach((button) => { button.textContent = t().filters[button.dataset.filter]; });
+    renderIdentityFacts();
     renderScopeReadout();
     renderRail();
     renderProjects();

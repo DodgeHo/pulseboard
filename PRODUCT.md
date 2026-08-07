@@ -2,7 +2,7 @@
 
 ## Product Summary
 
-`anlan.store` is a public index of deployed engineering work. It is not a generic personal landing page and it is not part of PulseBoard. The root route helps a recruiter, hiring manager, or engineering peer understand what is live, what each project demonstrates, and where to inspect it.
+`anlan.store` is Dodge Ho / 道安澜's public open-source project space. It is a concise personal engineering index, not a generic personal landing page and not part of PulseBoard. The root route helps a recruiter, hiring manager, or engineering peer understand who built the work, what is live, what each project demonstrates, and where to inspect it.
 
 PulseBoard remains a complete project, but its public surface moves under `/demo/` so the domain root can represent the wider portfolio.
 
@@ -71,7 +71,7 @@ The portal also links to public source repositories that are not deployed under 
 
 ### Personal Profile Entry
 
-The portal header includes one clearly labeled outbound entry to [Lang He's LinkedIn profile](https://www.linkedin.com/in/lang-he-a94655120/). It uses the recognizable LinkedIn mark as an icon, but the accessible label and visible copy make clear that it is **Lang He's personal profile**, not a generic social or LinkedIn friendship link. It opens as an external destination with safe link attributes.
+The portal header includes one clearly labeled outbound entry to the supplied [LinkedIn profile](https://www.linkedin.com/in/lang-he-a94655120/). Its English visible label is **My LinkedIn profile**; localized variants retain the same first-person meaning. It uses the recognizable LinkedIn mark as an icon, but never relies on the glyph alone or presents itself as a generic social link. It opens as an external destination with safe link attributes.
 
 ### Certification Practice Banks
 
@@ -82,6 +82,8 @@ Three deployed Flutter web entry points share a focused question-bank experience
 - ISPM Practice
 
 The portal must describe these honestly as study tools. It must not invent usage metrics, completion rates, customers, or certifications.
+
+The existing `/ispm/` route remains deployed and covered by public-route verification, but the root portal does **not** expose a clickable ISPM route or action. It may appear only as an unlinked archived study record so the public index does not advertise an entry the owner no longer wants to promote.
 
 ## Product Principles
 
@@ -95,8 +97,9 @@ The portal must describe these honestly as study tools. It must not invent usage
 ## Success Criteria
 
 - The root route is visibly `ANLAN.STORE`, not PulseBoard.
-- All deployed projects and the four featured GitHub projects are findable from the root page.
-- The header offers a clearly named, keyboard-accessible LinkedIn personal-profile link once its public URL is supplied.
+- The root page introduces Dodge Ho / 道安澜 and frames the work as a public open-source project space in every locale.
+- PulseBoard, Career Radar, SAA, SAP, and the four featured GitHub projects are findable from the root page; the deployed ISPM route remains unlinked by owner choice.
+- The header offers a clearly named, keyboard-accessible **My LinkedIn profile** link using the supplied public URL.
 - First-time visitors see English; each of the four locale choices translates all portal UI, project descriptions, filters, controls, and availability messages.
 - PulseBoard is fully reachable under `/demo/` with no accidental dependency on root paths.
 - Existing `/jobs/`, `/saa/`, `/sap/`, and `/ispm/` routes continue to work.

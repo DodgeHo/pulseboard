@@ -10,14 +10,16 @@ const targets = [
 
 const requiredText = [
   "ANLAN.STORE",
-  "DEPLOYED WORK.<br>OPEN SIGNALS.",
+  "DODGE HO.<br>BUILDS IN PUBLIC.",
   "id=\"signal-lattice\"",
   "data-locale=\"en\"",
   "data-locale=\"zh-Hant\"",
   "data-locale=\"zh-Hans\"",
   "data-locale=\"ja\"",
   "https://www.linkedin.com/in/lang-he-a94655120/",
-  "Lang He · LinkedIn profile",
+  "My LinkedIn profile",
+  "道安澜",
+  "道安瀾",
   "VMD_cpp",
   "PAL4_EnglishMod",
   "https://github.com/DodgeHo/VMD_cpp",
@@ -26,7 +28,17 @@ const requiredText = [
   "route: '/jobs/'",
   "route: '/saa/'",
   "route: '/sap/'",
-  "route: '/ispm/'",
+  "railKeywords: ['Hono', 'PostgreSQL', 'Redis']",
+  "railKeywords: ['invite-only', 'inbox', 'digests']",
+  "railKeywords: ['AWS', 'questions', 'progress']",
+  "railKeywords: ['AWS', 'architecture', 'advanced']",
+  "railKeywords: ['ITSM', 'study', 'unlinked']",
+  "railKeywords: ['C++', 'Eigen', 'VMD']",
+  "railKeywords: ['Python', 'localization', 'MIT']",
+  "railKeywords: ['GPT', 'writing', 'Python']",
+  "railKeywords: ['Python', 'robotics', 'RRT']",
+  "layout: 'feature'",
+  "layout: 'research'",
   "const localeStorageKey = 'anlan.portal.locale'",
   "document.documentElement.lang = currentLocale",
   "data:image/png;base64,"
@@ -41,6 +53,20 @@ for (const target of targets) {
   }
   if (/__[A-Z0-9_]+__/.test(artifact)) {
     throw new Error(target + " contains an unresolved build placeholder");
+  }
+  if (artifact.includes("route: '/ispm/'") || artifact.includes('href="/ispm/"') || artifact.includes('href="#project-ispm"')) {
+    throw new Error(target + " must not expose an ISPM route action from the portal");
+  }
+  const localizedPortalMarkers = [
+    String.fromCodePoint(0x4e2d, 0x56fd, 0x8a9e, 0x540d, 0x306f, 0x9053, 0x5b89, 0x703e),
+    String.fromCodePoint(0x50c5, 0x9650, 0x53d7, 0x9080),
+    String.fromCodePoint(0x4ec5, 0x9650, 0x53d7, 0x9080),
+    String.fromCodePoint(0x62db, 0x5f85, 0x5236)
+  ];
+  for (const marker of localizedPortalMarkers) {
+    if (!artifact.includes(marker)) {
+      throw new Error(target + " is missing localized portal marker: " + marker);
+    }
   }
   const imageCount = (artifact.match(/data:image\/png;base64,/g) || []).length;
   if (imageCount !== 2) {

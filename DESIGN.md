@@ -1,6 +1,6 @@
 ---
 name: "ANLAN.STORE"
-description: "A multilingual signal directory for deployed systems and public engineering work."
+description: "A four-language, colorful technical directory for Dodge Ho / 道安澜's public open-source work."
 colors:
   midnight: "#060817"
   midnight-raised: "#090d20"
@@ -46,19 +46,18 @@ components:
   signal-action:
     backgroundColor: "transparent"
     textColor: "{colors.cyan}"
-    height: "49px"
+    minHeight: "49px"
     padding: "11px 16px"
     typography: "{typography.label}"
   signal-action-primary:
     backgroundColor: "transparent"
     textColor: "{colors.hot-amber}"
-    height: "49px"
+    minHeight: "49px"
     padding: "11px 16px"
     typography: "{typography.label}"
-  locale-selected:
-    backgroundColor: "{colors.electric-orange}"
-    textColor: "#120a01"
-    height: "40px"
+  locale-control:
+    borderColor: "{colors.signal-rule}"
+    minHeight: "44px"
     typography: "{typography.label}"
 ---
 
@@ -68,16 +67,11 @@ components:
 
 **Creative North Star: "Signal Lattice / Project Scope."**
 
-ANLAN.STORE is a colorful technical directory, not a conventional portfolio or product dashboard. The approved Signal Lattice **composition C** puts a numbered project directory rail at left, a large central statement, and a live signal scope at right. The resulting scan order makes deployment proof, public repositories, and a clearly named personal profile immediately actionable.
+ANLAN.STORE is Dodge Ho / 道安澜's public open-source project space. It is a colorful engineering directory—not a generic portfolio, a social profile, or a uniform dashboard. The opening introduces Dodge and frames the work as inspectable systems, signal work, and practical tools; the English opening is **“DODGE HO. BUILDS IN PUBLIC.”**
 
-Midnight is the use scene. Cobalt, violet, cyan, and electric orange act as signal-family identifiers across rails, routes, status, and actions; they are not generic neon decoration. The page is a ruled instrument: thin dividers, labeled measurements, waveforms, and repository paths provide the visual structure. Canvas adds atmosphere and movement, while HTML holds all facts, controls, headings, links, and route state.
+The approved Signal Lattice **composition C** has three functional readings on desktop: a numbered project directory rail on the left; Dodge's identity, introduction, facts, and actions in the central copy field; and a live signal scope at right. A project scope below uses intentionally unequal evidence records. Midnight is the use scene; cobalt, violet, cyan, and electric orange are signal-family identifiers, not generic neon decoration.
 
-**Key Characteristics:**
-
-- A square-cornered, dense directory with a left rail and horizontal project evidence rows.
-- Colorful live-signal geometry over a near-black technical field.
-- English is the deterministic first-visit language; Traditional Chinese, Simplified Chinese, and Japanese are explicit, complete alternatives.
-- External personal and GitHub destinations are named as such instead of being represented as unlabeled social icons.
+A fixed, decorative canvas adds colored waveform, sample, and barcode geometry. Canvas never contains essential information: all identity, locale, project, status, route, and repository information is semantic HTML.
 
 ## Colors
 
@@ -85,108 +79,113 @@ The palette uses a deep midnight base and four high-energy signal families, rest
 
 ### Primary
 
-- **Signal Cyan:** Primary interactive and online-state signal. Use it for the default signal action, active availability confirmation, and primary technical labels.
-- **Cobalt Carrier:** The structural blue used for signal-family markers and stronger rules.
+- **Signal Cyan (`#17d6ff`):** primary technical interaction, online route state, and PulseBoard signal family.
+- **Cobalt Carrier (`#3380ff`):** structural signal family, prominent rules, SAA, and IELTS.
 
 ### Secondary
 
-- **Ultraviolet Channel:** Selected filters and the VMD project family use violet to differentiate a coherent secondary stream.
-- **Electric Orange:** Use for priority actions, live markers, and the selected locale; it must retain its semantics as an attention signal.
-- **Hot Amber:** A bright orange-adjacent foreground for the primary live-work action and warning-adjacent state text.
+- **Ultraviolet Channel (`#8a55ff`):** selected project-filter state, SAP, and VMD.
+- **Electric Orange (`#ff8f1f`):** attention state, live marker, selected locale, Career Radar, PAL4, and the archived ISPM record.
+- **Hot Amber (`#ffbd4a`):** the prioritized live-work action and highly visible focus outline.
 
 ### Neutral
 
-- **Midnight / Raised Midnight:** The base and raised surfaces establish the operating context.
-- **Signal Ink / Muted / Faint:** High-contrast reading text, secondary explanations, and technical metadata form a deliberate reading hierarchy.
-- **Signal Rule / Strong Rule:** Blue linework divides the instrument without introducing card shadows.
+- **Midnight / Raised Midnight:** `#060817` and `#090d20` provide the operating context and translucent layered surfaces.
+- **Signal Ink / Muted / Faint:** `#f4f8ff`, `#9cb3cf`, and `#456182` establish readable title, body, and technical-metadata hierarchy.
+- **Signal Rule / Strong Rule:** `#173b63` and `#2874b0` are one-pixel structural dividers rather than shadow-based elevation.
 
 ### Named Rules
 
-**The Signal-Family Rule.** Assign one accent family to a project, control state, or measured signal; do not scatter all accent colors within a single component merely for visual noise.
+**The Signal-Family Rule.** Give a project, route state, or control state one accent family. Do not distribute every accent through one component for visual noise.
 
-**The Midnight Rule.** The base remains dark and calm so cyan, cobalt, violet, and orange communicate information rather than becoming a full-screen glow effect.
+**The Midnight Rule.** Keep the ground dark and calm so color conveys families, state, and direction instead of becoming a full-screen glow effect.
 
 ## Typography
 
-**Display Font:** Self-hosted `Anlan Inter` (regular and semibold WOFF assets), with `Segoe UI` and sans-serif fallbacks.
+**Display and body font:** self-hosted `Anlan Inter` regular and semibold WOFF assets, with `Segoe UI` and sans-serif fallbacks.
 
-**Body Font:** Self-hosted `Anlan Inter` with the same fallback stack.
+**Technical-label font:** `Cascadia Mono`, `SFMono-Regular`, `Consolas`, monospace.
 
-**Label/Mono Font:** `Cascadia Mono`, `SFMono-Regular`, `Consolas`, monospace.
-
-**Character:** Inter makes multilingual interface copy and compressed project titles clear. The mono stack gives routes, tags, states, and controls an instrument-readout character without turning prose into terminal text.
+Inter supports the four portal locales and compressed project names; the mono stack gives routes, technology tags, statuses, directory keywords, and controls an instrument-readout character without turning explanatory prose into terminal text.
 
 ### Hierarchy
 
-- **Display:** The central two-line opening claim is an exceptionally large, tightly tracked, compact-line-height Inter statement. Reserve this scale for the portal's identity.
-- **Title:** Project names use a responsive Inter title scale and compact line height, so rows retain a dense directory rhythm.
-- **Body:** Explanations are readable Inter copy with a generous line height; hero copy is bounded while project descriptions have a broad but finite reading measure.
-- **Label:** Small, bold, slightly tracked mono labels identify controls, routes, project categories, statuses, and the footer. They may be uppercase when the translated label is Latin-script, but must remain legible in all four languages.
+- **Display:** A tightly tracked, compact-line-height identity statement carries the portal's purpose once. Every locale substitutes a localized personal introduction, not a machine-selected locale.
+- **Title:** Project names use the responsive Inter title scale; the emphasized records are visibly larger than study and compact source records.
+- **Body:** The personal introduction and project descriptions remain readable at a bounded measure.
+- **Label:** Small, bold, slightly tracked mono text labels controls, routes, project categories, live states, directory technologies, and footer metadata. Latin labels may be uppercase; CJK labels remain legible in their native script.
 
-### Named Rules
+### Named Rule
 
-**The Evidence-First Type Rule.** Large type states the portal's purpose once; the rest of the page gives project facts, routes, technologies, and actions enough room to be scanned.
+**The Evidence-First Type Rule.** The large type explains whose work this is; the remaining hierarchy gives real technologies, routes, repositories, and project evidence enough room to be scanned.
 
 ## Layout
 
-The shell is a bordered, centered surface with a wide desktop ceiling of `1540px` and side borders. Desktop composition C is a two-column frame: a `262px` project rail beside the main area. Within the main area, the first viewport divides the title/copy field from a live signal scope; the project index continues beneath the scope, aligned to the main column rather than becoming a separate card grid.
+The bordered, centered portal shell has a maximum width of `1540px`. On desktop, a `262px` project rail occupies the left side of a two-column scope layout. The adjacent first-viewport main area splits into an identity/copy field and live-scope field. The project index begins under the first viewport in the main column; it is not a disconnected card deck.
 
-Project rows are horizontal evidence records: ordinal, name, explanatory copy, technical data, and one action. PulseBoard alone expands into an image-evidence switcher because it has two real interface captures. The header keeps the explicit `Lang He · LinkedIn profile` entry beside the language control; its destination is exactly `https://www.linkedin.com/in/lang-he-a94655120/` and it opens as an external profile.
+The directory is a numbered list of nine records. Each record exposes a concise technical-keyword rail, such as `Hono · PostgreSQL · Redis` for PulseBoard, `invite-only · inbox · digests` for Career Radar, `AWS · questions · progress` for SAA, `C++ · Eigen · VMD` for VMD_cpp, `Python · localization · MIT` for PAL4, and `Python · robotics · RRT` for Dynamic RRT Connect.
 
-At `1120px`, the signal scope moves below the introductory copy while the directory rail narrows. At `820px`, the page becomes one column, the project rail becomes a compact grid, and records reflow to keep copy and actions readable. At `510px`, the profile label and locale selector each get their own row, primary hero actions become full width, the rail becomes two columns, and filter controls may scroll only within their own rail. The responsive contract is no page-level horizontal overflow at 360px, 768px, 1280px, and 1440px.
+The Project Scope is deliberately non-uniform on desktop: PulseBoard is the full-width feature record with the largest title and evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors PulseBoard, Career Radar, SAA, SAP, and VMD over the smaller archive and secondary source records.
+
+At `1120px`, the rail reduces to `216px`, the identity copy precedes the live scope, and ordinary records resolve to two six-column tracks. At `820px` and below, the page’s semantic and visual order is: top bar, identity/live-scope main field, compact project-directory rail, then the project index. The rail becomes three columns and hides entries seven through nine at this width. At `510px` and below, the explicit profile link and locale selector each take a row, the rail becomes two columns and shows all nine records, hero actions stack full width, and project records resolve to a single readable column. The responsive contract is no page-level horizontal overflow at 360px, 768px, 1280px, or 1440px.
 
 ## Elevation & Depth
 
-This is a flat, layered system: borders, translucent midnight surfaces, and density create depth. There are no container drop shadows. The only glow-like treatment is reserved for small live-status and scope-dot signals; it communicates activity, not elevation. The decorative background canvas stays behind a solidly readable portal shell.
+This is a flat, layered system. One-pixel borders, translucent midnight surfaces, and density establish depth; project records do not use floating card shadows. Small live-status and scope-dot signals may glow subtly to communicate activity, not elevation. The fixed background lattice remains behind an opaque, readable portal shell.
 
-### Named Rules
+### Named Rule
 
-**The Ruled-Field Rule.** Use one-pixel technical rules and tonal layering to separate information; do not replace the directory structure with floating cards or large soft shadows.
+**The Ruled-Field Rule.** Use technical linework and tonal layers to divide information. Do not replace the directory structure with soft, equal-size cards or oversized shadows.
 
 ## Shapes
 
-The form language is rectilinear and precise. Controls, locale segments, tags, image frames, rail entries, and project rows use square corners and one-pixel borders. Accent bars, thin linework, small square status marks, and waveform geometry supply the recurring visual silhouette. Primary controls meet the intended touch target height, and visible focus uses an offset amber outline rather than a subtle color-only state.
+The form language is rectilinear and precise. Controls, locale segments, tags, image frames, rail entries, and project records use square corners and one-pixel borders. Accent bars, technical rules, square status marks, and waveform geometry supply the recurring silhouette. Keyboard focus is a visible, offset hot-amber outline; primary actions and locale controls have a minimum height of at least 44px.
 
 ## Components
 
-### Navigation
+### Navigation and Identity
 
-- **Top bar:** Brand, project-frequency descriptor, explicit personal-profile link, and four-language switcher share a ruled header. The LinkedIn icon is accompanied by the translated `Lang He · LinkedIn profile` label and external mark, so it cannot be read as a generic social link.
-- **Project rail:** Numbered links use a project-family color bar and stronger active inset rule. It is a scan/navigation instrument, not a nested card set.
-- **Locale selector:** Four explicit buttons (`EN`, `繁中`, `简中`, `日本語`) use `aria-pressed`. English is selected on a first visit; only an explicit selection is saved to `anlan.portal.locale`, and the document `lang` changes with the selection.
+- **Top bar:** ANLAN.STORE brand, project-frequency descriptor, personal-profile link, and four-language switcher share one ruled header.
+- **Personal profile entry:** The supplied LinkedIn URL is exactly `https://www.linkedin.com/in/lang-he-a94655120/`. Its English visible label is **“My LinkedIn profile”**; localizations preserve that first-person meaning. The authored LinkedIn icon and external mark support, but never replace, the explicit profile label. It opens as an external link using `target="_blank"` and `rel="noreferrer"`.
+- **Locale selector:** Four explicit choices—English (`en`), Traditional Chinese (`zh-Hant`), Simplified Chinese (`zh-Hans`), and Japanese (`ja`)—are buttons with `aria-pressed`. English is the deterministic first-visit default. A locale is written to `anlan.portal.locale` only after an explicit choice, and `document.documentElement.lang` follows it; no browser-locale inference is used.
+- **Japanese identity:** In Japanese, the identity fact explicitly renders Dodge as **`道安瀾（ドッジ・ホー）`**. The Japanese hero copy identifies this as Dodge's open-source project space.
 
-### Buttons
+### Project Directory and Scope
 
-- **Signal actions:** Rectangular icon-plus-label actions use mono labels, 49px minimum height, technical borders, and a short color/background transition. The live-work variant takes priority with the orange/amber signal family; the source action remains cyan-led.
-- **Row actions:** Each project exposes one concise route or external-repository action. Source actions include an external arrow and use `target="_blank"` with `rel="noreferrer"`.
-- **Filter segments:** Compact mono controls expose `All`, `Live`, `Source`, and `Study` through `aria-pressed`; violet identifies the active filter.
+- **Directory rail:** The numbered, color-barred rail is a scan/navigation instrument with project-specific technology keywords. Linked records move to their matching Project Scope evidence entry rather than directly navigating away.
+- **ISPM archive record:** ISPM Practice remains in the directory and Scope as a subdued, non-clickable root record with `ITSM · study · unlinked` keywords. It has no root-page route, status probe, or action. Its deployed `/ispm/` application remains part of the wider public route contract, but the owner does not promote or link to it from the root portal.
+- **Project records:** The nine records are PulseBoard, Career Radar, SAA Practice, SAP Practice, ISPM Practice, VMD_cpp, PAL4 translation / `PAL4_EnglishMod`, IELTS writing GPT / `IELTS_writing_GPT`, and Dynamic RRT Connect / `dynamic_rrt_connect`.
+- **Live route records:** PulseBoard uses `/demo/` and additionally exposes `/demo/docs`; Career Radar uses `/jobs/`; SAA uses `/saa/`; SAP uses `/sap/`. These same-origin route records receive asynchronous availability labels.
+- **Source records:** VMD_cpp, PAL4 translation, IELTS writing GPT, and Dynamic RRT Connect link directly to their respective `DodgeHo` GitHub repositories with an external action. They do not receive route-health probes.
+- **PulseBoard evidence:** Only PulseBoard expands with semantic controls for its real Live Ops and customer-surface captures. The image preview supports the record; it never replaces the description, route, technical tags, or action.
 
-### Project Records
+### Actions and Filters
 
-- **Structure:** Nine ordered records split into deployed/live, study, and source categories. A live record gets an asynchronous same-origin route status; source entries intentionally do not receive a route-health probe.
-- **Live route inventory:** PulseBoard (`/demo/`, with `/demo/docs` evidence/docs link), Career Radar (`/jobs/`), SAA Practice (`/saa/`), SAP Practice (`/sap/`), and ISPM Practice (`/ispm/`).
-- **Source inventory:** `VMD_cpp`, `PAL4 translation` / `PAL4_EnglishMod`, `IELTS writing GPT` / `IELTS_writing_GPT`, and `Dynamic RRT Connect` / `dynamic_rrt_connect`, each linking directly to its `DodgeHo` GitHub repository.
-- **Evidence mode:** PulseBoard’s semantic image controls switch between Live Ops and customer-surface captures with `aria-pressed`; the image frame never substitutes for the underlying project information.
+- **Hero actions:** Rectangular icon-plus-label actions lead to the Project Scope and the VMD source anchor. The live-work action uses hot amber; the source action is cyan-led.
+- **Row actions:** Linked projects have one concise route or external-repository action. External actions include an arrow mark and use safe external-link attributes.
+- **Filter segments:** `All`, `Live`, `Source`, and `Study` are mono controls with `aria-pressed`; violet marks the active filter.
 
 ### Signal Scopes
 
-- **Foreground scope:** A grid-backed waveform canvas shows orange reference axes, cyan live waveform, and a moving white sample point alongside semantic scope readouts.
-- **Background lattice:** A fixed decorative canvas draws cyan and violet bands plus cobalt/orange barcode marks. It is `aria-hidden`; the semantic directory contains the actual content.
-- **Motion:** Both canvases render a static frame when `prefers-reduced-motion: reduce` is active. In the normal mode their changes are subtle, continuous signal movement rather than entrance spectacle.
+- **Foreground scope:** A grid-backed waveform canvas uses orange reference axes, a cyan live waveform, and a moving white sample point next to semantic readouts.
+- **Background lattice:** The fixed `aria-hidden` canvas draws colored cyan/violet bands and cobalt/orange barcode marks behind the shell.
+- **Motion:** Both canvases render a static frame under `prefers-reduced-motion: reduce`. Otherwise motion is a subtle, continuous signal change, not an entrance spectacle.
 
 ## Do's and Don'ts
 
-### Do:
+### Do
 
-- **Do** use the approved Project Scope composition C: directory rail, central claim, and live signal scope before the project record index.
-- **Do** keep the page colorful within the midnight/cobalt/violet/cyan/electric-orange signal system, and use color to identify a project family or state.
-- **Do** keep all visible content semantic and translated in English, Traditional Chinese, Simplified Chinese, and Japanese; start in English without browser-locale inference.
-- **Do** preserve explicit destinations and inventory: the named Lang He LinkedIn profile, five existing live routes, and the four named DodgeHo GitHub projects.
-- **Do** honor keyboard focus, `aria-pressed` state, real route status text, and reduced-motion preferences.
+- Use Project Scope composition C: left directory rail, Dodge’s central identity field, live signal scope, then varied project evidence.
+- Keep the colorful midnight/cobalt/violet/cyan/electric-orange signal system and assign color purposefully.
+- Introduce Dodge Ho / 道安澜 as the person behind this public open-source work in all four locales; use `道安瀾（ドッジ・ホー）` in Japanese identity copy.
+- Keep **My LinkedIn profile** explicit, first-person, and visually accompanied by a LinkedIn mark rather than presenting it as a generic social destination.
+- Retain technical-keyword rails and non-uniform project weight: PulseBoard first, Career Radar/SAA/SAP/VMD prominent, ISPM subdued and unlinked.
+- Keep semantic route and repository information, `aria-pressed` controls, visible focus, live route status, and reduced-motion behavior.
 
-### Don't:
+### Don't
 
-- **Don't** revert to the former light publishing-grid palette, rounded portfolio cards, or generic SaaS dashboard treatment.
-- **Don't** use a bare LinkedIn glyph or an unlabeled external icon where the profile relationship must be clear.
-- **Don't** make canvas the only source of a route, project, status, or language state.
-- **Don't** infer a visitor's language from the browser, or probe external GitHub repositories as though they were deployed routes.
+- Revert to the former light publishing grid, rounded portfolio cards, or an equal-size dashboard grid.
+- Use a bare LinkedIn glyph, a non-first-person profile label, or an unlabeled external icon for the personal profile.
+- Add a root-page link or action for ISPM, even though `/ispm/` remains deployed.
+- Make canvas the sole source of identity, project, status, route, or language state.
+- Infer a visitor’s language from the browser or probe external GitHub repositories as deployed routes.

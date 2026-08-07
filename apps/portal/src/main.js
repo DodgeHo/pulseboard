@@ -6,24 +6,28 @@
   const copy = {
     en: {
       documentTitle: 'ANLAN.STORE — Project Frequencies',
-      topbar: 'PROJECT FREQUENCIES',
-      profile: 'Lang He · LinkedIn profile',
-      profileAria: 'Open Lang He’s LinkedIn profile (external)',
+      topbar: 'DODGE / PROJECT FREQUENCIES',
+      profile: 'My LinkedIn profile',
+      profileAria: 'Open My LinkedIn profile (external)',
       skip: 'Skip to project index',
       chooseLanguage: 'Choose portal language',
       railTitle: 'PROJECT DIRECTORY',
       projectDirectory: 'Project directory',
       railAll: 'VIEW ALL PROJECTS',
       heroLabel: 'LIVE SYSTEMS · OPEN SOURCE',
-      heroTitle: 'DEPLOYED WORK.<br>OPEN SIGNALS.',
-      heroLede: 'A multilingual index of deployed systems, engineering experiments, and public proof. Inspect a live route or trace a repository.',
+      heroTitle: 'DODGE HO.<br>BUILDS IN PUBLIC.',
+      heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
+      identityFacts: [['IDENTITY', 'Dodge Ho · 道安澜'], ['PRACTICE', 'Systems · signals · tools'], ['SPACE', 'Public open-source work']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['Invite-only', 'Job inbox', 'Digests'], saa: ['AWS', 'Question bank', 'Progress'], sap: ['AWS', 'Architecture', 'Advanced'], ispm: ['ITSM', 'Study', 'Unlinked'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT']
+      },
       liveAction: 'EXPLORE LIVE WORK',
       sourceAction: 'BROWSE SOURCE PROJECTS',
       scopeTitle: 'LIVE SIGNAL SCOPE',
       live: 'LIVE',
       scopeRows: [['SIGNAL MODE', 'MULTI-SURFACE'], ['ROUTE STATE', 'AUDITABLE'], ['LANGUAGE LAYER', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'PROJECT SCOPE',
-      indexSummary: 'Nine project frequencies across deployed work and open source.',
+      indexSummary: 'Nine project signals, scaled by live evidence, research depth, and study focus.',
       filterProjects: 'Filter projects',
       filters: { all: 'ALL', live: 'LIVE', source: 'SOURCE', study: 'STUDY' },
       availability: { checking: 'CHECKING ROUTE', online: 'ROUTE ONLINE', unavailable: 'CHECK ROUTE' },
@@ -57,23 +61,27 @@
     'zh-Hant': {
       documentTitle: 'ANLAN.STORE — 專案訊號目錄',
       topbar: '專案訊號頻段',
-      profile: 'Lang He · LinkedIn 個人資料',
-      profileAria: '開啟 Lang He 的 LinkedIn 個人資料（外部連結）',
+      profile: '我的 LinkedIn 個人資料',
+      profileAria: '開啟我的 LinkedIn 個人資料（外部連結）',
       skip: '跳至專案目錄',
       chooseLanguage: '選擇入口網站語言',
       railTitle: '專案目錄',
       projectDirectory: '專案目錄',
       railAll: '查看所有專案',
       heroLabel: '線上系統 · 開源專案',
-      heroTitle: '已部署作品。<br>公開訊號。',
-      heroLede: '這是一個多語系索引，收錄已部署系統、工程實驗與公開證據。可直接檢查線上路由或追溯原始碼庫。',
+      heroTitle: '道安瀾。<br>公開構建。',
+      heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
+      identityFacts: [['身份', 'Dodge Ho · 道安瀾'], ['實踐', '系統 · 訊號 · 工具'], ['空間', '公開開源作品']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['僅限受邀', '職缺收件匣', '摘要'], saa: ['AWS', '題庫', '進度'], sap: ['AWS', '架構', '進階'], ispm: ['ITSM', '學習', '未連結'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT']
+      },
       liveAction: '探索線上作品',
       sourceAction: '瀏覽開源專案',
       scopeTitle: '即時訊號範圍',
       live: '運作中',
       scopeRows: [['訊號模式', '多重介面'], ['路由狀態', '可稽核'], ['語言層', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '專案範圍',
-      indexSummary: '九組專案訊號，涵蓋已部署作品與開源專案。',
+      indexSummary: '九組專案訊號，依線上證據、研究深度與學習焦點配置尺度。',
       filterProjects: '篩選專案',
       filters: { all: '全部', live: '線上', source: '開源', study: '學習' },
       availability: { checking: '檢查路由中', online: '路由正常', unavailable: '請檢查路由' },
@@ -107,23 +115,27 @@
     'zh-Hans': {
       documentTitle: 'ANLAN.STORE — 项目信号目录',
       topbar: '项目信号频段',
-      profile: 'Lang He · LinkedIn 个人资料',
-      profileAria: '打开 Lang He 的 LinkedIn 个人资料（外部链接）',
+      profile: '我的 LinkedIn 个人资料',
+      profileAria: '打开我的 LinkedIn 个人资料（外部链接）',
       skip: '跳至项目索引',
       chooseLanguage: '选择门户语言',
       railTitle: '项目目录',
       projectDirectory: '项目目录',
       railAll: '查看所有项目',
       heroLabel: '在线系统 · 开源项目',
-      heroTitle: '已部署作品。<br>开放信号。',
-      heroLede: '这是一个多语言索引，收录已部署系统、工程实验与公开证据。可直接检查在线路由或追溯源代码仓库。',
+      heroTitle: '道安澜。<br>公开构建。',
+      heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
+      identityFacts: [['身份', 'Dodge Ho · 道安澜'], ['实践', '系统 · 信号 · 工具'], ['空间', '公开开源作品']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['仅限受邀', '职位收件箱', '摘要'], saa: ['AWS', '题库', '进度'], sap: ['AWS', '架构', '进阶'], ispm: ['ITSM', '学习', '未链接'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT']
+      },
       liveAction: '探索在线作品',
       sourceAction: '浏览开源项目',
       scopeTitle: '实时信号范围',
       live: '运行中',
       scopeRows: [['信号模式', '多重界面'], ['路由状态', '可审计'], ['语言层', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '项目范围',
-      indexSummary: '九组项目信号，涵盖已部署作品与开源项目。',
+      indexSummary: '九组项目信号，依在线证据、研究深度与学习焦点配置尺度。',
       filterProjects: '筛选项目',
       filters: { all: '全部', live: '在线', source: '开源', study: '学习' },
       availability: { checking: '正在检查路由', online: '路由正常', unavailable: '请检查路由' },
@@ -157,23 +169,27 @@
     ja: {
       documentTitle: 'ANLAN.STORE — プロジェクト信号目録',
       topbar: 'プロジェクト周波数',
-      profile: 'Lang He · LinkedIn プロフィール',
-      profileAria: 'Lang He の LinkedIn プロフィールを開く（外部リンク）',
+      profile: '私の LinkedIn プロフィール',
+      profileAria: '私の LinkedIn プロフィールを開く（外部リンク）',
       skip: 'プロジェクト一覧へ移動',
       chooseLanguage: 'ポータル言語を選択',
       railTitle: 'プロジェクト目録',
       projectDirectory: 'プロジェクト目録',
       railAll: 'すべてのプロジェクト',
       heroLabel: 'ライブシステム · オープンソース',
-      heroTitle: 'デプロイ済みの仕事。<br>開かれた信号。',
-      heroLede: 'デプロイ済みシステム、エンジニアリング実験、公開された根拠を集めた多言語インデックスです。ライブの経路を調べるか、リポジトリを追跡できます。',
+      heroTitle: '道安瀾。<br>公開でつくる。',
+      heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
+      identityFacts: [['アイデンティティ', '道安瀾（ドッジ・ホー）'], ['実践', 'システム · 信号 · ツール'], ['空間', '公開オープンソース作品']],
+      railKeywords: {
+        pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['招待制', '求人受信箱', 'ダイジェスト'], saa: ['AWS', '問題バンク', '進捗'], sap: ['AWS', 'アーキテクチャ', '上級'], ispm: ['ITSM', '学習', '未リンク'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT']
+      },
       liveAction: 'ライブ作品を見る',
       sourceAction: 'ソースプロジェクトを見る',
       scopeTitle: 'ライブ信号スコープ',
       live: '稼働中',
       scopeRows: [['信号モード', 'マルチサーフェス'], ['経路状態', '監査可能'], ['言語レイヤー', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'プロジェクト範囲',
-      indexSummary: 'デプロイ済み作品とオープンソースにまたがる 9 つのプロジェクト信号。',
+      indexSummary: 'ライブの根拠、研究の深さ、学習の焦点に応じて尺度を変えた 9 つのプロジェクト信号。',
       filterProjects: 'プロジェクトを絞り込む',
       filters: { all: 'すべて', live: 'ライブ', source: 'ソース', study: '学習' },
       availability: { checking: '経路を確認中', online: '経路はオンライン', unavailable: '経路を確認' },
@@ -207,15 +223,15 @@
   };
 
   const projects = [
-    { id: 'pulseboard', category: 'live', color: 'cyan', name: 'PulseBoard', route: '/demo/', action: '/demo/', actionKey: 'open', tags: ['Hono', 'PostgreSQL', 'Redis', 'BullMQ', 'Docker'], links: [{ href: '/demo/docs', key: 'docs' }] },
-    { id: 'career', category: 'live', color: 'orange', name: 'Career Radar', alias: '职海雷达 · キャリアレーダー', route: '/jobs/', action: '/jobs/', actionKey: 'open', tags: ['invite-only', 'inbox', 'digests'] },
-    { id: 'saa', category: 'study', color: 'cobalt', name: 'SAA Practice', route: '/saa/', action: '/saa/', actionKey: 'open', tags: ['AWS', 'practice', 'progress'] },
-    { id: 'sap', category: 'study', color: 'violet', name: 'SAP Practice', route: '/sap/', action: '/sap/', actionKey: 'open', tags: ['AWS', 'advanced', 'practice'] },
-    { id: 'ispm', category: 'study', color: 'orange', name: 'ISPM Practice', route: '/ispm/', action: '/ispm/', actionKey: 'open', tags: ['ITSM', 'practice', 'progress'] },
-    { id: 'vmd', category: 'source', color: 'violet', name: 'VMD_cpp', route: 'https://github.com/DodgeHo/VMD_cpp', action: 'https://github.com/DodgeHo/VMD_cpp', actionKey: 'external', tags: ['C++', 'Eigen', 'signal processing'] },
-    { id: 'pal4', category: 'source', color: 'orange', name: 'PAL4 translation', alias: 'PAL4_EnglishMod', route: 'https://github.com/DodgeHo/PAL4_EnglishMod', action: 'https://github.com/DodgeHo/PAL4_EnglishMod', actionKey: 'external', tags: ['Python', 'localization', 'MIT'] },
-    { id: 'ielts', category: 'source', color: 'cobalt', name: 'IELTS writing GPT', alias: 'IELTS_writing_GPT', route: 'https://github.com/DodgeHo/IELTS_writing_GPT', action: 'https://github.com/DodgeHo/IELTS_writing_GPT', actionKey: 'external', tags: ['GPT', 'writing', 'Python'] },
-    { id: 'rrt', category: 'source', color: 'cyan', name: 'Dynamic RRT Connect', alias: 'dynamic_rrt_connect', route: 'https://github.com/DodgeHo/dynamic_rrt_connect', action: 'https://github.com/DodgeHo/dynamic_rrt_connect', actionKey: 'external', tags: ['Python', 'robotics', 'planning'] }
+    { id: 'pulseboard', category: 'live', layout: 'feature', color: 'cyan', name: 'PulseBoard', route: '/demo/', action: '/demo/', actionKey: 'open', railKeywords: ['Hono', 'PostgreSQL', 'Redis'], tags: ['Hono', 'PostgreSQL', 'Redis', 'BullMQ', 'Docker'], links: [{ href: '/demo/docs', key: 'docs' }] },
+    { id: 'career', category: 'live', layout: 'major', color: 'orange', name: 'Career Radar', alias: '职海雷达 · キャリアレーダー', route: '/jobs/', action: '/jobs/', actionKey: 'open', railKeywords: ['invite-only', 'inbox', 'digests'], tags: ['invite-only', 'inbox', 'digests'] },
+    { id: 'saa', category: 'study', layout: 'study', color: 'cobalt', name: 'SAA Practice', route: '/saa/', action: '/saa/', actionKey: 'open', railKeywords: ['AWS', 'questions', 'progress'], tags: ['AWS', 'practice', 'progress'] },
+    { id: 'sap', category: 'study', layout: 'study-small', color: 'violet', name: 'SAP Practice', route: '/sap/', action: '/sap/', actionKey: 'open', railKeywords: ['AWS', 'architecture', 'advanced'], tags: ['AWS', 'advanced', 'practice'] },
+    { id: 'ispm', category: 'study', layout: 'quiet', color: 'orange', name: 'ISPM Practice', railLinked: false, railKeywords: ['ITSM', 'study', 'unlinked'], tags: ['ITSM', 'practice', 'progress'] },
+    { id: 'vmd', category: 'source', layout: 'research', color: 'violet', name: 'VMD_cpp', route: 'https://github.com/DodgeHo/VMD_cpp', action: 'https://github.com/DodgeHo/VMD_cpp', actionKey: 'external', railKeywords: ['C++', 'Eigen', 'VMD'], tags: ['C++', 'Eigen', 'signal processing'] },
+    { id: 'pal4', category: 'source', layout: 'source', color: 'orange', name: 'PAL4 translation', alias: 'PAL4_EnglishMod', route: 'https://github.com/DodgeHo/PAL4_EnglishMod', action: 'https://github.com/DodgeHo/PAL4_EnglishMod', actionKey: 'external', railKeywords: ['Python', 'localization', 'MIT'], tags: ['Python', 'localization', 'MIT'] },
+    { id: 'ielts', category: 'source', layout: 'source-compact', color: 'cobalt', name: 'IELTS writing GPT', alias: 'IELTS_writing_GPT', route: 'https://github.com/DodgeHo/IELTS_writing_GPT', action: 'https://github.com/DodgeHo/IELTS_writing_GPT', actionKey: 'external', railKeywords: ['GPT', 'writing', 'Python'], tags: ['GPT', 'writing', 'Python'] },
+    { id: 'rrt', category: 'source', layout: 'source-wide', color: 'cyan', name: 'Dynamic RRT Connect', alias: 'dynamic_rrt_connect', route: 'https://github.com/DodgeHo/dynamic_rrt_connect', action: 'https://github.com/DodgeHo/dynamic_rrt_connect', actionKey: 'external', railKeywords: ['Python', 'robotics', 'RRT'], tags: ['Python', 'robotics', 'planning'] }
   ];
 
   const localeButtons = Array.from(document.querySelectorAll('[data-locale]'));
@@ -237,15 +253,17 @@
   };
 
   const renderRail = () => {
-    railList.innerHTML = projects.map((project, index) => `
-      <li class="rail-item" style="--rail-color:${projectColors[project.color]}">
-        <a href="#project-${project.id}" data-rail-project="${project.id}">
-          <span class="rail-number">${String(index + 1).padStart(2, '0')}</span><span class="rail-name">${project.name}</span>
-        </a>
-      </li>`).join('');
+    railList.innerHTML = projects.map((project, index) => {
+      const keywords = t().railKeywords[project.id] ?? project.railKeywords;
+      const content = `<span class="rail-number">${String(index + 1).padStart(2, '0')}</span><span class="rail-name">${project.name}</span><span class="rail-keywords">${keywords.join(' · ')}</span>`;
+      const destination = project.railLinked === false
+        ? `<span class="rail-record" aria-label="${project.name}">${content}</span>`
+        : `<a href="#project-${project.id}" data-rail-project="${project.id}">${content}</a>`;
+      return `<li class="rail-item${project.railLinked === false ? ' is-unlinked' : ''}" style="--rail-color:${projectColors[project.color]}">${destination}</li>`;
+    }).join('');
   };
 
-  const makeStatus = (project) => project.category !== 'live' ? '' : `
+  const makeStatus = (project) => project.category !== 'live' || !project.route ? '' : `
     <span class="status-label is-checking" data-route-status="${project.route}"><i aria-hidden="true"></i><span>${t().availability.checking}</span></span>`;
 
   const makeEvidence = () => `
@@ -264,14 +282,15 @@
   const renderProjects = () => {
     projectList.innerHTML = projects.map((project, index) => {
       const external = project.category === 'source';
-      const action = external
+      const action = !project.action ? '' : external
         ? `<a class="row-action" href="${project.action}" target="_blank" rel="noreferrer">${t()[project.actionKey]}${iconExternal}</a>`
         : `<a class="row-action" href="${project.action}">${t()[project.actionKey]}</a>`;
       const sourceOrRoute = external ? t().repository : t().route;
-      return `<article class="project-row" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
+      const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
+      return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
         <div><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
-        <div class="project-copy"><p class="project-description">${t().descriptions[project.id]}</p><p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
+        <div class="project-copy"><p class="project-description">${t().descriptions[project.id]}</p>${routeLine}<ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}
       </article>`;
@@ -292,6 +311,10 @@
 
   const renderScopeReadout = () => {
     document.querySelector('#scope-readout').innerHTML = t().scopeRows.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('');
+  };
+
+  const renderIdentityFacts = () => {
+    document.querySelector('#identity-facts').innerHTML = t().identityFacts.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('');
   };
 
   const applyFilter = (filter) => {
@@ -328,7 +351,7 @@
   };
 
   const checkRoutes = async () => {
-    const routes = [...new Set(projects.filter((project) => project.category === 'live').map((project) => project.route))];
+    const routes = [...new Set(projects.filter((project) => project.category === 'live' && project.route).map((project) => project.route))];
     if (window.location.protocol === 'file:') {
       routes.forEach((path) => setRouteStatus(path, 'checking'));
       return;
@@ -362,6 +385,7 @@
     document.querySelector('#footer-top').textContent = t().backToTop;
     document.querySelector('#empty-state').textContent = t().empty;
     filterButtons.forEach((button) => { button.textContent = t().filters[button.dataset.filter]; });
+    renderIdentityFacts();
     renderScopeReadout();
     renderRail();
     renderProjects();
