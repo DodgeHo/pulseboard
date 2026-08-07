@@ -110,7 +110,7 @@ or a reviewed commit SHA:
 <validated-commit-sha>
 ```
 
-The workflow validates the ref shape, builds and verifies the project portal and namespaced PulseBoard artifacts, refuses to deploy over a dirty server worktree by default, fetches the requested ref, rebuilds the production compose stack, checks local-on-server health endpoints, runs `pnpm demo:flow` inside the API container, installs the portal, `/demo/` artifacts, and Nginx config with timestamped backups, reloads Nginx after `nginx -t`, and runs `pnpm verify:public`. Enable `preserve_dirty_worktree` only after reviewing the reported status; it preserves the server changes as patches, an untracked-file archive, and a Git stash before deployment.
+The workflow validates the ref shape, builds and verifies the project portal and namespaced PulseBoard artifacts, refuses to deploy over a dirty server worktree by default, fetches the requested ref, rebuilds the production compose stack, checks local-on-server health endpoints, runs `pnpm demo:flow` inside the API container, installs the portal and `/demo/` artifacts, backs up and installs the reviewed Nginx contract to both `sites-available/anlan.conf` and the staging host's regular `sites-enabled/anlan.conf`, reloads Nginx after `nginx -t`, and runs `pnpm verify:public`. The contract preserves Career Radar at `/jobs/`. Enable `preserve_dirty_worktree` only after reviewing the reported status; it preserves the server changes as patches, an untracked-file archive, and a Git stash before deployment.
 
 ## Post-Run Evidence
 

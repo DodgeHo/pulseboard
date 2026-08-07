@@ -27,7 +27,7 @@ curl https://anlan.store/demo/openapi.json
 - `www.anlan.store` should redirect to `https://anlan.store/`.
 - `/v1/*` API routes remain API-key protected.
 - PostgreSQL and Redis remain private to Docker Compose.
-- Existing study portal paths `/saa/`, `/sap/`, and `/ispm/` remain served by Nginx.
+- Existing Career Radar `/jobs/` and study portal paths `/saa/`, `/sap/`, and `/ispm/` remain served by Nginx.
 
 ## Request Correlation
 

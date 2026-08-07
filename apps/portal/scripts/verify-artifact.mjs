@@ -12,11 +12,13 @@ const requiredText = [
   "ANLAN.STORE",
   "Live project<br>directory.",
   "href=\"/demo/\"",
+  "href=\"/jobs/\"",
   "href=\"/saa/\"",
   "href=\"/sap/\"",
   "href=\"/ispm/\"",
   "data-filter=\"systems\"",
   "data-preview-target=\"customer\"",
+  "Invite-only",
   "data:image/png;base64,"
 ];
 

@@ -130,7 +130,7 @@ CI runs fast unit/type checks, builds and verifies the root project portal plus 
 
 `anlan.store` has two distinct public layers:
 
-- `/` is the `ANLAN.STORE` project directory, with direct entries for PulseBoard, SAA, SAP, and ISPM.
+- `/` is the `ANLAN.STORE` project directory, with direct entries for PulseBoard, Career Radar, SAA, SAP, and ISPM.
 - `/demo/` is the PulseBoard Live Ops Console, with its customer UI at `/demo/frontend/` and backend evidence under `/demo/health/*`, `/demo/openapi.json`, `/demo/docs`, and `/demo/api/v1/*`.
 
 PulseBoard keeps its 10-language interface. English is first and remains the default, Traditional Chinese is included, and Simplified Chinese is last. A locale can be selected with `?lang=<locale>`, for example `/demo/?lang=zh-TW`.

@@ -35,8 +35,8 @@ function send(response, status, contentType, body, headers = {}) {
   response.end(body);
 }
 
-function redirect(response, location) {
-  send(response, 301, 'text/plain; charset=utf-8', 'Moved permanently', { location });
+function redirect(response, location, status = 301) {
+  send(response, status, 'text/plain; charset=utf-8', 'Redirecting', { location });
 }
 
 function studyShell(name) {
@@ -48,6 +48,8 @@ async function handle(request, response) {
   const path = url.pathname;
 
   if (path === '/demo') return redirect(response, '/demo/');
+  if (path === '/jobs') return redirect(response, '/jobs/', 308);
+  if (path === '/jobs/') return redirect(response, '/jobs/login', 303);
   if (path === '/demo/frontend') return redirect(response, '/demo/frontend/');
   if (path === '/frontend' || path === '/frontend/') return redirect(response, '/demo/frontend/');
   if (path === '/docs') return redirect(response, '/demo/docs');
@@ -76,6 +78,10 @@ async function handle(request, response) {
   }
   if (path === '/demo/api/v1/workspaces') {
     return send(response, 401, 'application/json; charset=utf-8', JSON.stringify({ error: 'unauthorized' }));
+  }
+  if (path === '/jobs/login') {
+    const html = '<!doctype html><html lang="en" data-base-path="/jobs"><head><title>Career Radar</title></head><body><main>Invite-only Career Radar login shell</main></body></html>';
+    return send(response, 200, 'text/html; charset=utf-8', html);
   }
   if (path === '/saa/' || path === '/sap/' || path === '/ispm/') {
     return send(response, 200, 'text/html; charset=utf-8', studyShell(path.slice(1, -1).toUpperCase()));

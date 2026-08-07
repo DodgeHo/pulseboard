@@ -514,6 +514,86 @@ img {
   opacity: 1;
 }
 
+.career-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  margin-top: 14px;
+  border-top: 6px solid var(--portal-green);
+}
+
+.career-identity,
+.career-copy {
+  min-width: 0;
+  padding: 28px;
+}
+
+.career-identity {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: end;
+  gap: 18px;
+  background: var(--portal-green-soft);
+}
+
+.career-identity > .project-type {
+  grid-column: 1 / -1;
+  align-self: start;
+  margin: 0 0 48px;
+}
+
+.career-monogram {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  background: var(--portal-ink);
+  color: var(--portal-surface);
+  font: 800 24px/1 "Cascadia Mono", Consolas, monospace;
+}
+
+.career-identity h3 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 0.95;
+}
+
+.career-alias {
+  margin: 10px 0 0;
+  color: #365744;
+  font-size: 13px;
+}
+
+.career-copy {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--portal-rule);
+}
+
+.career-copy > p {
+  max-width: 58ch;
+  margin: 36px 0 30px;
+  color: #484e4b;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.career-copy .route-line {
+  margin-top: auto;
+}
+
+.career-copy .action-primary {
+  align-self: flex-start;
+  margin-top: 18px;
+}
+
+.access-label {
+  padding: 6px 8px;
+  background: var(--portal-ink);
+  color: var(--portal-surface);
+  font: 700 10px/1 "Cascadia Mono", Consolas, monospace;
+  text-transform: uppercase;
+}
+
 .study-band {
   margin-top: 64px;
 }
@@ -673,6 +753,15 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .career-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .career-copy {
+    border-left: 0;
+    border-top: 1px solid var(--portal-rule);
+  }
+
   .study-entry {
     min-height: 300px;
   }
@@ -745,6 +834,23 @@ a:focus-visible {
   .project-copy {
     min-height: 570px;
     padding: 24px 20px;
+  }
+
+  .career-identity,
+  .career-copy {
+    padding: 22px 20px;
+  }
+
+  .career-identity > .project-type {
+    margin-bottom: 28px;
+  }
+
+  .career-copy > p {
+    margin-top: 26px;
+  }
+
+  .career-copy .action-primary {
+    width: 100%;
   }
 
   .project-heading {
@@ -882,9 +988,9 @@ a:focus-visible {
           <h1 id="directory-title">Live project<br>directory.</h1>
         </div>
         <div class="intro-copy">
-          <p>One domain, several inspectable builds. Open the systems project for backend evidence, or launch a focused certification practice bank.</p>
+          <p>One domain, several inspectable builds. Open a systems project for backend evidence and job discovery, or launch a focused certification practice bank.</p>
           <dl class="directory-summary">
-            <div><dt>Entries</dt><dd>04</dd></div>
+            <div><dt>Entries</dt><dd>05</dd></div>
             <div><dt>Categories</dt><dd>02</dd></div>
             <div><dt>Domain</dt><dd>anlan.store</dd></div>
           </dl>
@@ -943,6 +1049,26 @@ a:focus-visible {
           </div>
         </article>
 
+        <article class="project-entry career-entry" id="career-radar" data-project data-category="systems" data-route="/jobs/">
+          <div class="career-identity">
+            <p class="project-type">Systems / job discovery</p>
+            <div class="career-monogram" aria-hidden="true">CR</div>
+            <div>
+              <h3>Career Radar</h3>
+              <p class="career-alias">职海雷达 · キャリアレーダー</p>
+            </div>
+          </div>
+          <div class="career-copy">
+            <div class="project-heading">
+              <span class="access-label">Invite-only</span>
+              <span class="route-status is-checking" data-route-status="/jobs/"><i aria-hidden="true"></i><span>Checking route</span></span>
+            </div>
+            <p>An account-isolated job discovery and inbox service with saved roles, unread state, and scheduled digests.</p>
+            <div class="route-line"><span>Public route</span><code>/jobs/</code></div>
+            <a class="action-primary" href="/jobs/">Open Career Radar</a>
+          </div>
+        </article>
+
         <div class="study-band" id="study-tools" data-project-group>
           <header class="study-heading">
             <div>
@@ -997,7 +1123,7 @@ a:focus-visible {
 
     <footer class="portal-footer">
       <span>ANLAN.STORE / public deployment index</span>
-      <span><a href="#top">Back to top</a> / four live entries</span>
+      <span><a href="#top">Back to top</a> / five live entries</span>
     </footer>
   </div>
   <script>(() => {

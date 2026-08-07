@@ -26,6 +26,7 @@ The page uses a publishing-grid rhythm with operational details:
 - A compact masthead identifies the domain and current deployment date.
 - A strong directory title frames the page, but the project index starts in the first viewport.
 - PulseBoard receives the largest visual treatment because it has the deepest inspectable system surface.
+- Career Radar appears as a compact secondary systems entry with an honest invite-only access label.
 - The three practice banks appear as separate launchable entries in a dense study-tools band.
 - Route paths, stack labels, and live availability are treated as useful interface data, not decoration.
 
@@ -68,6 +69,7 @@ No gradient is part of the brand. Color communicates project type, route state, 
 - Header: brand, deployment descriptor, and section navigation.
 - Directory intro: compact statement plus project count and route health summary.
 - Featured project: one repeated-item card with a real screenshot, concise project explanation, proof links, and launch action.
+- Secondary systems: a compact Career Radar entry with its route, invite-only state, and launch action.
 - Study tools: three equal project rows or cards with distinct color markers.
 
 ### Mobile
@@ -104,6 +106,8 @@ Each repeated entry contains:
 - One clear open action.
 
 PulseBoard additionally includes links to its customer view, API docs, OpenAPI contract, and readiness probe.
+
+Career Radar is visually secondary to PulseBoard and describes its access boundary without implying public registration.
 
 ### Visual Evidence
 

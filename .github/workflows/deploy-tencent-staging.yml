@@ -181,16 +181,34 @@ jobs:
           if [ -f /var/www/html/demo/frontend/index.html ]; then
             sudo cp /var/www/html/demo/frontend/index.html /var/www/html/demo/frontend/index.html.backup-$ts
           fi
+          for nginx_site in /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-enabled/anlan.conf; do
+            if [ ! -f "$nginx_site" ]; then
+              echo "Required staging Nginx site file is missing: $nginx_site" >&2
+              exit 1
+            fi
+          done
           if [ -f /etc/nginx/sites-available/anlan.conf ]; then
             sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
+          fi
+          if [ -f /etc/nginx/sites-enabled/anlan.conf ]; then
+            sudo cp /etc/nginx/sites-enabled/anlan.conf /etc/nginx/sites-enabled/anlan.conf.backup-$ts
           fi
 
           sudo install -d -m 0755 /var/www/html/demo/frontend
           sudo install -m 0644 /tmp/anlan-portal-index.html /var/www/html/index.html
           sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
           sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
-          sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf
-          sudo nginx -t
+          sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts
+          sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-enabled/anlan.conf.candidate-$ts
+          sudo mv /etc/nginx/sites-available/anlan.conf.candidate-$ts /etc/nginx/sites-available/anlan.conf
+          sudo mv /etc/nginx/sites-enabled/anlan.conf.candidate-$ts /etc/nginx/sites-enabled/anlan.conf
+          if ! sudo nginx -t; then
+            echo "Nginx validation failed; restoring both site files from timestamp $ts." >&2
+            sudo install -m 0644 /etc/nginx/sites-available/anlan.conf.backup-$ts /etc/nginx/sites-available/anlan.conf
+            sudo install -m 0644 /etc/nginx/sites-enabled/anlan.conf.backup-$ts /etc/nginx/sites-enabled/anlan.conf
+            sudo nginx -t
+            exit 1
+          fi
           sudo systemctl reload nginx
           REMOTE
 

@@ -12,6 +12,7 @@ This runbook covers the existing `anlan.store` host only. It does not create or 
 - PulseBoard readiness: `https://anlan.store/demo/health/ready`
 - PulseBoard liveness: `https://anlan.store/demo/health/live`
 - PulseBoard authenticated API: `https://anlan.store/demo/api/v1/*`
+- Career Radar invite-only job inbox: `https://anlan.store/jobs/`
 - Existing study tools: `https://anlan.store/saa/`, `https://anlan.store/sap/`, and `https://anlan.store/ispm/`
 
 Legacy PulseBoard paths such as `/frontend/`, `/docs`, `/openapi.json`, `/health/*`, and `/v1/*` return permanent redirects into `/demo/`. `https://www.anlan.store/` continues to redirect to the bare domain after TLS negotiation.
@@ -23,9 +24,11 @@ Legacy PulseBoard paths such as `/frontend/`, `/docs`, `/openapi.json`, `/health
 | Project portal | `deploy/anlan/index.html` | `/var/www/html/index.html` |
 | PulseBoard operations | `deploy/anlan/demo/index.html` | `/var/www/html/demo/index.html` |
 | PulseBoard customer UI | `deploy/anlan/demo/frontend/index.html` | `/var/www/html/demo/frontend/index.html` |
-| Nginx route contract | `deploy/anlan/nginx/anlan.conf` | `/etc/nginx/sites-available/anlan.conf` |
+| Nginx route contract | `deploy/anlan/nginx/anlan.conf` | `/etc/nginx/sites-available/anlan.conf` and `/etc/nginx/sites-enabled/anlan.conf` |
 
 The portal source is under `apps/portal`. PulseBoard web source remains under `apps/web`. The API remains bound to `127.0.0.1:4000` on the host and Nginx rewrites the public `/demo/` routes to the existing internal Hono routes.
+
+The staging host currently has a regular file at `/etc/nginx/sites-enabled/anlan.conf`, not a symlink to `sites-available`. Until that host layout is deliberately normalized, every deployment backs up and installs both files from the same reviewed artifact. The route contract also preserves the independently deployed Career Radar service at `127.0.0.1:8765` under `/jobs/`.
 
 ## Build Gate
 
@@ -70,12 +73,18 @@ fi
 if [ -f /etc/nginx/sites-available/anlan.conf ]; then
   sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
 fi
+if [ -f /etc/nginx/sites-enabled/anlan.conf ]; then
+  sudo cp /etc/nginx/sites-enabled/anlan.conf /etc/nginx/sites-enabled/anlan.conf.backup-$ts
+fi
 
 sudo install -d -m 0755 /var/www/html/demo/frontend
 sudo install -m 0644 /tmp/anlan-portal-index.html /var/www/html/index.html
 sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
 sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
-sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf
+sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts
+sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-enabled/anlan.conf.candidate-$ts
+sudo mv /etc/nginx/sites-available/anlan.conf.candidate-$ts /etc/nginx/sites-available/anlan.conf
+sudo mv /etc/nginx/sites-enabled/anlan.conf.candidate-$ts /etc/nginx/sites-enabled/anlan.conf
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -96,7 +105,7 @@ For another rehearsal host:
 PUBLIC_BASE_URL=https://staging.example.com pnpm verify:public
 ```
 
-The verifier checks the portal, all four project entries, PulseBoard operations and customer pages, public health routes, Scalar docs, the public OpenAPI contract, unauthenticated API protection, legacy redirects, and the `www` redirect.
+The verifier checks the portal, all five project entries, the Career Radar login shell, PulseBoard operations and customer pages, public health routes, Scalar docs, the public OpenAPI contract, unauthenticated API protection, legacy redirects, and the `www` redirect.
 
 Useful manual checks:
 
@@ -109,6 +118,7 @@ curl -fsS https://anlan.store/demo/health/ready
 curl -I https://anlan.store/demo/docs
 curl -fsS https://anlan.store/demo/openapi.json
 curl -i https://anlan.store/demo/api/v1/workspaces
+curl -IL https://anlan.store/jobs/
 curl -I https://anlan.store/saa/
 curl -I https://anlan.store/sap/
 curl -I https://anlan.store/ispm/
@@ -119,12 +129,13 @@ sudo docker compose -f docker-compose.production.example.yml ps
 
 Expected results:
 
-- `/` renders the `ANLAN.STORE` project directory and links all four deployed projects.
+- `/` renders the `ANLAN.STORE` project directory and links all five deployed projects.
 - `/demo/` renders the PulseBoard operations console.
 - `/demo/frontend/` renders the multilingual customer surface.
 - `/demo/health/live` returns `status: ok` and `/demo/health/ready` returns `status: ready`.
 - `/demo/openapi.json` describes `/demo/health/*` and `/demo/api/v1/*` as public paths.
 - `/demo/api/v1/workspaces` returns `401` without an API key.
+- `/jobs` redirects to `/jobs/`, which reaches the Career Radar invite-only login shell.
 - `/saa/`, `/sap/`, and `/ispm/` remain available.
 - Old PulseBoard public paths redirect to `/demo/` equivalents.
 
@@ -137,6 +148,7 @@ sudo install -m 0644 /var/www/html/index.html.backup-<timestamp> /var/www/html/i
 sudo install -m 0644 /var/www/html/demo/index.html.backup-<timestamp> /var/www/html/demo/index.html
 sudo install -m 0644 /var/www/html/demo/frontend/index.html.backup-<timestamp> /var/www/html/demo/frontend/index.html
 sudo install -m 0644 /etc/nginx/sites-available/anlan.conf.backup-<timestamp> /etc/nginx/sites-available/anlan.conf
+sudo install -m 0644 /etc/nginx/sites-enabled/anlan.conf.backup-<timestamp> /etc/nginx/sites-enabled/anlan.conf
 sudo nginx -t
 sudo systemctl reload nginx
 ```

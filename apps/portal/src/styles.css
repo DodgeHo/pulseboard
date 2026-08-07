@@ -506,6 +506,86 @@ img {
   opacity: 1;
 }
 
+.career-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  margin-top: 14px;
+  border-top: 6px solid var(--portal-green);
+}
+
+.career-identity,
+.career-copy {
+  min-width: 0;
+  padding: 28px;
+}
+
+.career-identity {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: end;
+  gap: 18px;
+  background: var(--portal-green-soft);
+}
+
+.career-identity > .project-type {
+  grid-column: 1 / -1;
+  align-self: start;
+  margin: 0 0 48px;
+}
+
+.career-monogram {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  background: var(--portal-ink);
+  color: var(--portal-surface);
+  font: 800 24px/1 "Cascadia Mono", Consolas, monospace;
+}
+
+.career-identity h3 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 0.95;
+}
+
+.career-alias {
+  margin: 10px 0 0;
+  color: #365744;
+  font-size: 13px;
+}
+
+.career-copy {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--portal-rule);
+}
+
+.career-copy > p {
+  max-width: 58ch;
+  margin: 36px 0 30px;
+  color: #484e4b;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.career-copy .route-line {
+  margin-top: auto;
+}
+
+.career-copy .action-primary {
+  align-self: flex-start;
+  margin-top: 18px;
+}
+
+.access-label {
+  padding: 6px 8px;
+  background: var(--portal-ink);
+  color: var(--portal-surface);
+  font: 700 10px/1 "Cascadia Mono", Consolas, monospace;
+  text-transform: uppercase;
+}
+
 .study-band {
   margin-top: 64px;
 }
@@ -665,6 +745,15 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .career-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .career-copy {
+    border-left: 0;
+    border-top: 1px solid var(--portal-rule);
+  }
+
   .study-entry {
     min-height: 300px;
   }
@@ -737,6 +826,23 @@ a:focus-visible {
   .project-copy {
     min-height: 570px;
     padding: 24px 20px;
+  }
+
+  .career-identity,
+  .career-copy {
+    padding: 22px 20px;
+  }
+
+  .career-identity > .project-type {
+    margin-bottom: 28px;
+  }
+
+  .career-copy > p {
+    margin-top: 26px;
+  }
+
+  .career-copy .action-primary {
+    width: 100%;
   }
 
   .project-heading {

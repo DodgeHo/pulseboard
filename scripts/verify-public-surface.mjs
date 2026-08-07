@@ -83,10 +83,22 @@ async function verifyPortal() {
   expect('portal title identifies ANLAN.STORE', body.includes('<title>ANLAN.STORE - Live Project Directory</title>'));
   expect('portal exposes project directory identity', body.includes('ANLAN.STORE') && body.includes('Live project<br>directory.'));
   expect('portal links PulseBoard demo', body.includes('href="/demo/"'));
+  expect('portal links Career Radar', body.includes('href="/jobs/"') && body.includes('Career Radar') && body.includes('Invite-only'));
   expect('portal links all study routes', body.includes('href="/saa/"') && body.includes('href="/sap/"') && body.includes('href="/ispm/"'));
   expect('portal includes working filter controls', body.includes('data-filter="systems"') && body.includes('applyFilter'));
   expect('portal includes both PulseBoard captures', (body.match(/data:image\/png;base64,/g) ?? []).length === 2);
   expect('portal has no unresolved build placeholders', !/__PORTAL_[A-Z_]+__/.test(body) && !/__PULSEBOARD_[A-Z_]+__/.test(body));
+}
+
+async function verifyCareerRadar() {
+  const canonical = await fetchText('/jobs', { redirect: 'manual' });
+  expect('/jobs redirects', canonical.response.status === 308, canonical.response.status + ' ' + canonical.response.statusText);
+  expect('/jobs redirects to /jobs/', (canonical.response.headers.get('location') ?? '').endsWith('/jobs/'), canonical.response.headers.get('location') ?? '<missing>');
+
+  const { response, body } = await fetchText('/jobs/', { accept: 'text/html' });
+  expect('Career Radar route returns 200 after login redirect', response.status === 200, response.status + ' ' + response.statusText);
+  expect('Career Radar route is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+  expect('Career Radar retains subpath-aware login shell', body.includes('<title>Career Radar</title>') && body.includes('data-base-path="/jobs"'));
 }
 
 async function verifyPulseBoard() {
@@ -183,6 +195,7 @@ try {
   await verifyPulseBoard();
   await verifyCustomerSurface();
   await verifyBackendSurface();
+  await verifyCareerRadar();
   await verifyStudyRoutes();
   await verifyLegacyRedirects();
   await verifyWwwRedirect();
@@ -199,4 +212,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log('Anlan project portal and PulseBoard demo verified.');
+console.log('Anlan project portal, Career Radar, and PulseBoard demo verified.');

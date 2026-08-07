@@ -32,6 +32,7 @@ PulseBoard remains a complete project, but its public surface moves under `/demo
 | `/demo/health/live` | PulseBoard liveness probe |
 | `/demo/health/ready` | PulseBoard readiness probe |
 | `/demo/api/v1/*` | PulseBoard authenticated API |
+| `/jobs/` | Career Radar invite-only job discovery and inbox service |
 | `/saa/` | SAA certification practice bank |
 | `/sap/` | SAP certification practice bank |
 | `/ispm/` | ISPM certification practice bank |
@@ -43,6 +44,10 @@ The API process may keep its internal `/v1/*`, `/docs`, and `/health/*` routes. 
 ### PulseBoard
 
 A production-shaped reliability SaaS portfolio project with a Hono API, PostgreSQL, Redis, BullMQ workers, API-key boundaries, OpenAPI documentation, health probes, operational documentation, and a staged deployment workflow.
+
+### Career Radar
+
+An invite-only, multi-user job discovery and inbox service deployed at `/jobs/`. Its Nginx reverse-proxy route is an existing cross-project dependency and must be preserved by every portal or PulseBoard deployment.
 
 ### Certification Practice Banks
 
@@ -66,9 +71,9 @@ The portal must describe these honestly as study tools. It must not invent usage
 ## Success Criteria
 
 - The root route is visibly `ANLAN.STORE`, not PulseBoard.
-- All four project entries are available in the first usable project index.
+- All five project entries are available in the first usable project index.
 - PulseBoard is fully reachable under `/demo/` with no accidental dependency on root paths.
-- Existing `/saa/`, `/sap/`, and `/ispm/` routes continue to work.
+- Existing `/jobs/`, `/saa/`, `/sap/`, and `/ispm/` routes continue to work.
 - The portal uses real PulseBoard captures as visual evidence.
 - Desktop and mobile layouts do not overlap, clip long route labels, or hide primary actions.
 - Build artifacts and Nginx configuration are reproducible from source.

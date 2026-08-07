@@ -2,7 +2,7 @@
 
 ## Objective
 
-Replace the PulseBoard root homepage at `https://anlan.store/` with a project portal and publish the full PulseBoard public surface under `https://anlan.store/demo/` without breaking the existing SAA, SAP, or ISPM study routes.
+Replace the PulseBoard root homepage at `https://anlan.store/` with a project portal and publish the full PulseBoard public surface under `https://anlan.store/demo/` without breaking the existing Career Radar, SAA, SAP, or ISPM routes.
 
 ## Phase 1: Baseline and Contracts
 
@@ -35,7 +35,7 @@ Exit criteria:
 ## Phase 3: Portal Experience
 
 - Implement the `ANLAN.STORE` project directory.
-- Include PulseBoard, SAA, SAP, and ISPM as launchable entries.
+- Include PulseBoard, Career Radar, SAA, SAP, and ISPM as launchable entries.
 - Use real PulseBoard screenshots as visual evidence.
 - Add working `All`, `Systems`, and `Study` filters.
 - Add same-origin availability checks with readable loading, online, and unavailable states.
@@ -70,7 +70,7 @@ Exit criteria:
   - `/demo/openapi.json` to `/openapi.json`
   - `/demo/health/*` to `/health/*`
   - `/demo/api/v1/*` to `/v1/*`
-- Preserve the existing aliases for `/saa/`, `/sap/`, and `/ispm/`.
+- Preserve the existing Career Radar reverse proxy at `/jobs/` and aliases for `/saa/`, `/sap/`, and `/ispm/`.
 - Preserve retired root PulseBoard paths as explicit `301` compatibility redirects into `/demo/`, while keeping the application itself mounted only under the new route contract.
 
 Exit criteria:
@@ -84,7 +84,7 @@ Exit criteria:
 - Add portal artifact verification.
 - Update public-surface verification for the root portal and `/demo/*` routes.
 - Update CI to build and diff all generated artifacts.
-- Update the Tencent deployment workflow to back up and install the portal and `/demo/` artifacts atomically.
+- Update the Tencent deployment workflow to back up and install the portal, `/demo/` artifacts, and both staging Nginx site files atomically. The current host uses a regular `/etc/nginx/sites-enabled/anlan.conf` file rather than a symlink, so both copies are managed until the host layout is deliberately normalized.
 - Update the deployment runbook with upload, backup, install, Nginx test, reload, verification, and rollback steps.
 - Update README route references that describe the public deployment.
 
@@ -114,7 +114,7 @@ Exit criteria:
 - Install the new artifacts.
 - Run `nginx -t` before reloading Nginx.
 - Run automated public verification.
-- Manually inspect the live root, `/demo/`, `/demo/frontend/`, and all study routes.
+- Manually inspect the live root, `/demo/`, `/demo/frontend/`, `/jobs/`, and all study routes.
 - Record any work that remains outside the repository.
 
 The task is complete only when the live domain reflects the route contract and the rendered result has been verified. A locally complete implementation is not the same as a completed live migration.
