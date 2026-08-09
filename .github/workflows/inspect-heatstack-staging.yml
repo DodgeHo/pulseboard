@@ -40,37 +40,68 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-      - name: Inspect HeatStack routes and assets
+      - name: Inspect HeatStack runtime and build layout
         run: |
           set -euo pipefail
           ssh pulseboard-staging bash -se <<'REMOTE'
           set -euo pipefail
+          app=/var/www/anlan.store/heatstack
 
           echo '=== Current Nginx HeatStack markers ==='
-          sudo grep -n -i -C 3 'heatstack' /etc/nginx/sites-available/anlan.conf || true
+          sudo grep -n -i -C 4 'heatstack' /etc/nginx/sites-available/anlan.conf || true
 
-          echo '=== HeatStack markers in recent Nginx backups ==='
-          while IFS= read -r backup; do
-            if sudo grep -qi 'heatstack' "$backup"; then
-              echo "--- $backup"
-              sudo grep -n -i -C 5 'heatstack' "$backup" || true
-            fi
-          done < <(sudo find /etc/nginx/sites-available -maxdepth 1 -type f -name 'anlan.conf.backup-*' -printf '%T@ %p\n' | sort -nr | head -n 20 | cut -d' ' -f2-)
+          echo '=== HeatStack service metadata (environment values intentionally omitted) ==='
+          sudo systemctl show heatstack-api.service \
+            --property=Id \
+            --property=LoadState \
+            --property=ActiveState \
+            --property=SubState \
+            --property=FragmentPath \
+            --property=WorkingDirectory \
+            --property=ExecStart \
+            --property=EnvironmentFiles \
+            --no-pager || true
 
-          echo '=== Candidate HeatStack directories ==='
-          for path in /var/www/html/heatstack /var/www/heatstack /srv/heatstack /opt/heatstack "$HOME/heatstack"; do
-            if [ -e "$path" ]; then
-              sudo find "$path" -maxdepth 2 -printf '%y %p\n' | head -n 120
-            else
-              echo "missing $path"
-            fi
-          done
+          echo '=== HeatStack unit structure (Environment lines redacted) ==='
+          sudo systemctl cat heatstack-api.service --no-pager 2>/dev/null \
+            | sed -E '/^[[:space:]]*Environment=/c\Environment=<redacted>' \
+            | sed -E '/^[[:space:]]*EnvironmentFile=/c\EnvironmentFile=<configured; path omitted>' \
+            || true
 
-          echo '=== HeatStack-named files under common deployment roots ==='
-          sudo find /var/www /srv /opt "$HOME" -maxdepth 5 \
-            \( -iname '*heatstack*' -o -path '*/heatstack/*' \) -printf '%y %p\n' 2>/dev/null | head -n 240 || true
+          echo '=== Listening TCP sockets ==='
+          sudo ss -ltnp || true
 
-          echo '=== HeatStack services and containers ==='
-          sudo systemctl list-units --type=service --all --no-pager | grep -i heatstack || true
-          sudo docker ps -a --format '{{.Names}}\t{{.Image}}\t{{.Ports}}' | grep -i heatstack || true
+          echo '=== HeatStack top-level and build-related files ==='
+          if [ ! -d "$app" ]; then
+            echo "missing $app"
+            exit 0
+          fi
+          sudo find "$app" -maxdepth 3 \
+            \( -path '*/node_modules' -o -path '*/.git' \) -prune -o \
+            \( -type d -o -name 'package.json' -o -name 'astro.config.*' -o -name 'vite.config.*' -o -name 'index.html' -o -name 'manifest.json' \) \
+            -printf '%y %p\n' | head -n 320
+
+          echo '=== package.json ==='
+          sudo sed -n '1,240p' "$app/package.json" 2>/dev/null || true
+
+          echo '=== Astro/Vite config (secret files are never read) ==='
+          while IFS= read -r config; do
+            echo "--- $config"
+            sudo sed -n '1,240p' "$config"
+          done < <(sudo find "$app" -maxdepth 2 -type f \( -name 'astro.config.*' -o -name 'vite.config.*' \) -print)
+
+          echo '=== Dist index markers ==='
+          while IFS= read -r index; do
+            echo "--- $index"
+            sudo grep -Eio '<title>[^<]{0,160}</title>|<meta[^>]+name=["'"']description["'"'][^>]*>|data-[a-z0-9_-]+=["'"'][^"'"']+["'"']' "$index" | head -n 40 || true
+          done < <(sudo find "$app" -maxdepth 4 -type f -path '*/dist*/index.html' -print)
+
+          echo '=== Local HTTP probes for listening loopback ports ==='
+          while IFS= read -r port; do
+            [ -n "$port" ] || continue
+            printf -- '--- http://127.0.0.1:%s/\n' "$port"
+            curl -sS --max-time 3 -D - -o /tmp/heatstack-probe-body "http://127.0.0.1:$port/" | head -n 20 || true
+            head -c 300 /tmp/heatstack-probe-body 2>/dev/null | tr '\n' ' ' || true
+            printf '\n'
+          done < <(sudo ss -ltnH | awk '$4 ~ /127\.0\.0\.1:/ {sub(/^.*:/, "", $4); print $4}' | sort -nu)
           REMOTE
