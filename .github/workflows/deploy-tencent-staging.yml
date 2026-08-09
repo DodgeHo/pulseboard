@@ -213,7 +213,7 @@ jobs:
           sudo systemctl reload nginx
 
           echo "Effective Nginx sources and Anlan route markers:"
-          sudo nginx -T 2>&1 | grep -E '^# configuration file|server_name anlan\.store|location = /demo|location /demo/|location = /jobs|location /jobs/' || true
+          sudo nginx -T 2>&1 | grep -E '^# configuration file|server_name anlan\.store|location = /heatstack|location = /demo|location /demo/|location = /jobs|location /jobs/' || true
           sudo systemctl show nginx --property=MainPID --property=ExecStart --no-pager
 
           local_demo_status=$(curl -k -sS -o /dev/null -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/demo/)
