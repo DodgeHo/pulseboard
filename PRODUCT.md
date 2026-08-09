@@ -51,6 +51,8 @@ The project portal supports four complete interface locales:
 
 Locale selection is visible, keyboard-operable, persisted only after an explicit visitor choice, and updates the document language. The portal must not infer a first-visit locale from browser preferences, IP location, or route.
 
+Shareable language hashes provide deterministic deep links: `/#en`, `/#zh-hant`, `/#zh-hans`, and `/#ja`. The shorter `/#zh` alias resolves to Simplified Chinese. A recognized language hash overrides a stored preference for that visit without persisting a new preference; unrelated hashes such as `#project-heatstack` keep their existing anchor behavior.
+
 ## Project Inventory
 
 ### HeatStack

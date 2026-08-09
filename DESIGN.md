@@ -85,7 +85,7 @@ The palette uses a deep midnight base and four high-energy signal families, rest
 ### Secondary
 
 - **Ultraviolet Channel (`#8a55ff`):** selected project-filter state, SAP, and VMD.
-- **Electric Orange (`#ff8f1f`):** attention state, live marker, selected locale, Career Radar, PAL4, and the archived ISPM record.
+- **Electric Orange (`#ff8f1f`):** attention state, live marker, selected locale, HeatStack, Career Radar, PAL4, and the archived ISPM record.
 - **Hot Amber (`#ffbd4a`):** the prioritized live-work action and highly visible focus outline.
 
 ### Neutral
@@ -108,6 +108,8 @@ The palette uses a deep midnight base and four high-energy signal families, rest
 
 Inter supports the four portal locales and compressed project names; the mono stack gives routes, technology tags, statuses, directory keywords, and controls an instrument-readout character without turning explanatory prose into terminal text.
 
+Recognized language hashes (`#en`, `#zh-hant`, `#zh-hans`, and `#ja`) provide shareable locale entry points, with `#zh` as a Simplified Chinese alias. They override stored preference for the current visit without interfering with project anchors.
+
 ### Hierarchy
 
 - **Display:** A tightly tracked, compact-line-height identity statement carries the portal's purpose once. Every locale substitutes a localized personal introduction, not a machine-selected locale.
@@ -125,7 +127,7 @@ The bordered, centered portal shell has a maximum width of `1540px`. On desktop,
 
 The directory is a numbered list of ten records. Each record exposes a concise technical-keyword rail, such as `Astro · AI Skills · Windows CLI` for HeatStack, `Hono · PostgreSQL · Redis` for PulseBoard, `invite-only · inbox · digests` for Career Radar, `AWS · questions · progress` for SAA, `C++ · Eigen · VMD` for VMD_cpp, `Python · localization · MIT` for PAL4, and `Python · robotics · RRT` for Dynamic RRT Connect.
 
-The Project Scope is deliberately non-uniform on desktop: HeatStack leads as a full-width orange feature record; PulseBoard follows as the full-width evidence anchor with the largest evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors PulseBoard, Career Radar, SAA, SAP, and VMD over the smaller archive and secondary source records.
+The Project Scope is deliberately non-uniform on desktop: HeatStack leads as a full-width orange feature record; PulseBoard follows as the full-width evidence anchor with the largest evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors HeatStack, PulseBoard, Career Radar, SAA, SAP, and VMD over the smaller archive and secondary source records.
 
 At `1120px`, the rail reduces to `216px`, the identity copy precedes the live scope, and ordinary records resolve to two six-column tracks. At `820px` and below, the page’s semantic and visual order is: top bar, identity/live-scope main field, compact project-directory rail, then the project index. The rail becomes three columns and keeps all ten records visible at this width. At `510px` and below, the explicit profile link and locale selector each take a row, the rail becomes two columns and continues to show all ten records, hero actions stack full width, and project records resolve to a single readable column. The responsive contract is no page-level horizontal overflow at 360px, 768px, 1280px, or 1440px.
 

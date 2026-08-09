@@ -44,6 +44,12 @@ const requiredText = [
   "layout: 'feature'",
   "layout: 'research'",
   "const localeStorageKey = 'anlan.portal.locale'",
+  "'#en': 'en'",
+  "'#zh': 'zh-Hans'",
+  "'#zh-hant': 'zh-Hant'",
+  "'#zh-hans': 'zh-Hans'",
+  "'#ja': 'ja'",
+  "window.addEventListener('hashchange'",
   "document.documentElement.lang = currentLocale",
   "data:image/png;base64,"
 ];

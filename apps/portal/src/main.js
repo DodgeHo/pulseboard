@@ -1,6 +1,8 @@
 (() => {
   const profileUrl = 'https://www.linkedin.com/in/lang-he-a94655120/';
   const localeStorageKey = 'anlan.portal.locale';
+  const localeHashAliases = { '#en': 'en', '#zh': 'zh-Hans', '#zh-hant': 'zh-Hant', '#zh-hans': 'zh-Hans', '#ja': 'ja' };
+  const localeCanonicalHashes = { en: '#en', 'zh-Hant': '#zh-hant', 'zh-Hans': '#zh-hans', ja: '#ja' };
   const projectColors = { cyan: 'var(--cyan)', cobalt: 'var(--cobalt)', violet: 'var(--violet)', orange: 'var(--orange)' };
 
   const copy = {
@@ -257,6 +259,8 @@
     } catch { return 'en'; }
   };
 
+  const localeFromHash = () => localeHashAliases[window.location.hash.toLowerCase()] ?? null;
+
   const renderRail = () => {
     railList.innerHTML = projects.map((project, index) => {
       const keywords = t().railKeywords[project.id] ?? project.railKeywords;
@@ -364,7 +368,7 @@
     await Promise.all(routes.map(async (path) => setRouteStatus(path, (await fetchRoute(path)) ? 'online' : 'unavailable')));
   };
 
-  const applyLocale = (locale, persist = false) => {
+  const applyLocale = (locale, { persist = false, syncHash = false } = {}) => {
     currentLocale = copy[locale] ? locale : 'en';
     document.documentElement.lang = currentLocale;
     document.title = t().documentTitle;
@@ -397,6 +401,10 @@
     applyFilter(currentFilter);
     if (persist) {
       try { window.localStorage.setItem(localeStorageKey, currentLocale); } catch { /* Preference persistence is optional. */ }
+    }
+    if (syncHash) {
+      const canonicalHash = localeCanonicalHashes[currentLocale];
+      if (canonicalHash && window.location.hash !== canonicalHash) window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${canonicalHash}`);
     }
   };
 
@@ -470,10 +478,14 @@
     return () => window.cancelAnimationFrame(frame);
   };
 
-  localeButtons.forEach((button) => button.addEventListener('click', () => applyLocale(button.dataset.locale || 'en', true)));
+  localeButtons.forEach((button) => button.addEventListener('click', () => applyLocale(button.dataset.locale || 'en', { persist: true, syncHash: true })));
   filterButtons.forEach((button) => button.addEventListener('click', () => applyFilter(button.dataset.filter || 'all')));
+  window.addEventListener('hashchange', () => {
+    const hashLocale = localeFromHash();
+    if (hashLocale) applyLocale(hashLocale);
+  });
   document.querySelector('.profile-link').href = profileUrl;
-  applyLocale(safeStoredLocale());
+  applyLocale(localeFromHash() || safeStoredLocale());
   drawWave();
   drawLattice();
 })();

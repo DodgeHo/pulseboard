@@ -44,6 +44,7 @@ Explored visual systems:
 - Canvas is decorative; the same state and project data remain available as semantic HTML.
 - Active filters and selected locale are represented through `aria-pressed`; focus remains visible at high contrast.
 - The English default is set before scripts execute. An explicit choice persists in local storage and is never guessed from browser locale.
+- Shareable hashes `#en`, `#zh-hant`, `#zh-hans`, and `#ja` select their locale on load and hash changes; `#zh` aliases Simplified Chinese while project anchors remain unaffected.
 - All target sizes—360px, 768px, 1280px, and 1440px—must avoid horizontal overflow and preserve at least 44px target height for primary actions.
 
 ## Implementation Plan
@@ -58,6 +59,6 @@ Explored visual systems:
 ## Completion Evidence
 
 - The live root page visibly has the richer Signal Lattice direction, introduces Dodge Ho / 道安澜, presents HeatStack as project 01, opens the promoted live routes plus the four GitHub repositories, and does not expose an ISPM click target.
-- English is the default and Traditional Chinese, Simplified Chinese, and Japanese selections translate the full portal shell and project data.
+- English is the default; Traditional Chinese, Simplified Chinese, and Japanese selections translate the full portal shell and project data, and each locale has a verified shareable hash URL.
 - Existing `/heatstack/`, `/demo/`, `/jobs/`, `/saa/`, `/sap/`, and `/ispm/` paths remain online, while legacy PulseBoard redirects retain their contract.
 - The final staging workflow and public-surface verifier pass on the deployed commit.
