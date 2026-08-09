@@ -48,6 +48,7 @@ async function handle(request, response) {
   const path = url.pathname;
 
   if (path === '/demo') return redirect(response, '/demo/');
+  if (path === '/heatstack') return redirect(response, '/heatstack/');
   if (path === '/jobs') return redirect(response, '/jobs/', 308);
   if (path === '/jobs/') return redirect(response, '/jobs/login', 303);
   if (path === '/demo/frontend') return redirect(response, '/demo/frontend/');
@@ -78,6 +79,10 @@ async function handle(request, response) {
   }
   if (path === '/demo/api/v1/workspaces') {
     return send(response, 401, 'application/json; charset=utf-8', JSON.stringify({ error: 'unauthorized' }));
+  }
+  if (path === '/heatstack/') {
+    const html = '<!doctype html><html lang="zh-CN"><head><title>AI 热栈 HeatStack</title></head><body><main><strong>HeatStack</strong><span>AI 热栈</span></main></body></html>';
+    return send(response, 200, 'text/html; charset=utf-8', html);
   }
   if (path === '/jobs/login') {
     const html = '<!doctype html><html lang="en" data-base-path="/jobs"><head><title>Career Radar</title></head><body><main>Invite-only Career Radar login shell</main></body></html>';

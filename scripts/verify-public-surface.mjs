@@ -18,6 +18,7 @@ const retiredStyleNeedles = [
   'Evidence Rail'
 ];
 const portalKeywordNeedles = [
+  "railKeywords: ['Astro', 'AI Skills', 'Windows CLI']",
   "railKeywords: ['Hono', 'PostgreSQL', 'Redis']",
   "railKeywords: ['invite-only', 'inbox', 'digests']",
   "railKeywords: ['AWS', 'questions', 'progress']",
@@ -102,13 +103,24 @@ async function verifyPortal() {
   expect('portal links the supplied personal LinkedIn profile clearly', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('My LinkedIn profile') && body.includes('LinkedIn profile'));
   expect('portal includes complete four-language locale controls', body.includes('data-locale="en"') && body.includes('data-locale="zh-Hant"') && body.includes('data-locale="zh-Hans"') && body.includes('data-locale="ja"'));
   expect('portal defaults to English and only persists an explicit locale choice', body.includes("let currentLocale = 'en'") && body.includes("const localeStorageKey = 'anlan.portal.locale'") && body.includes('safeStoredLocale') && body.includes('document.documentElement.lang = currentLocale'));
-  expect('portal retains PulseBoard and Career Radar routes', body.includes("route: '/demo/'") && body.includes("route: '/jobs/'") && body.includes('PulseBoard') && body.includes('Career Radar'));
+  expect('portal retains HeatStack, PulseBoard, and Career Radar routes', body.includes("route: '/heatstack/'") && body.includes('HeatStack') && body.includes('AI 热栈') && body.includes("route: '/demo/'") && body.includes("route: '/jobs/'") && body.includes('PulseBoard') && body.includes('Career Radar'));
   expect('portal retains promoted study routes but deliberately has no ISPM route action', body.includes("route: '/saa/'") && body.includes("route: '/sap/'") && !body.includes("route: '/ispm/'") && !body.includes('href="/ispm/"') && !body.includes('href="#project-ispm"'));
   expect('portal includes verified GitHub source projects', body.includes('VMD_cpp') && body.includes('PAL4_EnglishMod') && body.includes('https://github.com/DodgeHo/VMD_cpp') && body.includes('https://github.com/DodgeHo/PAL4_EnglishMod') && body.includes('IELTS_writing_GPT') && body.includes('dynamic_rrt_connect'));
-  expect('portal exposes all nine technical keyword sets and non-uniform project hierarchy', portalKeywordNeedles.every((needle) => body.includes(needle)) && portalLocaleMarkers.every((marker) => body.includes(marker)) && body.includes("layout: 'feature'") && body.includes("layout: 'major'") && body.includes("layout: 'study-small'") && body.includes("layout: 'quiet'") && body.includes("layout: 'research'") && body.includes("layout: 'source-compact'") && body.includes("layout: 'source-wide'"));
+  expect('portal exposes all ten technical keyword sets and non-uniform project hierarchy', portalKeywordNeedles.every((needle) => body.includes(needle)) && portalLocaleMarkers.every((marker) => body.includes(marker)) && body.includes("layout: 'feature'") && body.includes("layout: 'major'") && body.includes("layout: 'study-small'") && body.includes("layout: 'quiet'") && body.includes("layout: 'research'") && body.includes("layout: 'source-compact'") && body.includes("layout: 'source-wide'"));
   expect('portal includes working filter controls', body.includes('data-filter="source"') && body.includes('applyFilter'));
   expect('portal includes both PulseBoard captures', (body.match(/data:image\/png;base64,/g) ?? []).length === 2);
   expect('portal has no unresolved build placeholders', !/__PORTAL_[A-Z_]+__/.test(body) && !/__PULSEBOARD_[A-Z_]+__/.test(body));
+}
+
+async function verifyHeatStack() {
+  const canonical = await fetchText('/heatstack', { redirect: 'manual' });
+  expect('/heatstack redirects', canonical.response.status >= 300 && canonical.response.status < 400, canonical.response.status + ' ' + canonical.response.statusText);
+  expect('/heatstack redirects to /heatstack/', (canonical.response.headers.get('location') ?? '').endsWith('/heatstack/'), canonical.response.headers.get('location') ?? '<missing>');
+
+  const { response, body } = await fetchText('/heatstack/', { accept: 'text/html' });
+  expect('HeatStack route returns 200', response.status === 200, response.status + ' ' + response.statusText);
+  expect('HeatStack route is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
+  expect('HeatStack identity is present', body.includes('HeatStack') && body.includes('AI 热栈'));
 }
 
 async function verifyCareerRadar() {
@@ -218,6 +230,7 @@ try {
   await verifyPulseBoard();
   await verifyCustomerSurface();
   await verifyBackendSurface();
+  await verifyHeatStack();
   await verifyCareerRadar();
   await verifyStudyRoutes();
   await verifyLegacyRedirects();
@@ -235,4 +248,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log('Anlan project portal, Career Radar, and PulseBoard demo verified.');
+console.log('Anlan project portal, HeatStack, Career Radar, and PulseBoard demo verified.');

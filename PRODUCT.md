@@ -25,6 +25,7 @@ PulseBoard remains a complete project, but its public surface moves under `/demo
 | Route | Purpose |
 | --- | --- |
 | `/` | Anlan project portal |
+| `/heatstack/` | HeatStack bilingual AI engineering learning hub |
 | `/demo/` | PulseBoard Live Ops Console |
 | `/demo/frontend/` | PulseBoard customer-facing product surface |
 | `/demo/docs` | PulseBoard Scalar API reference |
@@ -51,6 +52,10 @@ The project portal supports four complete interface locales:
 Locale selection is visible, keyboard-operable, persisted only after an explicit visitor choice, and updates the document language. The portal must not infer a first-visit locale from browser preferences, IP location, or route.
 
 ## Project Inventory
+
+### HeatStack
+
+A bilingual AI engineering learning hub deployed at `/heatstack/`. It connects daily AI Skill trends, safer local installation, Windows CLI workflows, structured practice, portfolio projects, and interview preparation. It is the first project in the portal directory and Project Scope.
 
 ### PulseBoard
 
@@ -98,11 +103,11 @@ The existing `/ispm/` route remains deployed and covered by public-route verific
 
 - The root route is visibly `ANLAN.STORE`, not PulseBoard.
 - The root page introduces Dodge Ho / 道安澜 and frames the work as a public open-source project space in every locale.
-- PulseBoard, Career Radar, SAA, SAP, and the four featured GitHub projects are findable from the root page; the deployed ISPM route remains unlinked by owner choice.
+- HeatStack, PulseBoard, Career Radar, SAA, SAP, and the four featured GitHub projects are findable from the root page; the deployed ISPM route remains unlinked by owner choice.
 - The header offers a clearly named, keyboard-accessible **My LinkedIn profile** link using the supplied public URL.
 - First-time visitors see English; each of the four locale choices translates all portal UI, project descriptions, filters, controls, and availability messages.
 - PulseBoard is fully reachable under `/demo/` with no accidental dependency on root paths.
-- Existing `/jobs/`, `/saa/`, `/sap/`, and `/ispm/` routes continue to work.
+- Existing `/heatstack/`, `/jobs/`, `/saa/`, `/sap/`, and `/ispm/` routes continue to work.
 - The portal uses real PulseBoard captures as visual evidence.
 - Desktop and mobile layouts do not overlap, clip long route labels, or hide primary actions.
 - Build artifacts and Nginx configuration are reproducible from source.

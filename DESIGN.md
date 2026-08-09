@@ -123,11 +123,11 @@ Inter supports the four portal locales and compressed project names; the mono st
 
 The bordered, centered portal shell has a maximum width of `1540px`. On desktop, a `262px` project rail occupies the left side of a two-column scope layout. The adjacent first-viewport main area splits into an identity/copy field and live-scope field. The project index begins under the first viewport in the main column; it is not a disconnected card deck.
 
-The directory is a numbered list of nine records. Each record exposes a concise technical-keyword rail, such as `Hono · PostgreSQL · Redis` for PulseBoard, `invite-only · inbox · digests` for Career Radar, `AWS · questions · progress` for SAA, `C++ · Eigen · VMD` for VMD_cpp, `Python · localization · MIT` for PAL4, and `Python · robotics · RRT` for Dynamic RRT Connect.
+The directory is a numbered list of ten records. Each record exposes a concise technical-keyword rail, such as `Astro · AI Skills · Windows CLI` for HeatStack, `Hono · PostgreSQL · Redis` for PulseBoard, `invite-only · inbox · digests` for Career Radar, `AWS · questions · progress` for SAA, `C++ · Eigen · VMD` for VMD_cpp, `Python · localization · MIT` for PAL4, and `Python · robotics · RRT` for Dynamic RRT Connect.
 
-The Project Scope is deliberately non-uniform on desktop: PulseBoard is the full-width feature record with the largest title and evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors PulseBoard, Career Radar, SAA, SAP, and VMD over the smaller archive and secondary source records.
+The Project Scope is deliberately non-uniform on desktop: HeatStack leads as a full-width orange feature record; PulseBoard follows as the full-width evidence anchor with the largest evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors PulseBoard, Career Radar, SAA, SAP, and VMD over the smaller archive and secondary source records.
 
-At `1120px`, the rail reduces to `216px`, the identity copy precedes the live scope, and ordinary records resolve to two six-column tracks. At `820px` and below, the page’s semantic and visual order is: top bar, identity/live-scope main field, compact project-directory rail, then the project index. The rail becomes three columns and hides entries seven through nine at this width. At `510px` and below, the explicit profile link and locale selector each take a row, the rail becomes two columns and shows all nine records, hero actions stack full width, and project records resolve to a single readable column. The responsive contract is no page-level horizontal overflow at 360px, 768px, 1280px, or 1440px.
+At `1120px`, the rail reduces to `216px`, the identity copy precedes the live scope, and ordinary records resolve to two six-column tracks. At `820px` and below, the page’s semantic and visual order is: top bar, identity/live-scope main field, compact project-directory rail, then the project index. The rail becomes three columns and keeps all ten records visible at this width. At `510px` and below, the explicit profile link and locale selector each take a row, the rail becomes two columns and continues to show all ten records, hero actions stack full width, and project records resolve to a single readable column. The responsive contract is no page-level horizontal overflow at 360px, 768px, 1280px, or 1440px.
 
 ## Elevation & Depth
 
@@ -154,8 +154,8 @@ The form language is rectilinear and precise. Controls, locale segments, tags, i
 
 - **Directory rail:** The numbered, color-barred rail is a scan/navigation instrument with project-specific technology keywords. Linked records move to their matching Project Scope evidence entry rather than directly navigating away.
 - **ISPM archive record:** ISPM Practice remains in the directory and Scope as a subdued, non-clickable root record with `ITSM · study · unlinked` keywords. It has no root-page route, status probe, or action. Its deployed `/ispm/` application remains part of the wider public route contract, but the owner does not promote or link to it from the root portal.
-- **Project records:** The nine records are PulseBoard, Career Radar, SAA Practice, SAP Practice, ISPM Practice, VMD_cpp, PAL4 translation / `PAL4_EnglishMod`, IELTS writing GPT / `IELTS_writing_GPT`, and Dynamic RRT Connect / `dynamic_rrt_connect`.
-- **Live route records:** PulseBoard uses `/demo/` and additionally exposes `/demo/docs`; Career Radar uses `/jobs/`; SAA uses `/saa/`; SAP uses `/sap/`. These same-origin route records receive asynchronous availability labels.
+- **Project records:** The ten records are HeatStack / `AI 热栈`, PulseBoard, Career Radar, SAA Practice, SAP Practice, ISPM Practice, VMD_cpp, PAL4 translation / `PAL4_EnglishMod`, IELTS writing GPT / `IELTS_writing_GPT`, and Dynamic RRT Connect / `dynamic_rrt_connect`.
+- **Live route records:** HeatStack uses `/heatstack/`; PulseBoard uses `/demo/` and additionally exposes `/demo/docs`; Career Radar uses `/jobs/`; SAA uses `/saa/`; SAP uses `/sap/`. These same-origin route records receive asynchronous availability labels.
 - **Source records:** VMD_cpp, PAL4 translation, IELTS writing GPT, and Dynamic RRT Connect link directly to their respective `DodgeHo` GitHub repositories with an external action. They do not receive route-health probes.
 - **PulseBoard evidence:** Only PulseBoard expands with semantic controls for its real Live Ops and customer-surface captures. The image preview supports the record; it never replaces the description, route, technical tags, or action.
 
@@ -179,7 +179,7 @@ The form language is rectilinear and precise. Controls, locale segments, tags, i
 - Keep the colorful midnight/cobalt/violet/cyan/electric-orange signal system and assign color purposefully.
 - Introduce Dodge Ho / 道安澜 as the person behind this public open-source work in all four locales; use `道安瀾（ドッジ・ホー）` in Japanese identity copy.
 - Keep **My LinkedIn profile** explicit, first-person, and visually accompanied by a LinkedIn mark rather than presenting it as a generic social destination.
-- Retain technical-keyword rails and non-uniform project weight: PulseBoard first, Career Radar/SAA/SAP/VMD prominent, ISPM subdued and unlinked.
+- Retain technical-keyword rails and non-uniform project weight: HeatStack first, PulseBoard as the evidence anchor, Career Radar/SAA/SAP/VMD prominent, ISPM subdued and unlinked.
 - Keep semantic route and repository information, `aria-pressed` controls, visible focus, live route status, and reduced-motion behavior.
 
 ### Don't
