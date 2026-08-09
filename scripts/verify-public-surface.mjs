@@ -121,7 +121,17 @@ async function verifyHeatStack() {
   const { response, body } = await fetchText('/heatstack/', { accept: 'text/html' });
   expect('HeatStack route returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect('HeatStack route is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('HeatStack identity is present', body.includes('HeatStack') && body.includes('AI 热栈'));
+  expect(
+    'HeatStack route serves the standalone Astro app rather than the portal fallback',
+    body.includes('<title>AI ') &&
+      body.includes('HeatStack —') &&
+      body.includes('href="/heatstack/favicon.svg"') &&
+      !body.includes('id="signal-lattice"')
+  );
+
+  const health = await fetchJson('/heatstack/api/v1/health');
+  expect('HeatStack API health returns 200', health.response.status === 200, health.response.status + ' ' + health.response.statusText);
+  expect('HeatStack API identifies the running service', health.json?.ok === true && health.json?.service === 'heatstack-api', health.body.slice(0, 200));
 }
 
 async function verifyCareerRadar() {

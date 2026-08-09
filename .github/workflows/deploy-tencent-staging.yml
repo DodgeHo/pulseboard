@@ -213,7 +213,7 @@ jobs:
           sudo systemctl reload nginx
 
           echo "Effective Nginx sources and Anlan route markers:"
-          sudo nginx -T 2>&1 | grep -E '^# configuration file|server_name anlan\.store|location = /heatstack|location = /demo|location /demo/|location = /jobs|location /jobs/' || true
+          sudo nginx -T 2>&1 | grep -E '^# configuration file|server_name anlan\.store|location = /heatstack|location \^~ /heatstack/|location \^~ /heatstack/api/|location = /demo|location /demo/|location = /jobs|location /jobs/' || true
           sudo systemctl show nginx --property=MainPID --property=ExecStart --no-pager
 
           local_demo_status=$(curl -k -sS -o /dev/null -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/demo/)
@@ -222,9 +222,35 @@ jobs:
             echo "Reloaded Nginx is not serving the reviewed /demo/ contract locally." >&2
             exit 1
           fi
+
+          local_heatstack_status=$(curl -k -sS -o /tmp/heatstack-page.html -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/heatstack/)
+          printf 'Local Nginx /heatstack/ status: %s\n' "$local_heatstack_status"
+          if [ "$local_heatstack_status" != "200" ]; then
+            echo "Reloaded Nginx returned a non-200 status for HeatStack." >&2
+            exit 1
+          fi
+          if ! grep -q '<title>AI .*HeatStack' /tmp/heatstack-page.html; then
+            echo "Reloaded Nginx did not return the HeatStack page title." >&2
+            exit 1
+          fi
+          if ! grep -q 'href="/heatstack/favicon.svg"' /tmp/heatstack-page.html; then
+            echo "Reloaded Nginx did not return the subpath-aware HeatStack asset base." >&2
+            exit 1
+          fi
+          if grep -q 'id="signal-lattice"' /tmp/heatstack-page.html; then
+            echo "Reloaded Nginx returned the portal fallback instead of HeatStack." >&2
+            exit 1
+          fi
+
+          local_heatstack_api_status=$(curl -k -sS -o /tmp/heatstack-health.json -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/heatstack/api/v1/health)
+          printf 'Local Nginx /heatstack/api/v1/health status: %s\n' "$local_heatstack_api_status"
+          if [ "$local_heatstack_api_status" != "200" ] || ! grep -q '"service":"heatstack-api"' /tmp/heatstack-health.json; then
+            echo "Reloaded Nginx is not proxying the HeatStack API contract." >&2
+            exit 1
+          fi
           REMOTE
 
-      - name: Verify portal, PulseBoard demo, and backend surface
+      - name: Verify portal, HeatStack, PulseBoard demo, and backend surface
         env:
           PUBLIC_BASE_URL: ${{ vars.TENCENT_STAGING_PUBLIC_BASE_URL || 'https://anlan.store' }}
         run: pnpm verify:public

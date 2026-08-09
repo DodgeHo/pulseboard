@@ -81,8 +81,11 @@ async function handle(request, response) {
     return send(response, 401, 'application/json; charset=utf-8', JSON.stringify({ error: 'unauthorized' }));
   }
   if (path === '/heatstack/') {
-    const html = '<!doctype html><html lang="zh-CN"><head><title>AI 热栈 HeatStack</title></head><body><main><strong>HeatStack</strong><span>AI 热栈</span></main></body></html>';
+    const html = '<!doctype html><html lang="zh-CN"><head><title>AI 热栈 HeatStack — 把 AI 热度变成工程能力</title><link rel="icon" href="/heatstack/favicon.svg"></head><body><main><strong>HeatStack</strong><span>AI 热栈</span></main></body></html>';
     return send(response, 200, 'text/html; charset=utf-8', html);
+  }
+  if (path === '/heatstack/api/v1/health') {
+    return send(response, 200, 'application/json; charset=utf-8', JSON.stringify({ ok: true, service: 'heatstack-api', ranking: { entries: [] } }));
   }
   if (path === '/jobs/login') {
     const html = '<!doctype html><html lang="en" data-base-path="/jobs"><head><title>Career Radar</title></head><body><main>Invite-only Career Radar login shell</main></body></html>';
