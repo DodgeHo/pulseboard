@@ -1,0 +1,76 @@
+name: Inspect HeatStack Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    environment: tencent-staging
+    permissions:
+      contents: read
+    steps:
+      - name: Configure SSH
+        env:
+          STAGING_HOST: ${{ secrets.TENCENT_STAGING_HOST }}
+          STAGING_USER: ${{ secrets.TENCENT_STAGING_USER }}
+          STAGING_SSH_KEY: ${{ secrets.TENCENT_STAGING_SSH_KEY }}
+          STAGING_KNOWN_HOSTS: ${{ secrets.TENCENT_STAGING_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$STAGING_HOST"
+          test -n "$STAGING_USER"
+          test -n "$STAGING_SSH_KEY"
+          test -n "$STAGING_KNOWN_HOSTS"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$STAGING_SSH_KEY" > ~/.ssh/pulseboard_staging
+          chmod 600 ~/.ssh/pulseboard_staging
+          printf '%s\n' "$STAGING_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          cat > ~/.ssh/config <<EOF
+          Host pulseboard-staging
+            HostName $STAGING_HOST
+            User $STAGING_USER
+            IdentityFile ~/.ssh/pulseboard_staging
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Inspect HeatStack routes and assets
+        run: |
+          set -euo pipefail
+          ssh pulseboard-staging bash -se <<'REMOTE'
+          set -euo pipefail
+
+          echo '=== Current Nginx HeatStack markers ==='
+          sudo grep -n -i -C 3 'heatstack' /etc/nginx/sites-available/anlan.conf || true
+
+          echo '=== HeatStack markers in recent Nginx backups ==='
+          while IFS= read -r backup; do
+            if sudo grep -qi 'heatstack' "$backup"; then
+              echo "--- $backup"
+              sudo grep -n -i -C 5 'heatstack' "$backup" || true
+            fi
+          done < <(sudo find /etc/nginx/sites-available -maxdepth 1 -type f -name 'anlan.conf.backup-*' -printf '%T@ %p\n' | sort -nr | head -n 20 | cut -d' ' -f2-)
+
+          echo '=== Candidate HeatStack directories ==='
+          for path in /var/www/html/heatstack /var/www/heatstack /srv/heatstack /opt/heatstack "$HOME/heatstack"; do
+            if [ -e "$path" ]; then
+              sudo find "$path" -maxdepth 2 -printf '%y %p\n' | head -n 120
+            else
+              echo "missing $path"
+            fi
+          done
+
+          echo '=== HeatStack-named files under common deployment roots ==='
+          sudo find /var/www /srv /opt "$HOME" -maxdepth 5 \
+            \( -iname '*heatstack*' -o -path '*/heatstack/*' \) -printf '%y %p\n' 2>/dev/null | head -n 240 || true
+
+          echo '=== HeatStack services and containers ==='
+          sudo systemctl list-units --type=service --all --no-pager | grep -i heatstack || true
+          sudo docker ps -a --format '{{.Names}}\t{{.Image}}\t{{.Ports}}' | grep -i heatstack || true
+          REMOTE
