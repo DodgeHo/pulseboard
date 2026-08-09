@@ -76,32 +76,45 @@ jobs:
             echo "missing $app"
             exit 0
           fi
-          sudo find "$app" -maxdepth 3 \
+          sudo find "$app" -maxdepth 4 \
             \( -path '*/node_modules' -o -path '*/.git' \) -prune -o \
             \( -type d -o -name 'package.json' -o -name 'astro.config.*' -o -name 'vite.config.*' -o -name 'index.html' -o -name 'manifest.json' \) \
-            -printf '%y %p\n' | head -n 320
+            -printf '%y %p\n' | head -n 360
 
-          echo '=== package.json ==='
-          sudo sed -n '1,240p' "$app/package.json" 2>/dev/null || true
+          echo '=== Workspace and app package manifests ==='
+          for manifest in "$app/package.json" "$app/apps/web/package.json" "$app/apps/api/package.json"; do
+            if [ -f "$manifest" ]; then
+              echo "--- $manifest"
+              sudo sed -n '1,260p' "$manifest"
+            fi
+          done
 
-          echo '=== Astro/Vite config (secret files are never read) ==='
+          echo '=== Deployment descriptors and Astro/Vite config (secret files are never read) ==='
           while IFS= read -r config; do
             echo "--- $config"
-            sudo sed -n '1,240p' "$config"
-          done < <(sudo find "$app" -maxdepth 2 -type f \( -name 'astro.config.*' -o -name 'vite.config.*' \) -print)
+            sudo sed -n '1,300p' "$config"
+          done < <(sudo find "$app" -maxdepth 5 -type f \
+            \( -name 'astro.config.*' -o -name 'vite.config.*' -o -name '*.service' -o -name '*nginx*.conf' -o -name 'nginx.conf' \) \
+            ! -name '*.env' -print)
 
-          echo '=== Dist index markers ==='
+          echo '=== HeatStack web dist tree and identity markers ==='
+          sudo find "$app/apps/web/dist" -maxdepth 3 -printf '%y %p\n' 2>/dev/null | head -n 300 || true
           while IFS= read -r index; do
             echo "--- $index"
-            sudo grep -Eio '<title>[^<]{0,160}</title>|<meta[^>]+name=["'"']description["'"'][^>]*>|data-[a-z0-9_-]+=["'"'][^"'"']+["'"']' "$index" | head -n 40 || true
-          done < <(sudo find "$app" -maxdepth 4 -type f -path '*/dist*/index.html' -print)
+            sudo grep -Eio "<title>[^<]{0,200}</title>" "$index" | head -n 10 || true
+            sudo grep -Eio "(src|href)=['\"][^'\"]{1,240}['\"]" "$index" | head -n 30 || true
+          done < <(sudo find "$app/apps/web/dist" -maxdepth 4 -type f -name 'index.html' -print 2>/dev/null)
 
-          echo '=== Local HTTP probes for listening loopback ports ==='
-          while IFS= read -r port; do
-            [ -n "$port" ] || continue
-            printf -- '--- http://127.0.0.1:%s/\n' "$port"
-            curl -sS --max-time 3 -D - -o /tmp/heatstack-probe-body "http://127.0.0.1:$port/" | head -n 20 || true
-            head -c 300 /tmp/heatstack-probe-body 2>/dev/null | tr '\n' ' ' || true
+          echo '=== Public route and API-prefix source markers ==='
+          sudo grep -RInE --exclude-dir=node_modules --exclude-dir=.git --exclude='*.map' \
+            'base:|site:|outDir|8787|API_BASE|PUBLIC_|/api/' \
+            "$app/apps/web" "$app/apps/api" "$app/deploy" 2>/dev/null | head -n 300 || true
+
+          echo '=== Local HeatStack API probes ==='
+          for path in / /health /health/live /api/health /api/v1/health; do
+            printf -- '--- http://127.0.0.1:8787%s\n' "$path"
+            curl -sS --max-time 3 -D - -o /tmp/heatstack-probe-body "http://127.0.0.1:8787$path" | head -n 20 || true
+            head -c 500 /tmp/heatstack-probe-body 2>/dev/null | tr '\n' ' ' || true
             printf '\n'
-          done < <(sudo ss -ltnH | awk '$4 ~ /127\.0\.0\.1:/ {sub(/^.*:/, "", $4); print $4}' | sort -nu)
+          done
           REMOTE
