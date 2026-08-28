@@ -6,6 +6,7 @@ build
 .cache
 .artifacts
 tmp-live-check/
+.tmp-ci-logs/
 .pnpm-store
 .npm
 .eslintcache

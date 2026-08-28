@@ -1,8 +1,15 @@
 \set ON_ERROR_STOP on
 
+SELECT set_config(
+  'pulseboard.expected_migration_count',
+  :'expected_migration_count',
+  false
+);
+
 DO $$
 DECLARE
   actual_count BIGINT;
+  expected_migration_count BIGINT := current_setting('pulseboard.expected_migration_count')::BIGINT;
 BEGIN
   SELECT COUNT(*) INTO actual_count FROM "User";
   IF actual_count <> 1 THEN RAISE EXCEPTION 'expected 1 User row, found %', actual_count; END IF;
@@ -53,7 +60,9 @@ BEGIN
   FROM "_prisma_migrations"
   WHERE finished_at IS NOT NULL
     AND rolled_back_at IS NULL;
-  IF actual_count <> 2 THEN RAISE EXCEPTION 'expected 2 completed Prisma migrations, found %', actual_count; END IF;
+  IF actual_count <> expected_migration_count THEN
+    RAISE EXCEPTION 'expected % completed Prisma migrations, found %', expected_migration_count, actual_count;
+  END IF;
 
   SELECT COUNT(*) INTO actual_count
   FROM "ApiKey"

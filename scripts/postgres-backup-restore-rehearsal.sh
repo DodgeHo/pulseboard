@@ -18,6 +18,16 @@ archive_list_path="$artifact_dir/archive-list.txt"
 source_manifest_path="$artifact_dir/source-manifest.txt"
 restore_manifest_path="$artifact_dir/restore-manifest.txt"
 
+shopt -s nullglob
+migration_dirs=("$repo_root"/packages/db/prisma/migrations/*/)
+shopt -u nullglob
+expected_migration_count="${#migration_dirs[@]}"
+
+if [ "$expected_migration_count" -eq 0 ]; then
+  printf 'No Prisma migration directories were found.\n' >&2
+  exit 1
+fi
+
 compose() {
   docker compose --project-name "$project_name" --file "$compose_file" "$@"
 }
@@ -48,6 +58,7 @@ compose exec -T postgres-source \
 printf 'Verifying source invariants before backup.\n'
 compose exec -T postgres-source \
   psql --username pulseboard --dbname pulseboard \
+    --set=expected_migration_count="$expected_migration_count" \
   < "$sql_dir/verify.sql"
 compose exec -T postgres-source \
   psql --username pulseboard --dbname pulseboard \
@@ -87,6 +98,7 @@ compose exec -T postgres-restore \
 printf 'Verifying restored invariants and full-table fingerprints.\n'
 compose exec -T postgres-restore \
   psql --username pulseboard --dbname pulseboard_restore \
+    --set=expected_migration_count="$expected_migration_count" \
   < "$sql_dir/verify.sql"
 compose exec -T postgres-restore \
   psql --username pulseboard --dbname pulseboard_restore \

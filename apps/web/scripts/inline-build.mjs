@@ -6,11 +6,13 @@ const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(here, '..');
 const repoRoot = resolve(appRoot, '..', '..');
 
-const template = await readFile(resolve(appRoot, 'src', 'index.html'), 'utf8');
-const frontendTemplate = await readFile(resolve(appRoot, 'src', 'frontend.html'), 'utf8');
-const css = await readFile(resolve(appRoot, 'src', 'styles.css'), 'utf8');
-const i18n = await readFile(resolve(appRoot, 'dist', 'assets', 'i18n.js'), 'utf8');
-const main = await readFile(resolve(appRoot, 'dist', 'assets', 'main.js'), 'utf8');
+const readText = async (path) => (await readFile(path, 'utf8')).replace(/\r\n?/g, '\n');
+
+const template = await readText(resolve(appRoot, 'src', 'index.html'));
+const frontendTemplate = await readText(resolve(appRoot, 'src', 'frontend.html'));
+const css = await readText(resolve(appRoot, 'src', 'styles.css'));
+const i18n = await readText(resolve(appRoot, 'dist', 'assets', 'i18n.js'));
+const main = await readText(resolve(appRoot, 'dist', 'assets', 'main.js'));
 
 const inlineI18n = i18n
   .replace(/export const /g, 'const ')

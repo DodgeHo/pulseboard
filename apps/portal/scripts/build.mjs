@@ -11,7 +11,8 @@ const localRoot = resolve(packageRoot, "dist");
 const deployRoot = resolve(repositoryRoot, "deploy/anlan");
 const siteUrl = "https://anlan.store";
 
-const readText = (path) => readFile(path, "utf8");
+const normalizeNewlines = (value) => value.replace(/\r\n?/g, "\n");
+const readText = async (path) => normalizeNewlines(await readFile(path, "utf8"));
 const readDataUri = async (path, mimeType) => {
   const bytes = await readFile(path);
   return `data:${mimeType};base64,${bytes.toString("base64")}`;
