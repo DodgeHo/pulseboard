@@ -37,9 +37,7 @@
         margin: 0;
         min-width: 320px;
         min-height: 100vh;
-        background:
-          linear-gradient(90deg, rgba(216, 210, 197, 0.36) 1px, transparent 1px) 0 0 / 70px 70px,
-          var(--bg);
+        background: var(--bg);
         color: var(--ink);
       }
 
@@ -54,6 +52,21 @@
       a { color: inherit; text-decoration: none; }
       button, select { font: inherit; }
       h1, h2, h3, p { margin: 0; }
+      h1, h2, h3 { text-wrap: balance; }
+
+      .brand-copy strong,
+      .brand-copy small,
+      .lead,
+      .section-head p,
+      .section-card p,
+      .metric span,
+      .price-card p,
+      .faq-card p,
+      .ledger div,
+      .timeline span,
+      .footer span {
+        overflow-wrap: anywhere;
+      }
 
       .page {
         width: min(1180px, calc(100% - 32px));
@@ -86,7 +99,7 @@
         backdrop-filter: blur(12px);
       }
 
-      .brand { gap: 12px; min-width: max-content; }
+      .brand { gap: 12px; min-width: 0; max-width: 100%; }
       .brand-mark {
         display: grid;
         width: 42px;
@@ -98,7 +111,7 @@
         font-family: "Cascadia Code", Consolas, monospace;
         font-weight: 800;
       }
-      .brand-copy { display: grid; gap: 1px; }
+      .brand-copy { display: grid; gap: 1px; min-width: 0; }
       .brand-copy small,
       .eyebrow,
       .label,
@@ -146,7 +159,7 @@
         border-bottom: 1px solid var(--rule);
       }
       .hero-copy { flex: 1.05; min-width: 0; }
-      .hero-panel { flex: 0.95; min-width: 360px; }
+      .hero-panel { flex: 0.95; min-width: 320px; }
       .eyebrow,
       .label {
         margin-bottom: 12px;
@@ -180,22 +193,35 @@
       }
       .hero-panel { padding: 18px; }
       .status-row {
-        justify-content: space-between;
-        gap: 12px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto;
+        gap: 10px 12px;
+        align-items: start;
         min-height: 58px;
         padding: 12px 0;
         border-bottom: 1px solid var(--rule);
       }
       .status-row:last-child { border-bottom: 0; }
+      .status-row > span:first-child { min-width: 0; }
+      .status-row > span:first-child {
+        color: var(--ink);
+        font-size: 0.94rem;
+        font-weight: 700;
+        line-height: 1.45;
+      }
       .status-row code,
       .metric strong,
       .ledger strong,
       .timeline time {
         font-family: "Cascadia Code", Consolas, monospace;
       }
-      .status-row code { color: var(--blue); }
+      .status-row code {
+        color: var(--blue);
+        min-width: 0;
+        justify-self: start;
+      }
       .pill {
-        min-width: 86px;
+        min-width: 84px;
         padding: 5px 8px;
         text-align: center;
         color: var(--green);
@@ -258,8 +284,9 @@
       }
       .ledger div {
         display: grid;
-        grid-template-columns: 120px minmax(0, 1fr);
+        grid-template-columns: minmax(102px, 0.9fr) minmax(0, 1.1fr);
         gap: 12px;
+        align-items: start;
         padding: 11px 12px;
         background: var(--panel);
         border: 1px solid var(--rule);
@@ -278,6 +305,7 @@
         display: grid;
         grid-template-columns: 80px minmax(0, 1fr);
         gap: 16px;
+        align-items: start;
         padding: 18px;
         background: rgba(255, 253, 248, 0.9);
         border-bottom: 1px solid var(--rule);
@@ -287,12 +315,14 @@
       .timeline span span { color: var(--muted); line-height: 1.45; }
 
       .price-card.featured { background: var(--green-soft); border-color: rgba(38, 115, 77, 0.28); }
+      .price-card { display: grid; align-content: start; }
       .price { margin: 16px 0; font-size: 2rem; font-weight: 800; }
       .price small { color: var(--muted); font-size: 0.9rem; font-weight: 500; }
 
       .footer {
         justify-content: space-between;
-        gap: 20px;
+        flex-wrap: wrap;
+        gap: 12px 20px;
         margin-top: 28px;
         padding-top: 22px;
         border-top: 1px solid var(--rule);
@@ -318,10 +348,13 @@
         .nav a, .lang-select, .button, .button-secondary { flex: 1 1 auto; }
         .status-row {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
+          grid-template-columns: 1fr;
+          align-items: start;
         }
-        .status-row > span:first-child { grid-column: 1 / -1; }
+        .status-row > span:first-child { grid-column: auto; }
         .status-row code { min-width: 0; overflow-wrap: anywhere; }
+        .status-row code,
+        .status-row .pill { justify-self: start; }
         .status-row .pill { min-width: 72px; }
         .proof-strip,
         .grid-3,
@@ -339,16 +372,16 @@
   <body>
     <main class="page">
       <header class="topbar">
-        <a class="brand" href="/demo/frontend/" aria-label="PulseBoard Reliability Works">
+        <a class="brand" href="/demo/frontend/" data-i18n-aria="brand">
           <span class="brand-mark">PB</span>
           <span class="brand-copy"><strong data-i18n="brand">PulseBoard Reliability Works</strong><small data-i18n="brandSub">Inspectable SaaS operations</small></span>
         </a>
-        <nav class="nav" aria-label="Primary">
+        <nav class="nav" aria-label="Primary" data-i18n-aria="navPrimary">
           <a href="#workflow" data-i18n="navWorkflow">Workflow</a>
           <a href="#plans" data-i18n="navPlans">Plans</a>
           <a href="#faq" data-i18n="navFaq">FAQ</a>
           <a href="/demo/" data-i18n="backendProof">Backend proof</a>
-          <select class="lang-select" id="langSelect" aria-label="Language selector"></select>
+          <select class="lang-select" id="langSelect" aria-label="Language selector" data-i18n-aria="langSelectorLabel"></select>
         </nav>
       </header>
 
@@ -362,15 +395,15 @@
             <a class="button-secondary" href="/demo/docs" target="_blank" rel="noreferrer" data-i18n="apiDocs">API Docs</a>
           </div>
         </div>
-        <aside class="hero-panel" aria-label="Product proof panel">
-          <div class="status-row"><span data-i18n="statusRoute">Static customer route</span><code>/demo/frontend/</code><span class="pill">static</span></div>
-          <div class="status-row"><span data-i18n="statusApi">Live backend proof nearby</span><code>/demo/health/ready</code><span class="pill">live</span></div>
-          <div class="status-row"><span data-i18n="statusContract">OpenAPI contract exposed</span><code>/demo/openapi.json</code><span class="pill">OpenAPI</span></div>
-          <div class="status-row"><span data-i18n="statusStack">PostgreSQL + Redis runtime</span><code>PostgreSQL / Redis + BullMQ</code><span class="pill">SaaS</span></div>
+        <aside class="hero-panel" aria-label="Product proof panel" data-i18n-aria="proofPanelLabel">
+          <div class="status-row"><span data-i18n="statusRoute">Static customer route</span><code>/demo/frontend/</code><span class="pill" data-i18n="statusStatic">static</span></div>
+          <div class="status-row"><span data-i18n="statusApi">Live backend proof nearby</span><code>/demo/health/ready</code><span class="pill" data-i18n="statusLive">live</span></div>
+          <div class="status-row"><span data-i18n="statusContract">OpenAPI contract exposed</span><code>/demo/openapi.json</code><span class="pill" data-i18n="statusOpenapi">OpenAPI</span></div>
+          <div class="status-row"><span data-i18n="statusStack">PostgreSQL + Redis runtime</span><code>PostgreSQL / Redis + BullMQ</code><span class="pill" data-i18n="statusSaas">SaaS</span></div>
         </aside>
       </section>
 
-      <section class="proof-strip" aria-label="Product proof metrics">
+      <section class="proof-strip" data-i18n-aria="proofMetricsLabel">
         <div class="metric"><strong>10</strong><span data-i18n="metricLocales">interface languages</span></div>
         <div class="metric"><strong>4</strong><span data-i18n="metricEndpoints">public evidence links</span></div>
         <div class="metric"><strong>0</strong><span data-i18n="metricSecrets">secrets in page HTML</span></div>
@@ -398,10 +431,10 @@
           <article class="section-card">
             <h3 data-i18n="ledgerTitle">Reliability ledger</h3>
             <div class="ledger">
-              <div><span>homepage</span><strong>anlan.store</strong></div>
-              <div><span>customer route</span><strong>/demo/frontend/</strong></div>
-              <div><span>proof route</span><strong>/</strong></div>
-              <div><span>deployment</span><strong>backup before install</strong></div>
+              <div><span data-i18n="ledgerHomepage">homepage</span><strong>anlan.store</strong></div>
+              <div><span data-i18n="ledgerCustomerRoute">customer route</span><strong>/demo/frontend/</strong></div>
+              <div><span data-i18n="ledgerProofRoute">proof route</span><strong>/</strong></div>
+              <div><span data-i18n="ledgerDeployment">deployment</span><strong data-i18n="ledgerDeploymentValue">backup before install</strong></div>
             </div>
           </article>
           <article class="section-card">
@@ -421,15 +454,15 @@
           <p data-i18n="plansCopy">Pricing is illustrative, but the operational boundaries are real: intake, automation, auditability, and deployment evidence.</p>
         </div>
         <div class="grid-3">
-          <article class="price-card"><h3>Starter</h3><p data-i18n="starterCopy">For a small team that needs shared incident intake, health visibility, and a simple service map.</p><div class="price">$19 <small>/mo</small></div></article>
-          <article class="price-card featured"><h3>Platform</h3><p data-i18n="platformCopy">For teams that need automation queues, service ownership, and deployment review rituals.</p><div class="price">$79 <small>/mo</small></div></article>
-          <article class="price-card"><h3>Interview</h3><p data-i18n="interviewCopy">For reviewers who want to inspect the API surface, worker model, and staging checklist directly.</p><div class="price">docs <small>included</small></div></article>
+          <article class="price-card"><h3 data-i18n="starterTitle">Starter</h3><p data-i18n="starterCopy">For a small team that needs shared incident intake, health visibility, and a simple service map.</p><div class="price">$19 <small>/mo</small></div></article>
+          <article class="price-card featured"><h3 data-i18n="platformTitle">Platform</h3><p data-i18n="platformCopy">For teams that need automation queues, service ownership, and deployment review rituals.</p><div class="price">$79 <small>/mo</small></div></article>
+          <article class="price-card"><h3 data-i18n="interviewTitle">Interview</h3><p data-i18n="interviewCopy">For reviewers who want to inspect the API surface, worker model, and staging checklist directly.</p><div class="price"><span data-i18n="docsIncluded">docs</span> <small data-i18n="includedText">included</small></div></article>
         </div>
       </section>
 
       <section class="section" id="faq">
         <div class="section-head">
-          <div><p class="label">FAQ</p><h2 data-i18n="faqTitle">Built to be inspected.</h2></div>
+          <div><p class="label" data-i18n="faqLabel">FAQ</p><h2 data-i18n="faqTitle">Built to be inspected.</h2></div>
         </div>
         <div class="grid-2">
           <article class="faq-card"><h3 data-i18n="faqOne">Is this just a static website?</h3><p data-i18n="faqOneCopy">No. The page is static, but it deliberately links to the running backend, OpenAPI contract, health checks, and deployment checklist.</p></article>
@@ -439,7 +472,7 @@
 
       <footer class="footer">
         <span data-i18n="footer">PulseBoard Reliability Works keeps the customer story connected to real backend evidence.</span>
-        <span><a href="/demo/" data-i18n="backendProof">Backend proof</a> / <a href="/demo/openapi.json">OpenAPI</a> / <a href="/demo/docs">API Docs</a></span>
+        <span><a href="/demo/" data-i18n="backendProof">Backend proof</a> / <a href="/demo/openapi.json" data-i18n="openapiLink">OpenAPI</a> / <a href="/demo/docs" data-i18n="apiDocs">API Docs</a></span>
       </footer>
     </main>
 
@@ -512,33 +545,282 @@
           footer: 'PulseBoard Reliability Works keeps the customer story connected to real backend evidence.',
         },
         'zh-TW': {
-          brand: 'PulseBoard 可靠性工作台', brandSub: '可檢視的 SaaS 營運介面', navWorkflow: '工作流', navPlans: '方案', navFaq: '常見問題', backendProof: '後端證據', apiDocs: 'API 文件', eyebrow: '面向客戶的可靠性 SaaS', title: '把後端可靠性變成客戶看得懂的產品。', lead: 'PulseBoard 把事件接收、服務歸屬、背景處理與 API 證據連成一個安靜的 SaaS 工作區，讓團隊建立可被檢查的營運信任。', statusRoute: '靜態客戶路由', statusApi: '即時後端證據', statusContract: 'OpenAPI 合約公開', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '介面語言', metricEndpoints: '公開證據連結', metricSecrets: '頁面 HTML 中的 secrets', metricRollback: 'rollback 路徑已記錄', workflowLabel: '工作流', workflowTitle: '圍繞營運信心打造的產品介面。', workflowCopy: '介面把後端機制轉成可見的客戶價值，同時保留面試官需要檢查的實作證據。', cardIntake: '事件接收', cardIntakeCopy: '以清楚流程記錄客戶影響、所屬服務、嚴重度與目前狀態，而不是鬆散工單。', cardAutomation: '自動化佇列', cardAutomationCopy: '延遲背景工作獨立於請求路徑，符合真實 SaaS 系統保護 latency 的方式。', cardEvidence: '證據連結', cardEvidenceCopy: '健康檢查、API 文件與部署筆記保持一鍵可達，讓產品敘事仍 anchored 到後端。', releaseLabel: '發布姿態', releaseTitle: '先 staging，再交付；不假裝這就是 production。', releaseCopy: 'Demo 不把 secrets 放進靜態資產，記錄 rollback，並在任何真實 staging 變更前導向 live health 與 OpenAPI 檢查。', ledgerTitle: '可靠性帳本', plansLabel: '方案', plansTitle: '依照不同可靠性成熟度設計的團隊方案。', plansCopy: '價格只是展示，但營運邊界是真的：接收、自動化、可稽核性與部署證據。', starterCopy: '適合需要共享事件接收、健康狀態與簡單服務地圖的小團隊。', platformCopy: '適合需要自動化佇列、服務歸屬與部署審查節奏的團隊。', interviewCopy: '適合想直接檢查 API surface、worker model 與 staging checklist 的 reviewer。', timelineTitle: '生命週期', lifeOne: '偵測', lifeOneCopy: '客戶事件會帶著服務、嚴重度與 owner context 出現。', lifeTwo: '處理', lifeTwoCopy: '後端保存狀態，並把延遲工作送入佇列，而不是阻塞 API。', lifeThree: '復原', lifeThreeCopy: '解決狀態、日誌、健康檢查與 rollback 筆記讓復原路徑可檢視。', faqTitle: '為了被檢查而打造。', faqOne: '這只是靜態網站嗎？', faqOneCopy: '不是。頁面本身是靜態，但它明確連到正在運行的後端、OpenAPI 合約、健康檢查與部署 checklist。', faqTwo: '為什麼後端 demo 要有客戶界面？', faqTwoCopy: '因為這個專案是為 backend、platform、cloud 面試準備。前端應該讓系統更容易被檢查。', footer: 'PulseBoard 可靠性工作台讓客戶故事連接到真實後端證據。'
+          brand: 'PulseBoard 可靠性工作台', brandSub: '可檢視的 SaaS 營運介面', navWorkflow: '工作流', navPlans: '方案', navFaq: '常見問題', backendProof: '後端證據', apiDocs: 'API 文件', eyebrow: '面向客戶的可靠性 SaaS', title: '把後端可靠性變成客戶看得懂的產品。', lead: 'PulseBoard 把事件接收、服務歸屬、背景處理與 API 證據連成一個安靜的 SaaS 工作區，讓團隊建立可被檢查的營運信任。', statusRoute: '靜態客戶路由', statusApi: '即時後端證據', statusContract: 'OpenAPI 合約公開', statusStack: 'PostgreSQL + Redis 執行環境', metricLocales: '介面語言', metricEndpoints: '公開證據連結', metricSecrets: '頁面 HTML 中沒有 secrets', metricRollback: '已記錄 rollback 路徑', workflowLabel: '工作流', workflowTitle: '圍繞營運信心打造的產品介面。', workflowCopy: '介面把後端機制轉成可見的客戶價值，同時保留面試官需要檢查的實作證據。', cardIntake: '事件接收', cardIntakeCopy: '以清楚流程記錄客戶影響、所屬服務、嚴重度與目前狀態，而不是鬆散工單。', cardAutomation: '自動化佇列', cardAutomationCopy: '延遲背景工作獨立於請求路徑，符合真實 SaaS 系統保護延遲的方式。', cardEvidence: '證據連結', cardEvidenceCopy: '健康檢查、API 文件與部署筆記保持一鍵可達，讓產品敘事仍連回後端。', releaseLabel: '發布姿態', releaseTitle: '先從 staging 出發，不假裝這就是 production。', releaseCopy: 'Demo 不把 secrets 放進靜態資產，記錄 rollback，並在任何真實 staging 變更前先導向 live health 與 OpenAPI 檢查。', ledgerTitle: '可靠性帳本', plansLabel: '方案', plansTitle: '依照不同可靠性成熟度設計的團隊方案。', plansCopy: '價格只是展示，但營運邊界是真的：接收、自動化、可稽核性與部署證據。', starterCopy: '適合需要共享事件接收、健康狀態與簡單服務地圖的小團隊。', platformCopy: '適合需要自動化佇列、服務歸屬與部署審查節奏的團隊。', interviewCopy: '給想直接檢查 API 表面、worker model 與 staging checklist 的 reviewer。', timelineTitle: '生命週期', lifeOne: '偵測', lifeOneCopy: '客戶事件會帶著服務、嚴重度與 owner context 出現。', lifeTwo: '處理', lifeTwoCopy: '後端保存狀態，並把延遲工作送入佇列，而不是阻塞 API。', lifeThree: '復原', lifeThreeCopy: '解決狀態、日誌、健康檢查與 rollback 筆記讓復原路徑可檢視。', faqTitle: '為了被檢查而打造。', faqOne: '這只是靜態網站嗎？', faqOneCopy: '不是。頁面本身是靜態，但它明確連到正在運行的後端、OpenAPI 合約、健康檢查與部署 checklist。', faqTwo: '為什麼後端 demo 要有客戶界面？', faqTwoCopy: '因為這個專案是為 backend、platform、cloud 面試準備。前端應該讓系統更容易被檢查。', footer: 'PulseBoard 可靠性工作台讓客戶故事連接到真實後端證據。'
         },
         ja: {
-          brand: 'PulseBoard Reliability Works', brandSub: '検証できる SaaS 運用画面', navWorkflow: 'ワークフロー', navPlans: 'プラン', navFaq: 'FAQ', backendProof: 'バックエンド証跡', apiDocs: 'API ドキュメント', eyebrow: '顧客向け信頼性 SaaS', title: 'バックエンドの信頼性を、顧客が理解できるプロダクトに変える。', lead: 'PulseBoard はインシデント受付、サービス所有者、バックグラウンド処理、API 証跡を、運用信頼を必要とするチーム向けの落ち着いた SaaS ワークスペースにまとめます。', statusRoute: '静的顧客ルート', statusApi: 'ライブのバックエンド証跡', statusContract: 'OpenAPI 契約を公開', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '表示言語', metricEndpoints: '公開証跡リンク', metricSecrets: 'ページ HTML 内の secret', metricRollback: 'rollback 手順を文書化', workflowLabel: 'ワークフロー', workflowTitle: '運用への信頼を中心にしたプロダクト画面。', workflowCopy: 'UI はバックエンドの仕組みを顧客価値として見せながら、面接官が確認したい実装証跡も隠しません。', cardIntake: 'インシデント受付', cardIntakeCopy: '顧客影響、担当サービス、重大度、状態を雑なチケットではなく明確な流れとして記録します。', cardAutomation: '自動化キュー', cardAutomationCopy: '遅延するバックグラウンド処理をリクエスト経路から分離し、実際の SaaS と同じように latency を守ります。', cardEvidence: '証跡リンク', cardEvidenceCopy: 'ヘルスチェック、API ドキュメント、デプロイメモをすぐ確認でき、プロダクトの説明をバックエンドに結び付けます。', releaseLabel: 'リリース姿勢', releaseTitle: 'production を装わず、staging から進めるデリバリー。', releaseCopy: '静的アセットに secrets を入れず、rollback を文書化し、実際の staging 変更前に live health と OpenAPI を確認します。', ledgerTitle: '信頼性台帳', plansLabel: 'プラン', plansTitle: '信頼性成熟度に合わせたチーム向けパッケージ。', plansCopy: '価格はデモ用ですが、受付、自動化、監査性、デプロイ証跡という運用境界は本物です。', starterCopy: '共有インシデント受付、ヘルス可視化、簡単なサービスマップが必要な小規模チーム向け。', platformCopy: '自動化キュー、サービス所有者、デプロイレビューの習慣が必要なチーム向け。', interviewCopy: 'API surface、worker model、staging checklist を直接確認したい reviewer 向け。', timelineTitle: 'ライフサイクル', lifeOne: '検知', lifeOneCopy: '顧客向けインシデントがサービス、重大度、owner context とともに現れます。', lifeTwo: '処理', lifeTwoCopy: 'バックエンドは状態を保存し、API をブロックせず遅延作業をキューに送ります。', lifeThree: '復旧', lifeThreeCopy: '解決状態、ログ、ヘルスチェック、rollback メモで復旧経路を検証できます。', faqTitle: '検査されるために作られています。', faqOne: 'これは静的サイトだけですか？', faqOneCopy: 'いいえ。ページは静的ですが、稼働中のバックエンド、OpenAPI 契約、ヘルスチェック、デプロイ checklist に明確につながっています。', faqTwo: 'バックエンド demo に顧客画面が必要な理由は？', faqTwoCopy: 'backend、platform、cloud 面接を支えるためです。フロントエンドはシステムをより調べやすくするべきです。', footer: 'PulseBoard Reliability Works は顧客ストーリーを実際のバックエンド証跡につなげます。'
+          brand: 'PulseBoard 信頼性ワークス', brandSub: '検証できる SaaS 運用画面', navWorkflow: 'ワークフロー', navPlans: 'プラン', navFaq: 'よくある質問', backendProof: 'バックエンド証跡', apiDocs: 'API ドキュメント', eyebrow: '顧客向け信頼性 SaaS', title: 'バックエンドの信頼性を、顧客が理解できるプロダクトに変える。', lead: 'PulseBoard はインシデント受付、サービス所有者、バックグラウンド処理、API 証跡を、運用信頼を必要とするチーム向けの落ち着いた SaaS ワークスペースにまとめます。', statusRoute: '静的顧客ルート', statusApi: 'ライブのバックエンド証跡', statusContract: 'OpenAPI 契約を公開', statusStack: 'PostgreSQL + Redis 実行基盤', metricLocales: '表示言語', metricEndpoints: '公開証跡リンク', metricSecrets: 'ページ HTML に secrets はありません', metricRollback: 'rollback 手順を記録', workflowLabel: 'ワークフロー', workflowTitle: '運用への信頼を中心にしたプロダクト画面。', workflowCopy: 'UI はバックエンドの仕組みを顧客価値として見せながら、面接官が確認したい実装証跡も隠しません。', cardIntake: 'インシデント受付', cardIntakeCopy: '顧客影響、担当サービス、重大度、状態を雑なチケットではなく明確な流れとして記録します。', cardAutomation: '自動化キュー', cardAutomationCopy: '遅延するバックグラウンド処理をリクエスト経路から分離し、実際の SaaS と同じように応答遅延を守ります。', cardEvidence: '証跡リンク', cardEvidenceCopy: 'ヘルスチェック、API ドキュメント、デプロイメモをすぐ確認でき、プロダクトの説明をバックエンドに結び付けます。', releaseLabel: 'リリース姿勢', releaseTitle: '本番を装わず、ステージングから進めるデリバリー。', releaseCopy: '静的アセットに秘密情報を入れず、rollback を記録し、実際のステージング変更前に live health と OpenAPI を確認します。', ledgerTitle: '信頼性台帳', plansLabel: 'プラン', plansTitle: '信頼性成熟度に合わせたチーム向けパッケージ。', plansCopy: '価格はデモ用ですが、受付、自動化、監査性、デプロイ証跡という運用境界は本物です。', starterCopy: '共有インシデント受付、ヘルス可視化、簡単なサービスマップが必要な小規模チーム向け。', platformCopy: '自動化キュー、サービス所有者、デプロイレビューの習慣が必要なチーム向け。', interviewCopy: 'API の表面、worker model、staging checklist を直接確認したい reviewer 向け。', timelineTitle: 'ライフサイクル', lifeOne: '検知', lifeOneCopy: '顧客向けインシデントがサービス、重大度、owner context とともに現れます。', lifeTwo: '処理', lifeTwoCopy: 'バックエンドは状態を保存し、API をブロックせず遅延作業をキューに送ります。', lifeThree: '復旧', lifeThreeCopy: '解決状態、ログ、ヘルスチェック、rollback メモで復旧経路を検証できます。', faqTitle: '検査されるために作られています。', faqOne: 'これは静的サイトだけですか？', faqOneCopy: 'いいえ。ページは静的ですが、稼働中のバックエンド、OpenAPI 契約、ヘルスチェック、デプロイ確認項目に明確につながっています。', faqTwo: 'バックエンド demo に顧客画面が必要な理由は？', faqTwoCopy: 'バックエンド、プラットフォーム、クラウドの面接を支えるためです。フロントエンドはシステムをより調べやすくするべきです。', footer: 'PulseBoard Reliability Works は顧客ストーリーを実際のバックエンド証跡につなげます。'
         },
         ko: {
-          brand: 'PulseBoard Reliability Works', brandSub: '검증 가능한 SaaS 운영 화면', navWorkflow: '워크플로', navPlans: '플랜', navFaq: 'FAQ', backendProof: '백엔드 증거', apiDocs: 'API 문서', eyebrow: '고객용 reliability SaaS', title: '백엔드 신뢰성을 고객이 이해할 수 있는 제품으로 바꿉니다.', lead: 'PulseBoard는 인시던트 접수, 서비스 소유권, 백그라운드 처리, API 증거를 운영 신뢰가 필요한 팀을 위한 차분한 SaaS 워크스페이스로 연결합니다.', statusRoute: '정적 고객 경로', statusApi: '실시간 백엔드 증거', statusContract: 'OpenAPI 계약 공개', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '인터페이스 언어', metricEndpoints: '공개 증거 링크', metricSecrets: '페이지 HTML의 secrets', metricRollback: 'rollback 경로 문서화', workflowLabel: '워크플로', workflowTitle: '운영 신뢰를 중심에 둔 제품 화면.', workflowCopy: '화면은 백엔드 메커니즘을 고객 가치로 보여 주면서 면접관이 확인해야 할 구현 증거도 가까이에 둡니다.', cardIntake: '인시던트 접수', cardIntakeCopy: '고객 영향, 담당 서비스, 심각도, 현재 상태를 흩어진 티켓이 아니라 정돈된 흐름으로 기록합니다.', cardAutomation: '자동화 큐', cardAutomationCopy: '지연되는 백그라운드 작업을 요청 경로와 분리하여 실제 SaaS처럼 latency 를 보호합니다.', cardEvidence: '증거 링크', cardEvidenceCopy: '헬스 체크, API 문서, 배포 노트를 한 번에 열 수 있어 제품 이야기가 백엔드에 붙어 있습니다.', releaseLabel: '릴리스 자세', releaseTitle: 'production 인 척하지 않고 staging 부터 검증합니다.', releaseCopy: '정적 자산에 secrets 를 넣지 않고 rollback 을 문서화하며 실제 staging 변경 전에 live health 와 OpenAPI 를 확인합니다.', ledgerTitle: '신뢰성 장부', plansLabel: '플랜', plansTitle: '팀의 reliability 성숙도에 맞춘 패키지.', plansCopy: '가격은 예시지만 운영 경계는 실제입니다: 접수, 자동화, 감사 가능성, 배포 증거.', starterCopy: '공유 인시던트 접수, 상태 가시성, 간단한 서비스 맵이 필요한 작은 팀용.', platformCopy: '자동화 큐, 서비스 소유권, 배포 리뷰 리듬이 필요한 팀용.', interviewCopy: 'API surface, worker model, staging checklist 를 직접 보고 싶은 reviewer 용.', timelineTitle: '라이프사이클', lifeOne: '탐지', lifeOneCopy: '고객용 인시던트가 서비스, 심각도, owner context 와 함께 나타납니다.', lifeTwo: '처리', lifeTwoCopy: '백엔드는 상태를 저장하고 API 를 막지 않도록 지연 작업을 큐로 보냅니다.', lifeThree: '복구', lifeThreeCopy: '해결 상태, 로그, 헬스 체크, rollback 노트로 복구 경로를 확인할 수 있습니다.', faqTitle: '검토받기 위해 만들어졌습니다.', faqOne: '이건 정적 웹사이트뿐인가요?', faqOneCopy: '아닙니다. 페이지는 정적이지만 실행 중인 백엔드, OpenAPI 계약, 헬스 체크, 배포 checklist 로 명확히 연결됩니다.', faqTwo: '백엔드 demo 에 고객 화면을 넣는 이유는?', faqTwoCopy: 'backend, platform, cloud 면접을 지원하기 위한 프로젝트이기 때문입니다. 프론트엔드는 시스템을 더 쉽게 검사하게 만들어야 합니다.', footer: 'PulseBoard Reliability Works 는 고객 이야기를 실제 백엔드 증거와 연결합니다.'
+          brand: 'PulseBoard 신뢰성 워크스', brandSub: '검증 가능한 SaaS 운영 화면', navWorkflow: '워크플로', navPlans: '플랜', navFaq: '자주 묻는 질문', backendProof: '백엔드 증거', apiDocs: 'API 문서', eyebrow: '고객용 reliability SaaS', title: '백엔드 신뢰성을 고객이 이해할 수 있는 제품으로 바꿉니다.', lead: 'PulseBoard는 인시던트 접수, 서비스 소유권, 백그라운드 처리, API 증거를 운영 신뢰가 필요한 팀을 위한 차분한 SaaS 워크스페이스로 연결합니다.', statusRoute: '정적 고객 경로', statusApi: '실시간 백엔드 증거', statusContract: 'OpenAPI 계약 공개', statusStack: 'PostgreSQL + Redis 실행 환경', metricLocales: '인터페이스 언어', metricEndpoints: '공개 증거 링크', metricSecrets: '페이지 HTML에 secrets 없음', metricRollback: 'rollback 경로 문서화', workflowLabel: '워크플로', workflowTitle: '운영 신뢰를 중심에 둔 제품 화면.', workflowCopy: '화면은 백엔드 메커니즘을 고객 가치로 보여 주면서 면접관이 확인해야 할 구현 증거도 가까이에 둡니다.', cardIntake: '인시던트 접수', cardIntakeCopy: '고객 영향, 담당 서비스, 심각도, 현재 상태를 흩어진 티켓이 아니라 정돈된 흐름으로 기록합니다.', cardAutomation: '자동화 큐', cardAutomationCopy: '지연되는 백그라운드 작업을 요청 경로와 분리하여 실제 SaaS처럼 latency 를 보호합니다.', cardEvidence: '증거 링크', cardEvidenceCopy: '헬스 체크, API 문서, 배포 노트를 한 번에 열 수 있어 제품 이야기가 백엔드에 붙어 있습니다.', releaseLabel: '릴리스 자세', releaseTitle: 'production 인 척하지 않고 staging 부터 검증합니다.', releaseCopy: '정적 자산에 secrets 를 넣지 않고 rollback 을 문서화하며 실제 staging 변경 전에 live health 와 OpenAPI 를 확인합니다.', ledgerTitle: '신뢰성 장부', plansLabel: '플랜', plansTitle: '팀의 reliability 성숙도에 맞춘 패키지.', plansCopy: '가격은 예시지만 운영 경계는 실제입니다: 접수, 자동화, 감사 가능성, 배포 증거.', starterCopy: '공유 인시던트 접수, 상태 가시성, 간단한 서비스 맵이 필요한 작은 팀용.', platformCopy: '자동화 큐, 서비스 소유권, 배포 리뷰 리듬이 필요한 팀용.', interviewCopy: 'API surface, worker model, staging checklist 를 직접 보고 싶은 reviewer 용.', timelineTitle: '라이프사이클', lifeOne: '탐지', lifeOneCopy: '고객용 인시던트가 서비스, 심각도, owner context 와 함께 나타납니다.', lifeTwo: '처리', lifeTwoCopy: '백엔드는 상태를 저장하고 API 를 막지 않도록 지연 작업을 큐로 보냅니다.', lifeThree: '복구', lifeThreeCopy: '해결 상태, 로그, 헬스 체크, rollback 노트로 복구 경로를 확인할 수 있습니다.', faqTitle: '검토받기 위해 만들어졌습니다.', faqOne: '이건 정적 웹사이트뿐인가요?', faqOneCopy: '아닙니다. 페이지는 정적이지만 실행 중인 백엔드, OpenAPI 계약, 헬스 체크, 배포 checklist 로 명확히 연결됩니다.', faqTwo: '백엔드 demo 에 고객 화면을 넣는 이유는?', faqTwoCopy: 'backend, platform, cloud 면접을 지원하기 위한 프로젝트이기 때문입니다. 프론트엔드는 시스템을 더 쉽게 검사하게 만들어야 합니다.', footer: 'PulseBoard Reliability Works 는 고객 이야기를 실제 백엔드 증거와 연결합니다.'
         },
         es: {
-          brand: 'PulseBoard Reliability Works', brandSub: 'Operaciones SaaS inspeccionables', navWorkflow: 'Flujo', navPlans: 'Planes', navFaq: 'FAQ', backendProof: 'Prueba backend', apiDocs: 'Docs API', eyebrow: 'SaaS de fiabilidad para clientes', title: 'Convierte la fiabilidad backend en un producto que el cliente entiende.', lead: 'PulseBoard conecta entrada de incidentes, propiedad de servicios, procesamiento en segundo plano y evidencia de API en un espacio SaaS sereno para equipos que necesitan confianza operativa.', statusRoute: 'Ruta estática de cliente', statusApi: 'Prueba backend en vivo', statusContract: 'Contrato OpenAPI expuesto', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'idiomas de interfaz', metricEndpoints: 'enlaces públicos de evidencia', metricSecrets: 'secrets en HTML', metricRollback: 'rollback documentado', workflowLabel: 'Flujo', workflowTitle: 'Una superficie de producto basada en confianza operativa.', workflowCopy: 'La interfaz convierte mecánicas backend en valor visible sin ocultar la evidencia que un entrevistador necesita inspeccionar.', cardIntake: 'Entrada de incidentes', cardIntakeCopy: 'Registra impacto, servicio dueño, severidad y estado como un flujo claro, no como tickets sueltos.', cardAutomation: 'Cola de automatización', cardAutomationCopy: 'El trabajo diferido vive fuera del camino de la petición, como en un SaaS real que protege la latency.', cardEvidence: 'Enlaces de evidencia', cardEvidenceCopy: 'Health checks, documentación API y notas de despliegue quedan a un clic para anclar la historia al backend.', releaseLabel: 'Postura de release', releaseTitle: 'Entrega staging-first sin fingir producción.', releaseCopy: 'El demo mantiene secrets fuera de assets estáticos, documenta rollback y dirige a live health y OpenAPI antes de tocar staging real.', ledgerTitle: 'Libro de fiabilidad', plansLabel: 'Planes', plansTitle: 'Paquetes para distintos niveles de madurez operativa.', plansCopy: 'El precio es ilustrativo, pero los límites operativos son reales: intake, automatización, auditoría y evidencia de despliegue.', starterCopy: 'Para un equipo pequeño que necesita incident intake compartido, health visible y un mapa simple de servicios.', platformCopy: 'Para equipos que necesitan colas, propiedad de servicios y rituales de revisión de despliegue.', interviewCopy: 'Para reviewers que quieren inspeccionar API surface, worker model y staging checklist.', timelineTitle: 'Ciclo de vida', lifeOne: 'Detectar', lifeOneCopy: 'Aparece un incidente de cliente con servicio, severidad y owner context.', lifeTwo: 'Procesar', lifeTwoCopy: 'El backend persiste estado y envía trabajo diferido a la cola sin bloquear la API.', lifeThree: 'Recuperar', lifeThreeCopy: 'Resolución, logs, health checks y rollback hacen inspeccionable la recuperación.', faqTitle: 'Construido para ser inspeccionado.', faqOne: '¿Es solo un sitio estático?', faqOneCopy: 'No. La página es estática, pero enlaza al backend en ejecución, OpenAPI, health checks y checklist de despliegue.', faqTwo: '¿Por qué incluir una superficie de cliente en un demo backend?', faqTwoCopy: 'Porque el proyecto apoya entrevistas backend, platform y cloud. El frontend debe facilitar la inspección del sistema.', footer: 'PulseBoard Reliability Works conecta la historia del cliente con evidencia backend real.'
+          brand: 'PulseBoard Taller de fiabilidad', brandSub: 'Operaciones SaaS inspeccionables', navWorkflow: 'Flujo', navPlans: 'Planes', navFaq: 'Preguntas frecuentes', backendProof: 'Prueba backend', apiDocs: 'Docs API', eyebrow: 'SaaS de fiabilidad para clientes', title: 'Convierte la fiabilidad backend en un producto que el cliente entiende.', lead: 'PulseBoard conecta entrada de incidentes, propiedad de servicios, procesamiento en segundo plano y evidencia de API en un espacio SaaS sereno para equipos que necesitan confianza operativa.', statusRoute: 'Ruta estática de cliente', statusApi: 'Prueba backend en vivo', statusContract: 'Contrato OpenAPI expuesto', statusStack: 'ambiente de execução com PostgreSQL + Redis', metricLocales: 'idiomas de interfaz', metricEndpoints: 'enlaces públicos de evidencia', metricSecrets: 'secrets en HTML', metricRollback: 'ruta de rollback documentada', workflowLabel: 'Flujo', workflowTitle: 'Una superficie de producto basada en confianza operativa.', workflowCopy: 'La interfaz convierte mecánicas backend en valor visible sin ocultar la evidencia que un entrevistador necesita inspeccionar.', cardIntake: 'Entrada de incidentes', cardIntakeCopy: 'Registra impacto, servicio dueño, severidad y estado como un flujo claro, no como tickets sueltos.', cardAutomation: 'Cola de automatización', cardAutomationCopy: 'El trabajo diferido vive fuera del camino de la petición, como en un SaaS real que protege la latency.', cardEvidence: 'Enlaces de evidencia', cardEvidenceCopy: 'Health checks, documentación API y notas de despliegue quedan a un clic para anclar la historia al backend.', releaseLabel: 'Postura de release', releaseTitle: 'Entrega primero en staging, sin fingir que esto es producción.', releaseCopy: 'El demo mantiene secrets fuera de assets estáticos, documenta rollback y dirige a live health y OpenAPI antes de tocar staging real.', ledgerTitle: 'Libro de fiabilidad', plansLabel: 'Planes', plansTitle: 'Paquetes para distintos niveles de madurez operativa.', plansCopy: 'El precio es ilustrativo, pero los límites operativos son reales: intake, automatización, auditoría y evidencia de despliegue.', starterCopy: 'Para un equipo pequeño que necesita incident intake compartido, health visible y un mapa simple de servicios.', platformCopy: 'Para equipos que necesitan colas, propiedad de servicios y rituales de revisión de despliegue.', interviewCopy: 'Para reviewers que quieren inspeccionar API surface, worker model y staging checklist.', timelineTitle: 'Ciclo de vida', lifeOne: 'Detectar', lifeOneCopy: 'Aparece un incidente de cliente con servicio, severidad y owner context.', lifeTwo: 'Procesar', lifeTwoCopy: 'El backend persiste estado y envía trabajo diferido a la cola sin bloquear la API.', lifeThree: 'Recuperar', lifeThreeCopy: 'Resolución, logs, health checks y rollback hacen inspeccionable la recuperación.', faqTitle: 'Construido para ser inspeccionado.', faqOne: '¿Es solo un sitio estático?', faqOneCopy: 'No. La página es estática, pero enlaza al backend en ejecución, OpenAPI, health checks y checklist de despliegue.', faqTwo: '¿Por qué incluir una superficie de cliente en un demo backend?', faqTwoCopy: 'Porque el proyecto apoya entrevistas backend, platform y cloud. El frontend debe facilitar la inspección del sistema.', footer: 'PulseBoard Reliability Works conecta la historia del cliente con evidencia backend real.'
         },
         fr: {
-          brand: 'PulseBoard Reliability Works', brandSub: 'Opérations SaaS inspectables', navWorkflow: 'Workflow', navPlans: 'Offres', navFaq: 'FAQ', backendProof: 'Preuve backend', apiDocs: 'Docs API', eyebrow: 'SaaS fiabilité côté client', title: 'Transformer la fiabilité backend en produit compréhensible par les clients.', lead: 'PulseBoard relie intake incident, ownership de service, traitement asynchrone et preuves API dans un espace SaaS calme pour les équipes qui veulent de la confiance opérationnelle.', statusRoute: 'Route client statique', statusApi: 'Preuve backend live', statusContract: 'Contrat OpenAPI exposé', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'langues d’interface', metricEndpoints: 'liens publics de preuve', metricSecrets: 'secrets dans le HTML', metricRollback: 'rollback documenté', workflowLabel: 'Workflow', workflowTitle: 'Une surface produit conçue pour la confiance opérationnelle.', workflowCopy: 'L’interface rend les mécanismes backend visibles comme valeur client tout en gardant les preuves techniques inspectables.', cardIntake: 'Intake incident', cardIntakeCopy: 'Capture impact client, service propriétaire, sévérité et état dans un flux clair plutôt qu’un amas de tickets.', cardAutomation: 'File d’automatisation', cardAutomationCopy: 'Le travail différé reste hors du chemin de requête, comme dans un vrai SaaS qui protège la latency.', cardEvidence: 'Liens de preuve', cardEvidenceCopy: 'Health checks, docs API et notes de déploiement restent accessibles en un clic pour relier le récit au backend.', releaseLabel: 'Posture release', releaseTitle: 'Livraison staging-first sans prétendre être en production.', releaseCopy: 'Le demo garde les secrets hors des assets statiques, documente rollback, et oriente vers live health et OpenAPI avant tout changement staging réel.', ledgerTitle: 'Registre fiabilité', plansLabel: 'Offres', plansTitle: 'Packages adaptés à la maturité fiabilité des équipes.', plansCopy: 'Les prix sont illustratifs, mais les frontières opérationnelles sont réelles : intake, automatisation, auditabilité et preuve de déploiement.', starterCopy: 'Pour une petite équipe qui veut intake partagé, visibilité health et carte simple de services.', platformCopy: 'Pour les équipes qui ont besoin de files, ownership de service et rituels de revue de déploiement.', interviewCopy: 'Pour les reviewers qui veulent inspecter API surface, worker model et staging checklist.', timelineTitle: 'Cycle de vie', lifeOne: 'Détecter', lifeOneCopy: 'Un incident client apparaît avec service, sévérité et owner context.', lifeTwo: 'Traiter', lifeTwoCopy: 'Le backend persiste l’état et pousse le travail différé en file sans bloquer l’API.', lifeThree: 'Récupérer', lifeThreeCopy: 'Résolution, logs, health checks et rollback rendent le chemin de reprise inspectable.', faqTitle: 'Conçu pour être inspecté.', faqOne: 'Est-ce seulement un site statique ?', faqOneCopy: 'Non. La page est statique, mais elle pointe clairement vers le backend actif, OpenAPI, health checks et checklist de déploiement.', faqTwo: 'Pourquoi une surface client dans un demo backend ?', faqTwoCopy: 'Parce que le projet sert des entretiens backend, platform et cloud. Le frontend doit rendre le système plus facile à inspecter.', footer: 'PulseBoard Reliability Works relie le récit client à de vraies preuves backend.'
+          brand: 'PulseBoard Reliability Works', brandSub: 'Opérations SaaS inspectables', navWorkflow: 'Flux de travail', navPlans: 'Offres', navFaq: 'Questions fréquentes', backendProof: 'Preuve backend', apiDocs: 'Docs API', eyebrow: 'SaaS fiabilité côté client', title: 'Transformer la fiabilité backend en produit compréhensible par les clients.', lead: 'PulseBoard relie intake incident, ownership de service, traitement asynchrone et preuves API dans un espace SaaS calme pour les équipes qui veulent de la confiance opérationnelle.', statusRoute: 'Route client statique', statusApi: 'Preuve backend live', statusContract: 'Contrat OpenAPI exposé', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'langues d’interface', metricEndpoints: 'liens publics de preuve', metricSecrets: 'secrets dans le HTML', metricRollback: 'chemin de rollback documenté', workflowLabel: 'Flux de travail', workflowTitle: 'Une surface produit conçue pour la confiance opérationnelle.', workflowCopy: 'L’interface rend les mécanismes backend visibles comme valeur client tout en gardant les preuves techniques inspectables.', cardIntake: 'Intake incident', cardIntakeCopy: 'Capture impact client, service propriétaire, sévérité et état dans un flux clair plutôt qu’un amas de tickets.', cardAutomation: 'File d’automatisation', cardAutomationCopy: 'Le travail différé reste hors du chemin de requête, comme dans un vrai SaaS qui protège la latency.', cardEvidence: 'Liens de preuve', cardEvidenceCopy: 'Health checks, docs API et notes de déploiement restent accessibles en un clic pour relier le récit au backend.', releaseLabel: 'Posture release', releaseTitle: 'Livraison staging-first sans prétendre être en production.', releaseCopy: 'Le demo garde les secrets hors des assets statiques, documente rollback, et oriente vers live health et OpenAPI avant tout changement staging réel.', ledgerTitle: 'Registre fiabilité', plansLabel: 'Offres', plansTitle: 'Packages adaptés à la maturité fiabilité des équipes.', plansCopy: 'Les prix sont illustratifs, mais les frontières opérationnelles sont réelles : intake, automatisation, auditabilité et preuve de déploiement.', starterCopy: 'Pour une petite équipe qui veut intake partagé, visibilité health et carte simple de services.', platformCopy: 'Pour les équipes qui ont besoin de files, ownership de service et rituels de revue de déploiement.', interviewCopy: 'Pour les reviewers qui veulent inspecter directement la surface API, le worker model et la staging checklist.', timelineTitle: 'Cycle de vie', lifeOne: 'Détecter', lifeOneCopy: 'Un incident client apparaît avec service, sévérité et owner context.', lifeTwo: 'Traiter', lifeTwoCopy: 'Le backend persiste l’état et pousse le travail différé en file sans bloquer l’API.', lifeThree: 'Récupérer', lifeThreeCopy: 'L’état de résolution, les logs, les health checks et les notes de rollback rendent le chemin de reprise inspectable.', faqTitle: 'Conçu pour être inspecté.', faqOne: 'Est-ce seulement un site statique ?', faqOneCopy: 'Non. La page est statique, mais elle renvoie volontairement vers le backend actif, le contrat OpenAPI, les health checks et la checklist de déploiement.', faqTwo: 'Pourquoi une surface client dans un demo backend ?', faqTwoCopy: 'Parce que le projet est conçu pour des entretiens backend, platform et cloud. Le frontend devrait rendre le système plus facile à inspecter.', footer: 'PulseBoard Reliability Works relie le récit client à de vraies preuves backend.'
         },
         de: {
-          brand: 'PulseBoard Reliability Works', brandSub: 'Prüfbare SaaS Operations', navWorkflow: 'Workflow', navPlans: 'Pakete', navFaq: 'FAQ', backendProof: 'Backend Nachweis', apiDocs: 'API Docs', eyebrow: 'Kundenseitiges Reliability SaaS', title: 'Backend Reliability wird zu einem Produkt, das Kunden verstehen.', lead: 'PulseBoard verbindet Incident Intake, Service Ownership, Hintergrundverarbeitung und API Nachweise in einem ruhigen SaaS Workspace für Teams mit operativem Vertrauensbedarf.', statusRoute: 'Statische Kundenroute', statusApi: 'Live Backend Nachweis', statusContract: 'OpenAPI Vertrag sichtbar', statusStack: 'PostgreSQL + Redis Runtime', metricLocales: 'Interface Sprachen', metricEndpoints: 'öffentliche Nachweis Links', metricSecrets: 'Secrets im HTML', metricRollback: 'Rollback Pfad dokumentiert', workflowLabel: 'Workflow', workflowTitle: 'Eine Produktfläche für operatives Vertrauen.', workflowCopy: 'Das Interface macht Backend Mechanik als Kundennutzen sichtbar und hält die technischen Nachweise für Reviews erreichbar.', cardIntake: 'Incident Intake', cardIntakeCopy: 'Erfasst Kundenwirkung, owning service, Schweregrad und Zustand als klaren Ablauf statt losem Ticket Haufen.', cardAutomation: 'Automatisierungs Queue', cardAutomationCopy: 'Verzögerte Arbeit läuft außerhalb des Request Pfads, wie bei einem echten SaaS zum Schutz der latency.', cardEvidence: 'Nachweis Links', cardEvidenceCopy: 'Health Checks, API Docs und Deployment Notizen bleiben mit einem Klick erreichbar und binden die Story ans Backend.', releaseLabel: 'Release Haltung', releaseTitle: 'Staging-first Lieferung, ohne Production vorzutäuschen.', releaseCopy: 'Das Demo hält secrets aus statischen Assets heraus, dokumentiert rollback und führt vor echten staging Änderungen zu live health und OpenAPI.', ledgerTitle: 'Reliability Ledger', plansLabel: 'Pakete', plansTitle: 'Pakete für unterschiedliche Reliability Reifegrade.', plansCopy: 'Preise sind illustrativ, aber die operativen Grenzen sind echt: Intake, Automatisierung, Auditierbarkeit und Deployment Nachweise.', starterCopy: 'Für kleine Teams mit gemeinsamem Incident Intake, Health Sichtbarkeit und einfacher Service Map.', platformCopy: 'Für Teams mit Queue Automatisierung, Service Ownership und Deployment Review Ritualen.', interviewCopy: 'Für Reviewer, die API surface, worker model und staging checklist direkt prüfen wollen.', timelineTitle: 'Lebenszyklus', lifeOne: 'Erkennen', lifeOneCopy: 'Ein Kundenincident erscheint mit Service, Schweregrad und owner context.', lifeTwo: 'Verarbeiten', lifeTwoCopy: 'Das Backend speichert Zustand und schiebt verzögerte Arbeit in die Queue, ohne die API zu blockieren.', lifeThree: 'Wiederherstellen', lifeThreeCopy: 'Resolution, Logs, Health Checks und Rollback Notizen machen den Recovery Pfad prüfbar.', faqTitle: 'Gebaut, um geprüft zu werden.', faqOne: 'Ist das nur eine statische Website?', faqOneCopy: 'Nein. Die Seite ist statisch, verweist aber klar auf laufendes Backend, OpenAPI Vertrag, Health Checks und Deployment Checklist.', faqTwo: 'Warum eine Kundenfläche in einem Backend Demo?', faqTwoCopy: 'Weil das Projekt Backend, Platform und Cloud Interviews unterstützen soll. Das Frontend soll das System leichter prüfbar machen.', footer: 'PulseBoard Reliability Works verbindet die Kundenstory mit echten Backend Nachweisen.'
+          brand: 'PulseBoard Reliability Works', brandSub: 'Prüfbare SaaS Operations', navWorkflow: 'Arbeitsablauf', navPlans: 'Pakete', navFaq: 'Häufige Fragen', backendProof: 'Backend Nachweis', apiDocs: 'API-Doku', eyebrow: 'Kundenseitiges Reliability SaaS', title: 'Backend Reliability wird zu einem Produkt, das Kunden verstehen.', lead: 'PulseBoard verbindet Incident Intake, Service Ownership, Hintergrundverarbeitung und API Nachweise in einem ruhigen SaaS Workspace für Teams mit operativem Vertrauensbedarf.', statusRoute: 'Statische Kundenroute', statusApi: 'Live Backend Nachweis', statusContract: 'OpenAPI Vertrag sichtbar', statusStack: 'PostgreSQL- und Redis-Laufzeitumgebung', metricLocales: 'Interface Sprachen', metricEndpoints: 'öffentliche Nachweis Links', metricSecrets: 'keine Secrets im Seiten-HTML', metricRollback: 'Rollback-Pfad dokumentiert', workflowLabel: 'Workflow', workflowTitle: 'Eine Produktfläche für operatives Vertrauen.', workflowCopy: 'Das Interface macht Backend Mechanik als Kundennutzen sichtbar und hält die technischen Nachweise für Reviews erreichbar.', cardIntake: 'Incident Intake', cardIntakeCopy: 'Erfasst Kundenwirkung, owning service, Schweregrad und Zustand als klaren Ablauf statt losem Ticket Haufen.', cardAutomation: 'Automatisierungs Queue', cardAutomationCopy: 'Verzögerte Hintergrundarbeit wird getrennt vom Request-Pfad modelliert, wie echte SaaS die Latenz schützen.', cardEvidence: 'Nachweis Links', cardEvidenceCopy: 'Health Checks, API Docs und Deployment Notizen bleiben mit einem Klick erreichbar und binden die Story ans Backend.', releaseLabel: 'Release Haltung', releaseTitle: 'Bereitstellung zuerst in Staging, ohne so zu tun, als wäre das Produktion.', releaseCopy: 'Die Demo legt keine Secrets in statische Assets, dokumentiert Rollback und führt vor echten Staging-Änderungen zu Live-Health und OpenAPI.', ledgerTitle: 'Reliability Ledger', plansLabel: 'Pakete', plansTitle: 'Pakete für unterschiedliche Reliability Reifegrade.', plansCopy: 'Preise sind illustrativ, aber die operativen Grenzen sind echt: Intake, Automatisierung, Auditierbarkeit und Deployment Nachweise.', starterCopy: 'Für kleine Teams mit gemeinsamem Incident Intake, Health Sichtbarkeit und einfacher Service Map.', platformCopy: 'Für Teams mit Queue Automatisierung, Service Ownership und Deployment Review Ritualen.', interviewCopy: 'Für Reviewer, die API-Oberfläche, Worker-Modell und Staging-Checkliste direkt prüfen wollen.', timelineTitle: 'Lebenszyklus', lifeOne: 'Erkennen', lifeOneCopy: 'Ein Kundenincident erscheint mit Service, Schweregrad und owner context.', lifeTwo: 'Verarbeiten', lifeTwoCopy: 'Das Backend speichert Zustand und schiebt verzögerte Arbeit in die Queue, ohne die API zu blockieren.', lifeThree: 'Wiederherstellen', lifeThreeCopy: 'Zustand der Behebung, Logs, Health Checks und Rollback-Notizen machen den Wiederherstellungspfad prüfbar.', faqTitle: 'Gebaut, um geprüft zu werden.', faqOne: 'Ist das nur eine statische Website?', faqOneCopy: 'Nein. Die Seite ist statisch, verweist aber bewusst auf das laufende Backend, den OpenAPI-Vertrag, Health Checks und die Deployment-Checkliste.', faqTwo: 'Warum eine Kundenfläche in einem Backend Demo?', faqTwoCopy: 'Weil das Projekt Interviews zu Backend, Platform und Cloud unterstützen soll. Das Frontend sollte das System leichter prüfbar machen.', footer: 'PulseBoard Reliability Works verbindet die Kundenstory mit echten Backend Nachweisen.'
         },
         'pt-BR': {
-          brand: 'PulseBoard Reliability Works', brandSub: 'Operações SaaS inspecionáveis', navWorkflow: 'Fluxo', navPlans: 'Planos', navFaq: 'FAQ', backendProof: 'Prova backend', apiDocs: 'Docs API', eyebrow: 'SaaS de confiabilidade para clientes', title: 'Transforme confiabilidade backend em um produto que clientes entendem.', lead: 'PulseBoard conecta entrada de incidentes, ownership de serviços, processamento em background e evidências de API em um workspace SaaS calmo para times que precisam de confiança operacional.', statusRoute: 'Rota estática do cliente', statusApi: 'Prova backend ao vivo', statusContract: 'Contrato OpenAPI exposto', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'idiomas da interface', metricEndpoints: 'links públicos de evidência', metricSecrets: 'secrets no HTML', metricRollback: 'rollback documentado', workflowLabel: 'Fluxo', workflowTitle: 'Uma superfície de produto para confiança operacional.', workflowCopy: 'A interface transforma mecânicas backend em valor visível sem esconder a evidência que entrevistadores precisam inspecionar.', cardIntake: 'Entrada de incidentes', cardIntakeCopy: 'Registra impacto do cliente, serviço dono, severidade e estado como fluxo claro, não como tickets soltos.', cardAutomation: 'Fila de automação', cardAutomationCopy: 'Trabalho em background fica fora do request path, como em um SaaS real que protege latency.', cardEvidence: 'Links de evidência', cardEvidenceCopy: 'Health checks, docs API e notas de deploy ficam a um clique para manter a história ligada ao backend.', releaseLabel: 'Postura de release', releaseTitle: 'Entrega staging-first sem fingir produção.', releaseCopy: 'O demo mantém secrets fora de assets estáticos, documenta rollback e aponta para live health e OpenAPI antes de mudanças reais em staging.', ledgerTitle: 'Ledger de confiabilidade', plansLabel: 'Planos', plansTitle: 'Pacotes para diferentes maturidades de reliability.', plansCopy: 'Preço é ilustrativo, mas os limites operacionais são reais: intake, automação, auditabilidade e evidência de deploy.', starterCopy: 'Para time pequeno que precisa de intake compartilhado, health visível e mapa simples de serviços.', platformCopy: 'Para times que precisam de filas, ownership de serviço e rituais de review de deploy.', interviewCopy: 'Para reviewers que querem inspecionar API surface, worker model e staging checklist diretamente.', timelineTitle: 'Ciclo de vida', lifeOne: 'Detectar', lifeOneCopy: 'Um incidente de cliente aparece com serviço, severidade e owner context.', lifeTwo: 'Processar', lifeTwoCopy: 'O backend persiste estado e envia trabalho diferido para a fila sem bloquear a API.', lifeThree: 'Recuperar', lifeThreeCopy: 'Resolução, logs, health checks e rollback tornam a recuperação inspecionável.', faqTitle: 'Construído para ser inspecionado.', faqOne: 'É só um site estático?', faqOneCopy: 'Não. A página é estática, mas aponta claramente para backend em execução, OpenAPI, health checks e checklist de deploy.', faqTwo: 'Por que incluir uma superfície de cliente num demo backend?', faqTwoCopy: 'Porque o projeto apoia entrevistas backend, platform e cloud. O frontend deve facilitar a inspeção do sistema.', footer: 'PulseBoard Reliability Works conecta a história do cliente com evidência backend real.'
+          brand: 'PulseBoard Reliability Works', brandSub: 'Operações SaaS inspecionáveis', navWorkflow: 'Fluxo', navPlans: 'Planos', navFaq: 'FAQ', backendProof: 'Prova backend', apiDocs: 'Docs API', eyebrow: 'SaaS de confiabilidade para clientes', title: 'Transforme confiabilidade backend em um produto que clientes entendem.', lead: 'PulseBoard conecta entrada de incidentes, ownership de serviços, processamento em background e evidências de API em um workspace SaaS calmo para times que precisam de confiança operacional.', statusRoute: 'Rota estática do cliente', statusApi: 'Prova backend ao vivo', statusContract: 'Contrato OpenAPI exposto', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'idiomas da interface', metricEndpoints: 'links públicos de evidência', metricSecrets: 'nenhum secret no HTML da página', metricRollback: 'caminho de rollback documentado', workflowLabel: 'Fluxo', workflowTitle: 'Uma superfície de produto para confiança operacional.', workflowCopy: 'A interface transforma mecânicas backend em valor visível sem esconder a evidência que entrevistadores precisam inspecionar.', cardIntake: 'Entrada de incidentes', cardIntakeCopy: 'Registra impacto do cliente, serviço dono, severidade e estado como fluxo claro, não como tickets soltos.', cardAutomation: 'Fila de automação', cardAutomationCopy: 'O trabalho em segundo plano é modelado separadamente do request path, como em SaaS reais que protegem a latência.', cardEvidence: 'Links de evidência', cardEvidenceCopy: 'Health checks, docs API e notas de deploy ficam a um clique para manter a história ligada ao backend.', releaseLabel: 'Postura de release', releaseTitle: 'Entrega primeiro em staging, sem fingir produção.', releaseCopy: 'A demo não coloca secrets em assets estáticos, documenta rollback e leva os usuários a live health e OpenAPI antes de qualquer mudança real em staging.', ledgerTitle: 'Ledger de confiabilidade', plansLabel: 'Planos', plansTitle: 'Pacotes para diferentes maturidades de reliability.', plansCopy: 'Preço é ilustrativo, mas os limites operacionais são reais: intake, automação, auditabilidade e evidência de deploy.', starterCopy: 'Para time pequeno que precisa de intake compartilhado, health visível e mapa simples de serviços.', platformCopy: 'Para times que precisam de filas, ownership de serviço e rituais de review de deploy.', interviewCopy: 'Para reviewers que querem inspecionar diretamente a API surface, o worker model e o staging checklist.', timelineTitle: 'Ciclo de vida', lifeOne: 'Detectar', lifeOneCopy: 'Um incidente de cliente aparece com serviço, severidade e owner context.', lifeTwo: 'Processar', lifeTwoCopy: 'O backend persiste estado e envia trabalho diferido para a fila sem bloquear a API.', lifeThree: 'Recuperar', lifeThreeCopy: 'Estado de resolução, logs, health checks e notas de rollback tornam o caminho de recuperação inspecionável.', faqTitle: 'Construído para ser inspecionado.', faqOne: 'É só um site estático?', faqOneCopy: 'Não. A página é estática, mas aponta de propósito para o backend em execução, o contrato OpenAPI, os health checks e a checklist de deploy.', faqTwo: 'Por que incluir uma superfície de cliente num demo backend?', faqTwoCopy: 'Porque o projeto foi pensado para entrevistas de backend, platform e cloud. O frontend deve facilitar a inspeção do sistema.', footer: 'PulseBoard Reliability Works conecta a história do cliente com evidência backend real.'
         },
         ar: {
-          brand: 'PulseBoard Reliability Works', brandSub: 'عمليات SaaS قابلة للفحص', navWorkflow: 'سير العمل', navPlans: 'الخطط', navFaq: 'الأسئلة', backendProof: 'دليل الخلفية', apiDocs: 'وثائق API', eyebrow: 'SaaS موثوقية موجه للعملاء', title: 'حوّل موثوقية الخلفية إلى منتج يفهمه العملاء.', lead: 'يربط PulseBoard استقبال الحوادث وملكية الخدمة والمعالجة الخلفية وأدلة API داخل مساحة SaaS هادئة للفرق التي تحتاج ثقة تشغيلية.', statusRoute: 'مسار عميل ثابت', statusApi: 'دليل خلفية مباشر', statusContract: 'عقد OpenAPI ظاهر', statusStack: 'تشغيل PostgreSQL + Redis', metricLocales: 'لغات الواجهة', metricEndpoints: 'روابط دليل عامة', metricSecrets: 'secrets في HTML الصفحة', metricRollback: 'مسار rollback موثق', workflowLabel: 'سير العمل', workflowTitle: 'واجهة منتج مبنية حول الثقة التشغيلية.', workflowCopy: 'تحول الواجهة آليات الخلفية إلى قيمة واضحة للعميل من دون إخفاء الأدلة التي يحتاجها المراجع.', cardIntake: 'استقبال الحوادث', cardIntakeCopy: 'تسجل أثر العميل والخدمة المالكة والخطورة والحالة كتدفق واضح لا كقائمة تذاكر متناثرة.', cardAutomation: 'طابور الأتمتة', cardAutomationCopy: 'يبقى العمل المؤجل خارج مسار الطلب مثل أنظمة SaaS الحقيقية التي تحمي latency.', cardEvidence: 'روابط الأدلة', cardEvidenceCopy: 'تبقى فحوص الصحة ووثائق API وملاحظات النشر على بعد نقرة كي تبقى القصة مرتبطة بالخلفية.', releaseLabel: 'موقف الإصدار', releaseTitle: 'تسليم يبدأ من staging من دون ادعاء production.', releaseCopy: 'يبقي demo الأسرار خارج الملفات الثابتة، ويوثق rollback، ويوجه إلى live health و OpenAPI قبل أي تغيير staging حقيقي.', ledgerTitle: 'سجل الموثوقية', plansLabel: 'الخطط', plansTitle: 'حزم تناسب مستويات نضج الموثوقية لدى الفرق.', plansCopy: 'الأسعار توضيحية، لكن الحدود التشغيلية حقيقية: intake والأتمتة والقابلية للتدقيق ودليل النشر.', starterCopy: 'لفريق صغير يحتاج استقبال حوادث مشترك ورؤية health وخريطة خدمات بسيطة.', platformCopy: 'لفرق تحتاج طوابير أتمتة وملكية خدمات وطقوس مراجعة نشر.', interviewCopy: 'للمراجعين الذين يريدون فحص API surface و worker model و staging checklist مباشرة.', timelineTitle: 'دورة الحياة', lifeOne: 'اكتشاف', lifeOneCopy: 'تظهر حادثة عميل مع الخدمة والخطورة و owner context.', lifeTwo: 'معالجة', lifeTwoCopy: 'يحفظ backend الحالة ويدفع العمل المؤجل إلى الطابور من دون حجب API.', lifeThree: 'تعافٍ', lifeThreeCopy: 'الحل والسجلات وفحوص الصحة وملاحظات rollback تجعل مسار التعافي قابلاً للفحص.', faqTitle: 'مبني ليتم فحصه.', faqOne: 'هل هذا مجرد موقع ثابت؟', faqOneCopy: 'لا. الصفحة ثابتة لكنها تربط بوضوح بالخلفية العاملة وعقد OpenAPI وفحوص الصحة و checklist النشر.', faqTwo: 'لماذا توجد واجهة عميل في demo backend؟', faqTwoCopy: 'لأن المشروع يدعم مقابلات backend و platform و cloud. يجب أن تجعل الواجهة النظام أسهل للفحص.', footer: 'يربط PulseBoard Reliability Works قصة العميل بأدلة backend حقيقية.'
+          brand: 'PulseBoard Reliability Works', brandSub: 'عمليات SaaS قابلة للفحص', navWorkflow: 'سير العمل', navPlans: 'الخطط', navFaq: 'الأسئلة', backendProof: 'دليل الخلفية', apiDocs: 'وثائق API', eyebrow: 'SaaS موثوقية موجه للعملاء', title: 'حوّل موثوقية الخلفية إلى منتج يفهمه العملاء.', lead: 'يربط PulseBoard استقبال الحوادث وملكية الخدمة والمعالجة الخلفية وأدلة API داخل مساحة SaaS هادئة للفرق التي تحتاج ثقة تشغيلية.', statusRoute: 'مسار عميل ثابت', statusApi: 'دليل خلفية مباشر', statusContract: 'عقد OpenAPI ظاهر', statusStack: 'بيئة تشغيل PostgreSQL و Redis', metricLocales: 'لغات الواجهة', metricEndpoints: 'روابط دليل عامة', metricSecrets: 'لا توجد أسرار في HTML الصفحة', metricRollback: 'مسار rollback موثق', workflowLabel: 'سير العمل', workflowTitle: 'واجهة منتج مبنية حول الثقة التشغيلية.', workflowCopy: 'تحول الواجهة آليات الخلفية إلى قيمة واضحة للعميل من دون إخفاء الأدلة التي يحتاجها المراجع.', cardIntake: 'استقبال الحوادث', cardIntakeCopy: 'تسجل أثر العميل والخدمة المالكة والخطورة والحالة كتدفق واضح لا كقائمة تذاكر متناثرة.', cardAutomation: 'طابور الأتمتة', cardAutomationCopy: 'يبقى العمل المؤجل خارج مسار الطلب مثل أنظمة SaaS الحقيقية التي تحمي latency.', cardEvidence: 'روابط الأدلة', cardEvidenceCopy: 'تبقى فحوص الصحة ووثائق API وملاحظات النشر على بعد نقرة كي تبقى القصة مرتبطة بالخلفية.', releaseLabel: 'موقف الإصدار', releaseTitle: 'تسليم يبدأ من staging من دون ادعاء production.', releaseCopy: 'يبقي demo الأسرار خارج الملفات الثابتة، ويوثق rollback، ويوجه إلى live health و OpenAPI قبل أي تغيير staging حقيقي.', ledgerTitle: 'سجل الموثوقية', plansLabel: 'الخطط', plansTitle: 'حزم تناسب مستويات نضج الموثوقية لدى الفرق.', plansCopy: 'الأسعار توضيحية، لكن الحدود التشغيلية حقيقية: intake والأتمتة والقابلية للتدقيق ودليل النشر.', starterCopy: 'لفريق صغير يحتاج استقبال حوادث مشترك ورؤية health وخريطة خدمات بسيطة.', platformCopy: 'لفرق تحتاج طوابير أتمتة وملكية خدمات وطقوس مراجعة نشر.', interviewCopy: 'للمراجعين الذين يريدون فحص surface API و worker model و staging checklist مباشرة.', timelineTitle: 'دورة الحياة', lifeOne: 'اكتشاف', lifeOneCopy: 'تظهر حادثة عميل مع الخدمة والخطورة و owner context.', lifeTwo: 'معالجة', lifeTwoCopy: 'يحفظ backend الحالة ويدفع العمل المؤجل إلى الطابور من دون حجب API.', lifeThree: 'تعافٍ', lifeThreeCopy: 'تجعل حالة الحل والسجلات وفحوص الصحة وملاحظات rollback مسار الاستعادة قابلاً للفحص.', faqTitle: 'مبني ليتم فحصه.', faqOne: 'هل هذا مجرد موقع ثابت؟', faqOneCopy: 'لا. الصفحة ثابتة، لكنها تربط عمداً بالخلفية العاملة وعقد OpenAPI وفحوص الصحة وقائمة التحقق للنشر.', faqTwo: 'لماذا توجد واجهة عميل في demo backend؟', faqTwoCopy: 'لأن المشروع مخصص لدعم مقابلات backend و platform و cloud. ينبغي أن تجعل الواجهة النظام أسهل للفحص.', footer: 'يربط PulseBoard Reliability Works قصة العميل بأدلة backend حقيقية.'
         },
         'zh-CN': {
-          brand: 'PulseBoard 可靠性工作台', brandSub: '可检查的 SaaS 运维界面', navWorkflow: '工作流', navPlans: '方案', navFaq: '常见问题', backendProof: '后端证据', apiDocs: 'API 文档', eyebrow: '面向客户的可靠性 SaaS', title: '把后端可靠性变成客户看得懂的产品。', lead: 'PulseBoard 把事件接收、服务归属、后台处理和 API 证据连接成一个安静的 SaaS 工作区，服务于需要运营信任的团队。', statusRoute: '静态客户路由', statusApi: '实时后端证据', statusContract: 'OpenAPI 合约已公开', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '界面语言', metricEndpoints: '公开证据链接', metricSecrets: '页面 HTML 中的 secrets', metricRollback: 'rollback 路径已记录', workflowLabel: '工作流', workflowTitle: '围绕运营信心打造的产品界面。', workflowCopy: '界面把后端机制转成可见的客户价值，同时保留面试官需要检查的实现证据。', cardIntake: '事件接收', cardIntakeCopy: '用清晰流程记录客户影响、所属服务、严重级别和当前状态，而不是散乱工单。', cardAutomation: '自动化队列', cardAutomationCopy: '延迟后台工作独立于请求路径，符合真实 SaaS 系统保护 latency 的方式。', cardEvidence: '证据链接', cardEvidenceCopy: '健康检查、API 文档和部署笔记保持一键可达，让产品叙事始终锚定后端。', releaseLabel: '发布姿态', releaseTitle: '先 staging，再交付；不假装这是 production。', releaseCopy: 'Demo 不把 secrets 放进静态资源，记录 rollback，并在任何真实 staging 变更前导向 live health 和 OpenAPI 检查。', ledgerTitle: '可靠性账本', plansLabel: '方案', plansTitle: '按照不同可靠性成熟度设计的团队方案。', plansCopy: '价格只是展示，但运营边界是真的：接收、自动化、可审计性和部署证据。', starterCopy: '适合需要共享事件接收、健康状态和简单服务地图的小团队。', platformCopy: '适合需要自动化队列、服务归属和部署审查节奏的团队。', interviewCopy: '适合想直接检查 API surface、worker model 和 staging checklist 的 reviewer。', timelineTitle: '生命周期', lifeOne: '发现', lifeOneCopy: '客户事件会带着服务、严重级别和 owner context 出现。', lifeTwo: '处理', lifeTwoCopy: '后端保存状态，并把延迟工作送入队列，而不是阻塞 API。', lifeThree: '恢复', lifeThreeCopy: '解决状态、日志、健康检查和 rollback 笔记让恢复路径可检查。', faqTitle: '为被检查而构建。', faqOne: '这只是静态网站吗？', faqOneCopy: '不是。页面本身是静态的，但它明确连到正在运行的后端、OpenAPI 合约、健康检查和部署 checklist。', faqTwo: '为什么后端 demo 要有客户界面？', faqTwoCopy: '因为这个项目是为 backend、platform、cloud 面试准备的。前端应该让系统更容易被检查。', footer: 'PulseBoard 可靠性工作台让客户故事连接到真实后端证据。'
+          brand: 'PulseBoard 可靠性工作台', brandSub: '可检查的 SaaS 运维界面', navWorkflow: '工作流', navPlans: '方案', navFaq: '常见问题', backendProof: '后端证据', apiDocs: 'API 文档', eyebrow: '面向客户的可靠性 SaaS', title: '把后端可靠性变成客户看得懂的产品。', lead: 'PulseBoard 把事件接收、服务归属、后台处理和 API 证据连接成一个安静的 SaaS 工作区，服务于需要运营信任的团队。', statusRoute: '静态客户路由', statusApi: '实时后端证据', statusContract: 'OpenAPI 合约已公开', statusStack: 'PostgreSQL + Redis 运行环境', metricLocales: '界面语言', metricEndpoints: '公开证据链接', metricSecrets: '页面 HTML 中没有 secrets', metricRollback: '已记录 rollback 路径', workflowLabel: '工作流', workflowTitle: '围绕运营信心打造的产品界面。', workflowCopy: '界面把后端机制转成可见的客户价值，同时保留面试官需要检查的实现证据。', cardIntake: '事件接收', cardIntakeCopy: '用清晰流程记录客户影响、所属服务、严重级别和当前状态，而不是散乱工单。', cardAutomation: '自动化队列', cardAutomationCopy: '延迟的后台工作会独立于请求路径建模，这正是真实 SaaS 保护延迟的方式。', cardEvidence: '证据链接', cardEvidenceCopy: '健康检查、API 文档和部署笔记保持一键可达，让产品叙事始终锚定后端。', releaseLabel: '发布姿态', releaseTitle: '先从 staging 交付，不假装这是 production。', releaseCopy: 'Demo 不会把 secrets 放进静态资源，会记录 rollback，并在任何真实 staging 变更前先导向 live health 和 OpenAPI 检查。', ledgerTitle: '可靠性账本', plansLabel: '方案', plansTitle: '按照不同可靠性成熟度设计的团队方案。', plansCopy: '价格只是展示，但运营边界是真的：接收、自动化、可审计性和部署证据。', starterCopy: '适合需要共享事件接收、健康状态和简单服务地图的小团队。', platformCopy: '适合需要自动化队列、服务归属和部署审查节奏的团队。', interviewCopy: '给想直接检查 API 表面、worker model 和 staging checklist 的 reviewer。', timelineTitle: '生命周期', lifeOne: '发现', lifeOneCopy: '客户事件会带着服务、严重级别和 owner context 出现。', lifeTwo: '处理', lifeTwoCopy: '后端保存状态，并把延迟工作送入队列，而不是阻塞 API。', lifeThree: '恢复', lifeThreeCopy: '解决状态、日志、健康检查和 rollback 笔记让恢复路径可检查。', faqTitle: '为被检查而构建。', faqOne: '这只是静态网站吗？', faqOneCopy: '不是。页面本身是静态的，但它明确连到正在运行的后端、OpenAPI 合约、健康检查和部署 checklist。', faqTwo: '为什么后端 demo 要有客户界面？', faqTwoCopy: '因为这个项目是为 backend、platform、cloud 面试准备的。前端应该让系统更容易被检查。', footer: 'PulseBoard 可靠性工作台让客户故事连接到真实后端证据。'
         },
       };
+
+      const frontendLocaleExtras = {
+        en: {
+          pageTitle: 'PulseBoard Reliability Works',
+          pageDescription: 'PulseBoard Reliability Works is the customer-facing surface for a cloud-native SaaS backend demo, with live backend proof one click away.',
+          navPrimary: 'Primary',
+          proofPanelLabel: 'Product proof panel',
+          proofMetricsLabel: 'Product proof metrics',
+          langSelectorLabel: 'Language selector',
+          statusStatic: 'static',
+          statusLive: 'live',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'homepage',
+          ledgerCustomerRoute: 'customer route',
+          ledgerProofRoute: 'proof route',
+          ledgerDeployment: 'deployment',
+          ledgerDeploymentValue: 'backup before install',
+          starterTitle: 'Starter',
+          platformTitle: 'Platform',
+          interviewTitle: 'Interview',
+          docsIncluded: 'docs',
+          includedText: 'included',
+          faqLabel: 'FAQ',
+          openapiLink: 'OpenAPI',
+        },
+        'zh-TW': {
+          pageTitle: 'PulseBoard 可靠性工作台',
+          pageDescription: 'PulseBoard 可靠性工作台是雲原生 SaaS 後端 demo 的客戶面，點一下就能看到即時後端證據。',
+          navPrimary: '主要導覽',
+          proofPanelLabel: '產品證據面板',
+          proofMetricsLabel: '產品證據指標',
+          langSelectorLabel: '語言選擇器',
+          statusStatic: '靜態',
+          statusLive: '即時',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: '首頁',
+          ledgerCustomerRoute: '客戶路由',
+          ledgerProofRoute: '證據路由',
+          ledgerDeployment: '部署',
+          ledgerDeploymentValue: '安裝前備份',
+          starterTitle: '入門',
+          platformTitle: '平台',
+          interviewTitle: '面試',
+          docsIncluded: '文件',
+          includedText: '已包含',
+          faqLabel: '常見問題',
+          openapiLink: 'OpenAPI',
+        },
+        ja: {
+          pageTitle: 'PulseBoard 信頼性ワークス',
+          pageDescription: 'PulseBoard 信頼性ワークスは、クラウドネイティブ SaaS バックエンド demo の顧客向け画面で、ライブのバックエンド証跡にすぐ到達できます。',
+          navPrimary: 'メインナビ',
+          proofPanelLabel: '製品証跡パネル',
+          proofMetricsLabel: '製品証跡の指標',
+          langSelectorLabel: '言語セレクター',
+          statusStatic: '静的',
+          statusLive: 'ライブ',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'ホーム',
+          ledgerCustomerRoute: '顧客ルート',
+          ledgerProofRoute: '証跡ルート',
+          ledgerDeployment: 'デプロイ',
+          ledgerDeploymentValue: 'インストール前バックアップ',
+          starterTitle: 'スターター',
+          platformTitle: 'プラットフォーム',
+          interviewTitle: '面接',
+          docsIncluded: '資料',
+          includedText: '含む',
+          faqLabel: 'よくある質問',
+          openapiLink: 'OpenAPI',
+        },
+        ko: {
+          pageTitle: 'PulseBoard 신뢰성 워크스',
+          pageDescription: 'PulseBoard 신뢰성 워크스는 클라우드 네이티브 SaaS 백엔드 데모의 고객용 화면으로, 라이브 백엔드 증거를 한 번에 볼 수 있습니다.',
+          navPrimary: '주요 탐색',
+          proofPanelLabel: '제품 증거 패널',
+          proofMetricsLabel: '제품 증거 지표',
+          langSelectorLabel: '언어 선택기',
+          statusStatic: '정적',
+          statusLive: '라이브',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: '홈페이지',
+          ledgerCustomerRoute: '고객 경로',
+          ledgerProofRoute: '증거 경로',
+          ledgerDeployment: '배포',
+          ledgerDeploymentValue: '설치 전 백업',
+          starterTitle: '스타터',
+          platformTitle: '플랫폼',
+          interviewTitle: '면접',
+          docsIncluded: '문서',
+          includedText: '포함',
+          faqLabel: '자주 묻는 질문',
+          openapiLink: 'OpenAPI',
+        },
+        es: {
+          pageTitle: 'PulseBoard Taller de fiabilidad',
+          pageDescription: 'PulseBoard Taller de fiabilidad es la superficie para clientes de una demo backend SaaS nativa en la nube, con pruebas en vivo del backend a un clic.',
+          navPrimary: 'Navegación principal',
+          proofPanelLabel: 'Panel de evidencia del producto',
+          proofMetricsLabel: 'Métricas de evidencia del producto',
+          langSelectorLabel: 'Selector de idioma',
+          statusStatic: 'estático',
+          statusLive: 'en vivo',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'inicio',
+          ledgerCustomerRoute: 'ruta de cliente',
+          ledgerProofRoute: 'ruta de prueba',
+          ledgerDeployment: 'despliegue',
+          ledgerDeploymentValue: 'copia antes de instalar',
+          starterTitle: 'Inicio',
+          platformTitle: 'Plataforma',
+          interviewTitle: 'Entrevista',
+          docsIncluded: 'docs',
+          includedText: 'incluidas',
+          faqLabel: 'Preguntas frecuentes',
+          openapiLink: 'OpenAPI',
+        },
+        fr: {
+          pageTitle: 'PulseBoard Atelier de fiabilité',
+          pageDescription: 'PulseBoard Atelier de fiabilité est la surface cliente d’une démo backend SaaS cloud-native, avec des preuves backend en direct à un clic.',
+          navPrimary: 'Navigation principale',
+          proofPanelLabel: 'Panneau de preuve produit',
+          proofMetricsLabel: 'Métriques de preuve produit',
+          langSelectorLabel: 'Sélecteur de langue',
+          statusStatic: 'statique',
+          statusLive: 'en direct',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'accueil',
+          ledgerCustomerRoute: 'route client',
+          ledgerProofRoute: 'route preuve',
+          ledgerDeployment: 'déploiement',
+          ledgerDeploymentValue: 'sauvegarde avant installation',
+          starterTitle: 'Démarrage',
+          platformTitle: 'Plateforme',
+          interviewTitle: 'Entretien',
+          docsIncluded: 'docs',
+          includedText: 'inclus',
+          faqLabel: 'FAQ',
+          openapiLink: 'OpenAPI',
+        },
+        de: {
+          pageTitle: 'PulseBoard Zuverlässigkeitswerk',
+          pageDescription: 'PulseBoard Zuverlässigkeitswerk ist die kundennahe Oberfläche einer cloudnativen SaaS-Backend-Demo, mit Live-Backend-Belegen auf einen Klick.',
+          navPrimary: 'Hauptnavigation',
+          proofPanelLabel: 'Produktnachweis-Panel',
+          proofMetricsLabel: 'Produktnachweis-Metriken',
+          langSelectorLabel: 'Sprachauswahl',
+          statusStatic: 'statisch',
+          statusLive: 'live',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'Startseite',
+          ledgerCustomerRoute: 'Kundenpfad',
+          ledgerProofRoute: 'Belegpfad',
+          ledgerDeployment: 'Bereitstellung',
+          ledgerDeploymentValue: 'Backup vor der Installation',
+          starterTitle: 'Starter',
+          platformTitle: 'Plattform',
+          interviewTitle: 'Interview',
+          docsIncluded: 'Doku',
+          includedText: 'enthalten',
+          faqLabel: 'FAQ',
+          openapiLink: 'OpenAPI',
+        },
+        'pt-BR': {
+          pageTitle: 'PulseBoard Oficina de confiabilidade',
+          pageDescription: 'PulseBoard Oficina de confiabilidade é a superfície para clientes de uma demo backend SaaS nativa da nuvem, com provas ao vivo do backend a um clique.',
+          navPrimary: 'Navegação principal',
+          proofPanelLabel: 'Painel de prova do produto',
+          proofMetricsLabel: 'Métricas de prova do produto',
+          langSelectorLabel: 'Seletor de idioma',
+          statusStatic: 'estático',
+          statusLive: 'ao vivo',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'início',
+          ledgerCustomerRoute: 'rota do cliente',
+          ledgerProofRoute: 'rota de prova',
+          ledgerDeployment: 'implantação',
+          ledgerDeploymentValue: 'backup antes da instalação',
+          starterTitle: 'Inicial',
+          platformTitle: 'Plataforma',
+          interviewTitle: 'Entrevista',
+          docsIncluded: 'docs',
+          includedText: 'incluídos',
+          faqLabel: 'Perguntas frequentes',
+          openapiLink: 'OpenAPI',
+        },
+        ar: {
+          pageTitle: 'PulseBoard ورشة الموثوقية',
+          pageDescription: 'PulseBoard ورشة الموثوقية هي الواجهة المخصصة للعميل في عرض backend SaaS سحابي، مع أدلة مباشرة على backend بنقرة واحدة.',
+          navPrimary: 'التنقل الرئيسي',
+          proofPanelLabel: 'لوحة إثبات المنتج',
+          proofMetricsLabel: 'مقاييس إثبات المنتج',
+          langSelectorLabel: 'محدد اللغة',
+          statusStatic: 'ثابت',
+          statusLive: 'مباشر',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: 'الصفحة الرئيسية',
+          ledgerCustomerRoute: 'مسار العميل',
+          ledgerProofRoute: 'مسار الأدلة',
+          ledgerDeployment: 'النشر',
+          ledgerDeploymentValue: 'نسخة احتياطية قبل التثبيت',
+          starterTitle: 'بداية',
+          platformTitle: 'المنصة',
+          interviewTitle: 'المقابلة',
+          docsIncluded: 'المستندات',
+          includedText: 'مشمولة',
+          faqLabel: 'الأسئلة الشائعة',
+          openapiLink: 'OpenAPI',
+        },
+        'zh-CN': {
+          pageTitle: 'PulseBoard 可靠性工作台',
+          pageDescription: 'PulseBoard 可靠性工作台是云原生 SaaS 后端 demo 的客户界面，点一下就能看到实时后端证据。',
+          navPrimary: '主导航',
+          proofPanelLabel: '产品证据面板',
+          proofMetricsLabel: '产品证据指标',
+          langSelectorLabel: '语言选择器',
+          statusStatic: '静态',
+          statusLive: '在线',
+          statusOpenapi: 'OpenAPI',
+          statusSaas: 'SaaS',
+          ledgerHomepage: '首页',
+          ledgerCustomerRoute: '客户路由',
+          ledgerProofRoute: '证据路由',
+          ledgerDeployment: '部署',
+          ledgerDeploymentValue: '安装前备份',
+          starterTitle: '入门',
+          platformTitle: '平台',
+          interviewTitle: '面试',
+          docsIncluded: '文档',
+          includedText: '已包含',
+          faqLabel: '常见问题',
+          openapiLink: 'OpenAPI',
+        },
+      };
+
+      Object.entries(frontendLocaleExtras).forEach(function(entry) {
+        const locale = entry[0];
+        const extra = entry[1];
+        translations[locale] = { ...(translations[locale] || {}), ...extra };
+      });
 
       const baseText = {};
       document.querySelectorAll('[data-i18n]').forEach(function(node) {
@@ -559,9 +841,19 @@
         const pack = translations[active] || translations.en;
         document.documentElement.lang = active;
         document.documentElement.dir = active === 'ar' ? 'rtl' : 'ltr';
+        document.title = pack.pageTitle || translations.en.pageTitle || document.title;
+        const description = document.querySelector('meta[name="description"]');
+        if (description) {
+          description.content = pack.pageDescription || translations.en.pageDescription || description.content;
+        }
         document.querySelectorAll('[data-i18n]').forEach(function(node) {
           const key = node.getAttribute('data-i18n');
           node.textContent = pack[key] || translations.en[key] || baseText[key] || '';
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function(node) {
+          const key = node.getAttribute('data-i18n-aria');
+          const value = pack[key] || translations.en[key] || '';
+          node.setAttribute('aria-label', value);
         });
         langSelect.value = active;
         localStorage.setItem('pulseboard.frontend.lang', active);
