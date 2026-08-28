@@ -112,6 +112,8 @@ or a reviewed commit SHA:
 
 The workflow validates the ref shape, builds and verifies the project portal and namespaced PulseBoard artifacts, refuses to deploy over a dirty server worktree by default, fetches the requested ref, rebuilds the production compose stack, checks local-on-server health endpoints, runs `pnpm demo:flow` inside the API container, installs the portal and `/demo/` artifacts, backs up and installs the reviewed Nginx contract to both `sites-available/anlan.conf` and the staging host's regular `sites-enabled/anlan.conf`, reloads Nginx after `nginx -t`, and runs `pnpm verify:public`. The contract preserves Career Radar at `/jobs/`. Enable `preserve_dirty_worktree` only after reviewing the reported status; it preserves the server changes as patches, an untracked-file archive, and a Git stash before deployment.
 
+The deployment detaches stdin from every one-shot `docker compose run` command. This is required because those commands execute inside an SSH heredoc and can otherwise consume all commands that follow them. A release-specific remote completion marker and an exact public `/demo/health/live` SHA assertion prevent a truncated remote script from being reported as a successful release.
+
 ## Post-Run Evidence
 
 Record only non-sensitive evidence:

@@ -113,6 +113,8 @@ jobs:
           PRESERVE_DIRTY_WORKTREE="$2"
           DEPLOY_SHA="$3"
           cd ~/pulseboard
+          completion_marker="$HOME/.pulseboard-deploy-complete-$DEPLOY_SHA"
+          rm -f -- "$completion_marker"
 
           if [ -n "$(git status --porcelain)" ]; then
             if [ "$PRESERVE_DIRTY_WORKTREE" != "true" ]; then
@@ -158,11 +160,11 @@ jobs:
           sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
             docker compose -f "$compose_file" up -d postgres redis
           sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
-            docker compose -f "$compose_file" run --rm migrate
+            docker compose -f "$compose_file" run --rm -T migrate </dev/null
           sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
             docker compose -f "$compose_file" up -d --no-build --no-deps --force-recreate api worker
           sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
-            docker compose -f "$compose_file" run --rm public-site
+            docker compose -f "$compose_file" run --rm -T public-site </dev/null
 
           wait_for_url() {
             url="$1"
@@ -293,9 +295,18 @@ jobs:
             echo "Reloaded Nginx is not proxying the HeatStack API contract." >&2
             exit 1
           fi
+          printf '%s\n' "$revision" > "$completion_marker"
+          printf 'Remote deployment completed for %s.\n' "$revision"
           REMOTE
+
+          completion_revision="$(ssh pulseboard-staging cat ".pulseboard-deploy-complete-$DEPLOY_SHA")"
+          if [ "$completion_revision" != "$DEPLOY_SHA" ]; then
+            echo "Remote deployment did not reach its completion marker." >&2
+            exit 1
+          fi
 
       - name: Verify portal, HeatStack, PulseBoard demo, and backend surface
         env:
           PUBLIC_BASE_URL: ${{ vars.TENCENT_STAGING_PUBLIC_BASE_URL || 'https://anlan.store' }}
+          EXPECTED_RELEASE_SHA: ${{ steps.release.outputs.sha }}
         run: pnpm verify:public

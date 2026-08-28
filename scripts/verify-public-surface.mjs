@@ -1,4 +1,5 @@
 const baseUrl = normalizeBaseUrl(process.env.PUBLIC_BASE_URL ?? 'https://anlan.store');
+const expectedReleaseSha = process.env.EXPECTED_RELEASE_SHA?.trim();
 const failures = [];
 const observations = [];
 const privateNames = [
@@ -145,6 +146,14 @@ async function verifyPulseBoard() {
   const live = await fetchJson('/demo/health/live');
   expect('liveness returns 200', live.response.status === 200, live.response.status + ' ' + live.response.statusText);
   expect('liveness body status is ok', live.json?.status === 'ok', live.body.slice(0, 160));
+  observe('/demo/health/live release', live.json?.release ?? '<missing>');
+  if (expectedReleaseSha) {
+    expect(
+      'public liveness reports the deployed release',
+      live.json?.release === expectedReleaseSha,
+      `expected ${expectedReleaseSha}, received ${String(live.json?.release)}`,
+    );
+  }
 
   const ready = await fetchJson('/demo/health/ready');
   expect('readiness returns 200', ready.response.status === 200, ready.response.status + ' ' + ready.response.statusText);
