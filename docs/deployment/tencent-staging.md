@@ -39,12 +39,14 @@ POSTGRES_PASSWORD=<long-random-postgres-password>
 DATABASE_URL=postgresql://pulseboard:<long-random-postgres-password>@postgres:5432/pulseboard?schema=public
 REDIS_URL=redis://redis:6379
 DEMO_API_KEY=replace-with-a-long-random-demo-key
-API_KEY_HASH_SALT=replace-with-a-long-random-salt
+API_KEY_HASH_SALT=<independently-generated-secret-of-at-least-32-characters>
 WRITE_RATE_LIMIT_WINDOW_MS=60000
 WRITE_RATE_LIMIT_MAX=120
 CHECK_SCHEDULER_INTERVAL_MS=60000
 HTTP_CHECK_TIMEOUT_MS=5000
 ```
+
+The API and migration/seed containers run with `NODE_ENV=production` and reject a missing salt, the local `local-development-only` value, or a value shorter than 32 characters. Changing this salt invalidates existing stored API key hashes, so preserve it across ordinary deployments and handle a deliberate change as a credential migration.
 
 ## Server Preparation
 
@@ -74,11 +76,19 @@ Do not expose PostgreSQL or Redis ports publicly.
 git clone <repo-url> pulseboard
 cd pulseboard
 # create .env manually from the checklist; do not copy local defaults
-docker compose -f docker-compose.production.example.yml up --build -d
+revision="$(git rev-parse HEAD)"
+export PULSEBOARD_IMAGE="pulseboard:git-$revision"
+export PULSEBOARD_BUILD_REVISION="$revision"
+docker compose -f docker-compose.production.example.yml build migrate
+docker compose -f docker-compose.production.example.yml up -d postgres redis
+docker compose -f docker-compose.production.example.yml run --rm migrate
+docker compose -f docker-compose.production.example.yml run --rm migrate pnpm db:seed
+docker compose -f docker-compose.production.example.yml up -d --no-build --no-deps api worker
+docker compose -f docker-compose.production.example.yml run --rm public-site
 docker compose -f docker-compose.production.example.yml ps
 ```
 
-The production example keeps PostgreSQL and Redis private to the Docker network and binds the API to `127.0.0.1:4000` for reverse proxy use.
+The production example keeps PostgreSQL and Redis private to the Docker network and binds the API to `127.0.0.1:4000` for reverse proxy use. The first deployment builds one revision-tagged local image and reuses it for migration, API, worker, and static-site tasks. Registry digests are preferred once a registry is available.
 
 Verify:
 
@@ -123,22 +133,30 @@ Keep production-like operational behavior without introducing Kubernetes.
 ## Update
 
 ```bash
-git pull --ff-only
-docker compose -f docker-compose.production.example.yml up --build -d
+export PULSEBOARD_IMAGE="registry.example.com/pulseboard@sha256:<candidate-digest>"
+docker compose -f docker-compose.production.example.yml pull migrate api worker public-site
+docker compose -f docker-compose.production.example.yml run --rm migrate
+docker compose -f docker-compose.production.example.yml up -d --no-build --force-recreate api worker
+docker compose -f docker-compose.production.example.yml run --rm public-site
 docker compose -f docker-compose.production.example.yml ps
-curl http://127.0.0.1:4000/health/ready
+curl -fsS http://127.0.0.1:4000/health/live
+curl -fsS http://127.0.0.1:4000/health/ready
 ```
+
+Record the current and candidate image digests before the update. Review every migration for compatibility with the previous application image, and stop when a destructive change makes application-only rollback unsafe.
 
 ## Rollback
 
 ```bash
-git log --oneline -5
-git checkout <previous-known-good-commit>
-docker compose -f docker-compose.production.example.yml up --build -d
-curl http://127.0.0.1:4000/health/ready
+export PULSEBOARD_IMAGE="registry.example.com/pulseboard@sha256:<previous-known-good-digest>"
+docker compose -f docker-compose.production.example.yml pull api worker public-site
+docker compose -f docker-compose.production.example.yml up -d --no-build --force-recreate api worker
+docker compose -f docker-compose.production.example.yml run --rm public-site
+curl -fsS http://127.0.0.1:4000/health/live
+curl -fsS http://127.0.0.1:4000/health/ready
 ```
 
-For schema migrations, rollback should be treated carefully. Prefer forward fixes unless the failed migration is known to be reversible and no important data has been written.
+Do not run reverse migrations as part of application rollback. If the previous image is incompatible with the current schema, deploy a forward-compatible fix or enter the separately reviewed data-recovery procedure. The complete release gates, evidence list, and local rehearsal are in [`../application-rollback.md`](../application-rollback.md).
 
 ## Manual GitHub Actions Deployment Rehearsal
 

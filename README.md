@@ -9,8 +9,12 @@ The project voice is deliberately modest: never boastful, never hucksterish; hum
 This repository is built to demonstrate real backend and cloud engineering judgment without pretending to be a finished commercial product. The first phase focuses on the system surfaces that interviewers can inspect and discuss:
 
 - API design for workspaces, projects, services, uptime checks, incidents, webhooks, and audit logs.
+- Workspace-membership authorization with a PostgreSQL-backed two-tenant isolation matrix.
+- High-entropy API keys stored only as salted hashes, with production configuration validation and explicit revocation.
 - Background jobs for scheduled uptime checks and mocked notifications.
+- SSRF-resistant HTTP checks with public-address validation, DNS pinning, redirect revalidation, and a single timeout budget.
 - Health/readiness endpoints, structured logs, seed data, and API documentation.
+- Representative executable OpenAPI response contracts checked against the real Hono application.
 - A local-first deployment path that can later move to a low-cost Linux staging host and then AWS Lightsail or a small EC2 instance.
 
 ## Architecture
@@ -103,6 +107,8 @@ Use it as:
 curl -H "Authorization: Bearer pb_local_demo_key_change_me" http://localhost:4000/v1/workspaces
 ```
 
+The local key and `API_KEY_HASH_SALT=local-development-only` are deliberately unsafe defaults for local development only. With `NODE_ENV=production`, both the API startup path and database seed require an independently generated hash salt of at least 32 characters. API key plaintext is returned only at creation; PostgreSQL stores the key prefix and a salted SHA-256 digest. See [`docs/adr/0003-tenant-isolation-and-api-key-storage.md`](docs/adr/0003-tenant-isolation-and-api-key-storage.md).
+
 Run the local product flow after the compose stack is healthy:
 
 ```bash
@@ -123,7 +129,25 @@ To run the API integration suite against the compose PostgreSQL and Redis servic
 pnpm compose:integration
 ```
 
-CI runs fast unit/type checks, builds and verifies the root project portal plus the namespaced PulseBoard artifacts, checks that `deploy/anlan/index.html` and `deploy/anlan/demo/` are up to date, and runs a Postgres/Redis-backed integration job that applies migrations, seeds the demo API key, and exercises the main API flows.
+CI runs fast unit/type checks, builds and verifies the root project portal plus the namespaced PulseBoard artifacts, checks that `deploy/anlan/index.html` and `deploy/anlan/demo/` are up to date, runs a Postgres/Redis-backed integration job, and configures isolated backup/restore plus application-rollback rehearsals. Both the fast and database-backed API suites validate representative real responses against schemas resolved from the exported OpenAPI document. Configured jobs are not described as remotely passing until a corresponding workflow run is recorded.
+
+The executable response coverage currently includes liveness, readiness, the shared `401` envelope, workspace lists, uptime-check create/list/detail responses, and incident list/detail responses including notification attempts. It deliberately does not claim full OpenAPI conformance: request bodies and many remaining endpoint responses are still description-only. The operator-only `/metrics` route remains outside the public contract. See [`docs/adr/0011-executable-openapi-response-contracts.md`](docs/adr/0011-executable-openapi-response-contracts.md).
+
+Rehearse a PostgreSQL custom-format backup and isolated restore:
+
+```bash
+pnpm compose:backup-restore
+```
+
+The rehearsal uses separate source and restore volumes, verifies representative business invariants, and compares full-table fingerprints. It never touches the normal Compose database. Production archive handling, restore gates, Redis boundaries, and honest RPO/RTO limits are documented in [`docs/postgresql-backup-restore.md`](docs/postgresql-backup-restore.md) and [`docs/adr/0008-postgresql-logical-backup-restore.md`](docs/adr/0008-postgresql-logical-backup-restore.md).
+
+Rehearse an immutable-image application deployment and rollback while preserving PostgreSQL and the public route contract:
+
+```bash
+pnpm compose:rollback
+```
+
+The rehearsal builds a checked-in pre-`0003` baseline contract with an old generated Prisma Client and a current candidate contract with nullable `UptimeCheck.description`. It applies the migration forward, writes the new field, rolls API and worker back without down-migrating PostgreSQL, and proves the old client still reads and updates old fields while candidate data remains stored. It also verifies source fingerprints, OCI revision/contract labels, image content IDs, running image IDs, migration contents, tenant state, audit history, and PostgreSQL identity. This proves one controlled expand-contract case, not arbitrary historical or destructive migration compatibility. See [`docs/application-rollback.md`](docs/application-rollback.md), [`docs/adr/0009-immutable-image-application-rollback.md`](docs/adr/0009-immutable-image-application-rollback.md), and [`docs/adr/0010-expand-contract-compatibility-fixture.md`](docs/adr/0010-expand-contract-compatibility-fixture.md).
 
 
 ## Public Portal and PulseBoard Demo
@@ -170,6 +194,14 @@ PulseBoard uses BullMQ with Redis:
 
 The worker creates incidents after failed checks and resolves open incidents after a recovery check. Notifications are stored in PostgreSQL instead of calling paid third-party providers.
 
+Monitoring URLs are treated as untrusted input. PulseBoard rejects private, local, reserved, metadata, credential-bearing, and mixed-DNS targets; pins the approved DNS address for the connection; and revalidates every redirect. The decision and its limitations are recorded in [`docs/adr/0002-ssrf-safe-http-checks.md`](docs/adr/0002-ssrf-safe-http-checks.md).
+
+## Tenant And Credential Boundaries
+
+API keys authenticate a user. Access to a workspace and all nested projects, services, uptime checks, incidents, notifications, audit logs, usage metrics, and webhook writes is then derived from `WorkspaceMember`. Resource routes return the same `404` for a nonexistent id and an id owned by another tenant, avoiding an ownership oracle. Collection filters such as a foreign `workspaceId` return an empty collection. A PostgreSQL-backed two-tenant integration test verifies both responses and unchanged foreign rows across the API surface.
+
+The current credential lifecycle supports creation, one-time plaintext return, usage timestamps, listing metadata, and revocation. It does not yet support expiry, named rotation lineage, or a grace period between old and replacement keys; documentation calls this replacement-and-revocation rather than automatic rotation.
+
 ## Observability
 
 The API emits structured request logs and returns `X-Request-Id` on every response. Error bodies also include `requestId` for log correlation. See [`docs/operations.md`](docs/operations.md).
@@ -183,6 +215,7 @@ Deployment notes:
 - [`docs/interview-walkthrough.md`](docs/interview-walkthrough.md)
 - [`docs/project-status.md`](docs/project-status.md)
 - [`docs/phase-plan.md`](docs/phase-plan.md)
+- [`docs/postgresql-backup-restore.md`](docs/postgresql-backup-restore.md)
 - [`docs/deployment/tencent-staging.md`](docs/deployment/tencent-staging.md)
 - [`docs/deployment/tencent-staging-deploy-secrets.md`](docs/deployment/tencent-staging-deploy-secrets.md)
 - [`docs/deployment/anlan-public-site.md`](docs/deployment/anlan-public-site.md)
@@ -196,6 +229,6 @@ Local development costs nothing beyond the machine. A later staging server can r
 ## Tradeoffs
 
 - Checked-in Prisma migrations are used by Docker Compose and future deployment paths. `prisma db push` remains available for short-lived local experiments.
-- API key auth is intentionally simple and inspectable. OAuth is out of scope for the first phase.
+- API key auth is intentionally simple and inspectable. Keys are high entropy and stored as salted hashes, while expiry and rotation lineage remain explicit future work. OAuth is out of scope for the first phase.
 - Notifications are mocked to avoid real account setup and paid SaaS dependencies.
 - The system is a modular monolith, not microservices, because the goal is credible backend design with low operational overhead.

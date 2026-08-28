@@ -1,13 +1,8 @@
-import { createHash } from 'node:crypto';
+import { hashApiKey } from '@pulseboard/core';
 
 import { prisma } from '../src/client.js';
 
-const salt = process.env.API_KEY_HASH_SALT ?? 'local-development-only';
 const demoApiKey = process.env.DEMO_API_KEY ?? 'pb_local_demo_key_change_me';
-
-function hashApiKey(key: string) {
-  return createHash('sha256').update(`${salt}:${key}`).digest('hex');
-}
 
 async function main() {
   const user = await prisma.user.upsert({

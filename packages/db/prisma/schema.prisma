@@ -144,6 +144,7 @@ model MonitoredService {
 model UptimeCheck {
   id                            String           @id @default(uuid())
   name                          String
+  description                   String?
   method                        String           @default("GET")
   url                           String
   expectedStatus                Int              @default(200)

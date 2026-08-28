@@ -15,6 +15,10 @@ export type NotificationJob =
   | { name: 'send-notification'; data: { notificationId: string } }
   | { name: 'dispatch-notifications'; data: Record<string, never> };
 
+export function checkExecutionDispatchJobId(executionId: string, attemptNumber: number) {
+  return `check-execution-${executionId}-${attemptNumber}`;
+}
+
 export function createQueues() {
   const connection = createRedisConnection();
 

@@ -4,7 +4,7 @@
 
 Goal: a credible local-first SaaS backend that runs in WSL with Docker Compose.
 
-Status: complete for the current portfolio scope.
+Status: functionally complete for the original MVP scope; reliability hardening is tracked below and remains iterative.
 
 Included:
 
@@ -65,26 +65,82 @@ Remaining staging hardening:
 
 Goal: remain correct under at-least-once jobs, concurrent workers, transaction failures, and replayed notification delivery.
 
-Status: implemented and covered by automated unit/integration scenarios; production deployment evidence is recorded separately from this roadmap.
+Status: implemented and covered by automated unit/integration scenarios as of 2026-08-28; the latest changes have not yet been redeployed to the public host.
 
 Included:
 
 - Durable `CheckExecution` records with stable schedule-derived idempotency keys.
 - Scheduler compare-and-swap updates so concurrent scheduler scans create one execution per due timestamp.
 - Database-backed worker leases, including recovery and redispatch of expired `RUNNING` executions.
+- Generation-aware BullMQ job IDs so a scheduler can redispatch an expired PostgreSQL lease even when BullMQ has already completed an earlier stalled delivery.
 - A service-row lock and one transaction for check result, incident transition, notification outbox, audit event, usage metric, and execution completion.
 - A PostgreSQL partial unique index that permits at most one `OPEN` or `ACKNOWLEDGED` incident per service.
 - Explicit, tested incident state transitions for API updates.
 - Unique idempotency keys for check runs, execution records, incident open/resolve effects, notifications, audit logs, and usage metrics.
 - Notification delivery attempts, exponential retry scheduling, lease recovery, dead-letter state, and authenticated manual replay.
 - Tests for duplicate/concurrent execution claims, active-incident uniqueness, rollback after injected transaction failure, temporary delivery failure, permanent dead-lettering, and replay.
+- A real PostgreSQL/Redis/BullMQ child-process crash test that kills a worker during the database transaction and proves rollback, lease-based redispatch, and one durable incident/notification/audit/usage flow.
+- Redis-backed low-cardinality operational metrics for committed check outcomes/duration, live lease contention, and terminal notification failures.
+- A local Prometheus-compatible `/metrics` scrape that includes BullMQ queue depth and returns `503` when collection fails.
 - ADR [`adr/0001-reliability-core-hardening.md`](adr/0001-reliability-core-hardening.md).
+- ADR [`adr/0004-worker-crash-recovery.md`](adr/0004-worker-crash-recovery.md).
+- ADR [`adr/0005-redis-backed-operational-metrics.md`](adr/0005-redis-backed-operational-metrics.md).
+- ADR [`adr/0006-bounded-api-shutdown.md`](adr/0006-bounded-api-shutdown.md).
+- ADR [`adr/0007-bounded-worker-shutdown.md`](adr/0007-bounded-worker-shutdown.md).
 
 Known boundaries:
 
 - Exactly-once external HTTP calls are impossible without receiver cooperation; webhook consumers should deduplicate on notification id.
 - A check probe can be repeated after lease expiry, although its PostgreSQL effects remain idempotent.
+- Lease recovery assumes sufficiently synchronized application and PostgreSQL clocks.
 - The polling dispatcher is intentionally retained instead of introducing another broker or service.
+
+Dependency-failure slice completed on 2026-08-28:
+
+- Added bounded API graceful shutdown with draining readiness, deterministic direct-Node signal delivery, owned-resource cleanup, and forced connection closure on deadline expiry.
+- Added route-level deadlines for PostgreSQL/Redis readiness and Redis/BullMQ metrics collection.
+- Added unit coverage for shutdown coalescing and deadline behavior plus a real Compose fault-injection drill for PostgreSQL outage/recovery, Redis outage/recovery, metrics failure/recovery, API `SIGTERM`, and API restart.
+- Documented the procedure and honest cancellation boundary in [`fault-injection.md`](fault-injection.md) and [`adr/0006-bounded-api-shutdown.md`](adr/0006-bounded-api-shutdown.md).
+
+Worker lifecycle slice completed on 2026-08-28:
+
+- Added bounded worker shutdown with concurrent graceful drain for uptime and notification consumers, ordered shared-resource cleanup, repeated-signal coalescing, and forced close with a nonzero exit on deadline expiry.
+- Changed Compose worker commands to run Node directly as PID 1 so Docker `SIGTERM` reaches the application deterministically.
+- Added unit coverage for successful drain, aggregate cleanup failure, repeated signals, and deadline force-close.
+- Added a real PostgreSQL/Redis/BullMQ integration scenario that sends `SIGTERM` while a result transaction is in flight and proves one complete durable result flow before a successful child-process exit.
+- Extended the Compose fault-injection drill to stop, verify, and restart the worker, and documented the cancellation boundary in [`adr/0007-bounded-worker-shutdown.md`](adr/0007-bounded-worker-shutdown.md).
+
+PostgreSQL recovery slice completed on 2026-08-28:
+
+- Added a unique-project Compose rehearsal with independent PostgreSQL source and restore volumes and no published host ports.
+- Applied the real Prisma migrations and seed, loaded deterministic reliability state, created a custom-format logical archive, restored it into an empty database, re-ran invariants, and compared all current table fingerprints.
+- Preserved local evidence under ignored `.artifacts/` while excluding it from Docker build context.
+- Added a separate bounded CI job for the same rehearsal. The workflow is configured, but no remote pass is claimed until a run completes.
+- Documented production archive handling, isolated restore, version compatibility, Redis recovery boundaries, and honest RPO/RTO limits in [`postgresql-backup-restore.md`](postgresql-backup-restore.md) and [`adr/0008-postgresql-logical-backup-restore.md`](adr/0008-postgresql-logical-backup-restore.md).
+
+Application rollback slice completed on 2026-08-28:
+
+- Added one revision-tagged image contract shared by migration, API, worker, and static-site tasks, with serving revision and compatibility contract exposed by liveness.
+- Added a checked-in pre-`0003` baseline Prisma/validation fixture and generated an old Prisma Client that does not know nullable `UptimeCheck.description`.
+- Added a unique-project Compose rehearsal that deploys source-distinct baseline and candidate images, applies migration `0003` forward, writes the new field, rolls application containers back without down-migrating PostgreSQL, and proves the old client can still read/update old fields while candidate data remains stored.
+- Added source fingerprints, OCI revision/contract labels, image content ID checks, running image identity checks, and image migration-content checks. Local images may have no registry digest, so no signing or registry attestation claim is made.
+- Updated the manual Tencent workflow to build one revision-tagged image and reuse it instead of rebuilding each service during deployment.
+- Added a bounded CI job and local evidence under ignored `.artifacts/application-rollback/`; remote CI success is not claimed.
+- Documented forward-only schema constraints, controlled compatibility scope, and rejected source-rebuild rollback in [`application-rollback.md`](application-rollback.md), [`adr/0009-immutable-image-application-rollback.md`](adr/0009-immutable-image-application-rollback.md), and [`adr/0010-expand-contract-compatibility-fixture.md`](adr/0010-expand-contract-compatibility-fixture.md).
+
+Executable OpenAPI contract slice completed on 2026-08-28:
+
+- Added reusable response schemas for representative health, authentication, workspace, uptime-check, incident, notification-attempt, and error payloads to the exported OpenAPI document.
+- Added Ajv-based tests that resolve those exact schemas, call the real Hono application, and reject missing required fields or undocumented represented-resource fields.
+- Added PostgreSQL/Redis-backed coverage for authenticated workspace, uptime-check, and incident handlers, including nullable operator context and notification attempts.
+- Made the contract gate explicit in both CI test phases without changing `/demo/docs`, `/demo/openapi.json`, `/demo/health/*`, or authenticated API routes.
+- Kept the scope honest: request bodies and many other endpoint responses remain description-only, and the internal `/metrics` route is not part of the public OpenAPI document. See [`adr/0011-executable-openapi-response-contracts.md`](adr/0011-executable-openapi-response-contracts.md).
+
+Next focused phase:
+
+- Add executable request schemas and stable write-path response schemas incrementally, starting with uptime-check creation/update and incident transitions.
+- Keep each addition tied to real handler tests; do not claim full conformance until every documented operation and response is executable.
+
 ## Optional Cloud Track: Low-Cost AWS Demo (formerly Phase 3)
 
 Use AWS only after Phase 1 is stable and Phase 2 has proven the Linux deployment path.

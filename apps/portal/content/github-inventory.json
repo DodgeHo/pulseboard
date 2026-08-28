@@ -1,0 +1,708 @@
+{
+  "schemaVersion": 1,
+  "owner": "DodgeHo",
+  "syncedAt": "2026-08-17T06:59:28.961Z",
+  "counts": {
+    "total": 70,
+    "public": 57,
+    "private": 13,
+    "forks": 21,
+    "original": 49,
+    "archived": 0
+  },
+  "repositories": [
+    {
+      "name": "01_polyAseq_py27",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/01_polyAseq_py27",
+      "language": "R",
+      "topics": [
+        "bioinformatics"
+      ],
+      "updatedAt": "2025-03-12T04:37:45Z"
+    },
+    {
+      "name": "ACCA-Learning",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ACCA-Learning",
+      "language": "Dart",
+      "topics": [],
+      "updatedAt": "2026-04-08T11:34:07Z"
+    },
+    {
+      "name": "adEBHMMs",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/adEBHMMs",
+      "language": "R",
+      "topics": [
+        "bioinformatics"
+      ],
+      "updatedAt": "2025-03-12T04:38:21Z"
+    },
+    {
+      "name": "AlphaMao_Skills",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/AlphaMao_Skills",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-02-11T04:49:52Z"
+    },
+    {
+      "name": "apa_atingLab2019",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/apa_atingLab2019",
+      "language": "R",
+      "topics": [
+        "bioinformatics"
+      ],
+      "updatedAt": "2025-03-12T04:37:46Z"
+    },
+    {
+      "name": "ASO_COWS",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ASO_COWS",
+      "language": "JavaScript",
+      "topics": [],
+      "updatedAt": "2025-09-26T06:18:10Z"
+    },
+    {
+      "name": "ASO-gin-vue-admin",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ASO-gin-vue-admin",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2025-04-09T05:43:21Z"
+    },
+    {
+      "name": "ASOfront",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ASOfront",
+      "language": "TypeScript",
+      "topics": [
+        "astro",
+        "react"
+      ],
+      "updatedAt": "2026-07-02T01:59:57Z"
+    },
+    {
+      "name": "auto-company",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/auto-company",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-02-15T10:11:40Z"
+    },
+    {
+      "name": "aws-saa-learning-skill",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/aws-saa-learning-skill",
+      "language": "Dart",
+      "topics": [],
+      "updatedAt": "2026-04-06T05:43:02Z"
+    },
+    {
+      "name": "BayesMSMW",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/BayesMSMW",
+      "language": "R",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:54Z"
+    },
+    {
+      "name": "careerforge-autoapply",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "CEEMDAN_cpp",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/CEEMDAN_cpp",
+      "language": "C++",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2026-05-03T05:51:24Z"
+    },
+    {
+      "name": "CodeLexicon",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/CodeLexicon",
+      "language": "Python",
+      "topics": [
+        "english-learning"
+      ],
+      "updatedAt": "2025-03-12T04:37:43Z"
+    },
+    {
+      "name": "cppauvsi_searchpath_2019-2020",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/cppauvsi_searchpath_2019-2020",
+      "language": "C++",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:03Z"
+    },
+    {
+      "name": "cycada_release",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/cycada_release",
+      "language": "Jupyter Notebook",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:20Z"
+    },
+    {
+      "name": "DodgeHo",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/DodgeHo",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-07-23T06:18:52Z"
+    },
+    {
+      "name": "DodgeHo.github.io",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/DodgeHo.github.io",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:53Z"
+    },
+    {
+      "name": "DSP_EPFL",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "dynamic_rrt_connect",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/dynamic_rrt_connect",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2026-08-10T00:57:59Z"
+    },
+    {
+      "name": "ebook-GPT-translator",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ebook-GPT-translator",
+      "language": null,
+      "topics": [
+        "gpt"
+      ],
+      "updatedAt": "2025-03-12T04:37:49Z"
+    },
+    {
+      "name": "EEG_Fourier_frequency_filter",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/EEG_Fourier_frequency_filter",
+      "language": "Jupyter Notebook",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2026-05-03T05:51:48Z"
+    },
+    {
+      "name": "ethereum-sports-betting",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ethereum-sports-betting",
+      "language": "JavaScript",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:47Z"
+    },
+    {
+      "name": "FIT1008-A2-Scaffold",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/FIT1008-A2-Scaffold",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:57Z"
+    },
+    {
+      "name": "FIT1008-A3-Scaffold",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/FIT1008-A3-Scaffold",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:56Z"
+    },
+    {
+      "name": "FlutterCalculator",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/FlutterCalculator",
+      "language": "Dart",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:55Z"
+    },
+    {
+      "name": "FT_PPT",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/FT_PPT",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2025-10-03T06:23:48Z"
+    },
+    {
+      "name": "go-stock",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/go-stock",
+      "language": "Go",
+      "topics": [],
+      "updatedAt": "2026-05-22T05:32:40Z"
+    },
+    {
+      "name": "GPT_translator_Dodge",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/GPT_translator_Dodge",
+      "language": "JavaScript",
+      "topics": [
+        "english-learning",
+        "gpt"
+      ],
+      "updatedAt": "2025-06-11T07:13:49Z"
+    },
+    {
+      "name": "IELTS_writing_GPT",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/IELTS_writing_GPT",
+      "language": "JavaScript",
+      "topics": [
+        "english-learning",
+        "gpt",
+        "ielts"
+      ],
+      "updatedAt": "2026-04-27T08:11:57Z"
+    },
+    {
+      "name": "IELTSReadingQuizMaker",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/IELTSReadingQuizMaker",
+      "language": "JavaScript",
+      "topics": [],
+      "updatedAt": "2026-04-19T04:48:29Z"
+    },
+    {
+      "name": "inceptionnext",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/inceptionnext",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2025-05-16T02:26:14Z"
+    },
+    {
+      "name": "interval_map",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "leaverequests",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "littlelemon",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "Lottery",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/Lottery",
+      "language": "Dart",
+      "topics": [],
+      "updatedAt": "2026-03-26T13:57:48Z"
+    },
+    {
+      "name": "MagiskOnWSA",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/MagiskOnWSA",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2022-08-12T17:41:15Z"
+    },
+    {
+      "name": "MATLAB_Tutorials_and_Exercise",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/MATLAB_Tutorials_and_Exercise",
+      "language": "MATLAB",
+      "topics": [
+        "digital-signal-processing",
+        "image-processing",
+        "matlab-tutorials"
+      ],
+      "updatedAt": "2026-05-03T05:50:52Z"
+    },
+    {
+      "name": "motion_example",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "multi_ai_game",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/multi_ai_game",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-01-30T04:24:18Z"
+    },
+    {
+      "name": "myLittleLemon",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "OpenCPN",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/OpenCPN",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:08Z"
+    },
+    {
+      "name": "P1117",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "PAL1_EnglishMod",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/PAL1_EnglishMod",
+      "language": "HTML",
+      "topics": [],
+      "updatedAt": "2026-07-10T07:19:18Z"
+    },
+    {
+      "name": "PAL3_debug",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "PAL3_translation",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "PAL4_EnglishMod",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/PAL4_EnglishMod",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2026-07-06T07:14:00Z"
+    },
+    {
+      "name": "pal4_inject_bilingual",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/pal4_inject_bilingual",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-05-03T05:50:17Z"
+    },
+    {
+      "name": "PAL4_translation",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "PAL4_Voice_Volume_Patch",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/PAL4_Voice_Volume_Patch",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-05-03T05:50:30Z"
+    },
+    {
+      "name": "PathPlanning",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/PathPlanning",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:01Z"
+    },
+    {
+      "name": "pdfplumber",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/pdfplumber",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2025-10-23T03:05:28Z"
+    },
+    {
+      "name": "prose_agent_DaoAnlan",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/prose_agent_DaoAnlan",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2026-04-19T04:48:30Z"
+    },
+    {
+      "name": "pulseboard",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/pulseboard",
+      "language": "HTML",
+      "topics": [],
+      "updatedAt": "2026-08-09T06:06:28Z"
+    },
+    {
+      "name": "PulsePal_test",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/PulsePal_test",
+      "language": "C++",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2026-05-03T05:52:07Z"
+    },
+    {
+      "name": "RogerPhysics",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "ros",
+      "visibility": "private",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "RPCA",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/RPCA",
+      "language": "C++",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2025-03-12T04:38:23Z"
+    },
+    {
+      "name": "ShapeContext_cpp",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/ShapeContext_cpp",
+      "language": "C++",
+      "topics": [],
+      "updatedAt": "2026-05-03T05:52:04Z"
+    },
+    {
+      "name": "SVWRPCA",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/SVWRPCA",
+      "language": "C++",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:19Z"
+    },
+    {
+      "name": "TenFoldCrossValidation",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/TenFoldCrossValidation",
+      "language": "Jupyter Notebook",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:01Z"
+    },
+    {
+      "name": "The-Wellbore-Simulator-FloWell-Python3",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/The-Wellbore-Simulator-FloWell-Python3",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2025-03-12T04:38:05Z"
+    },
+    {
+      "name": "Venn",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/Venn",
+      "language": "C#",
+      "topics": [
+        "csharp",
+        "venn",
+        "venn-diagram"
+      ],
+      "updatedAt": "2025-03-12T04:38:22Z"
+    },
+    {
+      "name": "VMD_2D_cpp",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/VMD_2D_cpp",
+      "language": "C++",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2026-05-03T05:48:49Z"
+    },
+    {
+      "name": "VMD_2D_CPP_OpenCV",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/VMD_2D_CPP_OpenCV",
+      "language": "C++",
+      "topics": [
+        "digital-signal-processing",
+        "unfinished-project"
+      ],
+      "updatedAt": "2026-05-03T05:52:02Z"
+    },
+    {
+      "name": "VMD_2D_python",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/VMD_2D_python",
+      "language": "Python",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2026-05-03T05:51:15Z"
+    },
+    {
+      "name": "VMD_cpp",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/VMD_cpp",
+      "language": "C++",
+      "topics": [
+        "digital-signal-processing"
+      ],
+      "updatedAt": "2026-08-09T16:40:32Z"
+    },
+    {
+      "name": "Web3-notebook",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/Web3-notebook",
+      "language": null,
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:59Z"
+    },
+    {
+      "name": "Wechat-questionnaire",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/Wechat-questionnaire",
+      "language": "JavaScript",
+      "topics": [],
+      "updatedAt": "2025-03-12T04:37:52Z"
+    },
+    {
+      "name": "wtf-aitrainingplan-load-snapshot",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/wtf-aitrainingplan-load-snapshot",
+      "language": "HTML",
+      "topics": [],
+      "updatedAt": "2026-07-10T05:38:18Z"
+    }
+  ]
+}

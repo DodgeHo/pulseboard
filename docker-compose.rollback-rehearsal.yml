@@ -1,0 +1,117 @@
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    environment:
+      POSTGRES_USER: pulseboard
+      POSTGRES_PASSWORD: rollback-rehearsal-only
+      POSTGRES_DB: pulseboard
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pulseboard -d pulseboard"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: ${REDIS_IMAGE:-redis:7-alpine}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  migrate:
+    image: ${PULSEBOARD_ROLLBACK_IMAGE:?Set PULSEBOARD_ROLLBACK_IMAGE to a versioned application image}
+    command: ["pnpm", "db:deploy"]
+    environment: &application-environment
+      NODE_ENV: production
+      DATABASE_URL: postgresql://pulseboard:rollback-rehearsal-only@postgres:5432/pulseboard?schema=public
+      REDIS_URL: redis://redis:6379
+      DEMO_API_KEY: pb_rollback_rehearsal_key_change_me
+      API_KEY_HASH_SALT: rollback-rehearsal-only-salt-32-characters-minimum
+      LOG_LEVEL: warn
+      CHECK_SCHEDULER_INTERVAL_MS: 60000
+      HTTP_CHECK_TIMEOUT_MS: 2000
+      WRITE_RATE_LIMIT_MAX: 1000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  seed:
+    image: ${PULSEBOARD_ROLLBACK_IMAGE:?Set PULSEBOARD_ROLLBACK_IMAGE to a versioned application image}
+    command: ["pnpm", "db:seed"]
+    environment: *application-environment
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    image: ${PULSEBOARD_ROLLBACK_IMAGE:?Set PULSEBOARD_ROLLBACK_IMAGE to a versioned application image}
+    command: ["node", "--import", "tsx", "apps/api/src/index.ts"]
+    environment:
+      <<: *application-environment
+      API_PORT: 4000
+      API_SHUTDOWN_TIMEOUT_MS: 10000
+      READINESS_TIMEOUT_MS: 2000
+      METRICS_SCRAPE_TIMEOUT_MS: 2000
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/health/live').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    image: ${PULSEBOARD_ROLLBACK_IMAGE:?Set PULSEBOARD_ROLLBACK_IMAGE to a versioned application image}
+    command: ["node", "--import", "tsx", "apps/worker/src/index.ts"]
+    environment:
+      <<: *application-environment
+      WORKER_SHUTDOWN_TIMEOUT_MS: 10000
+      CHECK_EXECUTION_LEASE_MS: 60000
+      UPTIME_JOB_LOCK_DURATION_MS: 30000
+      UPTIME_JOB_STALLED_INTERVAL_MS: 30000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  public-site:
+    image: ${PULSEBOARD_ROLLBACK_IMAGE:?Set PULSEBOARD_ROLLBACK_IMAGE to a versioned application image}
+    command:
+      - sh
+      - -c
+      - >-
+        set -eu;
+        install -d /public/demo/frontend;
+        install -m 0644 /app/deploy/anlan/demo/index.html /public/demo/index.html;
+        install -m 0644 /app/deploy/anlan/demo/frontend/index.html /public/demo/frontend/index.html
+    volumes:
+      - public_assets:/public
+
+  edge:
+    image: ${NGINX_IMAGE:-nginx:alpine}
+    volumes:
+      - public_assets:/usr/share/nginx/html:ro
+      - ./scripts/rollback-rehearsal/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/demo/health/live"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  verifier:
+    image: ${PULSEBOARD_ROLLBACK_IMAGE:?Set PULSEBOARD_ROLLBACK_IMAGE to a versioned application image}
+    command: ["node", "scripts/verify-rollback-rehearsal.mjs"]
+    environment:
+      PULSEBOARD_REHEARSAL_BASE_URL: http://edge:8080
+      DEMO_API_KEY: pb_rollback_rehearsal_key_change_me
+
+volumes:
+  postgres_data:
+  public_assets:

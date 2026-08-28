@@ -1,573 +1,576 @@
-<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>PulseBoard Operations Cloud - Customer Site</title><meta name="description" content="PulseBoard Operations Cloud is a customer-facing SaaS homepage with a scroll-driven 3D software factory." /><style>:root{color-scheme:dark;--bg:#101316;--text:#f4efe6;--muted:#c8bdaa;--cyan:#7adf9b;--green:#7adf9b;--purple:#d9863d;--amber:#ffb36a;--danger:#e65f4f;--line:rgba(255,255,255,.16);--camera-x:-7deg;--camera-y:-32deg;--camera-z:0deg;--camera-scale:.78;--camera-rise:0px;--scene-fog:.32;--scroll-progress:0%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;overflow-x:hidden;color:var(--text);background:radial-gradient(circle at 12% 8%,rgba(122,223,155,.22),transparent 32%),radial-gradient(circle at 82% 4%,rgba(217,134,61,.18),transparent 30%),linear-gradient(180deg,#101316,#14191d 46%,#0e1114)}body:before{position:fixed;inset:0;z-index:-1;content:"";opacity:.28;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,#000,transparent 80%)}a{color:inherit;text-decoration:none}.shell{width:min(1200px,calc(100% - 36px));margin:auto}.nav{position:sticky;top:14px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(6,16,28,.78);backdrop-filter:blur(18px);box-shadow:0 20px 80px rgba(0,0,0,.22)}.brand{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.02em}.mark{display:grid;place-items:center;width:40px;height:40px;border-radius:15px;color:#06101d;background:linear-gradient(135deg,var(--cyan),var(--green))}.links{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}.links a,.lang{padding:10px 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:inherit}.links a:hover,.lang:hover{border-color:var(--line);color:var(--text)}.nav-cta,.primary{color:#06101d;font-weight:900;background:linear-gradient(135deg,var(--green),var(--cyan),var(--purple));box-shadow:0 18px 58px rgba(122,223,155,.24)}.nav-cta{padding:11px 16px;border-radius:999px}.hero{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(360px,.88fr);gap:36px;align-items:center;padding:78px 0 42px}.kicker{display:inline-flex;align-items:center;gap:10px;color:var(--cyan);font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.kicker:before{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 26px rgba(122,223,155,.7);content:""}h1{max-width:820px;margin:20px 0 0;font-size:clamp(46px,7vw,88px);line-height:.92;letter-spacing:-.065em}h2{margin:0;font-size:clamp(34px,5vw,62px);line-height:.98;letter-spacing:-.055em}h3{margin:0;font-size:20px}.gradient{background:linear-gradient(120deg,#fff,#bbf7ff 42%,#d8c9ff 72%,#fff0c2);-webkit-text-fill-color:transparent;background-clip:text}.lead{max-width:700px;margin:24px 0 0;color:var(--muted);font-size:clamp(17px,2vw,21px);line-height:1.62}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}.primary,.secondary{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 20px;border-radius:999px}.secondary{border:1px solid var(--line);background:rgba(255,255,255,.06);font-weight:850}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:34px}.metric{padding:15px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.06)}.metric strong{display:block;font-size:24px}.metric span{display:block;margin-top:4px;color:var(--muted);font-size:12px}.hero-card{position:relative;overflow:hidden;min-height:520px;border:1px solid rgba(122,223,155,.42);border-radius:34px;background:linear-gradient(180deg,rgba(16,29,52,.9),rgba(7,13,25,.88));box-shadow:0 28px 110px rgba(0,0,0,.36)}.mini-stage{position:absolute;inset:20px;display:grid;place-items:center;perspective:1200px}.mini-tower{position:relative;width:230px;height:390px;transform-style:preserve-3d;transform:rotateX(-6deg) rotateY(-30deg);animation:heroOrbit 9s ease-in-out infinite alternate}.mini-tower:before{position:absolute;left:50%;bottom:0;width:124px;height:360px;border:1px solid rgba(122,223,155,.24);border-radius:28px 28px 12px 12px;background:linear-gradient(90deg,rgba(122,223,155,.10),rgba(255,255,255,.08),rgba(217,134,61,.13));box-shadow:0 0 80px rgba(122,223,155,.18);transform:translateX(-50%) translateZ(-18px);content:""}.mini-tower:after{position:absolute;left:50%;top:-42px;width:8px;height:70px;border-radius:999px;background:linear-gradient(to bottom,#fff,var(--cyan));box-shadow:0 0 32px rgba(122,223,155,.55);transform:translateX(-50%) translateZ(44px);content:""}.mini-floor{position:absolute;left:50%;bottom:calc(28px + var(--i)*31px);width:calc(176px - var(--i)*4px);height:25px;border:1px solid rgba(122,223,155,.34);border-radius:8px;background:linear-gradient(90deg,rgba(122,223,155,.20),rgba(255,255,255,.07),rgba(217,134,61,.16));box-shadow:0 14px 30px rgba(0,0,0,.12);transform:translateX(-50%) translateZ(calc(28px + var(--i)*3px))}.floating-dashboard{position:absolute;left:24px;right:24px;bottom:24px;padding:18px;border:1px solid var(--line);border-radius:24px;background:rgba(6,16,28,.72);backdrop-filter:blur(18px)}.dash-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:11px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,.1)}.dash-row:first-child{border-top:0}.status-dot{width:10px;height:10px;border-radius:999px;background:var(--green);box-shadow:0 0 20px rgba(122,223,155,.5)}.status-dot.warn{background:var(--amber)}.status-dot.fail{background:var(--danger)}.section-intro{padding:72px 0 20px}.scroll-theater{position:relative;min-height:560vh}.visual-stage{position:sticky;top:0;height:100vh;min-height:760px;overflow:hidden;border-block:1px solid rgba(255,255,255,.08);background:radial-gradient(circle at 50% 18%,rgba(122,223,155,.22),transparent 25%),radial-gradient(circle at 76% 70%,rgba(217,134,61,.14),transparent 28%),linear-gradient(180deg,rgba(6,16,28,.08),rgba(6,16,28,.78))}.visual-stage:before{position:absolute;inset:0;content:"";opacity:var(--scene-fog);background:radial-gradient(circle at 50% 42%,transparent 0 31%,rgba(6,16,28,.72) 78%)}.progress-track{position:absolute;left:28px;top:13vh;z-index:5;width:4px;height:74vh;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.12)}.progress-track:after{display:block;width:100%;height:var(--scroll-progress);border-radius:inherit;background:linear-gradient(to bottom,var(--cyan),var(--green),var(--purple));content:""}.camera-readout{position:absolute;left:52px;bottom:32px;z-index:5;display:grid;gap:7px;width:min(330px,calc(100% - 104px));padding:16px;border:1px solid var(--line);border-radius:20px;background:rgba(5,12,23,.72);backdrop-filter:blur(16px);color:var(--muted);font-size:13px}.camera-readout strong{color:var(--text);font-size:15px}.scene{position:absolute;inset:0;display:grid;place-items:center;perspective:1500px;perspective-origin:50% 44%}.orbit-space{position:relative;width:min(72vw,940px);height:min(82vh,820px);transform-style:preserve-3d;transform:translateY(var(--camera-rise)) scale(var(--camera-scale)) rotateX(var(--camera-x)) rotateY(var(--camera-y)) rotateZ(var(--camera-z));transition:transform 80ms linear}.ground-grid{position:absolute;left:50%;top:83%;width:820px;height:820px;border:1px solid rgba(122,223,155,.22);border-radius:50%;background-image:linear-gradient(rgba(122,223,155,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(122,223,155,.12) 1px,transparent 1px),radial-gradient(circle,rgba(122,223,155,.18),transparent 64%);background-size:42px 42px,42px 42px,100% 100%;transform:translate(-50%,-50%) rotateX(82deg) translateZ(-88px)}.campus-ring{position:absolute;left:50%;top:83%;width:560px;height:560px;border:1px dashed rgba(122,223,155,.42);border-radius:50%;transform:translate(-50%,-50%) rotateX(82deg) translateZ(-58px);animation:spinRing 28s linear infinite}.campus-label{position:absolute;left:50%;top:91%;padding:8px 12px;border:1px solid rgba(122,223,155,.32);border-radius:999px;background:rgba(6,16,28,.78);color:var(--cyan);font-size:12px;letter-spacing:.08em;text-transform:uppercase;transform:translateX(-50%) translateZ(92px)}.tower-wrap{position:absolute;left:50%;top:52%;width:420px;height:680px;transform-style:preserve-3d;transform:translate(-50%,-58%)}.tower-wrap:before,.tower-wrap:after{position:absolute;left:50%;content:"";pointer-events:none}.tower-wrap:before{top:16px;width:192px;height:618px;border:1px solid rgba(122,223,155,.28);border-radius:42px 42px 16px 16px;background:linear-gradient(90deg,rgba(122,223,155,.16),rgba(255,255,255,.06) 44%,rgba(217,134,61,.16)),repeating-linear-gradient(to bottom,rgba(255,255,255,.10) 0 2px,transparent 2px 31px);box-shadow:0 0 140px rgba(122,223,155,.20),inset 0 0 52px rgba(255,255,255,.06);transform:translateX(-50%) translateZ(-44px)}.tower-wrap:after{top:22px;width:236px;height:604px;border:1px solid rgba(122,223,155,.34);border-radius:44px 44px 18px 18px;background:linear-gradient(90deg,rgba(6,16,28,.20),rgba(122,223,155,.12) 26%,rgba(255,255,255,.11) 50%,rgba(217,134,61,.16) 74%,rgba(6,16,28,.28)),repeating-linear-gradient(to bottom,rgba(122,223,155,.32) 0 2px,transparent 2px 44px),repeating-linear-gradient(90deg,transparent 0 16px,rgba(255,255,255,.16) 16px 18px,transparent 18px 34px);box-shadow:0 18px 110px rgba(122,223,155,.16),inset 0 0 46px rgba(122,223,155,.10);opacity:.72;transform:translateX(-50%) translateZ(38px)}.tower-core{position:absolute;inset:0;transform-style:preserve-3d}.floor{position:absolute;left:50%;width:var(--w);height:34px;transform-style:preserve-3d;transform:translateX(-50%) translateY(var(--y)) translateZ(var(--z))}.floor .plate{position:absolute;inset:0;border:1px solid rgba(122,223,155,.28);border-radius:9px;background:linear-gradient(90deg,rgba(122,223,155,.24),rgba(255,255,255,.07),rgba(217,134,61,.16));box-shadow:0 0 32px rgba(122,223,155,.08),inset 0 0 0 1px rgba(255,255,255,.06);transform:translateZ(42px)}.floor .plate:before{position:absolute;inset:7px 12px;border-radius:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.26) 0 5px,transparent 5px 16px);opacity:.36;content:""}.floor .front,.floor .back,.floor .left,.floor .right{position:absolute;background:linear-gradient(180deg,rgba(122,223,155,.16),rgba(8,18,34,.84));border:1px solid rgba(122,223,155,.18)}.floor .front{left:0;top:-42px;width:100%;height:42px;transform-origin:50% 100%;transform:rotateX(90deg) translateZ(42px)}.floor .back{left:0;bottom:-42px;width:100%;height:42px;transform-origin:50% 0;transform:rotateX(-90deg) translateZ(42px)}.floor .left,.floor .right{top:0;width:84px;height:34px;transform-origin:0 50%}.floor .left{left:0;transform:rotateY(-90deg)}.floor .right{right:-84px;transform:rotateY(-90deg)}.floor.is-core .plate{border-color:rgba(122,223,155,.42);background:linear-gradient(90deg,rgba(122,223,155,.24),rgba(122,223,155,.14))}.floor.is-alert .plate{border-color:rgba(255,179,106,.48);background:linear-gradient(90deg,rgba(255,179,106,.22),rgba(230,95,79,.12))}.floor-label{position:absolute;right:-142px;top:-2px;width:130px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:rgba(6,16,28,.76);color:var(--muted);font-size:11px;line-height:1.25;transform:translateZ(88px)}.floor-label strong{display:block;color:var(--text);font-size:12px}.spine{position:absolute;left:50%;top:58px;width:18px;height:548px;border:1px solid rgba(122,223,155,.32);border-radius:999px;background:linear-gradient(to bottom,rgba(122,223,155,.44),rgba(217,134,61,.16));box-shadow:0 0 58px rgba(122,223,155,.22);transform:translateX(-50%) translateZ(96px)}.antenna{position:absolute;left:50%;top:-42px;width:10px;height:112px;border-radius:999px;background:linear-gradient(to bottom,#fff,var(--cyan));box-shadow:0 0 42px rgba(122,223,155,.58);transform:translateX(-50%) translateZ(106px)}.base-pod{position:absolute;left:50%;bottom:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:520px;transform:translateX(-50%) translateZ(80px);transform-style:preserve-3d}.pod{min-height:84px;padding:14px;border:1px solid rgba(122,223,155,.22);border-radius:18px;background:rgba(6,16,28,.80);box-shadow:0 20px 70px rgba(0,0,0,.24)}.pod strong{display:block;color:var(--text);font-size:13px}.pod span{display:block;margin-top:7px;color:var(--muted);font-size:11px;line-height:1.4}.data-beam{position:absolute;left:50%;top:50%;width:4px;height:620px;border-radius:999px;background:linear-gradient(to bottom,transparent,rgba(122,223,155,.78),transparent);transform-origin:50% 100%;transform:translate(-50%,-58%) translateZ(190px) rotateZ(var(--r));opacity:.42;animation:pulseBeam 2.4s ease-in-out infinite}.chapters{position:absolute;inset:0;pointer-events:none}.chapter{display:flex;align-items:center;min-height:100vh;padding:16vh max(36px,calc((100vw - 1200px)/2)) 16vh 36px}.chapter-card{width:min(440px,calc(100vw - 72px));margin-left:auto;padding:26px;border:1px solid var(--line);border-radius:28px;background:rgba(5,12,23,.74);box-shadow:0 24px 90px rgba(0,0,0,.28);backdrop-filter:blur(18px);pointer-events:auto}.chapter-card em{display:inline-flex;margin-bottom:14px;color:var(--cyan);font-size:12px;font-style:normal;font-weight:900;letter-spacing:.14em;text-transform:uppercase}.chapter-card p{margin:12px 0 0;color:var(--muted);line-height:1.64}.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.chip{padding:8px 10px;border:1px solid rgba(122,223,155,.24);border-radius:999px;background:rgba(122,223,155,.08);color:#c8f7ff;font-size:12px}.feature-grid,.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.panel{border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.06);box-shadow:0 20px 90px rgba(0,0,0,.18)}.feature-grid{padding:74px 0 18px}.feature,.price{padding:24px}.feature .icon{display:grid;place-items:center;width:44px;height:44px;margin-bottom:18px;border-radius:16px;background:linear-gradient(135deg,rgba(122,223,155,.18),rgba(217,134,61,.16));color:var(--cyan);font-size:22px}.feature p,.price p,.faq p{color:var(--muted);line-height:1.62}.workflow,.faq{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;padding:72px 0}.workflow-copy{padding:30px}.timeline{display:grid;gap:14px;padding:24px}.timeline-step{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:15px;border:1px solid var(--line);border-radius:20px;background:rgba(6,16,28,.48)}.timeline-step b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:rgba(122,223,155,.16);color:var(--cyan)}.pricing{padding:70px 0}.pricing-head{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:22px}.price.featured{border-color:rgba(122,223,155,.48);background:linear-gradient(180deg,rgba(122,223,155,.12),rgba(255,255,255,.06))}.amount{margin:18px 0;font-size:42px;font-weight:950;letter-spacing:-.05em}.amount small{color:var(--muted);font-size:15px}.price ul{display:grid;gap:10px;margin:0;padding:0;list-style:none;color:var(--muted)}.price li:before{color:var(--green);content:"✓"}.faq-list{display:grid;gap:14px}details{padding:20px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.06)}summary{cursor:pointer;font-weight:900}.quote{margin:34px 0 0;padding:26px;border:1px solid rgba(122,223,155,.28);border-radius:28px;background:rgba(122,223,155,.07);color:#d9fff0;line-height:1.7}.final-cta{padding:74px 0 90px;text-align:center}.final-cta .lead{margin-inline:auto}footer{padding:28px 0 42px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}footer .shell{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}@keyframes heroOrbit{from{transform:rotateX(-7deg) rotateY(-34deg) translateY(10px)}to{transform:rotateX(-3deg) rotateY(24deg) translateY(-8px)}}@keyframes spinRing{to{transform:translate(-50%,-50%) rotateX(82deg) translateZ(-58px) rotateZ(360deg)}}@keyframes pulseBeam{0%,100%{opacity:.18}50%{opacity:.58}}@media(max-width:960px){.hero,.workflow,.faq{grid-template-columns:1fr}.feature-grid,.pricing-grid,.metrics{grid-template-columns:repeat(2,1fr)}.links a:not(.nav-cta){display:none}.visual-stage{min-height:680px}.orbit-space{width:800px;transform:translateX(-8%) translateY(var(--camera-rise)) scale(calc(var(--camera-scale)*.82)) rotateX(var(--camera-x)) rotateY(var(--camera-y)) rotateZ(var(--camera-z))}}@media(max-width:640px){.metrics,.feature-grid,.pricing-grid{grid-template-columns:1fr}.progress-track,.camera-readout{display:none}.chapter{align-items:end;padding:56vh 12px 8vh}.chapter-card{width:100%;padding:20px}.orbit-space{transform:translateX(-18%) translateY(var(--camera-rise)) scale(calc(var(--camera-scale)*.62)) rotateX(var(--camera-x)) rotateY(var(--camera-y)) rotateZ(var(--camera-z))}}
-/* Quadplex-inspired original presentation layer: no external assets copied. */
-:root{--paper:#f7f1e8;--paper2:#e2d7c8;--ink:#11100d;--gold:#7c7262;--gold2:#b8a27f;--line:rgba(124,114,98,.34);--soft:rgba(17,16,13,.58);--night:#0a0c12;--cyan:#8ee9ff;--cream:#f7f1e8;--lux-x:58deg;--lux-y:-32deg}html{background:var(--paper);color:var(--ink)}body{color:var(--ink);background:linear-gradient(180deg,#fbf7f0,#e6dccd 44%,#d7c9b8);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body:before{opacity:.45;background:radial-gradient(circle at 15% 11%,rgba(184,162,127,.38),transparent 30%),radial-gradient(circle at 82% 12%,rgba(255,255,255,.78),transparent 28%),linear-gradient(180deg,#fbf8f2,#e6dccd)}.nav{position:fixed;left:22px;right:22px;top:16px;z-index:55;width:auto;margin:0;border-color:rgba(124,114,98,.28);background:rgba(247,241,232,.72);box-shadow:none;color:var(--ink);backdrop-filter:blur(18px)}.brand{letter-spacing:.14em;text-transform:uppercase}.mark{border:1px solid var(--gold);background:transparent!important;color:var(--gold)}.links{color:rgba(17,16,13,.62);letter-spacing:.09em;text-transform:uppercase}.links a:hover,.lang:hover{color:var(--ink);border-color:rgba(124,114,98,.38)}.nav-cta,.primary{background:#11100d!important;color:#f7f1e8!important;box-shadow:none!important}.secondary{border-color:rgba(124,114,98,.36);background:rgba(247,241,232,.52);color:var(--ink)}.shell{width:min(1380px,calc(100% - 44px))}.hero{min-height:100svh;padding-top:118px;grid-template-columns:minmax(0,1.04fr) minmax(360px,.96fr);align-items:end}.kicker{color:var(--gold);letter-spacing:.22em}.kicker:before{background:var(--gold);box-shadow:none}h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.07em}.gradient{background:none;-webkit-text-fill-color:currentColor;color:var(--ink)}.lead{color:var(--soft)}.metrics{gap:1px;border:1px solid var(--line);background:var(--line)}.metric{border:0;border-radius:0;background:rgba(247,241,232,.76);min-height:126px}.metric strong{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(32px,4vw,58px);letter-spacing:-.055em}.metric span{color:var(--soft)}.hero-card{border-color:rgba(124,114,98,.3);background:rgba(247,241,232,.55);box-shadow:none}.hero-card:before{background:radial-gradient(circle,rgba(124,114,98,.14),transparent 64%)}.hero-panel{border-color:rgba(124,114,98,.28);background:rgba(247,241,232,.78);color:var(--ink)}.hero-panel p{color:var(--soft)}.scroll-theater{background:linear-gradient(180deg,rgba(17,16,13,.02),#0a0c12 10%,#0a0c12 86%,rgba(247,241,232,.08));color:#f7f1e8}.visual-stage{background:radial-gradient(circle at 50% 17%,rgba(142,233,255,.18),transparent 26%),linear-gradient(180deg,#0a0c12,#121218 52%,#0a0c12);border-block:1px solid rgba(184,162,127,.22)}.visual-stage:before{background:radial-gradient(circle at 50% 44%,transparent 0 32%,rgba(10,12,18,.16) 55%,rgba(10,12,18,.78) 100%)}.quad-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.72}.scene{z-index:1}.orbit-space{width:min(70vw,880px);height:min(84vh,860px);transform:translateY(var(--camera-rise)) scale(var(--camera-scale)) rotateX(var(--camera-x)) rotateY(var(--camera-y)) rotateZ(var(--camera-z))}.ground-grid{top:78%;border-color:rgba(184,162,127,.24);background-image:linear-gradient(rgba(184,162,127,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(184,162,127,.13) 1px,transparent 1px),radial-gradient(circle,rgba(142,233,255,.15),transparent 61%)}.campus-ring{border-color:rgba(184,162,127,.42)}.campus-label{border-color:rgba(184,162,127,.34);background:rgba(10,12,18,.76);color:#d8c5a5}.tower-wrap{width:360px!important;height:720px!important;top:50%!important;transform:translate(-50%,-57%)!important}.tower-wrap:before{top:8px!important;width:170px!important;height:650px!important;border-color:rgba(184,162,127,.34)!important;border-radius:88px 88px 18px 18px!important;background:linear-gradient(90deg,rgba(247,241,232,.05),rgba(247,241,232,.22) 50%,rgba(184,162,127,.08)),repeating-linear-gradient(to bottom,rgba(247,241,232,.26) 0 1px,transparent 1px 18px),repeating-linear-gradient(90deg,rgba(247,241,232,.12) 0 1px,transparent 1px 18px)!important;box-shadow:0 0 120px rgba(142,233,255,.12),inset 0 0 70px rgba(247,241,232,.06)!important;transform:translateX(-50%) translateZ(-45px)!important}.tower-wrap:after{top:20px!important;width:230px!important;height:628px!important;border-color:rgba(184,162,127,.38)!important;border-radius:96px 96px 22px 22px!important;background:linear-gradient(90deg,rgba(10,12,18,.22),rgba(142,233,255,.10) 26%,rgba(247,241,232,.14) 50%,rgba(184,162,127,.16) 74%,rgba(10,12,18,.25)),repeating-linear-gradient(to bottom,rgba(142,233,255,.24) 0 1px,transparent 1px 36px),repeating-linear-gradient(90deg,transparent 0 16px,rgba(247,241,232,.16) 16px 17px,transparent 17px 32px)!important;box-shadow:0 16px 110px rgba(142,233,255,.16),inset 0 0 48px rgba(142,233,255,.08)!important;opacity:.78!important;transform:translateX(-50%) translateZ(44px)!important}.floor .plate{border-color:rgba(184,162,127,.36);background:linear-gradient(90deg,rgba(142,233,255,.16),rgba(247,241,232,.10),rgba(184,162,127,.12));box-shadow:0 0 36px rgba(142,233,255,.08)}.spine{background:linear-gradient(to bottom,#fff,rgba(142,233,255,.62),rgba(184,162,127,.16));box-shadow:0 0 58px rgba(142,233,255,.28)}.antenna{height:150px!important;top:-84px!important;background:linear-gradient(to bottom,#fff,rgba(142,233,255,.35));box-shadow:0 0 50px rgba(142,233,255,.48)}.base-pod{width:560px!important}.pod{border-color:rgba(184,162,127,.28);background:rgba(10,12,18,.64);box-shadow:none}.pod span,.floor-label,.chapter-card p{color:rgba(247,241,232,.64)}.data-beam{background:linear-gradient(to bottom,transparent,rgba(142,233,255,.70),transparent);opacity:.32}.progress-track{background:rgba(247,241,232,.16);width:1px;border-radius:0}.progress-track:after{background:var(--gold2);border-radius:0}.camera-readout{left:max(58px,calc((100vw - 1380px)/2 + 58px));bottom:7vh;width:min(520px,calc(100% - 90px));border:0;background:transparent;backdrop-filter:none}.camera-readout strong{font-family:Georgia,"Times New Roman",serif;font-size:clamp(42px,7vw,104px);line-height:.86;font-weight:400;letter-spacing:-.06em;color:#f7f1e8}.camera-readout span{max-width:520px;color:rgba(247,241,232,.68);font-size:clamp(15px,1.2vw,18px);line-height:1.65}.chapter-card{border-color:rgba(247,241,232,.22);background:rgba(10,12,18,.50);border-radius:0;box-shadow:none;backdrop-filter:blur(18px)}.chapter-card h3{font-family:Georgia,"Times New Roman",serif;font-size:clamp(32px,4vw,58px);font-weight:400;letter-spacing:-.045em;line-height:.98}.chip{border-color:rgba(184,162,127,.28);background:rgba(184,162,127,.10);color:#e5d4b8}.panel{border-radius:0;background:rgba(247,241,232,.70);box-shadow:none}.feature-grid,.pricing-grid{gap:1px;background:var(--line);border:1px solid var(--line)}.feature,.price{background:rgba(247,241,232,.82)}.final-cta{border-radius:0;background:#0a0c12;color:#f7f1e8}.final-cta .lead{color:rgba(247,241,232,.66)}footer{border-top:1px solid var(--line);color:var(--soft)}.lux-intro{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:#0a0c12;color:#f7f1e8;transition:opacity .8s cubic-bezier(.23,1,.32,1),visibility .8s}.lux-intro.is-hidden{opacity:0;visibility:hidden;pointer-events:none}.lux-intro__inner{width:min(920px,calc(100% - 48px));text-align:center}.lux-intro h2{margin:14px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(56px,10vw,146px);line-height:.82;font-weight:400;letter-spacing:-.065em}.lux-intro p{max-width:650px;margin:26px auto 0;color:rgba(247,241,232,.66);line-height:1.7}.lux-intro__line{height:1px;margin:42px 0 16px;background:rgba(247,241,232,.18);overflow:hidden}.lux-intro__line:before{content:"";display:block;height:100%;transform-origin:left;transform:scaleX(var(--intro-progress,0));background:#b8a27f}.lux-intro button{border:1px solid rgba(247,241,232,.65);border-radius:999px;padding:12px 18px;background:transparent;color:#f7f1e8;cursor:pointer}.hold-view{position:absolute;right:max(24px,calc((100vw - 1380px)/2 + 24px));bottom:7vh;z-index:8;display:grid;place-items:center;width:112px;height:112px;border:1px solid rgba(247,241,232,.56);border-radius:50%;background:rgba(247,241,232,.05);color:#f7f1e8;cursor:pointer;backdrop-filter:blur(10px)}.hold-view span{display:block;max-width:76px;text-align:center;font-size:11px;line-height:1.35;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.hold-view:before{content:"";position:absolute;inset:15px;border:1px solid rgba(247,241,232,.28);border-radius:50%}body.view-mode{--scene-fog:.08}.view-mode .tower-wrap:after,.view-mode .tower-wrap:before{opacity:.32!important}.view-mode .floor .plate{background:linear-gradient(90deg,rgba(142,233,255,.32),rgba(247,241,232,.06),rgba(184,162,127,.18));box-shadow:0 0 50px rgba(142,233,255,.22)}.view-mode .quad-canvas{opacity:1}@media(max-width:900px){.nav{left:12px;right:12px}.links a{display:none}.hero{grid-template-columns:1fr}.orbit-space{width:104vw;transform:translateY(var(--camera-rise)) scale(calc(var(--camera-scale)*.72)) rotateX(var(--camera-x)) rotateY(var(--camera-y)) rotateZ(var(--camera-z))}.camera-readout{top:90px;bottom:auto;left:24px}.hold-view{width:88px;height:88px;bottom:24px}.tower-wrap{height:640px!important}.base-pod{width:390px!important}}
+<!doctype html>
+<html lang="en" data-route="pulseboard-frontend">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PulseBoard Reliability Works</title>
+    <meta
+      name="description"
+      content="PulseBoard Reliability Works is the customer-facing surface for a cloud-native SaaS backend demo, with live backend proof one click away."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Aptos, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        --bg: #f4f1ea;
+        --surface: #fffdf8;
+        --ink: #19201d;
+        --muted: #64706a;
+        --rule: #d8d2c5;
+        --panel: #ece7dc;
+        --green: #26734d;
+        --green-soft: #dceadd;
+        --amber: #9a6a18;
+        --amber-soft: #f2e4c2;
+        --blue: #255f85;
+        --blue-soft: #dbe8ef;
+        --red: #9b3f36;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+      }
 
-/* Industrial factory redesign: converts the former tower silhouette into a software factory and replaces the palette for stronger contrast. */
-:root{--factory-bg:#101316;--factory-panel:#171c20;--factory-ink:#f4efe6;--factory-muted:#c8bdaa;--factory-copper:#d9863d;--factory-copper-2:#ffb36a;--factory-green:#7adf9b;--factory-line:rgba(244,239,230,.22);--factory-glow:rgba(217,134,61,.24);--paper:#191611;--paper2:#231f18;--ink:#f4efe6;--gold:#d9863d;--gold2:#ffb36a;--line:rgba(244,239,230,.20);--soft:rgba(244,239,230,.70);--night:#0e1114;--cyan:#7adf9b;--cream:#f4efe6;--bg:#101316;--text:#f4efe6;--muted:#c8bdaa;--green:#7adf9b;--purple:#d9863d;--amber:#ffb36a;--camera-x:57deg;--camera-y:-26deg;--camera-scale:.86;--scene-fog:.22}html{background:var(--factory-bg);color:var(--factory-ink)}body{color:var(--factory-ink);background:linear-gradient(180deg,#17130e 0%,#11161a 42%,#0e1114 100%)}body:before{opacity:.72;background:radial-gradient(circle at 18% 10%,rgba(217,134,61,.26),transparent 28%),radial-gradient(circle at 80% 12%,rgba(122,223,155,.16),transparent 26%),linear-gradient(180deg,#1b1712,#101316 55%,#0e1114)}.nav{background:rgba(16,19,22,.76);border-color:rgba(244,239,230,.18);color:var(--factory-ink)}.mark{border-color:var(--factory-copper);color:var(--factory-copper-2)}.links{color:rgba(244,239,230,.68)}.links a:hover,.lang:hover{color:#fff;border-color:rgba(255,179,106,.45)}.lang{background:rgba(23,28,32,.84);color:var(--factory-ink);border-color:rgba(244,239,230,.2)}.nav-cta,.primary{background:var(--factory-copper)!important;color:#14110d!important}.secondary{border-color:rgba(244,239,230,.24);background:rgba(23,28,32,.72);color:var(--factory-ink)}.kicker,.label,.campus-label{color:var(--factory-copper-2)!important}.kicker:before{background:var(--factory-green);box-shadow:0 0 22px rgba(122,223,155,.45)}.gradient{color:var(--factory-copper-2);-webkit-text-fill-color:currentColor}.lead{color:var(--factory-muted)}.metric,.hero-panel,.panel,.feature,.price{background:rgba(23,28,32,.82);color:var(--factory-ink);border-color:rgba(244,239,230,.18)}.metric span,.hero-panel p,.panel p,.panel li,.price p{color:var(--factory-muted)}.hero-card{background:linear-gradient(180deg,rgba(28,24,18,.88),rgba(16,19,22,.92));border-color:rgba(255,179,106,.26)}.scroll-theater{background:linear-gradient(180deg,rgba(25,22,17,.10),#101316 9%,#0e1114 86%,rgba(25,22,17,.08));color:var(--factory-ink)}.visual-stage{background:radial-gradient(circle at 48% 18%,rgba(217,134,61,.20),transparent 28%),radial-gradient(circle at 76% 68%,rgba(122,223,155,.12),transparent 28%),linear-gradient(180deg,#101316,#14191d 52%,#0e1114);border-block-color:rgba(255,179,106,.20)}.quad-canvas{opacity:.64}.ground-grid{top:82%;border-color:rgba(255,179,106,.25);background-image:linear-gradient(rgba(255,179,106,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,179,106,.12) 1px,transparent 1px),radial-gradient(circle,rgba(122,223,155,.12),transparent 62%)}.campus-ring{border-color:rgba(255,179,106,.38)}.campus-label{background:rgba(16,19,22,.82);border-color:rgba(255,179,106,.36)}.orbit-space{width:min(86vw,1080px);height:min(82vh,800px)}.tower-wrap{width:760px!important;height:390px!important;top:61%!important;transform:translate(-50%,-50%)!important}.tower-wrap:before{left:50%!important;top:92px!important;width:690px!important;height:238px!important;border:1px solid rgba(255,179,106,.38)!important;border-radius:12px 12px 24px 24px!important;background:linear-gradient(90deg,rgba(217,134,61,.16),rgba(244,239,230,.08) 46%,rgba(122,223,155,.08)),repeating-linear-gradient(to bottom,rgba(244,239,230,.12) 0 1px,transparent 1px 34px),repeating-linear-gradient(90deg,rgba(255,179,106,.16) 0 2px,transparent 2px 58px)!important;box-shadow:0 22px 110px rgba(217,134,61,.16),inset 0 0 64px rgba(244,239,230,.04)!important;clip-path:polygon(0 26%,7% 26%,11% 3%,18% 26%,27% 26%,31% 3%,38% 26%,48% 26%,52% 3%,59% 26%,69% 26%,73% 3%,80% 26%,100% 26%,100% 100%,0 100%)!important;transform:translateX(-50%) translateZ(-36px)!important}.tower-wrap:after{left:50%!important;top:140px!important;width:734px!important;height:190px!important;border:1px solid rgba(244,239,230,.20)!important;border-radius:10px 10px 22px 22px!important;background:linear-gradient(90deg,rgba(16,19,22,.25),rgba(217,134,61,.18) 32%,rgba(244,239,230,.08) 52%,rgba(122,223,155,.13) 74%,rgba(16,19,22,.28)),repeating-linear-gradient(90deg,transparent 0 28px,rgba(244,239,230,.13) 28px 30px,transparent 30px 62px),repeating-linear-gradient(to bottom,rgba(255,179,106,.16) 0 2px,transparent 2px 42px)!important;box-shadow:0 18px 100px rgba(217,134,61,.18),inset 0 0 48px rgba(255,179,106,.08)!important;opacity:.90!important;transform:translateX(-50%) translateZ(42px)!important}.antenna{left:16%!important;top:-28px!important;width:34px!important;height:168px!important;border-radius:8px 8px 0 0!important;background:linear-gradient(to bottom,#3b3328,#1b2024)!important;border:1px solid rgba(255,179,106,.38);box-shadow:0 0 42px rgba(217,134,61,.22)!important;transform:translateX(-50%) translateZ(94px)!important}.antenna:before{content:"";position:absolute;left:50%;top:-58px;width:110px;height:58px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(198,190,176,.28),rgba(198,190,176,.10) 48%,transparent 72%);filter:blur(5px);transform:translateX(-50%)}.spine{left:25%!important;top:18px!important;width:42px!important;height:126px!important;border-radius:8px 8px 0 0!important;background:linear-gradient(to bottom,#40372d,#20262a)!important;border:1px solid rgba(244,239,230,.18)!important;box-shadow:0 0 38px rgba(217,134,61,.20)!important;transform:translateX(-50%) translateZ(105px)!important}.spine:before{content:"";position:absolute;left:50%;top:-45px;width:94px;height:45px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(198,190,176,.22),rgba(198,190,176,.08) 52%,transparent 74%);filter:blur(5px);transform:translateX(-50%)}.tower-core{position:absolute!important;left:50%!important;top:128px!important;width:650px!important;height:178px!important;transform:translateX(-50%) translateZ(95px)!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;grid-auto-rows:70px!important;gap:14px!important;padding:16px!important}.floor{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;transform:none!important}.floor .plate{position:absolute!important;inset:0!important;border:1px solid rgba(255,179,106,.34)!important;border-radius:9px!important;background:linear-gradient(135deg,rgba(217,134,61,.20),rgba(244,239,230,.07),rgba(122,223,155,.12))!important;box-shadow:0 0 28px rgba(217,134,61,.10),inset 0 0 0 1px rgba(244,239,230,.06)!important;transform:translateZ(24px)!important}.floor .front,.floor .back,.floor .left,.floor .right{display:none!important}.floor .plate:before{inset:9px!important;background:repeating-linear-gradient(90deg,rgba(244,239,230,.30) 0 4px,transparent 4px 16px)!important}.floor-label{right:auto!important;left:8px!important;top:8px!important;width:calc(100% - 16px)!important;padding:0!important;border:0!important;background:transparent!important;color:var(--factory-muted)!important;font-size:10px!important;transform:translateZ(48px)!important}.floor-label strong{color:var(--factory-ink)!important;font-size:11px!important}.floor-label span{display:none!important}.floor:nth-child(n+9){display:none!important}.base-pod{left:50%!important;bottom:-22px!important;width:720px!important;grid-template-columns:repeat(3,1fr)!important;transform:translateX(-50%) translateZ(82px)!important}.pod{border-color:rgba(255,179,106,.28);background:rgba(16,19,22,.86)}.pod strong{color:#fff}.pod span{color:var(--factory-muted)}.data-beam{height:470px!important;background:linear-gradient(to bottom,transparent,rgba(122,223,155,.64),transparent);opacity:.28}.camera-readout strong{color:var(--factory-ink)}.camera-readout span{color:var(--factory-muted)}.chapter-card{background:rgba(16,19,22,.72);border-color:rgba(244,239,230,.18)}.chapter-card p{color:var(--factory-muted)}.chip{border-color:rgba(255,179,106,.30);background:rgba(217,134,61,.14);color:var(--factory-copper-2)}.final-cta{background:#101316;color:var(--factory-ink)}.final-cta .lead{color:var(--factory-muted)}.lux-intro{background:#101316;color:var(--factory-ink)}.lux-intro p{color:var(--factory-muted)}.lux-intro__line:before{background:var(--factory-copper-2)}.hold-view{border-color:rgba(255,179,106,.52);background:rgba(16,19,22,.76);color:var(--factory-ink)}.hold-view:before{border-color:rgba(122,223,155,.34)}body.view-mode .tower-wrap:after,body.view-mode .tower-wrap:before{opacity:.42!important}body.view-mode .floor .plate{background:linear-gradient(135deg,rgba(122,223,155,.26),rgba(244,239,230,.05),rgba(217,134,61,.20))!important;box-shadow:0 0 44px rgba(122,223,155,.20)!important}@media(max-width:900px){.tower-wrap{width:520px!important;height:330px!important}.tower-wrap:before{width:480px!important}.tower-wrap:after{width:505px!important}.tower-core{width:450px!important;grid-template-columns:repeat(3,1fr)!important}.base-pod{width:470px!important}.antenna{left:13%!important}.spine{left:24%!important}}
+      * { box-sizing: border-box; }
 
-/* Scroll focus: zoom each production cell/label instead of drifting the whole factory. */
-.tower-core{--focus-index:0;--focus-progress:0}.tower-core .floor{transition:opacity .34s cubic-bezier(.23,1,.32,1),filter .34s cubic-bezier(.23,1,.32,1),transform .34s cubic-bezier(.23,1,.32,1)!important;will-change:transform,opacity,filter}.tower-core .floor.is-dim{opacity:.42;filter:saturate(.65) brightness(.72);transform:translateZ(4px) scale(.92)!important}.tower-core .floor.is-focused{z-index:12;opacity:1;filter:saturate(1.25) brightness(1.18);transform:translateZ(92px) scale(1.24)!important}.tower-core .floor.is-focused .plate{border-color:rgba(255,179,106,.82)!important;background:linear-gradient(135deg,rgba(255,179,106,.36),rgba(244,239,230,.11),rgba(122,223,155,.28))!important;box-shadow:0 0 64px rgba(217,134,61,.35),0 0 34px rgba(122,223,155,.18),inset 0 0 0 1px rgba(244,239,230,.18)!important}.tower-core .floor.is-focused .floor-label{transform:translateZ(112px) scale(1.08)!important;color:var(--factory-ink)!important;text-shadow:0 0 18px rgba(217,134,61,.28)}.tower-core .floor.is-focused .floor-label strong{font-size:13px!important;color:#fff!important}.tower-core .floor.is-focused .floor-label span{display:block!important;margin-top:4px;color:var(--factory-muted)!important;font-size:10px!important}.focus-badge{position:absolute;left:50%;top:70px;z-index:10;min-width:220px;max-width:320px;padding:12px 14px;border:1px solid rgba(255,179,106,.42);background:rgba(16,19,22,.82);color:var(--factory-muted);font-size:12px;line-height:1.45;letter-spacing:.05em;transform:translateX(-50%) translateZ(180px);box-shadow:0 18px 70px rgba(0,0,0,.28);backdrop-filter:blur(16px)}.focus-badge strong{display:block;color:var(--factory-ink);font-size:13px;letter-spacing:.12em;text-transform:uppercase}.focus-badge span{display:block;margin-top:4px}@media(max-width:900px){.tower-core .floor.is-focused{transform:translateZ(74px) scale(1.16)!important}.focus-badge{top:52px;min-width:190px}}
-</style></head><body><div class="lux-intro" id="luxIntro"><div class="lux-intro__inner"><div class="kicker">PulseBoard Reliability Atelier</div><h2>Backend proof, presented like a flagship product.</h2><p>A cinematic software factory for recruiters and customers: scroll through product, platform, data, workers, and deployment evidence.</p><div class="lux-intro__line" id="luxIntroLine"></div><button type="button" id="luxEnter">Enter without sound</button></div></div><header class="shell nav"><a class="brand" href="#top"><span class="mark">PB</span><span>PulseBoard Operations Cloud</span></a><nav class="links"><a href="#tower">software factory</a><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="/" data-i18n="backendProof">Backend proof</a><select class="lang" id="langSelect" aria-label="Language selector"></select><a class="nav-cta" href="mailto:hello@anlan.store?subject=PulseBoard%20demo">Book a product demo</a></nav></header><main id="top"><section class="shell hero"><div><span class="kicker" data-i18n="kicker">Interactive SaaS command center</span><h1><span data-i18n="heroLine1">A customer-ready operations website,</span> <span class="gradient" data-i18n="heroLine2">powered by a real backend.</span></h1><p class="lead" data-i18n="heroLead">PulseBoard gives recruiters and buyers a complete product story: uptime monitoring, incident workflow, audit trails, API-key lifecycle, and a cinematic 3D software factory that explains industrialized platform delivery while the page scrolls.</p><div class="actions"><a class="primary" href="#tower" data-i18n="exploreTower">Explore the software factory</a><a class="secondary" href="/docs" data-i18n="viewApi">View live API docs</a></div><div class="metrics"><div class="metric"><strong>99.95%</strong><span data-i18n="metricUptime">SLO-ready uptime model</span></div><div class="metric"><strong>17</strong><span data-i18n="metricPaths">OpenAPI paths verified</span></div><div class="metric"><strong>&lt;60s</strong><span data-i18n="metricIncidents">Incident auto-open loop</span></div><div class="metric"><strong>API</strong><span data-i18n="metricKeys">Key rotation demo</span></div></div></div><aside class="hero-card"><div class="mini-stage"><div class="mini-tower"><i class="mini-floor" style="--i:0"></i><i class="mini-floor" style="--i:1"></i><i class="mini-floor" style="--i:2"></i><i class="mini-floor" style="--i:3"></i><i class="mini-floor" style="--i:4"></i><i class="mini-floor" style="--i:5"></i><i class="mini-floor" style="--i:6"></i><i class="mini-floor" style="--i:7"></i><i class="mini-floor" style="--i:8"></i><i class="mini-floor" style="--i:9"></i></div></div><div class="floating-dashboard"><div class="dash-row"><span class="status-dot"></span><strong>Global API</strong><span>healthy</span></div><div class="dash-row"><span class="status-dot warn"></span><strong>Checkout worker</strong><span>degraded</span></div><div class="dash-row"><span class="status-dot fail"></span><strong>Webhook ingest</strong><span>incident open</span></div></div></aside></section><section class="shell section-intro" id="tower"><span class="kicker" data-i18n="towerKicker">Scroll-driven 3D storytelling</span><h2 data-i18n="towerTitle">The PulseBoard Software Factory</h2><p class="lead" data-i18n="towerLead">Instead of a luxury high-rise, this scene is a software factory: intake becomes API contracts, production lines become platform capabilities, and the plant floor exposes PostgreSQL, Redis, BullMQ workers, CI, health checks, and deployment rails.</p></section><section class="scroll-theater" aria-label="Scroll-controlled 3D building walkthrough"><div class="visual-stage"><canvas class="quad-canvas" id="quadCanvas" aria-hidden="true"></canvas><div class="progress-track"></div><div class="camera-readout"><strong id="shotName">Opening orbit: software factory floor</strong><span id="shotCopy">Scroll through an industrialized software factory: intake, production lines, automation cells, runtime systems, and final product proof.</span></div><div class="scene"><div class="orbit-space"><div class="ground-grid"></div><div class="campus-ring"></div><div class="campus-label">software factory yard</div><i class="data-beam" style="--r:0deg"></i><i class="data-beam" style="--r:58deg"></i><i class="data-beam" style="--r:118deg"></i><div class="tower-wrap"><div class="antenna"></div><div class="spine"></div><div class="tower-core" id="towerCore"></div><div class="focus-badge" id="focusBadge" aria-live="polite"><strong>API Edge</strong><span>Auth, API keys, rate limits</span></div><div class="base-pod"><div class="pod"><strong>PostgreSQL</strong><span>Durable workspace, project, incident, audit, and usage records.</span></div><div class="pod"><strong>Redis + BullMQ</strong><span>Queue-backed checks and incident automation.</span></div><div class="pod"><strong>Docker deploy rail</strong><span>Portable compose rehearsal for staging.</span></div></div></div></div></div></div><button class="hold-view" id="holdView" type="button"><span data-i18n="holdView">Press & Hold
-See the view</span></button><div class="chapters"><article class="chapter"><div class="chapter-card"><em>01 / Full scene</em><h3>Opening view: a software factory built for repeatable delivery.</h3><p>The first scroll position shows the complete PulseBoard factory: customer experience, backend APIs, worker runtime, database, Redis, docs, and deployment rail.</p><div class="chip-row"><span class="chip">Customer-ready site</span><span class="chip">Recruiter-friendly narrative</span></div></div></article><article class="chapter"><div class="chapter-card"><em>02 / Exterior facade</em><h3>Orbit around the product intake and control room.</h3><p>The control room highlights what a non-technical buyer sees first: service health, status communication, audit history, and fast recovery signals.</p><div class="chip-row"><span class="chip">Status pages</span><span class="chip">Uptime checks</span><span class="chip">Incident timeline</span></div></div></article><article class="chapter"><div class="chapter-card"><em>03 / Floor structure</em><h3>Zoom into production lines and data flow.</h3><p>Each production cell maps to a backend competency: Hono routes, OpenAPI, Prisma models, API-key lifecycle, rate limits, structured logs, and worker handlers.</p><div class="chip-row"><span class="chip">TypeScript monorepo</span><span class="chip">OpenAPI</span><span class="chip">Prisma</span></div></div></article><article class="chapter"><div class="chapter-card"><em>04 / Base systems</em><h3>Dive below the plant floor to the runtime foundation.</h3><p>The plant floor exposes PostgreSQL persistence, Redis-backed write rate limiting, BullMQ background processing, Docker Compose validation, and readiness probes.</p><div class="chip-row"><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">BullMQ worker</span></div></div></article><article class="chapter"><div class="chapter-card"><em>05 / Pullback</em><h3>Return to the full commercial product.</h3><p>The final angle pulls away from implementation details and lands back on the business promise: a polished SaaS frontend backed by verified engineering proof.</p><div class="chip-row"><span class="chip">Portfolio-ready</span><span class="chip">Staging-friendly</span></div></div></article></div></section><section class="shell feature-grid" id="features"><article class="panel feature"><div class="icon" aria-hidden="true">&#9633;</div><h3>Operations dashboard</h3><p>Give buyers a clean overview of service health, check history, recent incidents, and the signals that matter during an outage.</p></article><article class="panel feature"><div class="icon" aria-hidden="true">&#9889;</div><h3>Incident automation</h3><p>Failed checks can open incidents automatically, while resolution flows create an audit-friendly timeline for every service.</p></article><article class="panel feature"><div class="icon" aria-hidden="true">&#9635;</div><h3>API-first backend</h3><p>OpenAPI docs, authenticated routes, API-key lifecycle, rate limits, structured logs, and readiness endpoints are all part of the demo.</p></article></section><section class="shell workflow"><div class="panel workflow-copy"><span class="kicker">How a buyer experiences it</span><h2>From first impression to proof in minutes.</h2><p class="lead">The frontend tells a commercial story. The backend proof page and API docs prove that the story is backed by running infrastructure rather than static screenshots.</p><blockquote class="quote">"PulseBoard is intentionally designed for overseas backend, platform, and cloud interviews: it looks like a product, but every polished surface maps back to a real engineering capability."</blockquote></div><div class="panel timeline"><div class="timeline-step"><b>1</b><div><h3>Customer sees a complete SaaS website</h3><p>The homepage communicates value, pricing, FAQs, and trust signals without requiring technical context.</p></div></div><div class="timeline-step"><b>2</b><div><h3>Recruiter opens the backend proof</h3><p>The cockpit links to live health probes, OpenAPI, protected routes, and public verification.</p></div></div><div class="timeline-step"><b>3</b><div><h3>Engineer runs the demo flow</h3><p>Workspace/project/service creation, checks, incidents, webhook ingest, usage, audit, and key revocation are wired together.</p></div></div></div></section><section class="shell pricing" id="pricing"><div class="pricing-head"><div><span class="kicker">Pricing</span><h2>Plans that make the demo feel like a real product.</h2></div><a class="secondary" href="mailto:hello@anlan.store?subject=PulseBoard%20pricing">Talk to sales</a></div><div class="pricing-grid"><article class="panel price"><h3>Starter</h3><p>For small teams that need public status and basic checks.</p><div class="amount">$29<small>/mo</small></div><ul><li>10 services</li><li>Public status page</li><li>Email incident digest</li></ul></article><article class="panel price featured"><h3>Scale</h3><p>For growing platforms that need automation and audit trails.</p><div class="amount">$99<small>/mo</small></div><ul><li>100 services</li><li>Webhook ingest</li><li>Audit and usage reports</li></ul></article><article class="panel price"><h3>Enterprise</h3><p>For regulated teams that need custom SLOs and deployment controls.</p><div class="amount">Custom</div><ul><li>Private staging</li><li>Custom retention</li><li>Platform review session</li></ul></article></div></section><section class="shell faq"><div><span class="kicker">FAQ</span><h2>Questions a buyer would actually ask.</h2><p class="lead">A good portfolio site should answer business questions first, then make technical proof easy to verify.</p></div><div class="faq-list"><details open><summary>Is this only a visual prototype?</summary><p>No. The commercial site is static, but it links to a live backend proof surface with health/readiness probes, OpenAPI, docs, and protected API behavior.</p></details><details><summary>Why use a software factory for a backend demo?</summary><p>The factory turns abstract platform layers into something memorable: intake equals customer experience, production cells equal backend modules, and the plant floor equals infrastructure.</p></details><details><summary>Can this be deployed to staging?</summary><p>Yes. The repository includes Docker Compose deployment materials and public surface verification scripts for safe staging rehearsal.</p></details></div></section><section class="shell final-cta"><span class="kicker">Ready for review</span><h2>Book a product demo, or inspect the backend proof.</h2><p class="lead">Use this page for a polished customer impression, then jump to the engineering cockpit when the reviewer wants evidence.</p><div class="actions" style="justify-content:center"><a class="primary" href="mailto:hello@anlan.store?subject=PulseBoard%20demo">Book a product demo</a><a class="secondary" href="/">Backend proof</a></div></section></main><footer><div class="shell"><span>PulseBoard Operations Cloud - portfolio SaaS demo.</span><span>Frontend story + backend proof + cloud-native deployment rehearsal.</span></div></footer><script>
-const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];
-const localeLabels = { en: 'English', 'zh-TW': '繁體中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', 'pt-BR': 'Português', ar: 'العربية', 'zh-CN': '简体中文' };
-const messages = {
-  en: { backendProof: 'Backend proof', kicker: 'Interactive SaaS command center', heroLine1: 'A customer-ready operations website,', heroLine2: 'powered by a real backend.', heroLead: 'PulseBoard gives recruiters and buyers a complete product story: uptime monitoring, incident workflow, audit trails, API-key lifecycle, and a cinematic 3D software factory that explains industrialized platform delivery while the page scrolls.', exploreTower: 'Explore the software factory', viewApi: 'View live API docs', metricUptime: 'SLO-ready uptime model', metricPaths: 'OpenAPI paths verified', metricIncidents: 'Incident auto-open loop', metricKeys: 'Key rotation demo', towerKicker: 'Scroll-driven 3D storytelling', towerTitle: 'The PulseBoard Software Factory', towerLead: 'Instead of a luxury high-rise, this scene is a software factory: intake becomes API contracts, production lines become platform capabilities, and the plant floor exposes PostgreSQL, Redis, BullMQ workers, CI, health checks, and deployment rails.' },
-  'zh-TW': { backendProof: '後端證明', kicker: '互動式 SaaS 指揮中心', heroLine1: '一個客戶看得懂的維運網站，', heroLine2: '背後接著真實後端。', heroLead: 'PulseBoard 讓招募方與客戶看到完整產品故事：可用性監控、事件流程、稽核軌跡、API key 生命週期，以及會隨捲動展示平台架構的直立 3D 指揮塔。', exploreTower: '探索 3D 指揮塔', viewApi: '查看即時 API 文件', metricUptime: 'SLO 可用性模型', metricPaths: '已驗證 OpenAPI 路徑', metricIncidents: '事件自動開啟迴路', metricKeys: '金鑰輪替 demo', towerKicker: '捲動驅動的 3D 敘事', towerTitle: 'PulseBoard 維運可靠性塔', towerLead: '這不是橫躺的公寓模型，而是一座直立的 full-stack 維運塔：頂端是 API edge，每一層代表一項平台能力，底座清楚露出 PostgreSQL、Redis、BullMQ worker 與部署軌道。' },
-  ja: { backendProof: 'バックエンド証明', kicker: 'インタラクティブ SaaS 指令センター', heroLine1: '顧客に伝わる運用サイトを、', heroLine2: '実際のバックエンドで稼働。', heroLead: 'PulseBoard は稼働監視、インシデント、監査、API キー、そして縦型 3D タワーで、商品価値と技術証明を同じ体験にまとめます。', exploreTower: '3D 指令タワーを見る', viewApi: 'ライブ API docs を開く', metricUptime: 'SLO 対応 uptime', metricPaths: '検証済み OpenAPI', metricIncidents: '自動インシデント化', metricKeys: 'キー rotation demo', towerKicker: 'スクロール駆動 3D ストーリー', towerTitle: 'PulseBoard Software Factory', towerLead: '各フロアが API、テナンシー、インシデント、監査、worker、データ層に対応する縦型の運用タワーです。' },
-  ko: { backendProof: '백엔드 증명', kicker: '인터랙티브 SaaS 커맨드 센터', heroLine1: '고객이 이해하는 운영 웹사이트,', heroLine2: '실제 백엔드로 구동됩니다.', heroLead: 'PulseBoard는 uptime, incident workflow, audit trail, API key lifecycle과 수직 3D 타워를 통해 제품 경험과 백엔드 증명을 함께 보여줍니다.', exploreTower: '3D 커맨드 타워 보기', viewApi: '라이브 API 문서 보기', metricUptime: 'SLO 준비 uptime', metricPaths: '검증된 OpenAPI 경로', metricIncidents: 'Incident 자동 오픈', metricKeys: 'Key rotation demo', towerKicker: '스크롤 기반 3D 스토리', towerTitle: 'PulseBoard Software Factory', towerLead: '각 층은 API, tenancy, incident, audit, worker, data, deployment 역량을 나타내는 수직 운영 타워입니다.' },
-  es: { backendProof: 'Prueba backend', kicker: 'Centro de mando SaaS interactivo', heroLine1: 'Un sitio de operaciones listo para clientes,', heroLine2: 'con backend real.', heroLead: 'PulseBoard une monitorización, incidentes, auditoría, ciclo de API keys y una fábrica de software 3D vertical para contar producto y arquitectura a la vez.', exploreTower: 'Explorar fábrica de software 3D', viewApi: 'Ver API docs en vivo', metricUptime: 'Uptime listo para SLO', metricPaths: 'Rutas OpenAPI verificadas', metricIncidents: 'Incidentes automáticos', metricKeys: 'Demo de rotación de keys', towerKicker: 'Historia 3D por scroll', towerTitle: 'PulseBoard Software Factory', towerLead: 'Una torre vertical donde cada piso representa capacidades de plataforma y la base muestra PostgreSQL, Redis, BullMQ y despliegue.' },
-  fr: { backendProof: 'Preuve backend', kicker: 'Centre de commande SaaS interactif', heroLine1: 'Un site d’opérations prêt pour les clients,', heroLine2: 'alimenté par un vrai backend.', heroLead: 'PulseBoard réunit supervision, incidents, audit, cycle des clés API et une usine logicielle 3D verticale pour montrer produit et architecture.', exploreTower: 'Explorer la usine logicielle 3D', viewApi: 'Voir les docs API live', metricUptime: 'Uptime compatible SLO', metricPaths: 'Chemins OpenAPI vérifiés', metricIncidents: 'Ouverture auto d’incident', metricKeys: 'Demo rotation de clés', towerKicker: 'Récit 3D au scroll', towerTitle: 'PulseBoard Software Factory', towerLead: 'Une tour verticale où chaque étage correspond à une capacité plateforme et la base expose PostgreSQL, Redis, BullMQ et le déploiement.' },
-  de: { backendProof: 'Backend-Nachweis', kicker: 'Interaktives SaaS Command Center', heroLine1: 'Eine kundentaugliche Operations-Website,', heroLine2: 'mit echtem Backend.', heroLead: 'PulseBoard verbindet Uptime, Incidents, Audit, API-Key-Lifecycle und einen vertikalen 3D-Tower zu einer Produkt- und Architekturstory.', exploreTower: 'Software Factory ansehen', viewApi: 'Live API Docs öffnen', metricUptime: 'SLO-bereites Uptime-Modell', metricPaths: 'Verifizierte OpenAPI-Pfade', metricIncidents: 'Automatische Incidents', metricKeys: 'Key-Rotation Demo', towerKicker: 'Scroll-getriebene 3D Story', towerTitle: 'PulseBoard Software Factory', towerLead: 'Ein vertikaler Operations-Tower: jede Etage steht für Plattformfähigkeiten, die Basis zeigt PostgreSQL, Redis, BullMQ und Deployment.' },
-  'pt-BR': { backendProof: 'Prova backend', kicker: 'Centro de comando SaaS interativo', heroLine1: 'Um site operacional pronto para clientes,', heroLine2: 'com backend real.', heroLead: 'PulseBoard combina uptime, incidentes, auditoria, ciclo de API keys e uma fábrica de software 3D vertical para explicar produto e arquitetura.', exploreTower: 'Explorar fábrica de software 3D', viewApi: 'Ver docs API ao vivo', metricUptime: 'Uptime pronto para SLO', metricPaths: 'Rotas OpenAPI verificadas', metricIncidents: 'Incidente automático', metricKeys: 'Demo de rotação de keys', towerKicker: 'Narrativa 3D por scroll', towerTitle: 'PulseBoard Software Factory', towerLead: 'Uma torre operacional vertical: cada andar representa capacidades de plataforma e a base mostra PostgreSQL, Redis, BullMQ e deploy.' },
-  ar: { backendProof: 'دليل الخلفية', kicker: 'مركز قيادة SaaS تفاعلي', heroLine1: 'موقع عمليات جاهز للعملاء،', heroLine2: 'مدعوم بخلفية حقيقية.', heroLead: 'يعرض PulseBoard مراقبة التوفر، سير الحوادث، التدقيق، دورة مفاتيح API، وبرجاً ثلاثي الأبعاد عمودياً يشرح بنية المنصة أثناء التمرير.', exploreTower: 'استكشف برج القيادة ثلاثي الأبعاد', viewApi: 'افتح وثائق API الحية', metricUptime: 'نموذج توفر جاهز لـ SLO', metricPaths: 'مسارات OpenAPI موثقة', metricIncidents: 'فتح الحوادث تلقائياً', metricKeys: 'عرض تدوير المفاتيح', towerKicker: 'سرد ثلاثي الأبعاد بالتمرير', towerTitle: 'برج موثوقية PulseBoard', towerLead: 'برج عمليات عمودي: القمة لطبقة API، كل طابق يمثل قدرة منصة، والقاعدة تعرض PostgreSQL و Redis و BullMQ ومسار النشر.' },
-  'zh-CN': { backendProof: '后端证明', kicker: '交互式 SaaS 指挥中心', heroLine1: '一个客户看得懂的运维网站，', heroLine2: '背后接着真实后端。', heroLead: 'PulseBoard 让招聘方和客户看到完整产品故事：可用性监控、事件流程、审计轨迹、API key 生命周期，以及会随着滚动展示平台架构的直立 3D 指挥塔。', exploreTower: '探索 3D 指挥塔', viewApi: '查看实时 API 文档', metricUptime: 'SLO 可用性模型', metricPaths: '已验证 OpenAPI 路径', metricIncidents: '事件自动打开闭环', metricKeys: '密钥轮换 demo', towerKicker: '滚动驱动的 3D 叙事', towerTitle: 'PulseBoard 运维可靠性塔', towerLead: '这不是横躺的公寓模型，而是一座直立的 full-stack 运维塔：塔冠是 API edge，每一层代表一项平台能力，底座清楚露出 PostgreSQL、Redis、BullMQ worker 和部署轨道。' }
-};
-const textMaps = {
-  'zh-CN': { 'PulseBoard Operations Cloud': 'PulseBoard 运维云', 'software factory': '3D 指挥塔', 'Features': '功能', 'Pricing': '定价', 'Book a product demo': '预约产品演示', 'Global API': '全球 API', 'healthy': '健康', 'Checkout worker': '结账 worker', 'degraded': '降级', 'Webhook ingest': 'Webhook 接入', 'incident open': '事件已打开', 'software factory yard': 'cloud-native 运行底座', 'Operations dashboard': '运维仪表盘', 'Incident automation': '事件自动化', 'API-first backend': 'API-first 后端', 'How a buyer experiences it': '客户如何体验它', 'From first impression to proof in minutes.': '从第一印象到工程证明，只需要几分钟。', 'Customer sees a complete SaaS website': '客户看到完整 SaaS 网站', 'Recruiter opens the backend proof': '招聘方打开后端证明', 'Engineer runs the demo flow': '工程师运行 demo flow', 'Plans that make the demo feel like a real product.': '让 demo 更像真实产品的套餐。', 'Talk to sales': '联系销售', 'For small teams that need public status and basic checks.': '适合需要公开状态和基础检查的小团队。', '10 services': '10 个服务', 'Public status page': '公开状态页', 'Email incident digest': '邮件事件摘要', 'For growing platforms that need automation and audit trails.': '适合需要自动化与审计轨迹的成长型平台。', '100 services': '100 个服务', 'Webhook ingest': 'Webhook 接入', 'Audit and usage reports': '审计与用量报告', 'For regulated teams that need custom SLOs and deployment controls.': '适合需要自定义 SLO 和部署控制的合规团队。', 'Custom': '定制', 'Private staging': '私有 staging', 'Custom retention': '自定义保留期', 'Platform review session': '平台评审 session', 'Questions a buyer would actually ask.': '客户真的会问的问题。', 'A good portfolio site should answer business questions first, then make technical proof easy to verify.': '一个好的作品集网站应先回答业务问题，再让技术证明易于验证。', 'Is this only a visual prototype?': '这只是视觉原型吗？', 'Why use a software factory for a backend demo?': '为什么用 3D 建筑展示后端 demo？', 'Can this be deployed to staging?': '它可以部署到 staging 吗？', 'Ready for review': '可以开始评审', 'Book a product demo, or inspect the backend proof.': '预约产品演示，或检查后端证明。', 'Use this page for a polished customer impression, then jump to the engineering cockpit when the reviewer wants evidence.': '先用这个页面建立完整客户印象；当评审者需要证据时，再跳到工程驾驶舱。', 'PulseBoard Operations Cloud - portfolio SaaS demo.': 'PulseBoard 运维云 - SaaS 作品集 demo。', 'Frontend story + backend proof + cloud-native deployment rehearsal.': '前端故事 + 后端证明 + cloud-native 部署演练。' },
-  'zh-TW': { 'PulseBoard Operations Cloud': 'PulseBoard 維運雲', 'software factory': '3D 指揮塔', 'Features': '功能', 'Pricing': '定價', 'Book a product demo': '預約產品演示', 'Global API': '全球 API', 'healthy': '健康', 'Checkout worker': '結帳 worker', 'degraded': '降級', 'Webhook ingest': 'Webhook 接入', 'incident open': '事件已開啟', 'software factory yard': 'cloud-native 運行底座', 'Operations dashboard': '維運儀表板', 'Incident automation': '事件自動化', 'API-first backend': 'API-first 後端', 'How a buyer experiences it': '客戶如何體驗它', 'From first impression to proof in minutes.': '從第一印象到工程證明，只需要幾分鐘。', 'Customer sees a complete SaaS website': '客戶看到完整 SaaS 網站', 'Recruiter opens the backend proof': '招募方打開後端證明', 'Engineer runs the demo flow': '工程師運行 demo flow', 'Plans that make the demo feel like a real product.': '讓 demo 更像真實產品的方案。', 'Talk to sales': '聯絡銷售', 'For small teams that need public status and basic checks.': '適合需要公開狀態與基礎檢查的小團隊。', '10 services': '10 個服務', 'Public status page': '公開狀態頁', 'Email incident digest': 'Email 事件摘要', 'For growing platforms that need automation and audit trails.': '適合需要自動化與稽核軌跡的成長型平台。', '100 services': '100 個服務', 'Audit and usage reports': '稽核與用量報告', 'For regulated teams that need custom SLOs and deployment controls.': '適合需要自訂 SLO 與部署控制的合規團隊。', 'Custom': '客製', 'Private staging': '私有 staging', 'Custom retention': '自訂保留期', 'Platform review session': '平台評審 session', 'Questions a buyer would actually ask.': '客戶真的會問的問題。', 'A good portfolio site should answer business questions first, then make technical proof easy to verify.': '好的作品集網站應先回答業務問題，再讓技術證明容易驗證。', 'Is this only a visual prototype?': '這只是視覺原型嗎？', 'Why use a software factory for a backend demo?': '為什麼用 3D 建築展示後端 demo？', 'Can this be deployed to staging?': '它可以部署到 staging 嗎？', 'Ready for review': '可以開始評審', 'Book a product demo, or inspect the backend proof.': '預約產品演示，或檢查後端證明。', 'Use this page for a polished customer impression, then jump to the engineering cockpit when the reviewer wants evidence.': '先用這個頁面建立完整客戶印象；當評審者需要證據時，再跳到工程駕駛艙。', 'PulseBoard Operations Cloud - portfolio SaaS demo.': 'PulseBoard 維運雲 - SaaS 作品集 demo。', 'Frontend story + backend proof + cloud-native deployment rehearsal.': '前端故事 + 後端證明 + cloud-native 部署演練。' }
-};
+      html { scroll-behavior: smooth; }
 
-messages['zh-CN'].towerTitle = 'PulseBoard \u8f6f\u4ef6\u5de5\u5382';
-messages['zh-CN'].towerLead = '\u8fd9\u4e0d\u662f\u9ad8\u5854\uff0c\u800c\u662f\u4e00\u5ea7\u8f6f\u4ef6\u5de5\u5382\uff1a\u5165\u53e3\u662f API \u5951\u7ea6\uff0c\u751f\u4ea7\u7ebf\u662f\u5e73\u53f0\u80fd\u529b\uff0c\u8f66\u95f4\u5730\u9762\u6e05\u695a\u9732\u51fa PostgreSQL\u3001Redis\u3001BullMQ worker\u3001CI\u3001\u5065\u5eb7\u68c0\u67e5\u4e0e\u90e8\u7f72\u8f68\u9053\u3002';
-messages['zh-CN'].exploreTower = '\u63a2\u7d22\u8f6f\u4ef6\u5de5\u5382';
-messages['zh-CN'].heroLead = 'PulseBoard \u8ba9\u62db\u8058\u65b9\u4e0e\u5ba2\u6237\u770b\u5230\u5b8c\u6574\u4ea7\u54c1\u6545\u4e8b\uff1a\u53ef\u7528\u6027\u76d1\u63a7\u3001\u4e8b\u4ef6\u6d41\u7a0b\u3001\u5ba1\u8ba1\u8f68\u8ff9\u3001API key \u751f\u547d\u5468\u671f\uff0c\u4ee5\u53ca\u968f\u6eda\u52a8\u5c55\u793a\u5e73\u53f0\u5de5\u4e1a\u5316\u4ea4\u4ed8\u7684 3D \u8f6f\u4ef6\u5de5\u5382\u3002';
-messages['zh-TW'].towerTitle = 'PulseBoard \u8edf\u9ad4\u5de5\u5ee0';
-messages['zh-TW'].towerLead = '\u9019\u4e0d\u662f\u9ad8\u5854\uff0c\u800c\u662f\u4e00\u5ea7\u8edf\u9ad4\u5de5\u5ee0\uff1a\u5165\u53e3\u662f API \u5951\u7d04\uff0c\u751f\u7522\u7dda\u662f\u5e73\u53f0\u80fd\u529b\uff0c\u5ee0\u623f\u5730\u9762\u6e05\u695a\u9732\u51fa PostgreSQL\u3001Redis\u3001BullMQ worker\u3001CI\u3001\u5065\u5eb7\u6aa2\u67e5\u8207\u90e8\u7f72\u8ecc\u9053\u3002';
-messages['zh-TW'].exploreTower = '\u63a2\u7d22\u8edf\u9ad4\u5de5\u5ee0';
-messages.ar.towerTitle = '\u0645\u0635\u0646\u0639 \u0628\u0631\u0645\u062c\u064a\u0627\u062a PulseBoard';
-messages.ar.towerLead = '\u0647\u0630\u0627 \u0644\u064a\u0633 \u0628\u0631\u062c\u0627\u064b\u060c \u0628\u0644 \u0645\u0635\u0646\u0639 \u0628\u0631\u0645\u062c\u064a\u0627\u062a: \u0627\u0644\u0645\u062f\u062e\u0644 \u0647\u0648 \u0639\u0642\u0648\u062f API\u060c \u0648\u062e\u0637\u0648\u0637 \u0627\u0644\u0625\u0646\u062a\u0627\u062c \u0647\u064a \u0642\u062f\u0631\u0627\u062a \u0627\u0644\u0645\u0646\u0635\u0629\u060c \u0648\u0623\u0631\u0636\u064a\u0629 \u0627\u0644\u0645\u0635\u0646\u0639 \u062a\u0639\u0631\u0636 PostgreSQL \u0648 Redis \u0648 BullMQ \u0648 CI \u0648\u0641\u062d\u0648\u0635 \u0627\u0644\u0635\u062d\u0629 \u0648\u0645\u0633\u0627\u0631 \u0627\u0644\u0646\u0634\u0631.';
-messages.ar.exploreTower = '\u0627\u0633\u062a\u0643\u0634\u0641 \u0645\u0635\u0646\u0639 \u0627\u0644\u0628\u0631\u0645\u062c\u064a\u0627\u062a';
-messages.en.holdView = 'Press & Hold\nSee the view';
-messages['zh-TW'].holdView = '\u9577\u6309\n\u67e5\u770b\u8996\u89d2';
-messages.ja.holdView = '\u9577\u62bc\u3057\n\u773a\u671b\u3092\u898b\u308b';
-messages.ko.holdView = '\uae38\uac8c \ub204\ub974\uae30\n\ubdf0 \ubcf4\uae30';
-messages.es.holdView = 'Mantén pulsado\nVer vista';
-messages.fr.holdView = 'Maintenir\nVoir la vue';
-messages.de.holdView = 'Gedrückt halten\nAnsicht sehen';
-messages['pt-BR'].holdView = 'Pressione e segure\nVer vista';
-messages.ar.holdView = '\u0627\u0636\u063a\u0637 \u0645\u0637\u0648\u0644\u0627\u064b\n\u0644\u0631\u0624\u064a\u0629 \u0627\u0644\u0645\u0634\u0647\u062f';
-messages['zh-CN'].holdView = '\u957f\u6309\n\u67e5\u770b\u89c6\u89d2';
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        background:
+          linear-gradient(90deg, rgba(216, 210, 197, 0.36) 1px, transparent 1px) 0 0 / 70px 70px,
+          var(--bg);
+        color: var(--ink);
+      }
 
-const runtimeMessageComplements = {
-  'zh-CN': {
-    heroLead: 'PulseBoard 让招聘方和客户看到完整产品故事：可用性监控、事件流程、审计轨迹、API key 生命周期，以及会随着滚动展示平台工业化交付的 3D 软件工厂。',
-    exploreTower: '探索软件工厂',
-    towerTitle: 'PulseBoard 软件工厂',
-    towerLead: '这不是横躺模型，也不是单纯装饰，而是一座软件工厂：入口是 API 契约，生产线是平台能力，车间地面清楚露出 PostgreSQL、Redis、BullMQ worker、CI、健康检查与部署轨道。'
-  },
-  'zh-TW': {
-    heroLead: 'PulseBoard 讓招募方與客戶看到完整產品故事：可用性監控、事件流程、稽核軌跡、API key 生命週期，以及會隨捲動展示平台工業化交付的 3D 軟體工廠。',
-    exploreTower: '探索軟體工廠',
-    towerTitle: 'PulseBoard 軟體工廠',
-    towerLead: '這不是橫躺模型，也不是單純裝飾，而是一座軟體工廠：入口是 API 契約，生產線是平台能力，廠房地面清楚露出 PostgreSQL、Redis、BullMQ worker、CI、健康檢查與部署軌道。'
-  },
-  ar: {
-    heroLead: 'يعرض PulseBoard قصة منتج كاملة: مراقبة التوفر، سير الحوادث، سجلات التدقيق، دورة مفاتيح API، ومصنع برمجيات ثلاثي الأبعاد يشرح تسليم المنصة بشكل صناعي أثناء التمرير.',
-    exploreTower: 'استكشف مصنع البرمجيات',
-    towerTitle: 'مصنع برمجيات PulseBoard',
-    towerLead: 'هذا ليس برجاً للزينة، بل مصنع برمجيات: المدخل هو عقود API، وخطوط الإنتاج هي قدرات المنصة، وأرضية المصنع تعرض PostgreSQL و Redis و BullMQ workers و CI وفحوصات الصحة ومسار النشر.'
-  }
-};
-Object.entries(runtimeMessageComplements).forEach(function(entry) { Object.assign(messages[entry[0]], entry[1]); });
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        content: "";
+        background: linear-gradient(180deg, rgba(255, 253, 248, 0.9), rgba(244, 241, 234, 0.88) 45%, var(--bg));
+      }
 
-const runtimeTextMapComplements = {
-  'zh-CN': {
-    'PulseBoard Reliability Atelier': 'PulseBoard 可靠性工坊',
-    'Backend proof, presented like a flagship product.': '把后端证明包装成旗舰产品体验。',
-    'A cinematic software factory for recruiters and customers: scroll through product, platform, data, workers, and deployment evidence.': '给招聘方和客户看的电影感软件工厂：滚动穿过产品、平台、数据、worker 与部署证据。',
-    'Enter without sound': '静音进入',
-    'PulseBoard Operations Cloud': 'PulseBoard 运维云',
-    'software factory': '软件工厂',
-    'Features': '功能',
-    'Pricing': '定价',
-    'Backend proof': '后端证明',
-    'Book a product demo': '预约产品演示',
-    'Global API': '全球 API',
-    'healthy': '健康',
-    'Checkout worker': '结账 worker',
-    'degraded': '降级',
-    'Webhook ingest': 'Webhook 接入',
-    'incident open': '事件已打开',
-    'software factory yard': '软件工厂地面',
-    'Opening orbit: software factory floor': '开场环绕：软件工厂全景',
-    'Scroll through an industrialized software factory: intake, production lines, automation cells, runtime systems, and final product proof.': '滚动穿过工业化软件工厂：入口、生产线、自动化单元、运行时系统和最终产品证明。',
-    'Auth, API keys, rate limits': '认证、API keys、限流',
-    'Durable workspace, project, incident, audit, and usage records.': '持久保存 workspace、project、incident、audit 与 usage 记录。',
-    'Queue-backed checks and incident automation.': '队列驱动的检查与事件自动化。',
-    'Docker deploy rail': 'Docker 部署轨道',
-    'Portable compose rehearsal for staging.': '可移植的 Compose staging 演练。',
-    'Press & Hold': '长按',
-    'See the view': '查看视角',
-    '01 / Full scene': '01 / 全景',
-    'Opening view: a software factory built for repeatable delivery.': '开场视角：为可重复交付而建的软件工厂。',
-    'The first scroll position shows the complete PulseBoard factory: customer experience, backend APIs, worker runtime, database, Redis, docs, and deployment rail.': '第一个滚动位置展示完整 PulseBoard 工厂：客户体验、后端 API、worker runtime、数据库、Redis、文档与部署轨道。',
-    'Customer-ready site': '客户可读的网站',
-    'Recruiter-friendly narrative': '招聘方友好的叙事',
-    '02 / Exterior facade': '02 / 外立面',
-    'Orbit around the product intake and control room.': '围绕产品入口和控制室环绕。',
-    'The control room highlights what a non-technical buyer sees first: service health, status communication, audit history, and fast recovery signals.': '控制室突出非技术买家最先看到的内容：服务健康、状态沟通、审计历史和快速恢复信号。',
-    'Status pages': '状态页',
-    'Uptime checks': '可用性检查',
-    'Incident timeline': '事件时间线',
-    '03 / Floor structure': '03 / 楼层结构',
-    'Zoom into production lines and data flow.': '放大生产线和数据流。',
-    'Each production cell maps to a backend competency: Hono routes, OpenAPI, Prisma models, API-key lifecycle, rate limits, structured logs, and worker handlers.': '每个生产单元都对应一项后端能力：Hono routes、OpenAPI、Prisma models、API-key 生命周期、限流、结构化日志和 worker handlers。',
-    'TypeScript monorepo': 'TypeScript monorepo',
-    '04 / Base systems': '04 / 底座系统',
-    'Dive below the plant floor to the runtime foundation.': '下潜到车间地面下方的运行时基础。',
-    'The plant floor exposes PostgreSQL persistence, Redis-backed write rate limiting, BullMQ background processing, Docker Compose validation, and readiness probes.': '车间地面露出 PostgreSQL 持久化、Redis-backed 写入限流、BullMQ 后台处理、Docker Compose 验证和 readiness probes。',
-    '05 / Pullback': '05 / 拉远',
-    'Return to the full commercial product.': '回到完整商业产品。',
-    'The final angle pulls away from implementation details and lands back on the business promise: a polished SaaS frontend backed by verified engineering proof.': '最后的视角从实现细节拉远，回到商业承诺：一个精致 SaaS 前端，背后有已验证的工程证明。',
-    'Portfolio-ready': '作品集就绪',
-    'Staging-friendly': 'Staging 友好',
-    'Operations dashboard': '运维仪表盘',
-    'Give buyers a clean overview of service health, check history, recent incidents, and the signals that matter during an outage.': '让买家清楚看到服务健康、检查历史、近期事件，以及故障期间真正重要的信号。',
-    'Incident automation': '事件自动化',
-    'Failed checks can open incidents automatically, while resolution flows create an audit-friendly timeline for every service.': '失败检查可以自动打开事件；解决流程会为每个服务生成适合审计的时间线。',
-    'API-first backend': 'API-first 后端',
-    'OpenAPI docs, authenticated routes, API-key lifecycle, rate limits, structured logs, and readiness endpoints are all part of the demo.': 'OpenAPI 文档、认证路由、API-key 生命周期、限流、结构化日志和 readiness endpoints 都是 demo 的一部分。',
-    'How a buyer experiences it': '客户如何体验它',
-    'From first impression to proof in minutes.': '从第一印象到工程证明，只需要几分钟。',
-    'The frontend tells a commercial story. The backend proof page and API docs prove that the story is backed by running infrastructure rather than static screenshots.': '前端讲清商业故事；后端证明页和 API 文档证明这不是静态截图，而是有运行中的基础设施支撑。',
-    '"PulseBoard is intentionally designed for overseas backend, platform, and cloud interviews: it looks like a product, but every polished surface maps back to a real engineering capability."': '“PulseBoard 是为海外 backend、platform、cloud 面试而设计的：它看起来像产品，但每个精致表面都能映射回真实工程能力。”',
-    'Customer sees a complete SaaS website': '客户看到完整 SaaS 网站',
-    'The homepage communicates value, pricing, FAQs, and trust signals without requiring technical context.': '首页无需技术背景，也能传达价值、定价、FAQ 和信任信号。',
-    'Recruiter opens the backend proof': '招聘方打开后端证明',
-    'The cockpit links to live health probes, OpenAPI, protected routes, and public verification.': '工程驾驶舱链接到实时健康探针、OpenAPI、受保护路由和公开验证。',
-    'Engineer runs the demo flow': '工程师运行 demo flow',
-    'Workspace/project/service creation, checks, incidents, webhook ingest, usage, audit, and key revocation are wired together.': 'workspace/project/service 创建、检查、事件、webhook 接入、用量、审计和密钥撤销已经串成完整流程。',
-    'Plans that make the demo feel like a real product.': '让 demo 更像真实产品的套餐。',
-    'Talk to sales': '联系销售',
-    'Starter': '入门版',
-    'For small teams that need public status and basic checks.': '适合需要公开状态和基础检查的小团队。',
-    '10 services': '10 个服务',
-    'Public status page': '公开状态页',
-    'Email incident digest': '邮件事件摘要',
-    'Scale': '增长版',
-    'For growing platforms that need automation and audit trails.': '适合需要自动化与审计轨迹的成长型平台。',
-    '100 services': '100 个服务',
-    'Audit and usage reports': '审计与用量报告',
-    'Enterprise': '企业版',
-    'For regulated teams that need custom SLOs and deployment controls.': '适合需要自定义 SLO 和部署控制的合规团队。',
-    'Custom': '定制',
-    'Private staging': '私有 staging',
-    'Custom retention': '自定义保留期',
-    'Platform review session': '平台评审 session',
-    'FAQ': '常见问题',
-    'Questions a buyer would actually ask.': '客户真的会问的问题。',
-    'A good portfolio site should answer business questions first, then make technical proof easy to verify.': '一个好的作品集网站应先回答业务问题，再让技术证明易于验证。',
-    'Is this only a visual prototype?': '这只是视觉原型吗？',
-    'No. The commercial site is static, but it links to a live backend proof surface with health/readiness probes, OpenAPI, docs, and protected API behavior.': '不是。商业站点是静态页面，但它链接到真实后端证明面：health/readiness 探针、OpenAPI、文档和受保护 API 行为。',
-    'Why use a software factory for a backend demo?': '为什么用软件工厂展示后端 demo？',
-    'The factory turns abstract platform layers into something memorable: intake equals customer experience, production cells equal backend modules, and the plant floor equals infrastructure.': '软件工厂把抽象平台层变得更容易记住：入口等于客户体验，生产单元等于后端模块，车间地面等于基础设施。',
-    'Can this be deployed to staging?': '它可以部署到 staging 吗？',
-    'Yes. The repository includes Docker Compose deployment materials and public surface verification scripts for safe staging rehearsal.': '可以。仓库包含 Docker Compose 部署材料和 public surface 验证脚本，可安全进行 staging 演练。',
-    'Ready for review': '可以开始评审',
-    'Book a product demo, or inspect the backend proof.': '预约产品演示，或检查后端证明。',
-    'Use this page for a polished customer impression, then jump to the engineering cockpit when the reviewer wants evidence.': '先用这个页面建立完整客户印象；当评审者需要证据时，再跳到工程驾驶舱。',
-    'PulseBoard Operations Cloud - portfolio SaaS demo.': 'PulseBoard 运维云 - SaaS 作品集 demo。',
-    'Frontend story + backend proof + cloud-native deployment rehearsal.': '前端故事 + 后端证明 + cloud-native 部署演练。'
-  },
-  'zh-TW': {
-    'PulseBoard Reliability Atelier': 'PulseBoard 可靠性工坊',
-    'Backend proof, presented like a flagship product.': '把後端證明包裝成旗艦產品體驗。',
-    'A cinematic software factory for recruiters and customers: scroll through product, platform, data, workers, and deployment evidence.': '給招募方與客戶看的電影感軟體工廠：捲動穿過產品、平台、資料、worker 與部署證據。',
-    'Enter without sound': '靜音進入',
-    'PulseBoard Operations Cloud': 'PulseBoard 維運雲',
-    'software factory': '軟體工廠',
-    'Features': '功能',
-    'Pricing': '定價',
-    'Backend proof': '後端證明',
-    'Book a product demo': '預約產品演示',
-    'Global API': '全球 API',
-    'healthy': '健康',
-    'Checkout worker': '結帳 worker',
-    'degraded': '降級',
-    'Webhook ingest': 'Webhook 接入',
-    'incident open': '事件已開啟',
-    'software factory yard': '軟體工廠地面',
-    'Opening orbit: software factory floor': '開場環繞：軟體工廠全景',
-    'Scroll through an industrialized software factory: intake, production lines, automation cells, runtime systems, and final product proof.': '捲動穿過工業化軟體工廠：入口、生產線、自動化單元、runtime 系統與最終產品證明。',
-    'Auth, API keys, rate limits': '認證、API keys、限流',
-    'Durable workspace, project, incident, audit, and usage records.': '持久保存 workspace、project、incident、audit 與 usage 記錄。',
-    'Queue-backed checks and incident automation.': '佇列驅動的檢查與事件自動化。',
-    'Docker deploy rail': 'Docker 部署軌道',
-    'Portable compose rehearsal for staging.': '可移植的 Compose staging 演練。',
-    'Press & Hold': '長按',
-    'See the view': '查看視角',
-    '01 / Full scene': '01 / 全景',
-    'Opening view: a software factory built for repeatable delivery.': '開場視角：為可重複交付而建的軟體工廠。',
-    'The first scroll position shows the complete PulseBoard factory: customer experience, backend APIs, worker runtime, database, Redis, docs, and deployment rail.': '第一個捲動位置展示完整 PulseBoard 工廠：客戶體驗、後端 API、worker runtime、資料庫、Redis、文件與部署軌道。',
-    'Customer-ready site': '客戶可讀的網站',
-    'Recruiter-friendly narrative': '招募方友好的敘事',
-    '02 / Exterior facade': '02 / 外立面',
-    'Orbit around the product intake and control room.': '圍繞產品入口與控制室環繞。',
-    'The control room highlights what a non-technical buyer sees first: service health, status communication, audit history, and fast recovery signals.': '控制室突出非技術買家最先看到的內容：服務健康、狀態溝通、稽核歷史與快速恢復信號。',
-    'Status pages': '狀態頁',
-    'Uptime checks': '可用性檢查',
-    'Incident timeline': '事件時間線',
-    '03 / Floor structure': '03 / 樓層結構',
-    'Zoom into production lines and data flow.': '放大生產線與資料流。',
-    'Each production cell maps to a backend competency: Hono routes, OpenAPI, Prisma models, API-key lifecycle, rate limits, structured logs, and worker handlers.': '每個生產單元都對應一項後端能力：Hono routes、OpenAPI、Prisma models、API-key 生命週期、限流、結構化日誌與 worker handlers。',
-    '04 / Base systems': '04 / 底座系統',
-    'Dive below the plant floor to the runtime foundation.': '下潛到廠房地面下方的 runtime 基礎。',
-    'The plant floor exposes PostgreSQL persistence, Redis-backed write rate limiting, BullMQ background processing, Docker Compose validation, and readiness probes.': '廠房地面露出 PostgreSQL 持久化、Redis-backed 寫入限流、BullMQ 背景處理、Docker Compose 驗證與 readiness probes。',
-    '05 / Pullback': '05 / 拉遠',
-    'Return to the full commercial product.': '回到完整商業產品。',
-    'The final angle pulls away from implementation details and lands back on the business promise: a polished SaaS frontend backed by verified engineering proof.': '最後的視角從實作細節拉遠，回到商業承諾：一個精緻 SaaS 前端，背後有已驗證的工程證明。',
-    'Portfolio-ready': '作品集就緒',
-    'Staging-friendly': 'Staging 友好',
-    'Operations dashboard': '維運儀表板',
-    'Give buyers a clean overview of service health, check history, recent incidents, and the signals that matter during an outage.': '讓買家清楚看到服務健康、檢查歷史、近期事件，以及故障期間真正重要的信號。',
-    'Incident automation': '事件自動化',
-    'Failed checks can open incidents automatically, while resolution flows create an audit-friendly timeline for every service.': '失敗檢查可以自動開啟事件；解決流程會為每個服務生成適合稽核的時間線。',
-    'API-first backend': 'API-first 後端',
-    'OpenAPI docs, authenticated routes, API-key lifecycle, rate limits, structured logs, and readiness endpoints are all part of the demo.': 'OpenAPI 文件、認證路由、API-key 生命週期、限流、結構化日誌與 readiness endpoints 都是 demo 的一部分。',
-    'How a buyer experiences it': '客戶如何體驗它',
-    'From first impression to proof in minutes.': '從第一印象到工程證明，只需要幾分鐘。',
-    'The frontend tells a commercial story. The backend proof page and API docs prove that the story is backed by running infrastructure rather than static screenshots.': '前端講清商業故事；後端證明頁與 API 文件證明這不是靜態截圖，而是有運行中的基礎設施支撐。',
-    '"PulseBoard is intentionally designed for overseas backend, platform, and cloud interviews: it looks like a product, but every polished surface maps back to a real engineering capability."': '「PulseBoard 是為海外 backend、platform、cloud 面試而設計的：它看起來像產品，但每個精緻表面都能映射回真實工程能力。」',
-    'Customer sees a complete SaaS website': '客戶看到完整 SaaS 網站',
-    'The homepage communicates value, pricing, FAQs, and trust signals without requiring technical context.': '首頁無需技術背景，也能傳達價值、定價、FAQ 與信任信號。',
-    'Recruiter opens the backend proof': '招募方打開後端證明',
-    'The cockpit links to live health probes, OpenAPI, protected routes, and public verification.': '工程駕駛艙連到即時健康探針、OpenAPI、受保護路由與公開驗證。',
-    'Engineer runs the demo flow': '工程師運行 demo flow',
-    'Workspace/project/service creation, checks, incidents, webhook ingest, usage, audit, and key revocation are wired together.': 'workspace/project/service 建立、檢查、事件、webhook 接入、用量、稽核與金鑰撤銷已串成完整流程。',
-    'Plans that make the demo feel like a real product.': '讓 demo 更像真實產品的方案。',
-    'Talk to sales': '聯絡銷售',
-    'Starter': '入門版',
-    'For small teams that need public status and basic checks.': '適合需要公開狀態與基礎檢查的小團隊。',
-    '10 services': '10 個服務',
-    'Public status page': '公開狀態頁',
-    'Email incident digest': 'Email 事件摘要',
-    'Scale': '成長版',
-    'For growing platforms that need automation and audit trails.': '適合需要自動化與稽核軌跡的成長型平台。',
-    '100 services': '100 個服務',
-    'Audit and usage reports': '稽核與用量報告',
-    'Enterprise': '企業版',
-    'For regulated teams that need custom SLOs and deployment controls.': '適合需要自訂 SLO 與部署控制的合規團隊。',
-    'Custom': '客製',
-    'Private staging': '私有 staging',
-    'Custom retention': '自訂保留期',
-    'Platform review session': '平台評審 session',
-    'FAQ': '常見問題',
-    'Questions a buyer would actually ask.': '客戶真的會問的問題。',
-    'A good portfolio site should answer business questions first, then make technical proof easy to verify.': '好的作品集網站應先回答業務問題，再讓技術證明容易驗證。',
-    'Is this only a visual prototype?': '這只是視覺原型嗎？',
-    'No. The commercial site is static, but it links to a live backend proof surface with health/readiness probes, OpenAPI, docs, and protected API behavior.': '不是。商業站點是靜態頁面，但它連到真實後端證明面：health/readiness 探針、OpenAPI、文件與受保護 API 行為。',
-    'Why use a software factory for a backend demo?': '為什麼用軟體工廠展示後端 demo？',
-    'The factory turns abstract platform layers into something memorable: intake equals customer experience, production cells equal backend modules, and the plant floor equals infrastructure.': '軟體工廠把抽象平台層變得更容易記住：入口等於客戶體驗，生產單元等於後端模組，廠房地面等於基礎設施。',
-    'Can this be deployed to staging?': '它可以部署到 staging 嗎？',
-    'Yes. The repository includes Docker Compose deployment materials and public surface verification scripts for safe staging rehearsal.': '可以。倉庫包含 Docker Compose 部署材料與 public surface 驗證腳本，可安全進行 staging 演練。',
-    'Ready for review': '可以開始評審',
-    'Book a product demo, or inspect the backend proof.': '預約產品演示，或檢查後端證明。',
-    'Use this page for a polished customer impression, then jump to the engineering cockpit when the reviewer wants evidence.': '先用這個頁面建立完整客戶印象；當評審者需要證據時，再跳到工程駕駛艙。',
-    'PulseBoard Operations Cloud - portfolio SaaS demo.': 'PulseBoard 維運雲 - SaaS 作品集 demo。',
-    'Frontend story + backend proof + cloud-native deployment rehearsal.': '前端故事 + 後端證明 + cloud-native 部署演練。'
-  },
-  ar: {
-    'PulseBoard Reliability Atelier': 'ورشة موثوقية PulseBoard',
-    'Backend proof, presented like a flagship product.': 'إثبات الخلفية مقدم كتجربة منتج رئيسية.',
-    'A cinematic software factory for recruiters and customers: scroll through product, platform, data, workers, and deployment evidence.': 'مصنع برمجيات سينمائي للمجندين والعملاء: مرر عبر المنتج والمنصة والبيانات والعمال وإثبات النشر.',
-    'Enter without sound': 'الدخول بدون صوت',
-    'PulseBoard Operations Cloud': 'سحابة عمليات PulseBoard',
-    'software factory': 'مصنع البرمجيات',
-    'Features': 'الميزات',
-    'Pricing': 'الأسعار',
-    'Backend proof': 'إثبات الخلفية',
-    'Book a product demo': 'احجز عرضاً للمنتج',
-    'Global API': 'API عالمي',
-    'healthy': 'سليم',
-    'Checkout worker': 'عامل الدفع',
-    'degraded': 'متدهور',
-    'Webhook ingest': 'استقبال Webhook',
-    'incident open': 'حادث مفتوح',
-    'software factory yard': 'أرضية مصنع البرمجيات',
-    'Opening orbit: software factory floor': 'جولة افتتاحية: مصنع البرمجيات',
-    'Scroll through an industrialized software factory: intake, production lines, automation cells, runtime systems, and final product proof.': 'مرر عبر مصنع برمجيات صناعي: المدخل، خطوط الإنتاج، خلايا الأتمتة، أنظمة التشغيل، وإثبات المنتج النهائي.',
-    'Auth, API keys, rate limits': 'مصادقة، API keys، حدود معدل',
-    'Durable workspace, project, incident, audit, and usage records.': 'سجلات دائمة للمساحات والمشاريع والحوادث والتدقيق والاستخدام.',
-    'Queue-backed checks and incident automation.': 'فحوصات مدعومة بالطوابير وأتمتة للحوادث.',
-    'Docker deploy rail': 'مسار نشر Docker',
-    'Portable compose rehearsal for staging.': 'تمرين Compose قابل للنقل لـ staging.',
-    'Press & Hold': 'اضغط مطولاً',
-    'See the view': 'لرؤية المشهد',
-    '01 / Full scene': '01 / المشهد الكامل',
-    'Opening view: a software factory built for repeatable delivery.': 'مشهد افتتاحي: مصنع برمجيات مبني لتسليم قابل للتكرار.',
-    'The first scroll position shows the complete PulseBoard factory: customer experience, backend APIs, worker runtime, database, Redis, docs, and deployment rail.': 'موضع التمرير الأول يعرض مصنع PulseBoard كاملاً: تجربة العميل، API الخلفية، worker runtime، قاعدة البيانات، Redis، الوثائق، ومسار النشر.',
-    'Customer-ready site': 'موقع جاهز للعملاء',
-    'Recruiter-friendly narrative': 'سرد مناسب للمجندين',
-    '02 / Exterior facade': '02 / الواجهة الخارجية',
-    'Orbit around the product intake and control room.': 'دُر حول مدخل المنتج وغرفة التحكم.',
-    'The control room highlights what a non-technical buyer sees first: service health, status communication, audit history, and fast recovery signals.': 'غرفة التحكم تبرز ما يراه المشتري غير التقني أولاً: صحة الخدمة، تواصل الحالة، تاريخ التدقيق، وإشارات التعافي السريع.',
-    'Status pages': 'صفحات الحالة',
-    'Uptime checks': 'فحوصات التوفر',
-    'Incident timeline': 'خط زمني للحوادث',
-    '03 / Floor structure': '03 / بنية الطوابق',
-    'Zoom into production lines and data flow.': 'كبّر خطوط الإنتاج وتدفق البيانات.',
-    'Each production cell maps to a backend competency: Hono routes, OpenAPI, Prisma models, API-key lifecycle, rate limits, structured logs, and worker handlers.': 'كل خلية إنتاج تقابل قدرة خلفية: Hono routes و OpenAPI و Prisma models ودورة API-key وحدود المعدل والسجلات المنظمة و worker handlers.',
-    '04 / Base systems': '04 / أنظمة الأساس',
-    'Dive below the plant floor to the runtime foundation.': 'انزل تحت أرضية المصنع إلى أساس التشغيل.',
-    'The plant floor exposes PostgreSQL persistence, Redis-backed write rate limiting, BullMQ background processing, Docker Compose validation, and readiness probes.': 'أرضية المصنع تعرض PostgreSQL persistence و Redis-backed write rate limiting و BullMQ processing و Docker Compose validation و readiness probes.',
-    '05 / Pullback': '05 / انسحاب',
-    'Return to the full commercial product.': 'العودة إلى المنتج التجاري الكامل.',
-    'The final angle pulls away from implementation details and lands back on the business promise: a polished SaaS frontend backed by verified engineering proof.': 'الزاوية الأخيرة تبتعد عن تفاصيل التنفيذ وتعود إلى الوعد التجاري: واجهة SaaS مصقولة مدعومة بإثبات هندسي موثق.',
-    'Portfolio-ready': 'جاهز للملف الشخصي',
-    'Staging-friendly': 'مناسب لـ staging',
-    'Operations dashboard': 'لوحة العمليات',
-    'Give buyers a clean overview of service health, check history, recent incidents, and the signals that matter during an outage.': 'امنح المشترين نظرة واضحة على صحة الخدمة وتاريخ الفحوصات والحوادث الأخيرة والإشارات المهمة أثناء الانقطاع.',
-    'Incident automation': 'أتمتة الحوادث',
-    'Failed checks can open incidents automatically, while resolution flows create an audit-friendly timeline for every service.': 'الفحوصات الفاشلة يمكنها فتح الحوادث تلقائياً، بينما تنشئ تدفقات الحل خطاً زمنياً مناسباً للتدقيق لكل خدمة.',
-    'API-first backend': 'خلفية API-first',
-    'OpenAPI docs, authenticated routes, API-key lifecycle, rate limits, structured logs, and readiness endpoints are all part of the demo.': 'وثائق OpenAPI والمسارات الموثقة ودورة API-key وحدود المعدل والسجلات المنظمة ونقاط readiness كلها جزء من العرض.',
-    'How a buyer experiences it': 'كيف يختبره المشتري',
-    'From first impression to proof in minutes.': 'من الانطباع الأول إلى الدليل خلال دقائق.',
-    'The frontend tells a commercial story. The backend proof page and API docs prove that the story is backed by running infrastructure rather than static screenshots.': 'الواجهة تروي قصة تجارية. صفحة إثبات الخلفية ووثائق API تثبت أن القصة مدعومة ببنية تعمل، لا بلقطات ثابتة.',
-    '"PulseBoard is intentionally designed for overseas backend, platform, and cloud interviews: it looks like a product, but every polished surface maps back to a real engineering capability."': '“صُمم PulseBoard عمداً لمقابلات backend و platform و cloud الدولية: يبدو كمنتج، لكن كل سطح مصقول يعود إلى قدرة هندسية حقيقية.”',
-    'Customer sees a complete SaaS website': 'يرى العميل موقع SaaS كاملاً',
-    'The homepage communicates value, pricing, FAQs, and trust signals without requiring technical context.': 'الصفحة الرئيسية تشرح القيمة والأسعار والأسئلة والثقة دون حاجة لسياق تقني.',
-    'Recruiter opens the backend proof': 'يفتح المجند إثبات الخلفية',
-    'The cockpit links to live health probes, OpenAPI, protected routes, and public verification.': 'لوحة القيادة تربط إلى health probes الحية و OpenAPI والمسارات المحمية والتحقق العام.',
-    'Engineer runs the demo flow': 'يشغل المهندس demo flow',
-    'Workspace/project/service creation, checks, incidents, webhook ingest, usage, audit, and key revocation are wired together.': 'إنشاء workspace/project/service والفحوصات والحوادث و webhook ingest والاستخدام والتدقيق وإلغاء المفاتيح كلها موصولة معاً.',
-    'Plans that make the demo feel like a real product.': 'خطط تجعل العرض يبدو كمنتج حقيقي.',
-    'Talk to sales': 'تحدث مع المبيعات',
-    'Starter': 'البداية',
-    'For small teams that need public status and basic checks.': 'للفرق الصغيرة التي تحتاج حالة عامة وفحوصات أساسية.',
-    '10 services': '10 خدمات',
-    'Public status page': 'صفحة حالة عامة',
-    'Email incident digest': 'ملخص حوادث بالبريد',
-    'Scale': 'النمو',
-    'For growing platforms that need automation and audit trails.': 'للمنصات النامية التي تحتاج أتمتة ومسارات تدقيق.',
-    '100 services': '100 خدمة',
-    'Audit and usage reports': 'تقارير التدقيق والاستخدام',
-    'Enterprise': 'المؤسسات',
-    'For regulated teams that need custom SLOs and deployment controls.': 'للفرق المنظمة التي تحتاج SLO مخصصاً وضوابط نشر.',
-    'Custom': 'مخصص',
-    'Private staging': 'Staging خاص',
-    'Custom retention': 'احتفاظ مخصص',
-    'Platform review session': 'جلسة مراجعة منصة',
-    'FAQ': 'الأسئلة الشائعة',
-    'Questions a buyer would actually ask.': 'أسئلة قد يطرحها المشتري فعلاً.',
-    'A good portfolio site should answer business questions first, then make technical proof easy to verify.': 'الموقع الجيد للملف الشخصي يجب أن يجيب أسئلة العمل أولاً، ثم يجعل الدليل التقني سهلاً للتحقق.',
-    'Is this only a visual prototype?': 'هل هذا مجرد نموذج بصري؟',
-    'No. The commercial site is static, but it links to a live backend proof surface with health/readiness probes, OpenAPI, docs, and protected API behavior.': 'لا. الموقع التجاري ثابت، لكنه يربط إلى سطح إثبات خلفية حي يحتوي health/readiness probes و OpenAPI ووثائق وسلوك API محمي.',
-    'Why use a software factory for a backend demo?': 'لماذا نستخدم مصنع برمجيات لعرض خلفية؟',
-    'The factory turns abstract platform layers into something memorable: intake equals customer experience, production cells equal backend modules, and the plant floor equals infrastructure.': 'مصنع البرمجيات يجعل طبقات المنصة المجردة قابلة للتذكر: المدخل تجربة العميل، خلايا الإنتاج وحدات الخلفية، وأرضية المصنع البنية التحتية.',
-    'Can this be deployed to staging?': 'هل يمكن نشره إلى staging؟',
-    'Yes. The repository includes Docker Compose deployment materials and public surface verification scripts for safe staging rehearsal.': 'نعم. يتضمن المستودع مواد نشر Docker Compose وسكربتات تحقق عامة لتمرين staging آمن.',
-    'Ready for review': 'جاهز للمراجعة',
-    'Book a product demo, or inspect the backend proof.': 'احجز عرضاً للمنتج أو افحص إثبات الخلفية.',
-    'Use this page for a polished customer impression, then jump to the engineering cockpit when the reviewer wants evidence.': 'استخدم هذه الصفحة لانطباع عميل مصقول، ثم انتقل إلى قمرة الهندسة عندما يريد المراجع دليلاً.',
-    'PulseBoard Operations Cloud - portfolio SaaS demo.': 'سحابة عمليات PulseBoard - عرض SaaS للملف الشخصي.',
-    'Frontend story + backend proof + cloud-native deployment rehearsal.': 'قصة الواجهة + إثبات الخلفية + تمرين نشر cloud-native.'
-  }
-};
-Object.entries(runtimeTextMapComplements).forEach(function(entry) { textMaps[entry[0]] = Object.assign({}, textMaps[entry[0]] || {}, entry[1]); });
-const floorSpecs = [['API Edge','Auth, API keys, rate limits','is-core'],['OpenAPI','Scalar docs and contracts',''],['Workspace','Tenancy and projects',''],['Services','Checks and uptime models','is-core'],['Incidents','Open and resolve flows','is-alert'],['Webhooks','External event ingest',''],['Audit','Traceable user actions',''],['Usage','Reporting and metering',''],['Worker','BullMQ handlers','is-core'],['Readiness','Health probes',''],['Deploy','Compose staging rail',''],['Observability','Structured logs','is-core']];
-const floorTextMaps = { 'zh-CN': { 'API Edge': ['API 边缘层','认证、API keys、限流'], OpenAPI: ['OpenAPI','Scalar 文档与契约'], Workspace: ['Workspace','租户与项目'], Services: ['服务','检查与可用性模型'], Incidents: ['事件','打开与解决流程'], Webhooks: ['Webhooks','外部事件接入'], Audit: ['审计','可追踪用户动作'], Usage: ['用量','报表与计量'], Worker: ['Worker','BullMQ handlers'], Readiness: ['Readiness','健康探针'], Deploy: ['部署','Compose staging 轨道'], Observability: ['可观测性','结构化日志'] }, 'zh-TW': { 'API Edge': ['API 邊緣層','認證、API keys、限流'], OpenAPI: ['OpenAPI','Scalar 文件與契約'], Workspace: ['Workspace','租戶與專案'], Services: ['服務','檢查與可用性模型'], Incidents: ['事件','開啟與解決流程'], Webhooks: ['Webhooks','外部事件接入'], Audit: ['稽核','可追蹤使用者動作'], Usage: ['用量','報表與計量'], Worker: ['Worker','BullMQ handlers'], Readiness: ['Readiness','健康探針'], Deploy: ['部署','Compose staging 軌道'], Observability: ['可觀測性','結構化日誌'] } };
-floorTextMaps.ar = { 'API Edge': ['حافة API','مصادقة، API keys، حدود معدل'], OpenAPI: ['OpenAPI','وثائق Scalar وعقود'], Workspace: ['Workspace','مستأجرون ومشاريع'], Services: ['الخدمات','فحوصات ونماذج توفر'], Incidents: ['الحوادث','تدفقات الفتح والحل'], Webhooks: ['Webhooks','استقبال أحداث خارجية'], Audit: ['التدقيق','إجراءات مستخدم قابلة للتتبع'], Usage: ['الاستخدام','تقارير وقياس'], Worker: ['Worker','معالجات BullMQ'], Readiness: ['الجاهزية','مجسات الصحة'], Deploy: ['النشر','مسار Compose staging'], Observability: ['قابلية المراقبة','سجلات منظمة'] };
-const shots = [{at:0,x:-7,y:-32,z:0,scale:.78,rise:18,fog:.34,name:'Opening orbit: software factory floor',copy:'Scroll through an industrialized software factory from intake to runtime base.'},{at:.24,x:-4,y:8,z:0,scale:.96,rise:6,fog:.2,name:'Facade view: upright product surface',copy:'The camera squares up to the vertical facade so the commercial SaaS experience reads first.'},{at:.5,x:-10,y:46,z:0,scale:1.12,rise:-18,fog:.1,name:'Production line cutaway: backend capabilities',copy:'Zooming in reveals a standing stack: API, tenancy, incidents, webhooks, audit, usage, and workers.'},{at:.74,x:-2,y:124,z:0,scale:1.18,rise:92,fog:.08,name:'Plant-floor dive: runtime foundation',copy:'The orbit drops toward the lower podium where PostgreSQL, Redis, BullMQ, and deployment rails support the tower.'},{at:1,x:-6,y:322,z:0,scale:.74,rise:20,fog:.32,name:'Final pullback: industrialized SaaS demo',copy:'The camera pulls back to reconnect the polished customer site with the verified engineering proof.'}];
-const shotTextMaps = { 'zh-CN': { 'Opening orbit: software factory floor': '开场环绕：完整直立塔', 'Scroll through an industrialized software factory from intake to runtime base.': '滚动页面，从天际线高度环绕一座直立可靠性塔，一直看到运行时底座。', 'Facade view: upright product surface': '外立面视角：直立产品表面', 'The camera squares up to the vertical facade so the commercial SaaS experience reads first.': '镜头对准竖直外立面，让商业 SaaS 体验先被客户看懂。', 'Production line cutaway: backend capabilities': '楼层剖面：堆叠后端能力', 'Zooming in reveals a standing stack: API, tenancy, incidents, webhooks, audit, usage, and workers.': '放大后可以看到直立能力栈：API、租户、事件、webhook、审计、用量和 worker。', 'Plant-floor dive: runtime foundation': '底座下潜：运行时基础', 'The orbit drops toward the lower podium where PostgreSQL, Redis, BullMQ, and deployment rails support the tower.': '镜头下降到底部平台，PostgreSQL、Redis、BullMQ 和部署轨道支撑整座塔。', 'Final pullback: industrialized SaaS demo': '最终拉远：完整 SaaS demo', 'The camera pulls back to reconnect the polished customer site with the verified engineering proof.': '镜头拉远，把精致客户网站和已验证工程证明重新连接起来。' }, 'zh-TW': { 'Opening orbit: software factory floor': '開場環繞：完整直立塔', 'Scroll through an industrialized software factory from intake to runtime base.': '捲動頁面，從天際線高度環繞一座直立可靠性塔，一直看到 runtime 底座。', 'Facade view: upright product surface': '外立面視角：直立產品表面', 'The camera squares up to the vertical facade so the commercial SaaS experience reads first.': '鏡頭對準垂直外立面，讓商業 SaaS 體驗先被客戶看懂。' }, ar: { 'Opening orbit: software factory floor': 'جولة افتتاحية: البرج العمودي الكامل', 'Scroll through an industrialized software factory from intake to runtime base.': 'مرر للدوران حول برج موثوقية قائم من مستوى الأفق إلى قاعدة التشغيل.' } };
+      a { color: inherit; text-decoration: none; }
+      button, select { font: inherit; }
+      h1, h2, h3, p { margin: 0; }
 
-shotTextMaps['zh-CN'] = Object.assign({}, shotTextMaps['zh-CN'], {
-  'Opening orbit: software factory floor': '\u5f00\u573a\u73af\u7ed5\uff1a\u8f6f\u4ef6\u5de5\u5382\u5168\u666f',
-  'Scroll through an industrialized software factory from intake to runtime base.': '\u6eda\u52a8\u9875\u9762\uff0c\u4ece API \u5165\u53e3\u7a7f\u8fc7\u5de5\u4e1a\u5316\u8f6f\u4ef6\u5de5\u5382\uff0c\u4e00\u76f4\u770b\u5230\u8fd0\u884c\u65f6\u5e95\u5ea7\u3002',
-  'Control room: product-facing surface': '\u63a7\u5236\u5ba4\uff1a\u9762\u5411\u5ba2\u6237\u7684\u4ea7\u54c1\u8868\u9762',
-  'Production line cutaway: backend capabilities': '\u751f\u4ea7\u7ebf\u5256\u9762\uff1a\u540e\u7aef\u80fd\u529b',
-  'Plant-floor dive: runtime foundation': '\u8f66\u95f4\u4e0b\u6f5c\uff1a\u8fd0\u884c\u65f6\u57fa\u7840',
-  'Final pullback: industrialized SaaS demo': '\u6700\u7ec8\u62c9\u8fdc\uff1a\u5de5\u4e1a\u5316 SaaS demo'
-});
-shotTextMaps['zh-TW'] = Object.assign({}, shotTextMaps['zh-TW'], {
-  'Opening orbit: software factory floor': '\u958b\u5834\u74b0\u7e5e\uff1a\u8edf\u9ad4\u5de5\u5ee0\u5168\u666f',
-  'Scroll through an industrialized software factory from intake to runtime base.': '\u6372\u52d5\u9801\u9762\uff0c\u5f9e API \u5165\u53e3\u7a7f\u904e\u5de5\u696d\u5316\u8edf\u9ad4\u5de5\u5ee0\uff0c\u4e00\u76f4\u770b\u5230 runtime \u5e95\u5ea7\u3002'
-});
-shotTextMaps.ar = Object.assign({}, shotTextMaps.ar, {
-  'Opening orbit: software factory floor': '\u062c\u0648\u0644\u0629 \u0627\u0641\u062a\u062a\u0627\u062d\u064a\u0629: \u0645\u0635\u0646\u0639 \u0627\u0644\u0628\u0631\u0645\u062c\u064a\u0627\u062a',
-  'Scroll through an industrialized software factory from intake to runtime base.': '\u0645\u0631\u0631 \u0644\u0639\u0628\u0648\u0631 \u0645\u0635\u0646\u0639 \u0628\u0631\u0645\u062c\u064a\u0627\u062a \u0635\u0646\u0627\u0639\u064a \u0645\u0646 \u0627\u0644\u0645\u062f\u062e\u0644 \u0625\u0644\u0649 \u0642\u0627\u0639\u062f\u0629 \u0627\u0644\u062a\u0634\u063a\u064a\u0644.'
-});
-const runtimeShotTextMapComplements = {
-  'zh-CN': {
-    'Opening orbit: software factory floor': '开场环绕：软件工厂全景',
-    'Scroll through an industrialized software factory from intake to runtime base.': '滚动穿过工业化软件工厂：从产品入口一直看到运行时底座。',
-    'Facade view: upright product surface': '外立面视角：客户可读产品面',
-    'The camera squares up to the vertical facade so the commercial SaaS experience reads first.': '镜头对准产品正面，让商业 SaaS 体验先被客户看懂。',
-    'Production line cutaway: backend capabilities': '生产线剖面：后端能力',
-    'Zooming in reveals a standing stack: API, tenancy, incidents, webhooks, audit, usage, and workers.': '放大后可以看到能力流水线：API、租户、事件、webhook、审计、用量和 worker。',
-    'Plant-floor dive: runtime foundation': '车间下潜：运行时基础',
-    'The orbit drops toward the lower podium where PostgreSQL, Redis, BullMQ, and deployment rails support the tower.': '镜头下降到底部平台，PostgreSQL、Redis、BullMQ 和部署轨道支撑整个软件工厂。',
-    'Final pullback: industrialized SaaS demo': '最终拉远：工业化 SaaS demo',
-    'The camera pulls back to reconnect the polished customer site with the verified engineering proof.': '镜头拉远，把精致客户网站和已验证工程证明重新连接起来。'
-  },
-  'zh-TW': {
-    'Opening orbit: software factory floor': '開場環繞：軟體工廠全景',
-    'Scroll through an industrialized software factory from intake to runtime base.': '捲動穿過工業化軟體工廠：從產品入口一直看到 runtime 底座。',
-    'Facade view: upright product surface': '外立面視角：客戶可讀產品面',
-    'The camera squares up to the vertical facade so the commercial SaaS experience reads first.': '鏡頭對準產品正面，讓商業 SaaS 體驗先被客戶看懂。',
-    'Production line cutaway: backend capabilities': '生產線剖面：後端能力',
-    'Zooming in reveals a standing stack: API, tenancy, incidents, webhooks, audit, usage, and workers.': '放大後可以看到能力流水線：API、租戶、事件、webhook、稽核、用量與 worker。',
-    'Plant-floor dive: runtime foundation': '廠房下潛：runtime 基礎',
-    'The orbit drops toward the lower podium where PostgreSQL, Redis, BullMQ, and deployment rails support the tower.': '鏡頭下降到底部平台，PostgreSQL、Redis、BullMQ 與部署軌道支撐整個軟體工廠。',
-    'Final pullback: industrialized SaaS demo': '最終拉遠：工業化 SaaS demo',
-    'The camera pulls back to reconnect the polished customer site with the verified engineering proof.': '鏡頭拉遠，把精緻客戶網站與已驗證工程證明重新連接起來。'
-  },
-  ar: {
-    'Opening orbit: software factory floor': 'جولة افتتاحية: مصنع البرمجيات',
-    'Scroll through an industrialized software factory from intake to runtime base.': 'مرر عبر مصنع برمجيات صناعي من المدخل إلى قاعدة التشغيل.',
-    'Facade view: upright product surface': 'واجهة المنتج الموجهة للعميل',
-    'The camera squares up to the vertical facade so the commercial SaaS experience reads first.': 'تواجه الكاميرا سطح المنتج كي تُفهم تجربة SaaS التجارية أولاً.',
-    'Production line cutaway: backend capabilities': 'مقطع خطوط الإنتاج: قدرات الخلفية',
-    'Zooming in reveals a standing stack: API, tenancy, incidents, webhooks, audit, usage, and workers.': 'يكشف التكبير قدرات API والتعدد والحوادث وwebhooks والتدقيق والاستخدام والعمال.',
-    'Plant-floor dive: runtime foundation': 'غوص أرضية المصنع: أساس التشغيل',
-    'The orbit drops toward the lower podium where PostgreSQL, Redis, BullMQ, and deployment rails support the tower.': 'تهبط الجولة إلى المنصة التي تدعم المصنع عبر PostgreSQL و Redis و BullMQ ومسارات النشر.',
-    'Final pullback: industrialized SaaS demo': 'انسحاب نهائي: عرض SaaS صناعي',
-    'The camera pulls back to reconnect the polished customer site with the verified engineering proof.': 'تبتعد الكاميرا لتربط موقع العميل المصقول بإثبات هندسي موثق.'
-  }
-};
-Object.entries(runtimeShotTextMapComplements).forEach(function(entry) { shotTextMaps[entry[0]] = Object.assign({}, shotTextMaps[entry[0]] || {}, entry[1]); });
-let activeLocale = 'en';
-const root = document.documentElement;
-const theater = document.querySelector('.scroll-theater');
-const shotName = document.getElementById('shotName');
-const shotCopy = document.getElementById('shotCopy');
-const towerCore = document.getElementById('towerCore');
-const focusBadge = document.getElementById('focusBadge');
-const langSelect = document.getElementById('langSelect');
-const floorNodes = [];
-function translateValue(table, value) { return (table[activeLocale] && table[activeLocale][value]) || value; }
-function floorText(title, copy) { const row = floorTextMaps[activeLocale] && floorTextMaps[activeLocale][title]; return row ? { title: row[0], copy: row[1] } : { title, copy }; }
-floorSpecs.forEach(function(spec, index) { const floor = document.createElement('div'); floor.className = 'floor ' + spec[2]; floor.style.setProperty('--y', (index * 44 + 28) + 'px'); floor.style.setProperty('--z', ((index % 3 - 1) * 22) + 'px'); floor.style.setProperty('--w', (index < 2 ? 190 : index < 5 ? 235 : index < 9 ? 278 : 330) + 'px'); floor.innerHTML = '<div class="plate"></div><div class="front"></div><div class="back"></div><div class="left"></div><div class="right"></div><div class="floor-label"><strong></strong><span></span></div>'; floor.dataset.title = spec[0]; floor.dataset.copy = spec[1]; towerCore.appendChild(floor); floorNodes.push(floor); });
-function updateFloorLabels() { floorNodes.forEach(function(floor) { const text = floorText(floor.dataset.title, floor.dataset.copy); floor.querySelector('strong').textContent = text.title; floor.querySelector('span').textContent = text.copy; }); }
-document.querySelectorAll('.data-beam').forEach(function(beam, index) { beam.style.setProperty('--r', (index * 60) + 'deg'); });
-const state = { smooth: 0, from: shots[0], to: shots[0] };
-function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
-function mixShot(progress) { let from = shots[0]; let to = shots[shots.length - 1]; for (let index = 0; index < shots.length - 1; index++) { if (progress >= shots[index].at && progress <= shots[index + 1].at) { from = shots[index]; to = shots[index + 1]; break; } } const span = to.at - from.at || 1; const local = clamp((progress - from.at) / span, 0, 1); return { from, to, local }; }
-function lerp(a, b, t) { return a + (b - a) * t; }
-function updateScene() {
-  const rect = theater.getBoundingClientRect();
-  const maxScroll = rect.height - innerHeight;
-  const progress = clamp(-rect.top / Math.max(1, maxScroll), 0, 1);
-  const shot = mixShot(progress);
-  state.from = shot.from;
-  state.to = shot.to;
-  state.smooth += (shot.local - state.smooth) * .14;
-  root.style.setProperty('--camera-x', lerp(state.from.x, state.to.x, state.smooth).toFixed(2) + 'deg');
-  root.style.setProperty('--camera-y', lerp(state.from.y, state.to.y, state.smooth).toFixed(2) + 'deg');
-  root.style.setProperty('--camera-z', lerp(state.from.z, state.to.z, state.smooth).toFixed(2) + 'deg');
-  root.style.setProperty('--camera-scale', lerp(state.from.scale, state.to.scale, state.smooth).toFixed(3));
-  root.style.setProperty('--camera-rise', lerp(state.from.rise, state.to.rise, state.smooth).toFixed(1) + 'px');
-  root.style.setProperty('--scene-fog', lerp(state.from.fog, state.to.fog, state.smooth).toFixed(3));
-  root.style.setProperty('--scroll-progress', (progress * 100).toFixed(2) + '%');
-  const active = progress > .87 ? shots[4] : progress > .62 ? shots[3] : progress > .37 ? shots[2] : progress > .13 ? shots[1] : shots[0];
-  shotName.textContent = translateValue(shotTextMaps, active.name);
-  shotCopy.textContent = translateValue(shotTextMaps, active.copy);
-  updateFactoryFocus(progress);
-}
-function updateFactoryFocus(progress) {
-  if (!floorNodes.length) return;
-  const visibleNodes = floorNodes.filter(function(node) { return getComputedStyle(node).display !== 'none'; });
-  const nodes = visibleNodes.length ? visibleNodes : floorNodes;
-  const activeIndex = clamp(Math.floor(progress * nodes.length), 0, nodes.length - 1);
-  towerCore.style.setProperty('--focus-index', String(activeIndex));
-  towerCore.style.setProperty('--focus-progress', progress.toFixed(4));
-  nodes.forEach(function(floor, index) {
-    const isFocused = index === activeIndex;
-    floor.classList.toggle('is-focused', isFocused);
-    floor.classList.toggle('is-dim', !isFocused);
-    floor.setAttribute('aria-current', isFocused ? 'step' : 'false');
-  });
-  const focused = nodes[activeIndex];
-  if (focused && focusBadge) {
-    const text = floorText(focused.dataset.title, focused.dataset.copy);
-    focusBadge.querySelector('strong').textContent = text.title;
-    focusBadge.querySelector('span').textContent = text.copy;
-  }
-}
-let ticking = false;
-function requestUpdate() { if (ticking) return; ticking = true; requestAnimationFrame(function() { updateScene(); ticking = false; }); }
-function captureBaseText() { const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } }); while (walker.nextNode()) walker.currentNode.__pulseboardBaseText = walker.currentNode.nodeValue.trim(); }
-function applyTextMap(locale) { const map = textMaps[locale] || {}; const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function(node) { return node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } }); while (walker.nextNode()) { const node = walker.currentNode; const base = node.__pulseboardBaseText || node.nodeValue.trim(); node.nodeValue = node.nodeValue.replace(node.nodeValue.trim(), map[base] || base); } }
-function applyLocale(locale) { activeLocale = localeOrder.includes(locale) ? locale : 'en'; const dict = Object.assign({}, messages.en, messages[activeLocale] || {}); document.documentElement.lang = activeLocale; document.documentElement.dir = activeLocale === 'ar' ? 'rtl' : 'ltr'; document.querySelectorAll('[data-i18n]').forEach(function(node) { const key = node.getAttribute('data-i18n'); if (dict[key]) node.textContent = dict[key]; }); applyTextMap(activeLocale); updateFloorLabels(); updateScene(); localStorage.setItem('pulseboard.frontend.lang', activeLocale); }
-localeOrder.forEach(function(locale) { const option = document.createElement('option'); option.value = locale; option.textContent = localeLabels[locale]; langSelect.appendChild(option); });
-addEventListener('scroll', requestUpdate, { passive: true });
-addEventListener('resize', requestUpdate);
-updateFloorLabels();
-captureBaseText();
-const params = new URLSearchParams(location.search);
-const saved = localStorage.getItem('pulseboard.frontend.lang');
-const initialLocale = localeOrder.includes(params.get('lang')) ? params.get('lang') : localeOrder.includes(saved) ? saved : 'en';
-langSelect.value = initialLocale;
-langSelect.addEventListener('change', function() { applyLocale(langSelect.value); });
-applyLocale(initialLocale);
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 20px 0 36px;
+      }
 
-(function enhanceQuadplexInspiredExperience(){
-  const intro = document.getElementById('luxIntro');
-  const enter = document.getElementById('luxEnter');
-  const canvas = document.getElementById('quadCanvas');
-  const hold = document.getElementById('holdView');
-  const stage = document.querySelector('.scroll-theater');
-  let introProgress = 0;
-  const hideIntro = () => intro && intro.classList.add('is-hidden');
-  const timer = setInterval(() => {
-    introProgress = Math.min(100, introProgress + 7 + Math.random() * 8);
-    if (intro) intro.style.setProperty('--intro-progress', introProgress / 100);
-    if (introProgress >= 100) { clearInterval(timer); setTimeout(hideIntro, 420); }
-  }, 80);
-  enter && enter.addEventListener('click', hideIntro);
-  const setViewMode = (on) => document.body.classList.toggle('view-mode', on);
-  if (hold) {
-    hold.addEventListener('pointerdown', () => setViewMode(true));
-    hold.addEventListener('pointerup', () => setViewMode(false));
-    hold.addEventListener('pointerleave', () => setViewMode(false));
-    hold.addEventListener('keydown', (event) => { if (event.key === ' ' || event.key === 'Enter') setViewMode(true); });
-    hold.addEventListener('keyup', () => setViewMode(false));
-  }
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  function progress() {
-    if (!stage) return 0;
-    const rect = stage.getBoundingClientRect();
-    return Math.min(1, Math.max(0, -rect.top / Math.max(1, rect.height - innerHeight)));
-  }
-  function resize() {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    canvas.width = Math.floor(innerWidth * dpr);
-    canvas.height = Math.floor(innerHeight * dpr);
-    canvas.style.width = innerWidth + 'px';
-    canvas.style.height = innerHeight + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw();
-  }
-  function draw() {
-    const p = progress();
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    const horizon = innerHeight * (.70 - p * .08);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(184,162,127,.18)';
-    for (let i = -18; i <= 18; i++) {
-      const x1 = innerWidth / 2 + i * 70 * (1 + p * .75);
-      ctx.beginPath(); ctx.moveTo(x1, horizon); ctx.lineTo(innerWidth / 2 + i * 214, innerHeight); ctx.stroke();
-    }
-    for (let j = 0; j < 18; j++) {
-      const y = horizon + j * j * 2.9;
-      ctx.globalAlpha = Math.max(0, 1 - j / 18);
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(innerWidth, y); ctx.stroke();
-    }
-    ctx.globalAlpha = .92;
-    for (let i = 0; i < 48; i++) {
-      const x = (i * 173 + p * 680) % Math.max(1, innerWidth);
-      const y = (i * 97) % Math.max(1, innerHeight * .66);
-      ctx.fillStyle = i % 5 === 0 ? 'rgba(142,233,255,.48)' : 'rgba(247,241,232,.25)';
-      ctx.fillRect(x, y, 1.5, 1.5);
-    }
-    ctx.globalAlpha = 1;
-  }
-  let ticking = false;
-  function requestDraw() { if (ticking) return; ticking = true; requestAnimationFrame(() => { draw(); ticking = false; }); }
-  addEventListener('resize', resize);
-  addEventListener('scroll', requestDraw, { passive: true });
-  resize();
-})();
-</script></body></html>
+      .topbar,
+      .brand,
+      .nav,
+      .actions,
+      .hero,
+      .status-row,
+      .section-head,
+      .footer {
+        display: flex;
+        align-items: center;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 70px;
+        padding: 10px 0;
+        background: rgba(244, 241, 234, 0.92);
+        border-bottom: 1px solid var(--rule);
+        backdrop-filter: blur(12px);
+      }
+
+      .brand { gap: 12px; min-width: max-content; }
+      .brand-mark {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        color: var(--surface);
+        background: var(--ink);
+        border-radius: var(--radius-md);
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-weight: 800;
+      }
+      .brand-copy { display: grid; gap: 1px; }
+      .brand-copy small,
+      .eyebrow,
+      .label,
+      .metric span,
+      .ledger span,
+      .timeline time,
+      .footer {
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.35;
+      }
+
+      .nav { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+      .nav a,
+      .lang-select,
+      .button,
+      .button-secondary {
+        min-height: 38px;
+        padding: 0 13px;
+        border: 1px solid var(--rule);
+        border-radius: var(--radius-sm);
+        background: rgba(255, 253, 248, 0.82);
+        box-shadow: 0 1px 0 rgba(25, 32, 29, 0.08);
+      }
+      .nav a,
+      .button,
+      .button-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      .button {
+        color: var(--surface);
+        background: var(--ink);
+        border-color: var(--ink);
+      }
+      .button-secondary { color: var(--blue); }
+      .lang-select { cursor: pointer; }
+
+      .hero {
+        align-items: stretch;
+        gap: 30px;
+        padding: 68px 0 36px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .hero-copy { flex: 1.05; min-width: 0; }
+      .hero-panel { flex: 0.95; min-width: 360px; }
+      .eyebrow,
+      .label {
+        margin-bottom: 12px;
+        font-family: "Cascadia Code", Consolas, monospace;
+        text-transform: uppercase;
+      }
+      h1 {
+        max-width: 800px;
+        font-size: clamp(2.6rem, 7vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+      .lead {
+        max-width: 740px;
+        margin-top: 22px;
+        color: #3f4c46;
+        font-size: clamp(1.05rem, 2vw, 1.24rem);
+        line-height: 1.72;
+      }
+      .actions { flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+
+      .hero-panel,
+      .proof-strip,
+      .section-card,
+      .price-card,
+      .faq-card {
+        background: rgba(255, 253, 248, 0.9);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius-md);
+        box-shadow: 0 1px 0 rgba(25, 32, 29, 0.08);
+      }
+      .hero-panel { padding: 18px; }
+      .status-row {
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 58px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--rule);
+      }
+      .status-row:last-child { border-bottom: 0; }
+      .status-row code,
+      .metric strong,
+      .ledger strong,
+      .timeline time {
+        font-family: "Cascadia Code", Consolas, monospace;
+      }
+      .status-row code { color: var(--blue); }
+      .pill {
+        min-width: 86px;
+        padding: 5px 8px;
+        text-align: center;
+        color: var(--green);
+        background: var(--green-soft);
+        border: 1px solid rgba(38, 115, 77, 0.26);
+        border-radius: var(--radius-sm);
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 800;
+      }
+
+      .proof-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+        margin-top: 24px;
+        overflow: hidden;
+      }
+      .metric {
+        min-height: 118px;
+        padding: 16px;
+        border-right: 1px solid var(--rule);
+      }
+      .metric:last-child { border-right: 0; }
+      .metric strong { display: block; margin-bottom: 8px; font-size: 1.4rem; }
+
+      .section {
+        margin-top: 28px;
+      }
+      .section-head {
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 14px;
+      }
+      h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.06; letter-spacing: 0; }
+      .section-head p { max-width: 560px; color: #46524d; line-height: 1.6; }
+
+      .grid-3,
+      .grid-2 {
+        display: grid;
+        gap: 18px;
+      }
+      .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-card,
+      .price-card,
+      .faq-card { padding: 22px; }
+      .section-card h3,
+      .price-card h3,
+      .faq-card h3 { margin-bottom: 10px; font-size: 1.08rem; }
+      .section-card p,
+      .price-card p,
+      .faq-card p { color: #46524d; line-height: 1.62; }
+
+      .ledger {
+        display: grid;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .ledger div {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 12px;
+        padding: 11px 12px;
+        background: var(--panel);
+        border: 1px solid var(--rule);
+        border-radius: var(--radius-sm);
+      }
+
+      .timeline {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        border: 1px solid var(--rule);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      .timeline li {
+        display: grid;
+        grid-template-columns: 80px minmax(0, 1fr);
+        gap: 16px;
+        padding: 18px;
+        background: rgba(255, 253, 248, 0.9);
+        border-bottom: 1px solid var(--rule);
+      }
+      .timeline li:last-child { border-bottom: 0; }
+      .timeline strong { display: block; margin-bottom: 4px; }
+      .timeline span span { color: var(--muted); line-height: 1.45; }
+
+      .price-card.featured { background: var(--green-soft); border-color: rgba(38, 115, 77, 0.28); }
+      .price { margin: 16px 0; font-size: 2rem; font-weight: 800; }
+      .price small { color: var(--muted); font-size: 0.9rem; font-weight: 500; }
+
+      .footer {
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid var(--rule);
+      }
+      .footer a { color: var(--blue); font-weight: 800; }
+
+      :focus-visible { outline: 3px solid rgba(37, 95, 133, 0.35); outline-offset: 3px; }
+
+      [dir="rtl"] .nav { justify-content: flex-start; }
+      [dir="rtl"] .metric { border-right: 0; border-left: 1px solid var(--rule); }
+
+      @media (max-width: 980px) {
+        .hero { flex-direction: column; }
+        .hero-panel { min-width: 0; }
+        .proof-strip,
+        .grid-3,
+        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 680px) {
+        .page { width: min(100% - 24px, 1180px); padding-top: 10px; }
+        .topbar { position: static; align-items: flex-start; flex-direction: column; }
+        .nav, .actions { width: 100%; justify-content: flex-start; }
+        .nav a, .lang-select, .button, .button-secondary { flex: 1 1 auto; }
+        .proof-strip,
+        .grid-3,
+        .grid-2 { grid-template-columns: 1fr; }
+        .metric,
+        [dir="rtl"] .metric { border-right: 0; border-left: 0; border-bottom: 1px solid var(--rule); }
+        .metric:last-child { border-bottom: 0; }
+        .section-head { align-items: flex-start; flex-direction: column; }
+        .ledger div,
+        .timeline li { grid-template-columns: 1fr; }
+        .footer { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <a class="brand" href="/frontend/" aria-label="PulseBoard Reliability Works">
+          <span class="brand-mark">PB</span>
+          <span class="brand-copy"><strong data-i18n="brand">PulseBoard Reliability Works</strong><small data-i18n="brandSub">Inspectable SaaS operations</small></span>
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href="#workflow" data-i18n="navWorkflow">Workflow</a>
+          <a href="#plans" data-i18n="navPlans">Plans</a>
+          <a href="#faq" data-i18n="navFaq">FAQ</a>
+          <a href="/" data-i18n="backendProof">Backend proof</a>
+          <select class="lang-select" id="langSelect" aria-label="Language selector"></select>
+        </nav>
+      </header>
+
+      <section class="hero" aria-labelledby="title">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="eyebrow">Customer-facing reliability SaaS</p>
+          <h1 id="title" data-i18n="title">Turn backend reliability into a product customers can understand.</h1>
+          <p class="lead" data-i18n="lead">PulseBoard connects incident intake, service ownership, background processing, and API evidence in a calm SaaS workspace for teams that need operational trust.</p>
+          <div class="actions">
+            <a class="button" href="/" data-i18n="backendProof">Backend proof</a>
+            <a class="button-secondary" href="/docs" target="_blank" rel="noreferrer" data-i18n="apiDocs">API Docs</a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="Product proof panel">
+          <div class="status-row"><span data-i18n="statusRoute">Static customer route</span><code>/frontend/</code><span class="pill">static</span></div>
+          <div class="status-row"><span data-i18n="statusApi">Live backend proof nearby</span><code>/health/ready</code><span class="pill">live</span></div>
+          <div class="status-row"><span data-i18n="statusContract">OpenAPI contract exposed</span><code>/openapi.json</code><span class="pill">OpenAPI</span></div>
+          <div class="status-row"><span data-i18n="statusStack">PostgreSQL + Redis runtime</span><code>PostgreSQL / Redis + BullMQ</code><span class="pill">SaaS</span></div>
+        </aside>
+      </section>
+
+      <section class="proof-strip" aria-label="Product proof metrics">
+        <div class="metric"><strong>10</strong><span data-i18n="metricLocales">interface languages</span></div>
+        <div class="metric"><strong>4</strong><span data-i18n="metricEndpoints">public evidence links</span></div>
+        <div class="metric"><strong>0</strong><span data-i18n="metricSecrets">secrets in page HTML</span></div>
+        <div class="metric"><strong>1</strong><span data-i18n="metricRollback">rollback path documented</span></div>
+      </section>
+
+      <section class="section" id="workflow">
+        <div class="section-head">
+          <div><p class="label" data-i18n="workflowLabel">Workflow</p><h2 data-i18n="workflowTitle">A product surface built around operational confidence.</h2></div>
+          <p data-i18n="workflowCopy">The interface turns backend mechanics into visible customer value without hiding the implementation proof that interviewers need to inspect.</p>
+        </div>
+        <div class="grid-3">
+          <article class="section-card"><h3 data-i18n="cardIntake">Incident intake</h3><p data-i18n="cardIntakeCopy">Capture customer impact, owning service, severity, and current state as a clean workflow instead of a loose ticket dump.</p></article>
+          <article class="section-card"><h3 data-i18n="cardAutomation">Automation queue</h3><p data-i18n="cardAutomationCopy">Delayed background work is modeled separately from the request path, matching how real SaaS systems protect latency.</p></article>
+          <article class="section-card"><h3 data-i18n="cardEvidence">Evidence links</h3><p data-i18n="cardEvidenceCopy">Health checks, API docs, and deployment notes remain one click away so the product story stays anchored to the backend.</p></article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div><p class="label" data-i18n="releaseLabel">Release posture</p><h2 data-i18n="releaseTitle">Staging-first delivery without pretending this is production.</h2></div>
+          <p data-i18n="releaseCopy">The demo keeps secrets out of static assets, documents rollback, and routes users to live health and OpenAPI checks before any real staging change.</p>
+        </div>
+        <div class="grid-2">
+          <article class="section-card">
+            <h3 data-i18n="ledgerTitle">Reliability ledger</h3>
+            <div class="ledger">
+              <div><span>homepage</span><strong>anlan.store</strong></div>
+              <div><span>customer route</span><strong>/frontend/</strong></div>
+              <div><span>proof route</span><strong>/</strong></div>
+              <div><span>deployment</span><strong>backup before install</strong></div>
+            </div>
+          </article>
+          <article class="section-card">
+            <h3 data-i18n="timelineTitle">Lifecycle</h3>
+            <ol class="timeline">
+              <li><time>01</time><span><strong data-i18n="lifeOne">Detect</strong><span data-i18n="lifeOneCopy">A customer-facing incident appears with service, severity, and owner context.</span></span></li>
+              <li><time>02</time><span><strong data-i18n="lifeTwo">Process</strong><span data-i18n="lifeTwoCopy">The backend persists state and pushes delayed work through the queue instead of blocking the API.</span></span></li>
+              <li><time>03</time><span><strong data-i18n="lifeThree">Recover</strong><span data-i18n="lifeThreeCopy">Resolution, logs, health checks, and rollback notes make the recovery path inspectable.</span></span></li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="plans">
+        <div class="section-head">
+          <div><p class="label" data-i18n="plansLabel">Plans</p><h2 data-i18n="plansTitle">Packages shaped for teams with different reliability maturity.</h2></div>
+          <p data-i18n="plansCopy">Pricing is illustrative, but the operational boundaries are real: intake, automation, auditability, and deployment evidence.</p>
+        </div>
+        <div class="grid-3">
+          <article class="price-card"><h3>Starter</h3><p data-i18n="starterCopy">For a small team that needs shared incident intake, health visibility, and a simple service map.</p><div class="price">$19 <small>/mo</small></div></article>
+          <article class="price-card featured"><h3>Platform</h3><p data-i18n="platformCopy">For teams that need automation queues, service ownership, and deployment review rituals.</p><div class="price">$79 <small>/mo</small></div></article>
+          <article class="price-card"><h3>Interview</h3><p data-i18n="interviewCopy">For reviewers who want to inspect the API surface, worker model, and staging checklist directly.</p><div class="price">docs <small>included</small></div></article>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="section-head">
+          <div><p class="label">FAQ</p><h2 data-i18n="faqTitle">Built to be inspected.</h2></div>
+        </div>
+        <div class="grid-2">
+          <article class="faq-card"><h3 data-i18n="faqOne">Is this just a static website?</h3><p data-i18n="faqOneCopy">No. The page is static, but it deliberately links to the running backend, OpenAPI contract, health checks, and deployment checklist.</p></article>
+          <article class="faq-card"><h3 data-i18n="faqTwo">Why include a customer surface in a backend demo?</h3><p data-i18n="faqTwoCopy">Because the project is meant to support backend, platform, and cloud interviews. The frontend should make the system easier to inspect.</p></article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span data-i18n="footer">PulseBoard Reliability Works keeps the customer story connected to real backend evidence.</span>
+        <span><a href="/" data-i18n="backendProof">Backend proof</a> / <a href="/openapi.json">OpenAPI</a> / <a href="/docs">API Docs</a></span>
+      </footer>
+    </main>
+
+    <script>
+      const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];
+      const localeLabels = {
+        en: 'English',
+        'zh-TW': '繁體中文',
+        ja: '日本語',
+        ko: '한국어',
+        es: 'Español',
+        fr: 'Français',
+        de: 'Deutsch',
+        'pt-BR': 'Português',
+        ar: 'العربية',
+        'zh-CN': '简体中文',
+      };
+
+      const translations = {
+        en: {
+          brand: 'PulseBoard Reliability Works',
+          brandSub: 'Inspectable SaaS operations',
+          navWorkflow: 'Workflow',
+          navPlans: 'Plans',
+          navFaq: 'FAQ',
+          backendProof: 'Backend proof',
+          apiDocs: 'API Docs',
+          eyebrow: 'Customer-facing reliability SaaS',
+          title: 'Turn backend reliability into a product customers can understand.',
+          lead: 'PulseBoard connects incident intake, service ownership, background processing, and API evidence in a calm SaaS workspace for teams that need operational trust.',
+          statusRoute: 'Static customer route',
+          statusApi: 'Live backend proof nearby',
+          statusContract: 'OpenAPI contract exposed',
+          statusStack: 'PostgreSQL + Redis runtime',
+          metricLocales: 'interface languages',
+          metricEndpoints: 'public evidence links',
+          metricSecrets: 'secrets in page HTML',
+          metricRollback: 'rollback path documented',
+          workflowLabel: 'Workflow',
+          workflowTitle: 'A product surface built around operational confidence.',
+          workflowCopy: 'The interface turns backend mechanics into visible customer value without hiding the implementation proof that interviewers need to inspect.',
+          cardIntake: 'Incident intake',
+          cardIntakeCopy: 'Capture customer impact, owning service, severity, and current state as a clean workflow instead of a loose ticket dump.',
+          cardAutomation: 'Automation queue',
+          cardAutomationCopy: 'Delayed background work is modeled separately from the request path, matching how real SaaS systems protect latency.',
+          cardEvidence: 'Evidence links',
+          cardEvidenceCopy: 'Health checks, API docs, and deployment notes remain one click away so the product story stays anchored to the backend.',
+          releaseLabel: 'Release posture',
+          releaseTitle: 'Staging-first delivery without pretending this is production.',
+          releaseCopy: 'The demo keeps secrets out of static assets, documents rollback, and routes users to live health and OpenAPI checks before any real staging change.',
+          ledgerTitle: 'Reliability ledger',
+          plansLabel: 'Plans',
+          plansTitle: 'Packages shaped for teams with different reliability maturity.',
+          plansCopy: 'Pricing is illustrative, but the operational boundaries are real: intake, automation, auditability, and deployment evidence.',
+          starterCopy: 'For a small team that needs shared incident intake, health visibility, and a simple service map.',
+          platformCopy: 'For teams that need automation queues, service ownership, and deployment review rituals.',
+          interviewCopy: 'For reviewers who want to inspect the API surface, worker model, and staging checklist directly.',
+          timelineTitle: 'Lifecycle',
+          lifeOne: 'Detect',
+          lifeOneCopy: 'A customer-facing incident appears with service, severity, and owner context.',
+          lifeTwo: 'Process',
+          lifeTwoCopy: 'The backend persists state and pushes delayed work through the queue instead of blocking the API.',
+          lifeThree: 'Recover',
+          lifeThreeCopy: 'Resolution, logs, health checks, and rollback notes make the recovery path inspectable.',
+          faqTitle: 'Built to be inspected.',
+          faqOne: 'Is this just a static website?',
+          faqOneCopy: 'No. The page is static, but it deliberately links to the running backend, OpenAPI contract, health checks, and deployment checklist.',
+          faqTwo: 'Why include a customer surface in a backend demo?',
+          faqTwoCopy: 'Because the project is meant to support backend, platform, and cloud interviews. The frontend should make the system easier to inspect.',
+          footer: 'PulseBoard Reliability Works keeps the customer story connected to real backend evidence.',
+        },
+        'zh-TW': {
+          brand: 'PulseBoard 可靠性工作台', brandSub: '可檢視的 SaaS 營運介面', navWorkflow: '工作流', navPlans: '方案', navFaq: '常見問題', backendProof: '後端證據', apiDocs: 'API 文件', eyebrow: '面向客戶的可靠性 SaaS', title: '把後端可靠性變成客戶看得懂的產品。', lead: 'PulseBoard 把事件接收、服務歸屬、背景處理與 API 證據連成一個安靜的 SaaS 工作區，讓團隊建立可被檢查的營運信任。', statusRoute: '靜態客戶路由', statusApi: '即時後端證據', statusContract: 'OpenAPI 合約公開', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '介面語言', metricEndpoints: '公開證據連結', metricSecrets: '頁面 HTML 中的 secrets', metricRollback: 'rollback 路徑已記錄', workflowLabel: '工作流', workflowTitle: '圍繞營運信心打造的產品介面。', workflowCopy: '介面把後端機制轉成可見的客戶價值，同時保留面試官需要檢查的實作證據。', cardIntake: '事件接收', cardIntakeCopy: '以清楚流程記錄客戶影響、所屬服務、嚴重度與目前狀態，而不是鬆散工單。', cardAutomation: '自動化佇列', cardAutomationCopy: '延遲背景工作獨立於請求路徑，符合真實 SaaS 系統保護 latency 的方式。', cardEvidence: '證據連結', cardEvidenceCopy: '健康檢查、API 文件與部署筆記保持一鍵可達，讓產品敘事仍 anchored 到後端。', releaseLabel: '發布姿態', releaseTitle: '先 staging，再交付；不假裝這就是 production。', releaseCopy: 'Demo 不把 secrets 放進靜態資產，記錄 rollback，並在任何真實 staging 變更前導向 live health 與 OpenAPI 檢查。', ledgerTitle: '可靠性帳本', plansLabel: '方案', plansTitle: '依照不同可靠性成熟度設計的團隊方案。', plansCopy: '價格只是展示，但營運邊界是真的：接收、自動化、可稽核性與部署證據。', starterCopy: '適合需要共享事件接收、健康狀態與簡單服務地圖的小團隊。', platformCopy: '適合需要自動化佇列、服務歸屬與部署審查節奏的團隊。', interviewCopy: '適合想直接檢查 API surface、worker model 與 staging checklist 的 reviewer。', timelineTitle: '生命週期', lifeOne: '偵測', lifeOneCopy: '客戶事件會帶著服務、嚴重度與 owner context 出現。', lifeTwo: '處理', lifeTwoCopy: '後端保存狀態，並把延遲工作送入佇列，而不是阻塞 API。', lifeThree: '復原', lifeThreeCopy: '解決狀態、日誌、健康檢查與 rollback 筆記讓復原路徑可檢視。', faqTitle: '為了被檢查而打造。', faqOne: '這只是靜態網站嗎？', faqOneCopy: '不是。頁面本身是靜態，但它明確連到正在運行的後端、OpenAPI 合約、健康檢查與部署 checklist。', faqTwo: '為什麼後端 demo 要有客戶界面？', faqTwoCopy: '因為這個專案是為 backend、platform、cloud 面試準備。前端應該讓系統更容易被檢查。', footer: 'PulseBoard 可靠性工作台讓客戶故事連接到真實後端證據。'
+        },
+        ja: {
+          brand: 'PulseBoard Reliability Works', brandSub: '検証できる SaaS 運用画面', navWorkflow: 'ワークフロー', navPlans: 'プラン', navFaq: 'FAQ', backendProof: 'バックエンド証跡', apiDocs: 'API ドキュメント', eyebrow: '顧客向け信頼性 SaaS', title: 'バックエンドの信頼性を、顧客が理解できるプロダクトに変える。', lead: 'PulseBoard はインシデント受付、サービス所有者、バックグラウンド処理、API 証跡を、運用信頼を必要とするチーム向けの落ち着いた SaaS ワークスペースにまとめます。', statusRoute: '静的顧客ルート', statusApi: 'ライブのバックエンド証跡', statusContract: 'OpenAPI 契約を公開', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '表示言語', metricEndpoints: '公開証跡リンク', metricSecrets: 'ページ HTML 内の secret', metricRollback: 'rollback 手順を文書化', workflowLabel: 'ワークフロー', workflowTitle: '運用への信頼を中心にしたプロダクト画面。', workflowCopy: 'UI はバックエンドの仕組みを顧客価値として見せながら、面接官が確認したい実装証跡も隠しません。', cardIntake: 'インシデント受付', cardIntakeCopy: '顧客影響、担当サービス、重大度、状態を雑なチケットではなく明確な流れとして記録します。', cardAutomation: '自動化キュー', cardAutomationCopy: '遅延するバックグラウンド処理をリクエスト経路から分離し、実際の SaaS と同じように latency を守ります。', cardEvidence: '証跡リンク', cardEvidenceCopy: 'ヘルスチェック、API ドキュメント、デプロイメモをすぐ確認でき、プロダクトの説明をバックエンドに結び付けます。', releaseLabel: 'リリース姿勢', releaseTitle: 'production を装わず、staging から進めるデリバリー。', releaseCopy: '静的アセットに secrets を入れず、rollback を文書化し、実際の staging 変更前に live health と OpenAPI を確認します。', ledgerTitle: '信頼性台帳', plansLabel: 'プラン', plansTitle: '信頼性成熟度に合わせたチーム向けパッケージ。', plansCopy: '価格はデモ用ですが、受付、自動化、監査性、デプロイ証跡という運用境界は本物です。', starterCopy: '共有インシデント受付、ヘルス可視化、簡単なサービスマップが必要な小規模チーム向け。', platformCopy: '自動化キュー、サービス所有者、デプロイレビューの習慣が必要なチーム向け。', interviewCopy: 'API surface、worker model、staging checklist を直接確認したい reviewer 向け。', timelineTitle: 'ライフサイクル', lifeOne: '検知', lifeOneCopy: '顧客向けインシデントがサービス、重大度、owner context とともに現れます。', lifeTwo: '処理', lifeTwoCopy: 'バックエンドは状態を保存し、API をブロックせず遅延作業をキューに送ります。', lifeThree: '復旧', lifeThreeCopy: '解決状態、ログ、ヘルスチェック、rollback メモで復旧経路を検証できます。', faqTitle: '検査されるために作られています。', faqOne: 'これは静的サイトだけですか？', faqOneCopy: 'いいえ。ページは静的ですが、稼働中のバックエンド、OpenAPI 契約、ヘルスチェック、デプロイ checklist に明確につながっています。', faqTwo: 'バックエンド demo に顧客画面が必要な理由は？', faqTwoCopy: 'backend、platform、cloud 面接を支えるためです。フロントエンドはシステムをより調べやすくするべきです。', footer: 'PulseBoard Reliability Works は顧客ストーリーを実際のバックエンド証跡につなげます。'
+        },
+        ko: {
+          brand: 'PulseBoard Reliability Works', brandSub: '검증 가능한 SaaS 운영 화면', navWorkflow: '워크플로', navPlans: '플랜', navFaq: 'FAQ', backendProof: '백엔드 증거', apiDocs: 'API 문서', eyebrow: '고객용 reliability SaaS', title: '백엔드 신뢰성을 고객이 이해할 수 있는 제품으로 바꿉니다.', lead: 'PulseBoard는 인시던트 접수, 서비스 소유권, 백그라운드 처리, API 증거를 운영 신뢰가 필요한 팀을 위한 차분한 SaaS 워크스페이스로 연결합니다.', statusRoute: '정적 고객 경로', statusApi: '실시간 백엔드 증거', statusContract: 'OpenAPI 계약 공개', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '인터페이스 언어', metricEndpoints: '공개 증거 링크', metricSecrets: '페이지 HTML의 secrets', metricRollback: 'rollback 경로 문서화', workflowLabel: '워크플로', workflowTitle: '운영 신뢰를 중심에 둔 제품 화면.', workflowCopy: '화면은 백엔드 메커니즘을 고객 가치로 보여 주면서 면접관이 확인해야 할 구현 증거도 가까이에 둡니다.', cardIntake: '인시던트 접수', cardIntakeCopy: '고객 영향, 담당 서비스, 심각도, 현재 상태를 흩어진 티켓이 아니라 정돈된 흐름으로 기록합니다.', cardAutomation: '자동화 큐', cardAutomationCopy: '지연되는 백그라운드 작업을 요청 경로와 분리하여 실제 SaaS처럼 latency 를 보호합니다.', cardEvidence: '증거 링크', cardEvidenceCopy: '헬스 체크, API 문서, 배포 노트를 한 번에 열 수 있어 제품 이야기가 백엔드에 붙어 있습니다.', releaseLabel: '릴리스 자세', releaseTitle: 'production 인 척하지 않고 staging 부터 검증합니다.', releaseCopy: '정적 자산에 secrets 를 넣지 않고 rollback 을 문서화하며 실제 staging 변경 전에 live health 와 OpenAPI 를 확인합니다.', ledgerTitle: '신뢰성 장부', plansLabel: '플랜', plansTitle: '팀의 reliability 성숙도에 맞춘 패키지.', plansCopy: '가격은 예시지만 운영 경계는 실제입니다: 접수, 자동화, 감사 가능성, 배포 증거.', starterCopy: '공유 인시던트 접수, 상태 가시성, 간단한 서비스 맵이 필요한 작은 팀용.', platformCopy: '자동화 큐, 서비스 소유권, 배포 리뷰 리듬이 필요한 팀용.', interviewCopy: 'API surface, worker model, staging checklist 를 직접 보고 싶은 reviewer 용.', timelineTitle: '라이프사이클', lifeOne: '탐지', lifeOneCopy: '고객용 인시던트가 서비스, 심각도, owner context 와 함께 나타납니다.', lifeTwo: '처리', lifeTwoCopy: '백엔드는 상태를 저장하고 API 를 막지 않도록 지연 작업을 큐로 보냅니다.', lifeThree: '복구', lifeThreeCopy: '해결 상태, 로그, 헬스 체크, rollback 노트로 복구 경로를 확인할 수 있습니다.', faqTitle: '검토받기 위해 만들어졌습니다.', faqOne: '이건 정적 웹사이트뿐인가요?', faqOneCopy: '아닙니다. 페이지는 정적이지만 실행 중인 백엔드, OpenAPI 계약, 헬스 체크, 배포 checklist 로 명확히 연결됩니다.', faqTwo: '백엔드 demo 에 고객 화면을 넣는 이유는?', faqTwoCopy: 'backend, platform, cloud 면접을 지원하기 위한 프로젝트이기 때문입니다. 프론트엔드는 시스템을 더 쉽게 검사하게 만들어야 합니다.', footer: 'PulseBoard Reliability Works 는 고객 이야기를 실제 백엔드 증거와 연결합니다.'
+        },
+        es: {
+          brand: 'PulseBoard Reliability Works', brandSub: 'Operaciones SaaS inspeccionables', navWorkflow: 'Flujo', navPlans: 'Planes', navFaq: 'FAQ', backendProof: 'Prueba backend', apiDocs: 'Docs API', eyebrow: 'SaaS de fiabilidad para clientes', title: 'Convierte la fiabilidad backend en un producto que el cliente entiende.', lead: 'PulseBoard conecta entrada de incidentes, propiedad de servicios, procesamiento en segundo plano y evidencia de API en un espacio SaaS sereno para equipos que necesitan confianza operativa.', statusRoute: 'Ruta estática de cliente', statusApi: 'Prueba backend en vivo', statusContract: 'Contrato OpenAPI expuesto', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'idiomas de interfaz', metricEndpoints: 'enlaces públicos de evidencia', metricSecrets: 'secrets en HTML', metricRollback: 'rollback documentado', workflowLabel: 'Flujo', workflowTitle: 'Una superficie de producto basada en confianza operativa.', workflowCopy: 'La interfaz convierte mecánicas backend en valor visible sin ocultar la evidencia que un entrevistador necesita inspeccionar.', cardIntake: 'Entrada de incidentes', cardIntakeCopy: 'Registra impacto, servicio dueño, severidad y estado como un flujo claro, no como tickets sueltos.', cardAutomation: 'Cola de automatización', cardAutomationCopy: 'El trabajo diferido vive fuera del camino de la petición, como en un SaaS real que protege la latency.', cardEvidence: 'Enlaces de evidencia', cardEvidenceCopy: 'Health checks, documentación API y notas de despliegue quedan a un clic para anclar la historia al backend.', releaseLabel: 'Postura de release', releaseTitle: 'Entrega staging-first sin fingir producción.', releaseCopy: 'El demo mantiene secrets fuera de assets estáticos, documenta rollback y dirige a live health y OpenAPI antes de tocar staging real.', ledgerTitle: 'Libro de fiabilidad', plansLabel: 'Planes', plansTitle: 'Paquetes para distintos niveles de madurez operativa.', plansCopy: 'El precio es ilustrativo, pero los límites operativos son reales: intake, automatización, auditoría y evidencia de despliegue.', starterCopy: 'Para un equipo pequeño que necesita incident intake compartido, health visible y un mapa simple de servicios.', platformCopy: 'Para equipos que necesitan colas, propiedad de servicios y rituales de revisión de despliegue.', interviewCopy: 'Para reviewers que quieren inspeccionar API surface, worker model y staging checklist.', timelineTitle: 'Ciclo de vida', lifeOne: 'Detectar', lifeOneCopy: 'Aparece un incidente de cliente con servicio, severidad y owner context.', lifeTwo: 'Procesar', lifeTwoCopy: 'El backend persiste estado y envía trabajo diferido a la cola sin bloquear la API.', lifeThree: 'Recuperar', lifeThreeCopy: 'Resolución, logs, health checks y rollback hacen inspeccionable la recuperación.', faqTitle: 'Construido para ser inspeccionado.', faqOne: '¿Es solo un sitio estático?', faqOneCopy: 'No. La página es estática, pero enlaza al backend en ejecución, OpenAPI, health checks y checklist de despliegue.', faqTwo: '¿Por qué incluir una superficie de cliente en un demo backend?', faqTwoCopy: 'Porque el proyecto apoya entrevistas backend, platform y cloud. El frontend debe facilitar la inspección del sistema.', footer: 'PulseBoard Reliability Works conecta la historia del cliente con evidencia backend real.'
+        },
+        fr: {
+          brand: 'PulseBoard Reliability Works', brandSub: 'Opérations SaaS inspectables', navWorkflow: 'Workflow', navPlans: 'Offres', navFaq: 'FAQ', backendProof: 'Preuve backend', apiDocs: 'Docs API', eyebrow: 'SaaS fiabilité côté client', title: 'Transformer la fiabilité backend en produit compréhensible par les clients.', lead: 'PulseBoard relie intake incident, ownership de service, traitement asynchrone et preuves API dans un espace SaaS calme pour les équipes qui veulent de la confiance opérationnelle.', statusRoute: 'Route client statique', statusApi: 'Preuve backend live', statusContract: 'Contrat OpenAPI exposé', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'langues d’interface', metricEndpoints: 'liens publics de preuve', metricSecrets: 'secrets dans le HTML', metricRollback: 'rollback documenté', workflowLabel: 'Workflow', workflowTitle: 'Une surface produit conçue pour la confiance opérationnelle.', workflowCopy: 'L’interface rend les mécanismes backend visibles comme valeur client tout en gardant les preuves techniques inspectables.', cardIntake: 'Intake incident', cardIntakeCopy: 'Capture impact client, service propriétaire, sévérité et état dans un flux clair plutôt qu’un amas de tickets.', cardAutomation: 'File d’automatisation', cardAutomationCopy: 'Le travail différé reste hors du chemin de requête, comme dans un vrai SaaS qui protège la latency.', cardEvidence: 'Liens de preuve', cardEvidenceCopy: 'Health checks, docs API et notes de déploiement restent accessibles en un clic pour relier le récit au backend.', releaseLabel: 'Posture release', releaseTitle: 'Livraison staging-first sans prétendre être en production.', releaseCopy: 'Le demo garde les secrets hors des assets statiques, documente rollback, et oriente vers live health et OpenAPI avant tout changement staging réel.', ledgerTitle: 'Registre fiabilité', plansLabel: 'Offres', plansTitle: 'Packages adaptés à la maturité fiabilité des équipes.', plansCopy: 'Les prix sont illustratifs, mais les frontières opérationnelles sont réelles : intake, automatisation, auditabilité et preuve de déploiement.', starterCopy: 'Pour une petite équipe qui veut intake partagé, visibilité health et carte simple de services.', platformCopy: 'Pour les équipes qui ont besoin de files, ownership de service et rituels de revue de déploiement.', interviewCopy: 'Pour les reviewers qui veulent inspecter API surface, worker model et staging checklist.', timelineTitle: 'Cycle de vie', lifeOne: 'Détecter', lifeOneCopy: 'Un incident client apparaît avec service, sévérité et owner context.', lifeTwo: 'Traiter', lifeTwoCopy: 'Le backend persiste l’état et pousse le travail différé en file sans bloquer l’API.', lifeThree: 'Récupérer', lifeThreeCopy: 'Résolution, logs, health checks et rollback rendent le chemin de reprise inspectable.', faqTitle: 'Conçu pour être inspecté.', faqOne: 'Est-ce seulement un site statique ?', faqOneCopy: 'Non. La page est statique, mais elle pointe clairement vers le backend actif, OpenAPI, health checks et checklist de déploiement.', faqTwo: 'Pourquoi une surface client dans un demo backend ?', faqTwoCopy: 'Parce que le projet sert des entretiens backend, platform et cloud. Le frontend doit rendre le système plus facile à inspecter.', footer: 'PulseBoard Reliability Works relie le récit client à de vraies preuves backend.'
+        },
+        de: {
+          brand: 'PulseBoard Reliability Works', brandSub: 'Prüfbare SaaS Operations', navWorkflow: 'Workflow', navPlans: 'Pakete', navFaq: 'FAQ', backendProof: 'Backend Nachweis', apiDocs: 'API Docs', eyebrow: 'Kundenseitiges Reliability SaaS', title: 'Backend Reliability wird zu einem Produkt, das Kunden verstehen.', lead: 'PulseBoard verbindet Incident Intake, Service Ownership, Hintergrundverarbeitung und API Nachweise in einem ruhigen SaaS Workspace für Teams mit operativem Vertrauensbedarf.', statusRoute: 'Statische Kundenroute', statusApi: 'Live Backend Nachweis', statusContract: 'OpenAPI Vertrag sichtbar', statusStack: 'PostgreSQL + Redis Runtime', metricLocales: 'Interface Sprachen', metricEndpoints: 'öffentliche Nachweis Links', metricSecrets: 'Secrets im HTML', metricRollback: 'Rollback Pfad dokumentiert', workflowLabel: 'Workflow', workflowTitle: 'Eine Produktfläche für operatives Vertrauen.', workflowCopy: 'Das Interface macht Backend Mechanik als Kundennutzen sichtbar und hält die technischen Nachweise für Reviews erreichbar.', cardIntake: 'Incident Intake', cardIntakeCopy: 'Erfasst Kundenwirkung, owning service, Schweregrad und Zustand als klaren Ablauf statt losem Ticket Haufen.', cardAutomation: 'Automatisierungs Queue', cardAutomationCopy: 'Verzögerte Arbeit läuft außerhalb des Request Pfads, wie bei einem echten SaaS zum Schutz der latency.', cardEvidence: 'Nachweis Links', cardEvidenceCopy: 'Health Checks, API Docs und Deployment Notizen bleiben mit einem Klick erreichbar und binden die Story ans Backend.', releaseLabel: 'Release Haltung', releaseTitle: 'Staging-first Lieferung, ohne Production vorzutäuschen.', releaseCopy: 'Das Demo hält secrets aus statischen Assets heraus, dokumentiert rollback und führt vor echten staging Änderungen zu live health und OpenAPI.', ledgerTitle: 'Reliability Ledger', plansLabel: 'Pakete', plansTitle: 'Pakete für unterschiedliche Reliability Reifegrade.', plansCopy: 'Preise sind illustrativ, aber die operativen Grenzen sind echt: Intake, Automatisierung, Auditierbarkeit und Deployment Nachweise.', starterCopy: 'Für kleine Teams mit gemeinsamem Incident Intake, Health Sichtbarkeit und einfacher Service Map.', platformCopy: 'Für Teams mit Queue Automatisierung, Service Ownership und Deployment Review Ritualen.', interviewCopy: 'Für Reviewer, die API surface, worker model und staging checklist direkt prüfen wollen.', timelineTitle: 'Lebenszyklus', lifeOne: 'Erkennen', lifeOneCopy: 'Ein Kundenincident erscheint mit Service, Schweregrad und owner context.', lifeTwo: 'Verarbeiten', lifeTwoCopy: 'Das Backend speichert Zustand und schiebt verzögerte Arbeit in die Queue, ohne die API zu blockieren.', lifeThree: 'Wiederherstellen', lifeThreeCopy: 'Resolution, Logs, Health Checks und Rollback Notizen machen den Recovery Pfad prüfbar.', faqTitle: 'Gebaut, um geprüft zu werden.', faqOne: 'Ist das nur eine statische Website?', faqOneCopy: 'Nein. Die Seite ist statisch, verweist aber klar auf laufendes Backend, OpenAPI Vertrag, Health Checks und Deployment Checklist.', faqTwo: 'Warum eine Kundenfläche in einem Backend Demo?', faqTwoCopy: 'Weil das Projekt Backend, Platform und Cloud Interviews unterstützen soll. Das Frontend soll das System leichter prüfbar machen.', footer: 'PulseBoard Reliability Works verbindet die Kundenstory mit echten Backend Nachweisen.'
+        },
+        'pt-BR': {
+          brand: 'PulseBoard Reliability Works', brandSub: 'Operações SaaS inspecionáveis', navWorkflow: 'Fluxo', navPlans: 'Planos', navFaq: 'FAQ', backendProof: 'Prova backend', apiDocs: 'Docs API', eyebrow: 'SaaS de confiabilidade para clientes', title: 'Transforme confiabilidade backend em um produto que clientes entendem.', lead: 'PulseBoard conecta entrada de incidentes, ownership de serviços, processamento em background e evidências de API em um workspace SaaS calmo para times que precisam de confiança operacional.', statusRoute: 'Rota estática do cliente', statusApi: 'Prova backend ao vivo', statusContract: 'Contrato OpenAPI exposto', statusStack: 'Runtime PostgreSQL + Redis', metricLocales: 'idiomas da interface', metricEndpoints: 'links públicos de evidência', metricSecrets: 'secrets no HTML', metricRollback: 'rollback documentado', workflowLabel: 'Fluxo', workflowTitle: 'Uma superfície de produto para confiança operacional.', workflowCopy: 'A interface transforma mecânicas backend em valor visível sem esconder a evidência que entrevistadores precisam inspecionar.', cardIntake: 'Entrada de incidentes', cardIntakeCopy: 'Registra impacto do cliente, serviço dono, severidade e estado como fluxo claro, não como tickets soltos.', cardAutomation: 'Fila de automação', cardAutomationCopy: 'Trabalho em background fica fora do request path, como em um SaaS real que protege latency.', cardEvidence: 'Links de evidência', cardEvidenceCopy: 'Health checks, docs API e notas de deploy ficam a um clique para manter a história ligada ao backend.', releaseLabel: 'Postura de release', releaseTitle: 'Entrega staging-first sem fingir produção.', releaseCopy: 'O demo mantém secrets fora de assets estáticos, documenta rollback e aponta para live health e OpenAPI antes de mudanças reais em staging.', ledgerTitle: 'Ledger de confiabilidade', plansLabel: 'Planos', plansTitle: 'Pacotes para diferentes maturidades de reliability.', plansCopy: 'Preço é ilustrativo, mas os limites operacionais são reais: intake, automação, auditabilidade e evidência de deploy.', starterCopy: 'Para time pequeno que precisa de intake compartilhado, health visível e mapa simples de serviços.', platformCopy: 'Para times que precisam de filas, ownership de serviço e rituais de review de deploy.', interviewCopy: 'Para reviewers que querem inspecionar API surface, worker model e staging checklist diretamente.', timelineTitle: 'Ciclo de vida', lifeOne: 'Detectar', lifeOneCopy: 'Um incidente de cliente aparece com serviço, severidade e owner context.', lifeTwo: 'Processar', lifeTwoCopy: 'O backend persiste estado e envia trabalho diferido para a fila sem bloquear a API.', lifeThree: 'Recuperar', lifeThreeCopy: 'Resolução, logs, health checks e rollback tornam a recuperação inspecionável.', faqTitle: 'Construído para ser inspecionado.', faqOne: 'É só um site estático?', faqOneCopy: 'Não. A página é estática, mas aponta claramente para backend em execução, OpenAPI, health checks e checklist de deploy.', faqTwo: 'Por que incluir uma superfície de cliente num demo backend?', faqTwoCopy: 'Porque o projeto apoia entrevistas backend, platform e cloud. O frontend deve facilitar a inspeção do sistema.', footer: 'PulseBoard Reliability Works conecta a história do cliente com evidência backend real.'
+        },
+        ar: {
+          brand: 'PulseBoard Reliability Works', brandSub: 'عمليات SaaS قابلة للفحص', navWorkflow: 'سير العمل', navPlans: 'الخطط', navFaq: 'الأسئلة', backendProof: 'دليل الخلفية', apiDocs: 'وثائق API', eyebrow: 'SaaS موثوقية موجه للعملاء', title: 'حوّل موثوقية الخلفية إلى منتج يفهمه العملاء.', lead: 'يربط PulseBoard استقبال الحوادث وملكية الخدمة والمعالجة الخلفية وأدلة API داخل مساحة SaaS هادئة للفرق التي تحتاج ثقة تشغيلية.', statusRoute: 'مسار عميل ثابت', statusApi: 'دليل خلفية مباشر', statusContract: 'عقد OpenAPI ظاهر', statusStack: 'تشغيل PostgreSQL + Redis', metricLocales: 'لغات الواجهة', metricEndpoints: 'روابط دليل عامة', metricSecrets: 'secrets في HTML الصفحة', metricRollback: 'مسار rollback موثق', workflowLabel: 'سير العمل', workflowTitle: 'واجهة منتج مبنية حول الثقة التشغيلية.', workflowCopy: 'تحول الواجهة آليات الخلفية إلى قيمة واضحة للعميل من دون إخفاء الأدلة التي يحتاجها المراجع.', cardIntake: 'استقبال الحوادث', cardIntakeCopy: 'تسجل أثر العميل والخدمة المالكة والخطورة والحالة كتدفق واضح لا كقائمة تذاكر متناثرة.', cardAutomation: 'طابور الأتمتة', cardAutomationCopy: 'يبقى العمل المؤجل خارج مسار الطلب مثل أنظمة SaaS الحقيقية التي تحمي latency.', cardEvidence: 'روابط الأدلة', cardEvidenceCopy: 'تبقى فحوص الصحة ووثائق API وملاحظات النشر على بعد نقرة كي تبقى القصة مرتبطة بالخلفية.', releaseLabel: 'موقف الإصدار', releaseTitle: 'تسليم يبدأ من staging من دون ادعاء production.', releaseCopy: 'يبقي demo الأسرار خارج الملفات الثابتة، ويوثق rollback، ويوجه إلى live health و OpenAPI قبل أي تغيير staging حقيقي.', ledgerTitle: 'سجل الموثوقية', plansLabel: 'الخطط', plansTitle: 'حزم تناسب مستويات نضج الموثوقية لدى الفرق.', plansCopy: 'الأسعار توضيحية، لكن الحدود التشغيلية حقيقية: intake والأتمتة والقابلية للتدقيق ودليل النشر.', starterCopy: 'لفريق صغير يحتاج استقبال حوادث مشترك ورؤية health وخريطة خدمات بسيطة.', platformCopy: 'لفرق تحتاج طوابير أتمتة وملكية خدمات وطقوس مراجعة نشر.', interviewCopy: 'للمراجعين الذين يريدون فحص API surface و worker model و staging checklist مباشرة.', timelineTitle: 'دورة الحياة', lifeOne: 'اكتشاف', lifeOneCopy: 'تظهر حادثة عميل مع الخدمة والخطورة و owner context.', lifeTwo: 'معالجة', lifeTwoCopy: 'يحفظ backend الحالة ويدفع العمل المؤجل إلى الطابور من دون حجب API.', lifeThree: 'تعافٍ', lifeThreeCopy: 'الحل والسجلات وفحوص الصحة وملاحظات rollback تجعل مسار التعافي قابلاً للفحص.', faqTitle: 'مبني ليتم فحصه.', faqOne: 'هل هذا مجرد موقع ثابت؟', faqOneCopy: 'لا. الصفحة ثابتة لكنها تربط بوضوح بالخلفية العاملة وعقد OpenAPI وفحوص الصحة و checklist النشر.', faqTwo: 'لماذا توجد واجهة عميل في demo backend؟', faqTwoCopy: 'لأن المشروع يدعم مقابلات backend و platform و cloud. يجب أن تجعل الواجهة النظام أسهل للفحص.', footer: 'يربط PulseBoard Reliability Works قصة العميل بأدلة backend حقيقية.'
+        },
+        'zh-CN': {
+          brand: 'PulseBoard 可靠性工作台', brandSub: '可检查的 SaaS 运维界面', navWorkflow: '工作流', navPlans: '方案', navFaq: '常见问题', backendProof: '后端证据', apiDocs: 'API 文档', eyebrow: '面向客户的可靠性 SaaS', title: '把后端可靠性变成客户看得懂的产品。', lead: 'PulseBoard 把事件接收、服务归属、后台处理和 API 证据连接成一个安静的 SaaS 工作区，服务于需要运营信任的团队。', statusRoute: '静态客户路由', statusApi: '实时后端证据', statusContract: 'OpenAPI 合约已公开', statusStack: 'PostgreSQL + Redis runtime', metricLocales: '界面语言', metricEndpoints: '公开证据链接', metricSecrets: '页面 HTML 中的 secrets', metricRollback: 'rollback 路径已记录', workflowLabel: '工作流', workflowTitle: '围绕运营信心打造的产品界面。', workflowCopy: '界面把后端机制转成可见的客户价值，同时保留面试官需要检查的实现证据。', cardIntake: '事件接收', cardIntakeCopy: '用清晰流程记录客户影响、所属服务、严重级别和当前状态，而不是散乱工单。', cardAutomation: '自动化队列', cardAutomationCopy: '延迟后台工作独立于请求路径，符合真实 SaaS 系统保护 latency 的方式。', cardEvidence: '证据链接', cardEvidenceCopy: '健康检查、API 文档和部署笔记保持一键可达，让产品叙事始终锚定后端。', releaseLabel: '发布姿态', releaseTitle: '先 staging，再交付；不假装这是 production。', releaseCopy: 'Demo 不把 secrets 放进静态资源，记录 rollback，并在任何真实 staging 变更前导向 live health 和 OpenAPI 检查。', ledgerTitle: '可靠性账本', plansLabel: '方案', plansTitle: '按照不同可靠性成熟度设计的团队方案。', plansCopy: '价格只是展示，但运营边界是真的：接收、自动化、可审计性和部署证据。', starterCopy: '适合需要共享事件接收、健康状态和简单服务地图的小团队。', platformCopy: '适合需要自动化队列、服务归属和部署审查节奏的团队。', interviewCopy: '适合想直接检查 API surface、worker model 和 staging checklist 的 reviewer。', timelineTitle: '生命周期', lifeOne: '发现', lifeOneCopy: '客户事件会带着服务、严重级别和 owner context 出现。', lifeTwo: '处理', lifeTwoCopy: '后端保存状态，并把延迟工作送入队列，而不是阻塞 API。', lifeThree: '恢复', lifeThreeCopy: '解决状态、日志、健康检查和 rollback 笔记让恢复路径可检查。', faqTitle: '为被检查而构建。', faqOne: '这只是静态网站吗？', faqOneCopy: '不是。页面本身是静态的，但它明确连到正在运行的后端、OpenAPI 合约、健康检查和部署 checklist。', faqTwo: '为什么后端 demo 要有客户界面？', faqTwoCopy: '因为这个项目是为 backend、platform、cloud 面试准备的。前端应该让系统更容易被检查。', footer: 'PulseBoard 可靠性工作台让客户故事连接到真实后端证据。'
+        },
+      };
+
+      const baseText = {};
+      document.querySelectorAll('[data-i18n]').forEach(function(node) {
+        const key = node.getAttribute('data-i18n');
+        baseText[key] = node.textContent || '';
+      });
+
+      const langSelect = document.getElementById('langSelect');
+      localeOrder.forEach(function(locale) {
+        const option = document.createElement('option');
+        option.value = locale;
+        option.textContent = localeLabels[locale];
+        langSelect.appendChild(option);
+      });
+
+      function applyLocale(locale, options) {
+        const active = localeOrder.includes(locale) ? locale : 'en';
+        const pack = translations[active] || translations.en;
+        document.documentElement.lang = active;
+        document.documentElement.dir = active === 'ar' ? 'rtl' : 'ltr';
+        document.querySelectorAll('[data-i18n]').forEach(function(node) {
+          const key = node.getAttribute('data-i18n');
+          node.textContent = pack[key] || translations.en[key] || baseText[key] || '';
+        });
+        langSelect.value = active;
+        localStorage.setItem('pulseboard.frontend.lang', active);
+        if (options && options.persistQuery) {
+          const next = new URL(window.location.href);
+          next.searchParams.set('lang', active);
+          window.history.replaceState({}, '', next);
+        }
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const saved = localStorage.getItem('pulseboard.frontend.lang');
+      const requested = params.get('lang');
+      const initialLocale = localeOrder.includes(requested) ? requested : localeOrder.includes(saved) ? saved : 'en';
+      langSelect.addEventListener('change', function(event) { applyLocale(event.target.value, { persistQuery: true }); });
+      applyLocale(initialLocale);
+    </script>
+  </body>
+</html>

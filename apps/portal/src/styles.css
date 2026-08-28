@@ -438,6 +438,8 @@ canvas { display: block; }
 }
 .row-action:hover { background: var(--project-color, var(--cyan)); border-color: var(--project-color, var(--cyan)); color: #07101f; }
 .row-action svg { width: 15px; height: 15px; }
+.row-actions-home { display: grid; gap: 8px; align-self: center; }
+.project-evidence { margin: 13px 0 0; color: var(--project-color, var(--cyan)); font-family: var(--font-measure); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 
 .layout-feature { grid-column: 1 / -1; min-height: 330px; grid-template-columns: 45px minmax(180px, .86fr) minmax(240px, 1.25fr) minmax(145px, .48fr) auto; align-items: center; padding-top: 33px; padding-bottom: 33px; background: rgba(7, 19, 42, .45); }
 .layout-feature .project-title { font-size: clamp(32px, 4vw, 58px); }
@@ -560,6 +562,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .filter-controls button { flex: 1 0 62px; }
   .project-row, .layout-feature { grid-template-columns: 28px minmax(0, 1fr); }
   .row-action { grid-column: 2; justify-self: start; }
+  .row-actions-home { grid-column: 2; display: flex; flex-wrap: wrap; }
   .project-copy { grid-column: 2; }
   .pulse-evidence { grid-column: 1 / -1; }
   .evidence-frame { min-height: 178px; }

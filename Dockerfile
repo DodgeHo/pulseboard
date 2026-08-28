@@ -28,6 +28,7 @@ COPY apps/worker/package.json apps/worker/package.json
 COPY apps/web/package.json apps/web/package.json
 COPY packages/core/package.json packages/core/package.json
 COPY packages/db/package.json packages/db/package.json
+COPY packages/observability/package.json packages/observability/package.json
 COPY packages/queues/package.json packages/queues/package.json
 
 RUN pnpm install --frozen-lockfile
@@ -35,6 +36,13 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 RUN pnpm db:generate
+
+ARG PULSEBOARD_BUILD_REVISION=unversioned
+ARG PULSEBOARD_BUILD_CONTRACT=current
+ENV PULSEBOARD_BUILD_REVISION=${PULSEBOARD_BUILD_REVISION}
+ENV PULSEBOARD_BUILD_CONTRACT=${PULSEBOARD_BUILD_CONTRACT}
+LABEL org.opencontainers.image.revision="${PULSEBOARD_BUILD_REVISION}"
+LABEL io.pulseboard.build-contract="${PULSEBOARD_BUILD_CONTRACT}"
 
 EXPOSE 4000
 

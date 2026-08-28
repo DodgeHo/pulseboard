@@ -50,13 +50,17 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
         APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
         APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
-    command: pnpm dev:api
+    command: ["node", "--import", "tsx", "apps/api/src/index.ts"]
     environment:
       NODE_ENV: development
       API_PORT: 4000
       LOG_LEVEL: info
+      API_SHUTDOWN_TIMEOUT_MS: 10000
+      READINESS_TIMEOUT_MS: 2000
+      METRICS_SCRAPE_TIMEOUT_MS: 2000
       DATABASE_URL: postgresql://pulseboard:pulseboard@postgres:5432/pulseboard?schema=public
       REDIS_URL: redis://redis:6379
+      OPERATIONAL_METRICS_REDIS_PREFIX: pulseboard:operational-metrics:v1
       API_KEY_HASH_SALT: local-development-only
       CHECK_SCHEDULER_INTERVAL_MS: 60000
       HTTP_CHECK_TIMEOUT_MS: 5000
@@ -83,15 +87,20 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
         APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
         APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
-    command: pnpm dev:worker
+    command: ["node", "--import", "tsx", "apps/worker/src/index.ts"]
     environment:
       NODE_ENV: development
       LOG_LEVEL: info
+      WORKER_SHUTDOWN_TIMEOUT_MS: 10000
       DATABASE_URL: postgresql://pulseboard:pulseboard@postgres:5432/pulseboard?schema=public
       REDIS_URL: redis://redis:6379
+      OPERATIONAL_METRICS_REDIS_PREFIX: pulseboard:operational-metrics:v1
       API_KEY_HASH_SALT: local-development-only
       CHECK_SCHEDULER_INTERVAL_MS: 60000
       HTTP_CHECK_TIMEOUT_MS: 5000
+      CHECK_EXECUTION_LEASE_MS: 60000
+      UPTIME_JOB_LOCK_DURATION_MS: 30000
+      UPTIME_JOB_STALLED_INTERVAL_MS: 30000
     depends_on:
       migrate:
         condition: service_completed_successfully

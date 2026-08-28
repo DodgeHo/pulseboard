@@ -24,6 +24,7 @@ services:
       retries: 12
 
   migrate:
+    image: ${PULSEBOARD_IMAGE:-pulseboard:local}
     build:
       context: .
       args:
@@ -31,8 +32,11 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
         APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
         APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
-    command: sh -c "pnpm db:generate && pnpm db:deploy && pnpm db:seed"
+        PULSEBOARD_BUILD_REVISION: ${PULSEBOARD_BUILD_REVISION:-unversioned}
+        PULSEBOARD_BUILD_CONTRACT: ${PULSEBOARD_BUILD_CONTRACT:-current}
+    command: ["pnpm", "db:deploy"]
     environment:
+      NODE_ENV: production
       DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
       DEMO_API_KEY: ${DEMO_API_KEY:?Set DEMO_API_KEY in the server-side .env file}
       API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:?Set API_KEY_HASH_SALT in the server-side .env file}
@@ -41,6 +45,7 @@ services:
         condition: service_healthy
 
   api:
+    image: ${PULSEBOARD_IMAGE:-pulseboard:local}
     build:
       context: .
       args:
@@ -48,13 +53,19 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
         APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
         APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
-    command: pnpm --filter @pulseboard/api start
+        PULSEBOARD_BUILD_REVISION: ${PULSEBOARD_BUILD_REVISION:-unversioned}
+        PULSEBOARD_BUILD_CONTRACT: ${PULSEBOARD_BUILD_CONTRACT:-current}
+    command: ["node", "--import", "tsx", "apps/api/src/index.ts"]
     environment:
       NODE_ENV: production
       API_PORT: 4000
       LOG_LEVEL: ${LOG_LEVEL:-info}
+      API_SHUTDOWN_TIMEOUT_MS: ${API_SHUTDOWN_TIMEOUT_MS:-10000}
+      READINESS_TIMEOUT_MS: ${READINESS_TIMEOUT_MS:-2000}
+      METRICS_SCRAPE_TIMEOUT_MS: ${METRICS_SCRAPE_TIMEOUT_MS:-2000}
       DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
       REDIS_URL: redis://redis:6379
+      OPERATIONAL_METRICS_REDIS_PREFIX: ${OPERATIONAL_METRICS_REDIS_PREFIX:-pulseboard:operational-metrics:v1}
       API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:?Set API_KEY_HASH_SALT in the server-side .env file}
       CHECK_SCHEDULER_INTERVAL_MS: ${CHECK_SCHEDULER_INTERVAL_MS:-60000}
       HTTP_CHECK_TIMEOUT_MS: ${HTTP_CHECK_TIMEOUT_MS:-5000}
@@ -75,6 +86,7 @@ services:
       retries: 12
 
   worker:
+    image: ${PULSEBOARD_IMAGE:-pulseboard:local}
     build:
       context: .
       args:
@@ -82,15 +94,22 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
         APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
         APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
-    command: pnpm --filter @pulseboard/worker start
+        PULSEBOARD_BUILD_REVISION: ${PULSEBOARD_BUILD_REVISION:-unversioned}
+        PULSEBOARD_BUILD_CONTRACT: ${PULSEBOARD_BUILD_CONTRACT:-current}
+    command: ["node", "--import", "tsx", "apps/worker/src/index.ts"]
     environment:
       NODE_ENV: production
       LOG_LEVEL: ${LOG_LEVEL:-info}
+      WORKER_SHUTDOWN_TIMEOUT_MS: ${WORKER_SHUTDOWN_TIMEOUT_MS:-10000}
       DATABASE_URL: postgresql://pulseboard:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the server-side .env file}@postgres:5432/pulseboard?schema=public
       REDIS_URL: redis://redis:6379
+      OPERATIONAL_METRICS_REDIS_PREFIX: ${OPERATIONAL_METRICS_REDIS_PREFIX:-pulseboard:operational-metrics:v1}
       API_KEY_HASH_SALT: ${API_KEY_HASH_SALT:?Set API_KEY_HASH_SALT in the server-side .env file}
       CHECK_SCHEDULER_INTERVAL_MS: ${CHECK_SCHEDULER_INTERVAL_MS:-60000}
       HTTP_CHECK_TIMEOUT_MS: ${HTTP_CHECK_TIMEOUT_MS:-5000}
+      CHECK_EXECUTION_LEASE_MS: ${CHECK_EXECUTION_LEASE_MS:-60000}
+      UPTIME_JOB_LOCK_DURATION_MS: ${UPTIME_JOB_LOCK_DURATION_MS:-30000}
+      UPTIME_JOB_STALLED_INTERVAL_MS: ${UPTIME_JOB_STALLED_INTERVAL_MS:-30000}
     restart: unless-stopped
     depends_on:
       migrate:
@@ -100,6 +119,7 @@ services:
 
 
   public-site:
+    image: ${PULSEBOARD_IMAGE:-pulseboard:local}
     build:
       context: .
       args:
@@ -107,6 +127,8 @@ services:
         NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org/}
         APT_DEBIAN_MIRROR: ${APT_DEBIAN_MIRROR:-}
         APT_SECURITY_MIRROR: ${APT_SECURITY_MIRROR:-}
+        PULSEBOARD_BUILD_REVISION: ${PULSEBOARD_BUILD_REVISION:-unversioned}
+        PULSEBOARD_BUILD_CONTRACT: ${PULSEBOARD_BUILD_CONTRACT:-current}
     command: >
       sh -c "set -eu;
       ts=$$(date -u +%Y%m%dT%H%M%SZ);
@@ -119,7 +141,16 @@ services:
         cp /host-web/frontend/index.html /host-web/frontend/index.html.backup-$$ts;
       fi;
       install -m 0644 /app/deploy/anlan/frontend/index.html /host-web/frontend/index.html;
-      echo public site installed to /var/www/html/index.html and /var/www/html/frontend/index.html"
+      mkdir -p /host-web/demo/frontend;
+      if [ -f /host-web/demo/index.html ]; then
+        cp /host-web/demo/index.html /host-web/demo/index.html.backup-$$ts;
+      fi;
+      install -m 0644 /app/deploy/anlan/demo/index.html /host-web/demo/index.html;
+      if [ -f /host-web/demo/frontend/index.html ]; then
+        cp /host-web/demo/frontend/index.html /host-web/demo/frontend/index.html.backup-$$ts;
+      fi;
+      install -m 0644 /app/deploy/anlan/demo/frontend/index.html /host-web/demo/frontend/index.html;
+      echo public site installed to /var/www/html/index.html, /var/www/html/frontend/index.html, and /var/www/html/demo/"
     volumes:
       - /var/www/html:/host-web
     restart: "no"

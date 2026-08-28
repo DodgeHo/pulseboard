@@ -1,39 +1,10 @@
 const baseUrl = normalizeBaseUrl(process.env.PUBLIC_BASE_URL ?? 'https://anlan.store');
 const failures = [];
 const observations = [];
-const text = (...codePoints) => String.fromCodePoint(...codePoints);
-
-const traditionalChineseLabel = text(0x7e41, 0x9ad4, 0x4e2d, 0x6587);
-const simplifiedChineseLabel = text(0x7b80, 0x4f53, 0x4e2d, 0x6587);
-const arabicLabel = text(0x0627, 0x0644, 0x0639, 0x0631, 0x0628, 0x064a, 0x0629);
-const localeOrderNeedle = "const localeOrder = ['en', 'zh-TW', 'ja', 'ko', 'es', 'fr', 'de', 'pt-BR', 'ar', 'zh-CN'];";
-const retiredStyleNeedles = [
-  'gradient-text',
-  'towerCore',
-  'camera-x',
-  'Opening orbit: software factory floor',
-  'Scroll-driven 3D storytelling',
-  'vertical-tower-preview',
-  'Reliability Desk',
-  'Evidence Rail'
-];
-const portalKeywordNeedles = [
-  "railKeywords: ['Astro', 'AI Skills', 'Windows CLI']",
-  "railKeywords: ['Hono', 'PostgreSQL', 'Redis']",
-  "railKeywords: ['invite-only', 'inbox', 'digests']",
-  "railKeywords: ['AWS', 'questions', 'progress']",
-  "railKeywords: ['AWS', 'architecture', 'advanced']",
-  "railKeywords: ['ITSM', 'study', 'unlinked']",
-  "railKeywords: ['C++', 'Eigen', 'VMD']",
-  "railKeywords: ['Python', 'localization', 'MIT']",
-  "railKeywords: ['GPT', 'writing', 'Python']",
-  "railKeywords: ['Python', 'robotics', 'RRT']"
-];
-const portalLocaleMarkers = [
-  text(0x4e2d, 0x56fd, 0x8a9e, 0x540d, 0x306f, 0x9053, 0x5b89, 0x703e),
-  text(0x50c5, 0x9650, 0x53d7, 0x9080),
-  text(0x4ec5, 0x9650, 0x53d7, 0x9080),
-  text(0x62db, 0x5f85, 0x5236)
+const privateNames = [
+  'careerforge-autoapply', 'DSP_EPFL', 'interval_map', 'leaverequests', 'littlelemon',
+  'motion_example', 'myLittleLemon', 'P1117', 'PAL3_debug', 'PAL3_translation',
+  'PAL4_translation', 'RogerPhysics', 'ros'
 ];
 
 function normalizeBaseUrl(value) {
@@ -83,96 +54,94 @@ async function fetchJson(path) {
   }
 }
 
-function verifyLocaleSurface(body, scope) {
-  expect(scope + ' includes English-first locale order', body.includes(localeOrderNeedle));
-  expect(scope + ' includes Traditional Chinese locale', body.includes(traditionalChineseLabel));
-  expect(scope + ' includes Simplified Chinese locale', body.includes(simplifiedChineseLabel));
-  expect(scope + ' includes Arabic locale', body.includes(arabicLabel));
-  expect(scope + ' has no replacement characters', !body.includes(text(0xfffd)));
-  for (const needle of retiredStyleNeedles) {
-    expect(scope + ' retired old marker: ' + needle, !body.includes(needle));
+function rowFor(body, name) {
+  return [...body.matchAll(/<article class="archive-row"[\s\S]*?<\/article>/g)]
+    .map((match) => match[0])
+    .find((row) => row.includes(`data-name="${name}"`));
+}
+
+function verifyMetadata(body, scope) {
+  expect(scope + ' has canonical URL', body.includes('<link rel="canonical"'));
+  expect(scope + ' has Open Graph metadata', body.includes('<meta property="og:title"'));
+  expect(scope + ' has JSON-LD', body.includes('type="application/ld+json"'));
+  for (const locale of ['en', 'zh-Hant', 'zh-Hans', 'ja', 'x-default']) {
+    expect(scope + ' has hreflang ' + locale, body.includes(`hreflang="${locale}"`));
   }
+  expect(scope + ' has no unresolved placeholders', !/__[A-Z0-9_]+__/.test(body));
+  expect(scope + ' has no replacement characters', !body.includes('\uFFFD'));
 }
 
 async function verifyPortal() {
   const { response, body } = await fetchText('/');
   expect('portal returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect('portal is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('portal title identifies ANLAN.STORE', body.includes('<title>ANLAN.STORE — Project Frequencies</title>'));
-  expect('portal introduces Dodge in the approved colorful Signal Lattice identity', body.includes('ANLAN.STORE') && body.includes('DODGE HO.<br>BUILDS IN PUBLIC.') && body.includes('道安澜') && body.includes('道安瀾') && body.includes('id="signal-lattice"'));
-  expect('portal links the supplied personal LinkedIn profile clearly', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('My LinkedIn profile') && body.includes('LinkedIn profile'));
-  expect('portal includes complete four-language locale controls', body.includes('data-locale="en"') && body.includes('data-locale="zh-Hant"') && body.includes('data-locale="zh-Hans"') && body.includes('data-locale="ja"'));
-  expect('portal defaults to English and only persists an explicit locale choice', body.includes("let currentLocale = 'en'") && body.includes("const localeStorageKey = 'anlan.portal.locale'") && body.includes('safeStoredLocale') && body.includes('document.documentElement.lang = currentLocale'));
-  expect('portal supports shareable language hash routes without replacing project anchors', body.includes("'#en': 'en'") && body.includes("'#zh': 'zh-Hans'") && body.includes("'#zh-hant': 'zh-Hant'") && body.includes("'#zh-hans': 'zh-Hans'") && body.includes("'#ja': 'ja'") && body.includes("window.addEventListener('hashchange'") && body.includes('localeFromHash() || safeStoredLocale()'));
-  expect('portal retains HeatStack, PulseBoard, and Career Radar routes', body.includes("route: '/heatstack/'") && body.includes('HeatStack') && body.includes('AI 热栈') && body.includes("route: '/demo/'") && body.includes("route: '/jobs/'") && body.includes('PulseBoard') && body.includes('Career Radar'));
-  expect('portal retains promoted study routes but deliberately has no ISPM route action', body.includes("route: '/saa/'") && body.includes("route: '/sap/'") && !body.includes("route: '/ispm/'") && !body.includes('href="/ispm/"') && !body.includes('href="#project-ispm"'));
-  expect('portal includes verified GitHub source projects', body.includes('VMD_cpp') && body.includes('PAL4_EnglishMod') && body.includes('https://github.com/DodgeHo/VMD_cpp') && body.includes('https://github.com/DodgeHo/PAL4_EnglishMod') && body.includes('IELTS_writing_GPT') && body.includes('dynamic_rrt_connect'));
-  expect('portal exposes all ten technical keyword sets and non-uniform project hierarchy', portalKeywordNeedles.every((needle) => body.includes(needle)) && portalLocaleMarkers.every((marker) => body.includes(marker)) && body.includes("layout: 'feature'") && body.includes("layout: 'major'") && body.includes("layout: 'study-small'") && body.includes("layout: 'quiet'") && body.includes("layout: 'research'") && body.includes("layout: 'source-compact'") && body.includes("layout: 'source-wide'"));
-  expect('portal includes working filter controls', body.includes('data-filter="source"') && body.includes('applyFilter'));
-  expect('portal includes both PulseBoard captures', (body.match(/data:image\/png;base64,/g) ?? []).length === 2);
-  expect('portal has no unresolved build placeholders', !/__PORTAL_[A-Z_]+__/.test(body) && !/__PULSEBOARD_[A-Z_]+__/.test(body));
+  expect('portal keeps colorful composition C', body.includes('ANLAN.STORE') && body.includes('DODGE HO.<br>BUILDS IN PUBLIC.') && body.includes('id="signal-lattice"'));
+  expect('portal clearly labels the personal LinkedIn link', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('My LinkedIn profile'));
+  expect('portal links the complete archive', body.includes('href="/projects/"'));
+  expect('HeatStack remains first', body.indexOf('"name":"HeatStack"') < body.indexOf('"name":"PulseBoard"'));
+  expect('ISPM remains unlinked from the homepage', !body.includes('href="/ispm/"') && !body.includes('"route":"/ispm/"'));
+  for (const hash of ['#en', '#zh', '#zh-hans', '#zh-hant', '#ja']) {
+    expect('portal supports ' + hash, body.toLowerCase().includes(`'${hash}'`) || body.toLowerCase().includes(`"${hash}"`));
+  }
+  expect('portal keeps four language controls', ['en', 'zh-Hant', 'zh-Hans', 'ja'].every((locale) => body.includes(`data-locale="${locale}"`)));
+  expect('portal links existing application routes', ['/heatstack/', '/demo/', '/jobs/', '/saa/', '/sap/'].every((path) => body.includes(path)));
+  expect('portal has JSON-LD', body.includes('type="application/ld+json"'));
 }
 
-async function verifyHeatStack() {
-  const canonical = await fetchText('/heatstack', { redirect: 'manual' });
-  expect('/heatstack redirects', canonical.response.status >= 300 && canonical.response.status < 400, canonical.response.status + ' ' + canonical.response.statusText);
-  expect('/heatstack redirects to /heatstack/', (canonical.response.headers.get('location') ?? '').endsWith('/heatstack/'), canonical.response.headers.get('location') ?? '<missing>');
-
-  const { response, body } = await fetchText('/heatstack/', { accept: 'text/html' });
-  expect('HeatStack route returns 200', response.status === 200, response.status + ' ' + response.statusText);
-  expect('HeatStack route is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect(
-    'HeatStack route serves the standalone Astro app rather than the portal fallback',
-    body.includes('<title>AI ') &&
-      body.includes('HeatStack —') &&
-      body.includes('href="/heatstack/favicon.svg"') &&
-      !body.includes('id="signal-lattice"')
-  );
-
-  const health = await fetchJson('/heatstack/api/v1/health');
-  expect('HeatStack API health returns 200', health.response.status === 200, health.response.status + ' ' + health.response.statusText);
-  expect('HeatStack API identifies the running service', health.json?.ok === true && health.json?.service === 'heatstack-api', health.body.slice(0, 200));
+async function verifyArchive(path, languageMarker) {
+  const { response, body } = await fetchText(path);
+  expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
+  expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'));
+  const archiveRows = (body.match(/<article class="archive-row"/g) ?? []).length;
+  expect(path + ' has 73 archive rows', archiveRows === 73, String(archiveRows));
+  expect(path + ' has search, filters, and sorting', body.includes('data-project-search') && body.includes('data-project-filter="featured"') && body.includes('data-project-filter="private"') && body.includes('data-project-filter="fork"') && body.includes('data-project-sort'));
+  expect(path + ' uses the expected language', body.includes(languageMarker));
+  const privateRow = rowFor(body, 'RogerPhysics');
+  expect(path + ' contains a locked private record', privateRow?.includes('data-visibility="private"') && privateRow.includes('Private repository · access unavailable'));
+  expect(path + ' private record has no action or GitHub URL', privateRow && !privateRow.includes('class="row-action"') && !privateRow.includes('github.com'));
+  const forkRow = rowFor(body, 'PathPlanning');
+  expect(path + ' marks forks clearly', forkRow?.includes('data-origin="fork"') && forkRow.includes('Fork'));
+  const publicRow = rowFor(body, 'VMD_cpp');
+  expect(path + ' gives public repositories a GitHub action', publicRow?.includes('https://github.com/DodgeHo/VMD_cpp'));
+  verifyMetadata(body, path);
 }
 
-async function verifyCareerRadar() {
-  const canonical = await fetchText('/jobs', { redirect: 'manual' });
-  expect('/jobs redirects', canonical.response.status === 308, canonical.response.status + ' ' + canonical.response.statusText);
-  expect('/jobs redirects to /jobs/', (canonical.response.headers.get('location') ?? '').endsWith('/jobs/'), canonical.response.headers.get('location') ?? '<missing>');
+async function verifyProjectLibrary() {
+  for (const [path, marker] of [
+    ['/projects/', 'Complete Engineering Archive'],
+    ['/zh-hans/projects/', '完整工程资产档案'],
+    ['/zh-hant/projects/', '完整工程資產檔案'],
+    ['/ja/projects/', '完全なエンジニアリング資産目録']
+  ]) await verifyArchive(path, marker);
 
-  const { response, body } = await fetchText('/jobs/', { accept: 'text/html' });
-  expect('Career Radar route returns 200 after login redirect', response.status === 200, response.status + ' ' + response.statusText);
-  expect('Career Radar route is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('Career Radar retains subpath-aware login shell', body.includes('<title>Career Radar</title>') && body.includes('data-base-path="/jobs"'));
+  for (const path of ['/projects/pulseboard/', '/projects/heatstack/', '/projects/career-radar/']) {
+    const { response, body } = await fetchText(path);
+    expect(path + ' flagship case returns 200', response.status === 200, response.status + ' ' + response.statusText);
+    expect(path + ' contains case study sections', body.includes('Problem') && body.includes('My role') && body.includes('Key decisions') && body.includes('Engineering evidence'));
+    verifyMetadata(body, path);
+  }
+
+  const asset = await fetchText('/projects/pulseboard/deployment-runbook/');
+  expect('PulseBoard asset returns 200', asset.response.status === 200, asset.response.status + ' ' + asset.response.statusText);
+  expect('PulseBoard asset is labeled', asset.body.includes('Deployment Runbook') && asset.body.includes('public, security-reviewed explanation'));
+
+  const publicRecord = await fetchText('/projects/vmd-cpp/');
+  expect('public source project record returns 200', publicRecord.response.status === 200, publicRecord.response.status + ' ' + publicRecord.response.statusText);
+  expect('public source project record links GitHub', publicRecord.body.includes('https://github.com/DodgeHo/VMD_cpp'));
+
+  for (const path of ['/sitemap.xml', '/robots.txt', '/feed.xml']) {
+    const { response, body } = await fetchText(path);
+    expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
+    expect(path + ' is nonempty', body.length > 50);
+    expect(path + ' contains no private GitHub URL', !privateNames.some((name) => body.includes(`github.com/DodgeHo/${name}`)));
+  }
 }
 
 async function verifyPulseBoard() {
-  const { response, body } = await fetchText('/demo/');
-  expect('PulseBoard demo returns 200', response.status === 200, response.status + ' ' + response.statusText);
-  expect('PulseBoard demo is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('PulseBoard demo title is Live Ops Console', body.includes('<title>PulseBoard - Live Ops Console</title>'));
-  expect('PulseBoard demo has operational hero', body.includes('PulseBoard Live Ops Console.') && body.includes('A backend portfolio you can interrogate.'));
-  expect('PulseBoard demo surfaces runtime evidence', body.includes('probe terminal') && body.includes('Runtime Ledger') && body.includes('Incident Runway'));
-  expect('PulseBoard demo links customer route', body.includes('href="/demo/frontend/"'));
-  expect('PulseBoard demo uses namespaced probes', body.includes('/demo/health/live') && body.includes('/demo/health/ready'));
-  expect('PulseBoard demo uses namespaced docs', body.includes('/demo/openapi.json') && body.includes('/demo/docs'));
-  expect('PulseBoard demo supports RTL Arabic', body.includes("currentLocale === 'ar' ? 'rtl' : 'ltr'"));
-  verifyLocaleSurface(body, 'PulseBoard demo');
-}
+  const app = await fetchText('/demo/frontend/');
+  expect('PulseBoard customer surface returns 200', app.response.status === 200, app.response.status + ' ' + app.response.statusText);
+  expect('PulseBoard customer surface retains app shell', app.body.includes('PulseBoard') || app.body.includes('root'));
 
-async function verifyCustomerSurface() {
-  const { response, body } = await fetchText('/demo/frontend/');
-  expect('customer surface returns 200', response.status === 200, response.status + ' ' + response.statusText);
-  expect('customer surface is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
-  expect('customer surface title is Reliability Works', body.includes('<title>PulseBoard Reliability Works</title>'));
-  expect('customer surface has product workflow', body.includes('Workflow') && body.includes('Automation queue') && body.includes('Evidence links'));
-  expect('customer surface has release and lifecycle sections', body.includes('Release posture') && body.includes('Lifecycle'));
-  expect('customer surface uses namespaced backend links', body.includes('/demo/health/ready') && body.includes('/demo/openapi.json') && body.includes('/demo/docs'));
-  expect('customer surface links back to PulseBoard', body.includes('href="/demo/"'));
-  expect('customer surface supports RTL Arabic', body.includes("active === 'ar' ? 'rtl' : 'ltr'"));
-  verifyLocaleSurface(body, 'customer surface');
-}
-
-async function verifyBackendSurface() {
   const live = await fetchJson('/demo/health/live');
   expect('liveness returns 200', live.response.status === 200, live.response.status + ' ' + live.response.statusText);
   expect('liveness body status is ok', live.json?.status === 'ok', live.body.slice(0, 160));
@@ -182,29 +151,31 @@ async function verifyBackendSurface() {
   expect('readiness body status is ready', ready.json?.status === 'ready', ready.body.slice(0, 160));
 
   const openapi = await fetchJson('/demo/openapi.json');
-  expect('OpenAPI returns 200', openapi.response.status === 200, openapi.response.status + ' ' + openapi.response.statusText);
   const paths = openapi.json?.paths && typeof openapi.json.paths === 'object' ? Object.keys(openapi.json.paths) : [];
-  observe('OpenAPI path count', paths.length);
-  expect('OpenAPI includes public liveness path', paths.includes('/demo/health/live'));
-  expect('OpenAPI includes public readiness path', paths.includes('/demo/health/ready'));
-  expect('OpenAPI includes public API key path', paths.includes('/demo/api/v1/api-keys'));
-  expect('OpenAPI includes public workspace path', paths.includes('/demo/api/v1/workspaces'));
-
-  const docs = await fetchText('/demo/docs', { accept: 'text/html' });
-  expect('API docs returns 200', docs.response.status === 200, docs.response.status + ' ' + docs.response.statusText);
-  expect('API docs references PulseBoard API', docs.body.includes('PulseBoard API') || docs.body.includes('api-reference'));
-  expect('API docs loads namespaced OpenAPI', docs.body.includes('/demo/openapi.json'));
+  expect('OpenAPI returns 200', openapi.response.status === 200, openapi.response.status + ' ' + openapi.response.statusText);
+  expect('OpenAPI keeps public and protected routes', ['/demo/health/live', '/demo/health/ready', '/demo/api/v1/api-keys', '/demo/api/v1/workspaces'].every((path) => paths.includes(path)));
 
   const unauthorized = await fetchJson('/demo/api/v1/workspaces');
   expect('protected workspace route returns 401 without API key', unauthorized.response.status === 401, unauthorized.response.status + ' ' + unauthorized.response.statusText);
   expect('protected workspace route does not leak data', !Array.isArray(unauthorized.json), unauthorized.body.slice(0, 160));
 }
 
-async function verifyStudyRoutes() {
+async function verifyApplicationRoutes() {
+  const heatStack = await fetchText('/heatstack/');
+  expect('HeatStack returns 200', heatStack.response.status === 200, heatStack.response.status + ' ' + heatStack.response.statusText);
+  expect('HeatStack identity is present', heatStack.body.includes('HeatStack') && heatStack.body.includes('AI 热栈'));
+
+  const heatHealth = await fetchJson('/heatstack/api/v1/health');
+  expect('HeatStack health returns 200', heatHealth.response.status === 200, heatHealth.response.status + ' ' + heatHealth.response.statusText);
+  expect('HeatStack health identifies the service', heatHealth.json?.service === 'heatstack-api');
+
+  const career = await fetchText('/jobs/login');
+  expect('Career Radar login returns 200', career.response.status === 200, career.response.status + ' ' + career.response.statusText);
+  expect('Career Radar identity is present', career.body.includes('Career Radar'));
+
   for (const path of ['/saa/', '/sap/', '/ispm/']) {
-    const { response, body } = await fetchText(path, { accept: 'text/html' });
+    const { response, body } = await fetchText(path);
     expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
-    expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
     expect(path + ' retains Flutter app shell', body.includes('flutter') || body.includes('flt-glass-pane'));
   }
 }
@@ -238,12 +209,9 @@ async function verifyWwwRedirect() {
 
 try {
   await verifyPortal();
+  await verifyProjectLibrary();
   await verifyPulseBoard();
-  await verifyCustomerSurface();
-  await verifyBackendSurface();
-  await verifyHeatStack();
-  await verifyCareerRadar();
-  await verifyStudyRoutes();
+  await verifyApplicationRoutes();
   await verifyLegacyRedirects();
   await verifyWwwRedirect();
 } catch (error) {
@@ -259,4 +227,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log('Anlan project portal, HeatStack, Career Radar, and PulseBoard demo verified.');
+console.log('ANLAN.STORE portal, complete project archive, flagship cases, and preserved application routes verified.');

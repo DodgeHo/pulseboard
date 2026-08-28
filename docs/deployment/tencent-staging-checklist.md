@@ -122,7 +122,15 @@ The production compose file requires `POSTGRES_PASSWORD`, `DEMO_API_KEY`, and `A
 - [ ] Start the production-like compose stack:
 
   ```bash
-  docker compose -f docker-compose.production.example.yml up --build -d
+  revision="$(git rev-parse HEAD)"
+  export PULSEBOARD_IMAGE="pulseboard:git-$revision"
+  export PULSEBOARD_BUILD_REVISION="$revision"
+  docker compose -f docker-compose.production.example.yml build migrate
+  docker compose -f docker-compose.production.example.yml up -d postgres redis
+  docker compose -f docker-compose.production.example.yml run --rm migrate
+  docker compose -f docker-compose.production.example.yml run --rm migrate pnpm db:seed
+  docker compose -f docker-compose.production.example.yml up -d --no-build --no-deps api worker
+  docker compose -f docker-compose.production.example.yml run --rm public-site
   docker compose -f docker-compose.production.example.yml ps
   ```
 
@@ -175,12 +183,17 @@ Only continue after the local-on-server checks are healthy.
 
 ## Update Rehearsal
 
-- [ ] Pull the next validated commit:
+- [ ] Create and verify a restricted PostgreSQL logical backup before applying a new commit or migration. Follow [`../postgresql-backup-restore.md`](../postgresql-backup-restore.md); do not rely on the named volume alone.
+
+- [ ] Select and record the next reviewed immutable image digest:
 
   ```bash
-  git fetch --all --prune
-  git checkout <next-validated-commit>
-  docker compose -f docker-compose.production.example.yml up --build -d
+  export PULSEBOARD_IMAGE="registry.example.com/pulseboard@sha256:<candidate-digest>"
+  docker compose -f docker-compose.production.example.yml pull migrate api worker public-site
+  docker compose -f docker-compose.production.example.yml run --rm migrate
+  docker compose -f docker-compose.production.example.yml up -d --no-build --force-recreate api worker
+  docker compose -f docker-compose.production.example.yml run --rm public-site
+  curl -fsS http://127.0.0.1:4000/health/live
   curl -fsS http://127.0.0.1:4000/health/ready
   ```
 
@@ -188,21 +201,23 @@ Only continue after the local-on-server checks are healthy.
 
 ## Rollback Rehearsal
 
-- [ ] Identify the previous known-good commit:
+- [ ] Confirm the pre-deployment archive, checksum, source manifest, application commit, and PostgreSQL major version are available.
+- [ ] Prove any database restore in an isolated target before changing the active volume. A destructive restore requires a maintenance window and explicit operator review.
+
+- [ ] Confirm the previous immutable image digest is recorded and compatible with the current forward-migrated schema.
+
+- [ ] Recreate only application containers from the previous image:
 
   ```bash
-  git log --oneline -5
-  ```
-
-- [ ] Roll back the app code:
-
-  ```bash
-  git checkout <previous-known-good-commit>
-  docker compose -f docker-compose.production.example.yml up --build -d
+  export PULSEBOARD_IMAGE="registry.example.com/pulseboard@sha256:<previous-known-good-digest>"
+  docker compose -f docker-compose.production.example.yml pull api worker public-site
+  docker compose -f docker-compose.production.example.yml up -d --no-build --force-recreate api worker
+  docker compose -f docker-compose.production.example.yml run --rm public-site
+  curl -fsS http://127.0.0.1:4000/health/live
   curl -fsS http://127.0.0.1:4000/health/ready
   ```
 
-- [ ] If a database migration was already applied, prefer a forward fix unless the rollback has been reviewed and tested.
+- [ ] Do not reverse Prisma migrations automatically. If the previous image cannot run against the current schema, stop and deploy a forward-compatible fix. Follow [`../application-rollback.md`](../application-rollback.md).
 
 ## Cleanup
 

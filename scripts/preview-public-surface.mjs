@@ -1,19 +1,28 @@
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { readFile, stat } from 'node:fs/promises';
+import { dirname, extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const deployRoot = resolve(rootDir, 'deploy/anlan');
 const verifyMode = process.argv.includes('--verify');
 const requestedPort = Number(process.env.PUBLIC_PREVIEW_PORT ?? (verifyMode ? 0 : 4173));
 const host = process.env.PUBLIC_PREVIEW_HOST ?? '127.0.0.1';
 
 const files = new Map([
-  ['/', resolve(rootDir, 'deploy/anlan/index.html')],
-  ['/demo/', resolve(rootDir, 'deploy/anlan/demo/index.html')],
-  ['/demo/frontend/', resolve(rootDir, 'deploy/anlan/demo/frontend/index.html')]
+  ['/', resolve(deployRoot, 'index.html')],
+  ['/demo/', resolve(deployRoot, 'demo/index.html')],
+  ['/demo/frontend/', resolve(deployRoot, 'demo/frontend/index.html')]
 ]);
+
+const generatedPrefixes = ['/projects/', '/zh-hans/projects/', '/zh-hant/projects/', '/ja/projects/'];
+const generatedFiles = new Set(['/sitemap.xml', '/robots.txt', '/feed.xml']);
+const contentTypes = {
+  '.html': 'text/html; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8'
+};
 
 const openApiDocument = {
   openapi: '3.1.0',
@@ -43,6 +52,33 @@ function studyShell(name) {
   return '<!doctype html><html><head><title>' + name + '</title></head><body><main id="flutter-app">flutter preview shell</main></body></html>';
 }
 
+async function serveGenerated(path, response) {
+  if (!generatedFiles.has(path) && !generatedPrefixes.some((prefix) => path.startsWith(prefix))) return false;
+  let relativePath;
+  try {
+    relativePath = decodeURIComponent(path).replace(/^\/+/, '');
+  } catch {
+    send(response, 400, 'text/plain; charset=utf-8', 'Bad request');
+    return true;
+  }
+  if (path.endsWith('/')) relativePath += 'index.html';
+  const target = resolve(deployRoot, relativePath);
+  if (target !== deployRoot && !target.startsWith(deployRoot + sep)) {
+    send(response, 403, 'text/plain; charset=utf-8', 'Forbidden');
+    return true;
+  }
+  try {
+    const metadata = await stat(target);
+    if (!metadata.isFile()) return false;
+    const body = await readFile(target);
+    send(response, 200, contentTypes[extname(target)] ?? 'application/octet-stream', body);
+    return true;
+  } catch (error) {
+    if (error?.code === 'ENOENT') return false;
+    throw error;
+  }
+}
+
 async function handle(request, response) {
   const url = new URL(request.url ?? '/', 'http://' + (request.headers.host ?? 'localhost'));
   const path = url.pathname;
@@ -63,6 +99,8 @@ async function handle(request, response) {
     const html = await readFile(file, 'utf8');
     return send(response, 200, 'text/html; charset=utf-8', html);
   }
+
+  if (await serveGenerated(path, response)) return;
 
   if (path === '/demo/health/live') {
     return send(response, 200, 'application/json; charset=utf-8', JSON.stringify({ status: 'ok' }));

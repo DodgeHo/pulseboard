@@ -24,7 +24,8 @@ jobs:
       - name: Ensure generated public artifacts are up to date
         run: git diff --exit-code -- deploy/anlan/index.html deploy/anlan/demo/index.html deploy/anlan/demo/frontend/index.html
       - run: pnpm typecheck
-      - run: pnpm test
+      - name: Run unit and executable OpenAPI contract tests
+        run: pnpm test
 
   integration:
     runs-on: ubuntu-latest
@@ -70,7 +71,37 @@ jobs:
       - run: pnpm db:generate
       - run: pnpm db:deploy
       - run: pnpm db:seed
-      - run: pnpm test:integration
+      - name: Run API integration and executable OpenAPI contract tests
+        run: pnpm test:integration
+      - name: Run worker crash-recovery and shutdown integration tests
+        env:
+          RUN_WORKER_INTEGRATION_TESTS: "true"
+          NODE_ENV: test
+        run: pnpm --filter @pulseboard/worker test:integration
+
+  backup-restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Rehearse PostgreSQL logical backup and isolated restore
+        run: bash scripts/postgres-backup-restore-rehearsal.sh
+
+  rollback-rehearsal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Rehearse immutable-image application rollback
+        run: bash scripts/local-compose-rollback-rehearsal.sh
+      - name: Upload rollback evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-rollback-evidence
+          path: .artifacts/application-rollback
+          if-no-files-found: ignore
+          retention-days: 7
 
   infrastructure:
     runs-on: ubuntu-latest

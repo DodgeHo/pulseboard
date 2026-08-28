@@ -63,7 +63,7 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build:public
           pnpm verify:artifacts
-          git diff --exit-code -- deploy/anlan/index.html deploy/anlan/demo/index.html deploy/anlan/demo/frontend/index.html
+          git diff --exit-code -- deploy/anlan
 
       - name: Configure SSH
         env:
@@ -98,7 +98,9 @@ jobs:
       - name: Upload public site assets
         run: |
           set -euo pipefail
-          scp deploy/anlan/index.html pulseboard-staging:/tmp/anlan-portal-index.html
+          tar -C deploy/anlan -czf /tmp/anlan-portal-static.tar.gz \
+            index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant
+          scp /tmp/anlan-portal-static.tar.gz pulseboard-staging:/tmp/anlan-portal-static.tar.gz
           scp deploy/anlan/demo/index.html pulseboard-staging:/tmp/pulseboard-demo-index.html
           scp deploy/anlan/demo/frontend/index.html pulseboard-staging:/tmp/pulseboard-demo-frontend-index.html
           scp deploy/anlan/nginx/anlan.conf pulseboard-staging:/tmp/pulseboard-anlan.conf
@@ -142,7 +144,23 @@ jobs:
           git fetch origin "$DEPLOY_REF"
           git checkout -B master FETCH_HEAD
 
-          sudo env DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker compose -f docker-compose.production.example.yml up --build -d
+          revision="$(git rev-parse HEAD)"
+          export PULSEBOARD_IMAGE="pulseboard:git-$revision"
+          export PULSEBOARD_BUILD_REVISION="$revision"
+          compose_file="docker-compose.production.example.yml"
+
+          sudo env DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 \
+            PULSEBOARD_IMAGE="$PULSEBOARD_IMAGE" \
+            PULSEBOARD_BUILD_REVISION="$PULSEBOARD_BUILD_REVISION" \
+            docker compose -f "$compose_file" build migrate
+          sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
+            docker compose -f "$compose_file" up -d postgres redis
+          sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
+            docker compose -f "$compose_file" run --rm migrate
+          sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
+            docker compose -f "$compose_file" up -d --no-build --no-deps --force-recreate api worker
+          sudo --preserve-env=PULSEBOARD_IMAGE,PULSEBOARD_BUILD_REVISION \
+            docker compose -f "$compose_file" run --rm public-site
 
           wait_for_url() {
             url="$1"
@@ -162,6 +180,7 @@ jobs:
 
           wait_for_url http://127.0.0.1:4000/health/live
           wait_for_url http://127.0.0.1:4000/health/ready
+          curl -fsS http://127.0.0.1:4000/health/live | grep -F "\"release\":\"$revision\"" >/dev/null
 
           set -a
           . ./.env
@@ -176,8 +195,15 @@ jobs:
           deploy_backup_dir="$HOME/pulseboard-deploy-backups/$ts/public-surface"
           mkdir -p "$deploy_backup_dir/nginx"
 
-          if [ -f /var/www/html/index.html ]; then
-            sudo cp /var/www/html/index.html /var/www/html/index.html.backup-$ts
+          portal_paths=(index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant)
+          existing_portal_paths=()
+          for portal_path in "${portal_paths[@]}"; do
+            if [ -e "/var/www/html/$portal_path" ]; then
+              existing_portal_paths+=("$portal_path")
+            fi
+          done
+          if [ "${#existing_portal_paths[@]}" -gt 0 ]; then
+            sudo tar -C /var/www/html -czf "$deploy_backup_dir/portal-static.tar.gz" "${existing_portal_paths[@]}"
           fi
           if [ -f /var/www/html/demo/index.html ]; then
             sudo cp /var/www/html/demo/index.html /var/www/html/demo/index.html.backup-$ts
@@ -211,7 +237,7 @@ jobs:
           sudo cp /etc/nginx/sites-enabled/anlan.conf "$deploy_backup_dir/nginx/sites-enabled-anlan.conf"
 
           sudo install -d -m 0755 /var/www/html/demo/frontend
-          sudo install -m 0644 /tmp/anlan-portal-index.html /var/www/html/index.html
+          sudo tar --no-same-owner -xzf /tmp/anlan-portal-static.tar.gz -C /var/www/html
           sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
           sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
           sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts

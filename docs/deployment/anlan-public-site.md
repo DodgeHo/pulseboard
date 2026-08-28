@@ -21,7 +21,7 @@ Legacy PulseBoard paths such as `/frontend/`, `/docs`, `/openapi.json`, `/health
 
 | Surface | Repository artifact | Server target |
 | --- | --- | --- |
-| Project portal | `deploy/anlan/index.html` | `/var/www/html/index.html` |
+| Project portal | `deploy/anlan/index.html`, locale archives, project pages, sitemap, RSS, and robots metadata | `/var/www/html/` |
 | PulseBoard operations | `deploy/anlan/demo/index.html` | `/var/www/html/demo/index.html` |
 | PulseBoard customer UI | `deploy/anlan/demo/frontend/index.html` | `/var/www/html/demo/frontend/index.html` |
 | Nginx route contract | `deploy/anlan/nginx/anlan.conf` | `/etc/nginx/sites-available/anlan.conf` and `/etc/nginx/sites-enabled/anlan.conf` |
@@ -38,17 +38,19 @@ Run this from the repository root before uploading anything:
 pnpm install --frozen-lockfile
 pnpm build:public
 pnpm verify:artifacts
-git diff --exit-code -- deploy/anlan/index.html deploy/anlan/demo/index.html deploy/anlan/demo/frontend/index.html
+git diff --exit-code -- deploy/anlan
 ```
 
-`build:public` first creates the root portal, then builds PulseBoard into `deploy/anlan/demo/`. Both static surfaces remain self-contained HTML artifacts.
+`build:public` first creates the root portal, locale archives, project pages, and discovery metadata, then builds PulseBoard into `deploy/anlan/demo/`. The generated portal remains static and the PulseBoard surfaces remain self-contained HTML artifacts.
 
 ## Upload
 
 Use the approved staging SSH alias or replace `<staging-host>` with the approved host. Do not put private keys, passwords, or tokens in this repository.
 
 ```bash
-scp deploy/anlan/index.html <staging-host>:/tmp/anlan-portal-index.html
+tar -C deploy/anlan -czf /tmp/anlan-portal-static.tar.gz \
+  index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant
+scp /tmp/anlan-portal-static.tar.gz <staging-host>:/tmp/anlan-portal-static.tar.gz
 scp deploy/anlan/demo/index.html <staging-host>:/tmp/pulseboard-demo-index.html
 scp deploy/anlan/demo/frontend/index.html <staging-host>:/tmp/pulseboard-demo-frontend-index.html
 scp deploy/anlan/nginx/anlan.conf <staging-host>:/tmp/pulseboard-anlan.conf
@@ -60,9 +62,18 @@ On the host, create timestamped backups before replacing any artifact:
 
 ```bash
 ts=$(date -u +%Y%m%dT%H%M%SZ)
+deploy_backup_dir="$HOME/pulseboard-deploy-backups/$ts/public-surface"
+mkdir -p "$deploy_backup_dir/nginx"
 
-if [ -f /var/www/html/index.html ]; then
-  sudo cp /var/www/html/index.html /var/www/html/index.html.backup-$ts
+portal_paths=(index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant)
+existing_portal_paths=()
+for portal_path in "${portal_paths[@]}"; do
+  if [ -e "/var/www/html/$portal_path" ]; then
+    existing_portal_paths+=("$portal_path")
+  fi
+done
+if [ "${#existing_portal_paths[@]}" -gt 0 ]; then
+  sudo tar -C /var/www/html -czf "$deploy_backup_dir/portal-static.tar.gz" "${existing_portal_paths[@]}"
 fi
 if [ -f /var/www/html/demo/index.html ]; then
   sudo cp /var/www/html/demo/index.html /var/www/html/demo/index.html.backup-$ts
@@ -78,7 +89,7 @@ if [ -f /etc/nginx/sites-enabled/anlan.conf ]; then
 fi
 
 sudo install -d -m 0755 /var/www/html/demo/frontend
-sudo install -m 0644 /tmp/anlan-portal-index.html /var/www/html/index.html
+sudo tar --no-same-owner -xzf /tmp/anlan-portal-static.tar.gz -C /var/www/html
 sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
 sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
 sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts

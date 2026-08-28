@@ -4,6 +4,8 @@ coverage
 build
 .next
 .cache
+.artifacts
+tmp-live-check/
 .pnpm-store
 .npm
 .eslintcache

@@ -22,7 +22,7 @@ curl \
   "$PULSEBOARD_API_URL/v1/workspaces"
 ```
 
-## Rotate API Keys
+## Replace And Revoke API Keys
 
 List API key metadata. Plaintext key values are never returned from this endpoint.
 
@@ -49,6 +49,8 @@ curl -X DELETE \
   -H "Authorization: Bearer $DEMO_API_KEY" \
   "$PULSEBOARD_API_URL/v1/api-keys/<api-key-id>"
 ```
+
+This is a manual replacement workflow, not automatic rotation: the current model does not store expiry or rotation lineage.
 
 ## Create a Workspace
 

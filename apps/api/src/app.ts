@@ -3,14 +3,16 @@ import {
   apiKeyInputSchema,
   incidentUpdateSchema,
   projectInputSchema,
+  resolveSafeHttpTarget,
   serviceInputSchema,
+  UnsafeHttpUrlError,
   uptimeCheckInputSchema,
   webhookIngestSchema,
   workspaceInputSchema,
 } from '@pulseboard/core';
 import { prisma } from '@pulseboard/db';
 import { Prisma } from '@pulseboard/db';
-import { createQueues } from '@pulseboard/queues';
+import { checkExecutionDispatchJobId, createQueues } from '@pulseboard/queues';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { Redis } from 'ioredis';
@@ -19,6 +21,7 @@ import { randomBytes } from 'node:crypto';
 import { apiKeyAuth, hashApiKey } from './auth.js';
 import type { ApiVariables } from './auth.js';
 import { logger } from './logger.js';
+import { closeMetricsResources, collectPrometheusMetrics } from './metrics.js';
 import { openApiDocument } from './openapi.js';
 import { createRedisRateLimitStore, createWriteRateLimit } from './rate-limit.js';
 import { requestContext } from './request-context.js';
@@ -42,13 +45,21 @@ function writeRateLimitStore() {
 }
 
 export async function closeAppResources() {
-  await Promise.all([
+  const results = await Promise.allSettled([
     queueSingleton?.uptimeChecks.close(),
     queueSingleton?.notifications.close(),
     rateLimitRedis?.quit().catch(() => rateLimitRedis?.disconnect()),
+    closeMetricsResources(),
   ]);
   queueSingleton = null;
   rateLimitRedis = null;
+
+  const failures = results
+    .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
+    .map((result) => result.reason);
+  if (failures.length > 0) {
+    throw new AggregateError(failures, 'One or more API resources failed to close.');
+  }
 }
 
 async function writeAudit(input: {
@@ -106,12 +117,22 @@ async function queueCheckExecution(input: { uptimeCheckId: string; idempotencyKe
   await queues().uptimeChecks.add(
     'perform-check',
     { executionId: execution.id },
-    { jobId: `check-execution-${execution.id}` },
+    { jobId: checkExecutionDispatchJobId(execution.id, execution.attemptCount + 1) },
   );
   return execution;
 }
 
-export function createApp() {
+async function validateUptimeCheckTarget(url: string): Promise<string | null> {
+  try {
+    await resolveSafeHttpTarget(url);
+    return null;
+  } catch (error) {
+    if (error instanceof UnsafeHttpUrlError) return error.message;
+    return 'Monitoring target could not be validated safely.';
+  }
+}
+
+export function createApp(options: { isDraining?: () => boolean } = {}) {
   const app = new Hono<{ Variables: ApiVariables }>();
 
   app.use('*', cors());
@@ -132,26 +153,63 @@ export function createApp() {
     c.json({
       status: 'ok',
       service: 'pulseboard-api',
+      release: process.env.PULSEBOARD_BUILD_REVISION ?? 'unversioned',
+      contract: process.env.PULSEBOARD_BUILD_CONTRACT ?? 'current',
       checkedAt: new Date().toISOString(),
     }),
   );
 
   app.get('/health/ready', async (c) => {
+    if (options.isDraining?.()) {
+      return c.json({ status: 'not_ready', reason: 'shutting_down', requestId: c.var.requestId }, 503);
+    }
+
+    const timeoutMs = Number(process.env.READINESS_TIMEOUT_MS ?? 2_000);
     const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379', {
       maxRetriesPerRequest: 1,
       lazyConnect: true,
+      connectTimeout: timeoutMs,
+      commandTimeout: timeoutMs,
     });
 
     try {
-      await prisma.$queryRaw`SELECT 1`;
-      await redis.connect();
-      await redis.ping();
+      let timeout: NodeJS.Timeout | undefined;
+      try {
+        await Promise.race([
+          (async () => {
+            await prisma.$queryRaw`SELECT 1`;
+            await redis.connect();
+            await redis.ping();
+          })(),
+          new Promise<never>((_, reject) => {
+            timeout = setTimeout(() => reject(new Error(`Readiness check exceeded ${timeoutMs}ms.`)), timeoutMs);
+          }),
+        ]);
+      } finally {
+        if (timeout) clearTimeout(timeout);
+      }
       return c.json({ status: 'ready' });
     } catch (error) {
       logger.warn({ error }, 'readiness check failed');
       return c.json({ status: 'not_ready', requestId: c.var.requestId }, 503);
     } finally {
       redis.disconnect();
+    }
+  });
+
+  app.get('/metrics', async (c) => {
+    try {
+      const body = await collectPrometheusMetrics(queues());
+      return c.body(body, 200, {
+        'Cache-Control': 'no-store',
+        'Content-Type': 'text/plain; version=0.0.4; charset=utf-8',
+      });
+    } catch (error) {
+      logger.warn({ error, requestId: c.var.requestId }, 'metrics scrape failed');
+      return c.body('# PulseBoard metrics scrape failed.\n', 503, {
+        'Cache-Control': 'no-store',
+        'Content-Type': 'text/plain; version=0.0.4; charset=utf-8',
+      });
     }
   });
 
@@ -293,8 +351,14 @@ export function createApp() {
   });
 
   app.get('/v1/workspaces/:workspaceId/projects', async (c) => {
+    const workspace = await prisma.workspace.findFirst({
+      where: { id: c.req.param('workspaceId'), members: { some: { userId: c.get('userId') } } },
+      select: { id: true },
+    });
+    if (!workspace) return errorResponse(c, 404, 'Workspace not found.');
+
     const projects = await prisma.project.findMany({
-      where: { workspaceId: c.req.param('workspaceId'), workspace: { members: { some: { userId: c.get('userId') } } } },
+      where: { workspaceId: workspace.id },
       orderBy: { createdAt: 'asc' },
     });
     return c.json({ data: projects });
@@ -371,8 +435,14 @@ export function createApp() {
   });
 
   app.get('/v1/projects/:projectId/services', async (c) => {
+    const project = await prisma.project.findFirst({
+      where: { id: c.req.param('projectId'), workspace: { members: { some: { userId: c.get('userId') } } } },
+      select: { id: true },
+    });
+    if (!project) return errorResponse(c, 404, 'Project not found.');
+
     const services = await prisma.monitoredService.findMany({
-      where: { projectId: c.req.param('projectId'), project: { workspace: { members: { some: { userId: c.get('userId') } } } } },
+      where: { projectId: project.id },
       orderBy: { createdAt: 'asc' },
     });
     return c.json({ data: services });
@@ -454,8 +524,14 @@ export function createApp() {
   });
 
   app.get('/v1/services/:serviceId/uptime-checks', async (c) => {
+    const service = await prisma.monitoredService.findFirst({
+      where: { id: c.req.param('serviceId'), project: { workspace: { members: { some: { userId: c.get('userId') } } } } },
+      select: { id: true },
+    });
+    if (!service) return errorResponse(c, 404, 'Service not found.');
+
     const checks = await prisma.uptimeCheck.findMany({
-      where: { serviceId: c.req.param('serviceId'), service: { project: { workspace: { members: { some: { userId: c.get('userId') } } } } } },
+      where: { serviceId: service.id },
       orderBy: { createdAt: 'asc' },
     });
     return c.json({ data: checks });
@@ -470,6 +546,9 @@ export function createApp() {
       include: { project: true },
     });
     if (!service) return errorResponse(c, 404, 'Service not found.');
+
+    const unsafeTargetReason = await validateUptimeCheckTarget(input.url);
+    if (unsafeTargetReason) return errorResponse(c, 400, unsafeTargetReason);
 
     const scheduledFor = new Date();
     const intervalSeconds = input.intervalSeconds ?? 60;
@@ -511,6 +590,11 @@ export function createApp() {
       include: { service: { include: { project: true } } },
     });
     if (!check) return errorResponse(c, 404, 'Uptime check not found.');
+
+    if (input.url) {
+      const unsafeTargetReason = await validateUptimeCheckTarget(input.url);
+      if (unsafeTargetReason) return errorResponse(c, 400, unsafeTargetReason);
+    }
 
     const scheduledFor = new Date();
     const updated = await prisma.uptimeCheck.update({

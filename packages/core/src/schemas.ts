@@ -25,6 +25,7 @@ export const serviceInputSchema = z.object({
 
 export const uptimeCheckInputSchema = z.object({
   name: z.string().min(2).max(120),
+  description: z.string().max(500).optional(),
   method: z.enum(['GET', 'HEAD']).default('GET'),
   url: z.string().url(),
   expectedStatus: z.number().int().min(100).max(599).default(200),

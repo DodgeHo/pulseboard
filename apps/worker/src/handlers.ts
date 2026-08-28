@@ -2,6 +2,8 @@
 import type { HttpCheckRequest, HttpCheckResult } from '@pulseboard/core';
 import { Prisma } from '@pulseboard/db';
 import type { PrismaClient } from '@pulseboard/db';
+import type { OperationalMetrics } from '@pulseboard/observability';
+import { checkExecutionDispatchJobId } from '@pulseboard/queues';
 import { randomUUID } from 'node:crypto';
 
 import type { logger as defaultLogger } from './logger.js';
@@ -46,6 +48,7 @@ export interface WorkerHandlerDependencies {
   logger: Pick<typeof defaultLogger, 'info' | 'warn'>;
   schedulerIntervalMs: number;
   notificationProvider?: NotificationProvider;
+  metrics?: OperationalMetrics;
   workerId?: string;
   now?: () => Date;
   checkLeaseMs?: number;
@@ -55,6 +58,11 @@ export interface WorkerHandlerDependencies {
   };
 }
 
+export interface CheckJobContext {
+  jobId?: string;
+  queueName?: string;
+}
+
 function executionKey(uptimeCheckId: string, scheduledFor: Date) {
   return `check:${uptimeCheckId}:${scheduledFor.toISOString()}`;
 }
@@ -62,6 +70,12 @@ function executionKey(uptimeCheckId: string, scheduledFor: Date) {
 function notificationBackoffMs(cycleAttemptCount: number) {
   return Math.min(60_000, 1_000 * 2 ** Math.max(0, cycleAttemptCount - 1));
 }
+
+const noopOperationalMetrics: OperationalMetrics = {
+  recordUptimeCheck: () => Promise.resolve(),
+  recordCheckExecutionLeaseContention: () => Promise.resolve(),
+  recordNotificationTerminalFailure: () => Promise.resolve(),
+};
 
 async function defaultNotificationProvider(notification: Parameters<NotificationProvider>[0]): Promise<NotificationDelivery> {
   if (notification.channel !== 'WEBHOOK') return { responseStatus: 202 };
@@ -94,12 +108,21 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
     runHttpCheck,
     schedulerIntervalMs,
     notificationProvider = defaultNotificationProvider,
+    metrics = noopOperationalMetrics,
     workerId = randomUUID(),
     now = () => new Date(),
     checkLeaseMs = 60_000,
     notificationLeaseMs = 30_000,
     testHooks,
   } = dependencies;
+
+  async function recordMetric(task: () => Promise<void>, context: Record<string, unknown>) {
+    try {
+      await task();
+    } catch (error) {
+      logger.warn({ ...context, error }, 'operational metric recording failed');
+    }
+  }
 
   async function scheduleRecurringChecks() {
     await queues.uptimeChecks.add('run-due-checks', {}, { jobId: 'uptime-scheduler', repeat: { every: schedulerIntervalMs } });
@@ -151,19 +174,23 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
           { status: 'RUNNING', leaseExpiresAt: { lt: scanTime } },
         ],
       },
-      select: { id: true },
+      select: { id: true, attemptCount: true },
       orderBy: { scheduledFor: 'asc' },
       take: 200,
     });
     await Promise.all(
       pending.map((execution) =>
-        queues.uptimeChecks.add('perform-check', { executionId: execution.id }, { jobId: `check-execution-${execution.id}` }),
+        queues.uptimeChecks.add(
+          'perform-check',
+          { executionId: execution.id },
+          { jobId: checkExecutionDispatchJobId(execution.id, execution.attemptCount + 1) },
+        ),
       ),
     );
     logger.info({ scheduled: dueChecks.length, dispatched: pending.length }, 'scheduled and dispatched due uptime checks');
   }
 
-  async function performCheck(executionId: string) {
+  async function performCheck(executionId: string, jobContext: CheckJobContext = {}) {
     const claimTime = now();
     const claimed = await prisma.checkExecution.updateMany({
       where: {
@@ -182,7 +209,20 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
       },
     });
     if (claimed.count === 0) {
-      logger.info({ executionId }, 'skipping already claimed or completed check execution');
+      const current = await prisma.checkExecution.findUnique({
+        where: { id: executionId },
+        select: { status: true, leaseExpiresAt: true },
+      });
+      if (current?.status === 'RUNNING' && current.leaseExpiresAt && current.leaseExpiresAt > claimTime) {
+        await recordMetric(
+          () => metrics.recordCheckExecutionLeaseContention(),
+          { executionId, workerId, ...jobContext },
+        );
+      }
+      logger.info(
+        { executionId, workerId, ...jobContext },
+        'skipping check execution because its database lease is active or it is already complete',
+      );
       return;
     }
 
@@ -192,6 +232,17 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
     });
     if (!execution) return;
     const check = execution.uptimeCheck;
+    const logContext = {
+      executionId,
+      workerId,
+      attemptNumber: execution.attemptCount,
+      workspaceId: check.service.project.workspaceId,
+      projectId: check.service.project.id,
+      serviceId: check.serviceId,
+      uptimeCheckId: check.id,
+      ...jobContext,
+    };
+    logger.info(logContext, 'claimed uptime check execution');
     if (!check.isActive || check.service.status !== 'ACTIVE') {
       await prisma.checkExecution.update({
         where: { id: execution.id },
@@ -208,7 +259,7 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
         timeoutMs: check.timeoutMs,
       });
 
-      const notificationIds = await prisma.$transaction(async (tx) => {
+      const effects = await prisma.$transaction(async (tx) => {
         await tx.$queryRaw(Prisma.sql`SELECT id FROM "MonitoredService" WHERE id = ${check.serviceId} FOR UPDATE`);
 
         const existingRun = await tx.checkRun.findUnique({ where: { idempotencyKey: execution.idempotencyKey } });
@@ -217,7 +268,7 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
             where: { id: execution.id },
             data: { status: 'SUCCEEDED', checkRunId: existingRun.id, leaseOwner: null, leaseExpiresAt: null, lastError: null },
           });
-          return [] as string[];
+          return { createdRun: false, notificationIds: [] as string[] };
         }
 
         const checkRun = await tx.checkRun.create({
@@ -327,18 +378,26 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
           where: { id: execution.id },
           data: { status: 'SUCCEEDED', checkRunId: checkRun.id, leaseOwner: null, leaseExpiresAt: null, lastError: null },
         });
-        return createdNotificationIds;
+        return { createdRun: true, notificationIds: createdNotificationIds };
       }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
 
-      await Promise.all(notificationIds.map((notificationId) =>
+      if (effects.createdRun) {
+        await recordMetric(
+          () => metrics.recordUptimeCheck(result.status, result.latencyMs ?? 0),
+          logContext,
+        );
+      }
+      await Promise.all(effects.notificationIds.map((notificationId) =>
         queues.notifications.add('send-notification', { notificationId }, { jobId: `notification-${notificationId}-1` }),
       ));
-      logger.info({ executionId, uptimeCheckId: check.id, status: result.status }, 'performed idempotent uptime check');
+      logger.info({ ...logContext, status: result.status }, 'performed idempotent uptime check');
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       await prisma.checkExecution.updateMany({
         where: { id: execution.id, status: 'RUNNING', leaseOwner: workerId },
-        data: { status: 'PENDING', leaseOwner: null, leaseExpiresAt: null, lastError: error instanceof Error ? error.message : String(error) },
+        data: { status: 'PENDING', leaseOwner: null, leaseExpiresAt: null, lastError: errorMessage },
       });
+      logger.warn({ ...logContext, error: errorMessage }, 'uptime check execution failed and was released for retry');
       throw error;
     }
   }
@@ -447,6 +506,12 @@ export function createWorkerHandlers(dependencies: WorkerHandlerDependencies) {
           },
         });
       });
+      if (deadLetter) {
+        await recordMetric(
+          () => metrics.recordNotificationTerminalFailure(notification.channel),
+          { notificationId, attemptNumber, channel: notification.channel },
+        );
+      }
       logger.warn({ notificationId, attemptNumber, deadLetter, error: deliveryError.message }, 'notification delivery failed');
     }
   }

@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="ANLAN.STORE is a multilingual signal directory for deployed systems and open-source engineering work.">
   <meta name="theme-color" content="#060817">
+  <link rel="canonical" href="https://anlan.store/">
+  <link rel="alternate" hreflang="en" href="https://anlan.store/#en">
+  <link rel="alternate" hreflang="zh-Hant" href="https://anlan.store/#zh-hant">
+  <link rel="alternate" hreflang="zh-Hans" href="https://anlan.store/#zh-hans">
+  <link rel="alternate" hreflang="ja" href="https://anlan.store/#ja">
+  <link rel="alternate" hreflang="x-default" href="https://anlan.store/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ANLAN.STORE — Project Frequencies">
+  <meta property="og:description" content="Deployed systems, research implementations, and a complete multilingual engineering archive by Dodge Ho.">
+  <meta property="og:url" content="https://anlan.store/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfilePage","name":"ANLAN.STORE — Dodge Ho engineering portfolio","url":"https://anlan.store/","mainEntity":{"@type":"Person","name":"Dodge Ho","alternateName":["Lang He","道安澜","道安瀾"],"sameAs":["https://www.linkedin.com/in/lang-he-a94655120/","https://github.com/DodgeHo"]}}</script>
   <title>ANLAN.STORE — Project Frequencies</title>
   <style>@font-face {
   font-family: "Anlan Inter";
@@ -446,6 +457,8 @@ canvas { display: block; }
 }
 .row-action:hover { background: var(--project-color, var(--cyan)); border-color: var(--project-color, var(--cyan)); color: #07101f; }
 .row-action svg { width: 15px; height: 15px; }
+.row-actions-home { display: grid; gap: 8px; align-self: center; }
+.project-evidence { margin: 13px 0 0; color: var(--project-color, var(--cyan)); font-family: var(--font-measure); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 
 .layout-feature { grid-column: 1 / -1; min-height: 330px; grid-template-columns: 45px minmax(180px, .86fr) minmax(240px, 1.25fr) minmax(145px, .48fr) auto; align-items: center; padding-top: 33px; padding-bottom: 33px; background: rgba(7, 19, 42, .45); }
 .layout-feature .project-title { font-size: clamp(32px, 4vw, 58px); }
@@ -568,6 +581,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .filter-controls button { flex: 1 0 62px; }
   .project-row, .layout-feature { grid-template-columns: 28px minmax(0, 1fr); }
   .row-action { grid-column: 2; justify-self: start; }
+  .row-actions-home { grid-column: 2; display: flex; flex-wrap: wrap; }
   .project-copy { grid-column: 2; }
   .pulse-evidence { grid-column: 1 / -1; }
   .evidence-frame { min-height: 178px; }
@@ -625,7 +639,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
           <h2 id="rail-title">PROJECT DIRECTORY</h2>
         </div>
         <nav aria-label="Project directory" id="rail-nav"><ol class="rail-list" id="rail-list"></ol></nav>
-        <a class="rail-all-link" href="#project-index" id="rail-all-link"><span>/</span><span>VIEW ALL PROJECTS</span><b aria-hidden="true">›</b></a>
+        <a class="rail-all-link" href="/projects/" id="rail-all-link"><span>/</span><span>COMPLETE PROJECT ARCHIVE</span><b aria-hidden="true">›</b></a>
       </aside>
 
       <section class="scope-main" aria-labelledby="portal-title">
@@ -642,13 +656,13 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
         <section class="live-scope" aria-labelledby="live-scope-title">
           <div class="scope-titlebar"><h2 id="live-scope-title">LIVE SIGNAL SCOPE</h2><span class="live-dot"><i></i><span id="live-label">LIVE</span></span></div>
           <div class="scope-plot" aria-hidden="true"><canvas id="scope-wave"></canvas></div>
-          <div class="scope-readout" id="scope-readout"></div>
+          <div class="scope-readout" id="scope-readout"></div>
         </section>
       </section>
 
       <section class="project-index" id="project-index" aria-labelledby="project-index-title">
         <header class="index-head">
-          <div><h2 id="project-index-title">PROJECT SCOPE</h2><p id="index-summary">Nine project frequencies across deployed work and open source.</p></div>
+          <div><h2 id="project-index-title">PROJECT SCOPE</h2><p id="index-summary">Ten project signals, scaled by live evidence, research depth, and study focus.</p></div>
           <div class="filter-controls" role="group" aria-label="Filter projects" id="filter-controls">
             <button type="button" data-filter="all" aria-pressed="true">ALL</button>
             <button type="button" data-filter="live" aria-pressed="false">LIVE</button>
@@ -683,7 +697,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       chooseLanguage: 'Choose portal language',
       railTitle: 'PROJECT DIRECTORY',
       projectDirectory: 'Project directory',
-      railAll: 'VIEW ALL PROJECTS',
+      railAll: 'COMPLETE PROJECT ARCHIVE',
       heroLabel: 'LIVE SYSTEMS · OPEN SOURCE',
       heroTitle: 'DODGE HO.<br>BUILDS IN PUBLIC.',
       heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
@@ -705,6 +719,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       repository: 'PUBLIC REPOSITORY',
       external: 'OPEN REPOSITORY',
       open: 'OPEN PROJECT',
+      caseStudy: 'VIEW CASE STUDY',
       previewOps: 'OPERATIONS',
       previewCustomer: 'CUSTOMER VIEW',
       pulseEvidence: 'PulseBoard interface evidence',
@@ -738,7 +753,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       chooseLanguage: '選擇入口網站語言',
       railTitle: '專案目錄',
       projectDirectory: '專案目錄',
-      railAll: '查看所有專案',
+      railAll: '完整專案檔案',
       heroLabel: '線上系統 · 開源專案',
       heroTitle: '道安瀾。<br>公開構建。',
       heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
@@ -760,6 +775,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       repository: '公開儲存庫',
       external: '開啟儲存庫',
       open: '開啟專案',
+      caseStudy: '查看案例研究',
       previewOps: '營運畫面',
       previewCustomer: '客戶畫面',
       pulseEvidence: 'PulseBoard 介面證據',
@@ -793,7 +809,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       chooseLanguage: '选择门户语言',
       railTitle: '项目目录',
       projectDirectory: '项目目录',
-      railAll: '查看所有项目',
+      railAll: '完整项目档案',
       heroLabel: '在线系统 · 开源项目',
       heroTitle: '道安澜。<br>公开构建。',
       heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
@@ -815,6 +831,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       repository: '公开仓库',
       external: '打开仓库',
       open: '打开项目',
+      caseStudy: '查看案例研究',
       previewOps: '运营界面',
       previewCustomer: '客户界面',
       pulseEvidence: 'PulseBoard 界面证据',
@@ -848,7 +865,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       chooseLanguage: 'ポータル言語を選択',
       railTitle: 'プロジェクト目録',
       projectDirectory: 'プロジェクト目録',
-      railAll: 'すべてのプロジェクト',
+      railAll: '完全なプロジェクト目録',
       heroLabel: 'ライブシステム · オープンソース',
       heroTitle: '道安瀾。<br>公開でつくる。',
       heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
@@ -870,6 +887,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       repository: '公開リポジトリ',
       external: 'リポジトリを開く',
       open: 'プロジェクトを開く',
+      caseStudy: 'ケーススタディを見る',
       previewOps: '運用画面',
       previewCustomer: '顧客画面',
       pulseEvidence: 'PulseBoard インターフェースの根拠',
@@ -896,18 +914,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
     }
   };
 
-  const projects = [
-    { id: 'heatstack', category: 'live', layout: 'feature', color: 'orange', name: 'HeatStack', alias: 'AI 热栈', route: '/heatstack/', action: '/heatstack/', actionKey: 'open', railKeywords: ['Astro', 'AI Skills', 'Windows CLI'], tags: ['Astro', 'AI Skills', 'Windows CLI'] },
-    { id: 'pulseboard', category: 'live', layout: 'feature', color: 'cyan', name: 'PulseBoard', route: '/demo/', action: '/demo/', actionKey: 'open', railKeywords: ['Hono', 'PostgreSQL', 'Redis'], tags: ['Hono', 'PostgreSQL', 'Redis', 'BullMQ', 'Docker'], links: [{ href: '/demo/docs', key: 'docs' }] },
-    { id: 'career', category: 'live', layout: 'major', color: 'orange', name: 'Career Radar', alias: '职海雷达 · キャリアレーダー', route: '/jobs/', action: '/jobs/', actionKey: 'open', railKeywords: ['invite-only', 'inbox', 'digests'], tags: ['invite-only', 'inbox', 'digests'] },
-    { id: 'saa', category: 'study', layout: 'study', color: 'cobalt', name: 'SAA Practice', route: '/saa/', action: '/saa/', actionKey: 'open', railKeywords: ['AWS', 'questions', 'progress'], tags: ['AWS', 'practice', 'progress'] },
-    { id: 'sap', category: 'study', layout: 'study-small', color: 'violet', name: 'SAP Practice', route: '/sap/', action: '/sap/', actionKey: 'open', railKeywords: ['AWS', 'architecture', 'advanced'], tags: ['AWS', 'advanced', 'practice'] },
-    { id: 'ispm', category: 'study', layout: 'quiet', color: 'orange', name: 'ISPM Practice', railLinked: false, railKeywords: ['ITSM', 'study', 'unlinked'], tags: ['ITSM', 'practice', 'progress'] },
-    { id: 'vmd', category: 'source', layout: 'research', color: 'violet', name: 'VMD_cpp', route: 'https://github.com/DodgeHo/VMD_cpp', action: 'https://github.com/DodgeHo/VMD_cpp', actionKey: 'external', railKeywords: ['C++', 'Eigen', 'VMD'], tags: ['C++', 'Eigen', 'signal processing'] },
-    { id: 'pal4', category: 'source', layout: 'source', color: 'orange', name: 'PAL4 translation', alias: 'PAL4_EnglishMod', route: 'https://github.com/DodgeHo/PAL4_EnglishMod', action: 'https://github.com/DodgeHo/PAL4_EnglishMod', actionKey: 'external', railKeywords: ['Python', 'localization', 'MIT'], tags: ['Python', 'localization', 'MIT'] },
-    { id: 'ielts', category: 'source', layout: 'source-compact', color: 'cobalt', name: 'IELTS writing GPT', alias: 'IELTS_writing_GPT', route: 'https://github.com/DodgeHo/IELTS_writing_GPT', action: 'https://github.com/DodgeHo/IELTS_writing_GPT', actionKey: 'external', railKeywords: ['GPT', 'writing', 'Python'], tags: ['GPT', 'writing', 'Python'] },
-    { id: 'rrt', category: 'source', layout: 'source-wide', color: 'cyan', name: 'Dynamic RRT Connect', alias: 'dynamic_rrt_connect', route: 'https://github.com/DodgeHo/dynamic_rrt_connect', action: 'https://github.com/DodgeHo/dynamic_rrt_connect', actionKey: 'external', railKeywords: ['Python', 'robotics', 'RRT'], tags: ['Python', 'robotics', 'planning'] }
-  ];
+  const projects = [{"lookup":"HeatStack","id":"heatstack","category":"live","layout":"feature","color":"orange","name":"HeatStack","alias":"AI 热栈","route":"/heatstack/","action":"/heatstack/","actionKey":"open","railKeywords":["Astro","AI Skills","Windows CLI"],"tags":["Astro","AI Skills","Windows CLI"],"safeSummary":{"en":"A bilingual AI engineering learning hub that turns fast-moving Skill trends into safer installation paths, structured practice, portfolio work, and interview preparation.","zh-Hant":"雙語 AI 工程學習中心，把快速變動的 Skill 趨勢轉化為更安全的安裝路徑、結構化實作、作品集專案與面試準備。","zh-Hans":"双语 AI 工程学习中心，把快速变化的 Skill 趋势转化为更安全的安装路径、结构化练习、作品集项目与面试准备。","ja":"変化の速い AI Skill の動向を、安全な導入、体系的な実践、ポートフォリオ制作、面接準備へつなぐバイリンガル学習ハブです。"},"evidence":["Live demo","Case study","Architecture"],"casePath":"/projects/heatstack/"},{"lookup":"pulseboard","id":"pulseboard","category":"live","layout":"feature","color":"cyan","name":"PulseBoard","route":"/demo/","action":"/demo/","actionKey":"open","railKeywords":["Hono","PostgreSQL","Redis"],"tags":["Hono","PostgreSQL","Redis","BullMQ","Docker"],"safeSummary":{"en":"A production-shaped reliability SaaS portfolio with API-key boundaries, queues, health probes, OpenAPI, and inspectable operational evidence.","zh-Hant":"具備 API 金鑰邊界、佇列、健康探針、OpenAPI 與可檢查運維證據的生產型可靠性 SaaS 作品。","zh-Hans":"具备 API 密钥边界、队列、健康探针、OpenAPI 与可检查运维证据的生产型可靠性 SaaS 作品。","ja":"API キー境界、キュー、ヘルスプローブ、OpenAPI、検証可能な運用証拠を備えた本番志向の信頼性 SaaS ポートフォリオです。"},"evidence":["Live demo","Case study","Architecture","Runbook","ADR","Verification"],"casePath":"/projects/pulseboard/"},{"lookup":"Career Radar","id":"career","category":"live","layout":"major","color":"orange","name":"Career Radar","alias":"职海雷达 · キャリアレーダー","route":"/jobs/","action":"/jobs/","actionKey":"open","railKeywords":["Account isolation","Job inbox","Scheduled digests"],"tags":["Account isolation","Job inbox","Scheduled digests"],"safeSummary":{"en":"An invite-only, account-isolated job discovery and inbox service with saved roles, unread state, and scheduled digests.","zh-Hant":"採邀請制與帳戶隔離的職缺探索及收件匣服務，包含收藏職缺、未讀狀態與排程摘要。","zh-Hans":"采用邀请制与账户隔离的职位探索及收件箱服务，包含收藏职位、未读状态与定时摘要。","ja":"招待制とアカウント分離を採用し、保存求人、未読状態、定期ダイジェストを備えた求人探索・受信箱サービスです。"},"evidence":["Live demo","Case study","Architecture"],"casePath":"/projects/career-radar/"},{"lookup":"aws-saa-learning-skill","id":"saa","category":"study","layout":"study","color":"cobalt","name":"SAA Practice","route":"/saa/","action":"/saa/","actionKey":"open","railKeywords":["Dart","AWS","Question bank"],"tags":["Dart","AWS","Question bank","Progress tracking"],"safeSummary":{"en":"An original public Dart repository in the complete engineering archive. Source history is available for direct inspection on GitHub.","zh-Hant":"完整工程檔案中的原創公開 Dart 儲存庫，可在 GitHub 直接檢查原始碼歷史。","zh-Hans":"完整工程档案中的原创公开 Dart 仓库，可在 GitHub 直接检查源码历史。","ja":"完全なエンジニアリング目録に含まれるオリジナルの公開 Dart リポジトリです。GitHub でソース履歴を確認できます。"},"evidence":["Live demo","Source"],"casePath":null},{"lookup":"SAP Practice","id":"sap","category":"study","layout":"study-small","color":"violet","name":"SAP Practice","route":"/sap/","action":"/sap/","actionKey":"open","railKeywords":["AWS","Architecture","Progress tracking"],"tags":["AWS","Architecture","Progress tracking"],"safeSummary":{"en":"An advanced cloud architecture practice route with progress-aware question sessions.","zh-Hant":"具備進度追蹤的進階雲端架構題庫練習路徑。","zh-Hans":"具备进度跟踪的高级云架构题库练习路径。","ja":"進捗を記録する上級クラウドアーキテクチャ問題演習です。"},"evidence":["Live demo"],"casePath":null},{"id":"ispm","category":"study","layout":"quiet","color":"orange","name":"ISPM Practice","railLinked":false,"railKeywords":["ITSM","study","unlinked"],"tags":["ITSM","practice","progress"],"safeSummary":{"en":"A private study route retained without a public application link.","zh-Hant":"保留但不提供公開應用入口的私人學習路線。","zh-Hans":"保留但不提供公开应用入口的私有学习路线。","ja":"公開アプリへのリンクを持たずに記録した非公開の学習ルートです。"},"evidence":["Unlinked study route"],"actionKey":"external","casePath":null},{"lookup":"VMD_cpp","id":"vmd","category":"source","layout":"research","color":"violet","name":"VMD_cpp","route":"https://github.com/DodgeHo/VMD_cpp","action":"https://github.com/DodgeHo/VMD_cpp","actionKey":"external","railKeywords":["C++","Eigen","Signal processing"],"tags":["C++","Eigen","Signal processing","VMD"],"safeSummary":{"en":"A C++ and Eigen implementation of Variational Mode Decomposition for signal-processing experiments.","zh-Hant":"以 C++ 與 Eigen 實作變分模態分解，用於訊號處理實驗。","zh-Hans":"以 C++ 与 Eigen 实现变分模态分解，用于信号处理实验。","ja":"信号処理実験のための Variational Mode Decomposition を C++ と Eigen で実装しています。"},"evidence":["Source","Research implementation"],"casePath":null},{"lookup":"PAL4_EnglishMod","id":"pal4","category":"source","layout":"source","color":"orange","name":"PAL4 translation","alias":"PAL4_EnglishMod","route":"https://github.com/DodgeHo/PAL4_EnglishMod","action":"https://github.com/DodgeHo/PAL4_EnglishMod","actionKey":"external","railKeywords":["Python","Localization","Game tooling"],"tags":["Python","Localization","Game tooling"],"safeSummary":{"en":"English localization tooling and release work for the PC game Sword and Fairy 4.","zh-Hant":"為 PC 遊戲《仙劍奇俠傳四》製作的英文在地化工具與發布成果。","zh-Hans":"为 PC 游戏《仙剑奇侠传四》制作的英文本地化工具与发布成果。","ja":"PC ゲーム『仙剣奇侠伝四』向けの英語ローカライズ用ツールと公開成果です。"},"evidence":["Source","Released localization"],"casePath":null},{"lookup":"IELTS_writing_GPT","id":"ielts","category":"source","layout":"source-compact","color":"cobalt","name":"IELTS writing GPT","alias":"IELTS_writing_GPT","route":"https://github.com/DodgeHo/IELTS_writing_GPT","action":"https://github.com/DodgeHo/IELTS_writing_GPT","actionKey":"external","railKeywords":["JavaScript","GPT","English learning"],"tags":["JavaScript","GPT","English learning"],"safeSummary":{"en":"A GPT-assisted tool for evaluating and improving IELTS writing drafts.","zh-Hant":"使用 GPT 協助評估與改善 IELTS 寫作草稿的工具。","zh-Hans":"使用 GPT 协助评估与改善 IELTS 写作草稿的工具。","ja":"IELTS ライティング草稿の評価と改善を GPT で支援するツールです。"},"evidence":["Source"],"casePath":null},{"lookup":"dynamic_rrt_connect","id":"rrt","category":"source","layout":"source-wide","color":"cyan","name":"Dynamic RRT Connect","alias":"dynamic_rrt_connect","route":"https://github.com/DodgeHo/dynamic_rrt_connect","action":"https://github.com/DodgeHo/dynamic_rrt_connect","actionKey":"external","railKeywords":["Python","Robotics","RRT Connect"],"tags":["Python","Robotics","RRT Connect","Path planning"],"safeSummary":{"en":"A Python implementation of bidirectional RRT Connect with dynamic-obstacle avoidance.","zh-Hant":"以 Python 實作具動態障礙避讓的雙向 RRT Connect。","zh-Hans":"以 Python 实现具动态障碍避让的双向 RRT Connect。","ja":"動的障害物回避を備えた双方向 RRT Connect の Python 実装です。"},"evidence":["Source","Algorithm implementation"],"casePath":null}];
 
   const localeButtons = Array.from(document.querySelectorAll('[data-locale]'));
   const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
@@ -931,7 +938,7 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
 
   const renderRail = () => {
     railList.innerHTML = projects.map((project, index) => {
-      const keywords = t().railKeywords[project.id] ?? project.railKeywords;
+      const keywords = project.railKeywords;
       const content = `<span class="rail-number">${String(index + 1).padStart(2, '0')}</span><span class="rail-name">${project.name}</span><span class="rail-keywords">${keywords.join(' · ')}</span>`;
       const destination = project.railLinked === false
         ? `<span class="rail-record" aria-label="${project.name}">${content}</span>`
@@ -959,15 +966,17 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   const renderProjects = () => {
     projectList.innerHTML = projects.map((project, index) => {
       const external = project.category === 'source';
-      const action = !project.action ? '' : external
+      const primaryAction = !project.action ? '' : external
         ? `<a class="row-action" href="${project.action}" target="_blank" rel="noreferrer">${t()[project.actionKey]}${iconExternal}</a>`
         : `<a class="row-action" href="${project.action}">${t()[project.actionKey]}</a>`;
+      const caseAction = project.casePath ? `<a class="row-action" href="${project.casePath}">${t().caseStudy}</a>` : '';
+      const action = primaryAction || caseAction ? `<div class="row-actions-home">${caseAction}${primaryAction}</div>` : '';
       const sourceOrRoute = external ? t().repository : t().route;
       const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
       return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
         <div><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
-        <div class="project-copy"><p class="project-description">${t().descriptions[project.id]}</p>${routeLine}<ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
+        <div class="project-copy"><p class="project-description">${project.safeSummary[currentLocale]}</p>${routeLine}<p class="project-evidence">${project.evidence.join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}
       </article>`;

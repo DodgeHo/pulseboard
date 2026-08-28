@@ -15,7 +15,7 @@
       chooseLanguage: 'Choose portal language',
       railTitle: 'PROJECT DIRECTORY',
       projectDirectory: 'Project directory',
-      railAll: 'VIEW ALL PROJECTS',
+      railAll: 'COMPLETE PROJECT ARCHIVE',
       heroLabel: 'LIVE SYSTEMS · OPEN SOURCE',
       heroTitle: 'DODGE HO.<br>BUILDS IN PUBLIC.',
       heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
@@ -37,6 +37,7 @@
       repository: 'PUBLIC REPOSITORY',
       external: 'OPEN REPOSITORY',
       open: 'OPEN PROJECT',
+      caseStudy: 'VIEW CASE STUDY',
       previewOps: 'OPERATIONS',
       previewCustomer: 'CUSTOMER VIEW',
       pulseEvidence: 'PulseBoard interface evidence',
@@ -70,7 +71,7 @@
       chooseLanguage: '選擇入口網站語言',
       railTitle: '專案目錄',
       projectDirectory: '專案目錄',
-      railAll: '查看所有專案',
+      railAll: '完整專案檔案',
       heroLabel: '線上系統 · 開源專案',
       heroTitle: '道安瀾。<br>公開構建。',
       heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
@@ -92,6 +93,7 @@
       repository: '公開儲存庫',
       external: '開啟儲存庫',
       open: '開啟專案',
+      caseStudy: '查看案例研究',
       previewOps: '營運畫面',
       previewCustomer: '客戶畫面',
       pulseEvidence: 'PulseBoard 介面證據',
@@ -125,7 +127,7 @@
       chooseLanguage: '选择门户语言',
       railTitle: '项目目录',
       projectDirectory: '项目目录',
-      railAll: '查看所有项目',
+      railAll: '完整项目档案',
       heroLabel: '在线系统 · 开源项目',
       heroTitle: '道安澜。<br>公开构建。',
       heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
@@ -147,6 +149,7 @@
       repository: '公开仓库',
       external: '打开仓库',
       open: '打开项目',
+      caseStudy: '查看案例研究',
       previewOps: '运营界面',
       previewCustomer: '客户界面',
       pulseEvidence: 'PulseBoard 界面证据',
@@ -180,7 +183,7 @@
       chooseLanguage: 'ポータル言語を選択',
       railTitle: 'プロジェクト目録',
       projectDirectory: 'プロジェクト目録',
-      railAll: 'すべてのプロジェクト',
+      railAll: '完全なプロジェクト目録',
       heroLabel: 'ライブシステム · オープンソース',
       heroTitle: '道安瀾。<br>公開でつくる。',
       heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
@@ -202,6 +205,7 @@
       repository: '公開リポジトリ',
       external: 'リポジトリを開く',
       open: 'プロジェクトを開く',
+      caseStudy: 'ケーススタディを見る',
       previewOps: '運用画面',
       previewCustomer: '顧客画面',
       pulseEvidence: 'PulseBoard インターフェースの根拠',
@@ -228,18 +232,7 @@
     }
   };
 
-  const projects = [
-    { id: 'heatstack', category: 'live', layout: 'feature', color: 'orange', name: 'HeatStack', alias: 'AI 热栈', route: '/heatstack/', action: '/heatstack/', actionKey: 'open', railKeywords: ['Astro', 'AI Skills', 'Windows CLI'], tags: ['Astro', 'AI Skills', 'Windows CLI'] },
-    { id: 'pulseboard', category: 'live', layout: 'feature', color: 'cyan', name: 'PulseBoard', route: '/demo/', action: '/demo/', actionKey: 'open', railKeywords: ['Hono', 'PostgreSQL', 'Redis'], tags: ['Hono', 'PostgreSQL', 'Redis', 'BullMQ', 'Docker'], links: [{ href: '/demo/docs', key: 'docs' }] },
-    { id: 'career', category: 'live', layout: 'major', color: 'orange', name: 'Career Radar', alias: '职海雷达 · キャリアレーダー', route: '/jobs/', action: '/jobs/', actionKey: 'open', railKeywords: ['invite-only', 'inbox', 'digests'], tags: ['invite-only', 'inbox', 'digests'] },
-    { id: 'saa', category: 'study', layout: 'study', color: 'cobalt', name: 'SAA Practice', route: '/saa/', action: '/saa/', actionKey: 'open', railKeywords: ['AWS', 'questions', 'progress'], tags: ['AWS', 'practice', 'progress'] },
-    { id: 'sap', category: 'study', layout: 'study-small', color: 'violet', name: 'SAP Practice', route: '/sap/', action: '/sap/', actionKey: 'open', railKeywords: ['AWS', 'architecture', 'advanced'], tags: ['AWS', 'advanced', 'practice'] },
-    { id: 'ispm', category: 'study', layout: 'quiet', color: 'orange', name: 'ISPM Practice', railLinked: false, railKeywords: ['ITSM', 'study', 'unlinked'], tags: ['ITSM', 'practice', 'progress'] },
-    { id: 'vmd', category: 'source', layout: 'research', color: 'violet', name: 'VMD_cpp', route: 'https://github.com/DodgeHo/VMD_cpp', action: 'https://github.com/DodgeHo/VMD_cpp', actionKey: 'external', railKeywords: ['C++', 'Eigen', 'VMD'], tags: ['C++', 'Eigen', 'signal processing'] },
-    { id: 'pal4', category: 'source', layout: 'source', color: 'orange', name: 'PAL4 translation', alias: 'PAL4_EnglishMod', route: 'https://github.com/DodgeHo/PAL4_EnglishMod', action: 'https://github.com/DodgeHo/PAL4_EnglishMod', actionKey: 'external', railKeywords: ['Python', 'localization', 'MIT'], tags: ['Python', 'localization', 'MIT'] },
-    { id: 'ielts', category: 'source', layout: 'source-compact', color: 'cobalt', name: 'IELTS writing GPT', alias: 'IELTS_writing_GPT', route: 'https://github.com/DodgeHo/IELTS_writing_GPT', action: 'https://github.com/DodgeHo/IELTS_writing_GPT', actionKey: 'external', railKeywords: ['GPT', 'writing', 'Python'], tags: ['GPT', 'writing', 'Python'] },
-    { id: 'rrt', category: 'source', layout: 'source-wide', color: 'cyan', name: 'Dynamic RRT Connect', alias: 'dynamic_rrt_connect', route: 'https://github.com/DodgeHo/dynamic_rrt_connect', action: 'https://github.com/DodgeHo/dynamic_rrt_connect', actionKey: 'external', railKeywords: ['Python', 'robotics', 'RRT'], tags: ['Python', 'robotics', 'planning'] }
-  ];
+  const projects = __FEATURED_PROJECTS_JSON__;
 
   const localeButtons = Array.from(document.querySelectorAll('[data-locale]'));
   const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
@@ -263,7 +256,7 @@
 
   const renderRail = () => {
     railList.innerHTML = projects.map((project, index) => {
-      const keywords = t().railKeywords[project.id] ?? project.railKeywords;
+      const keywords = project.railKeywords;
       const content = `<span class="rail-number">${String(index + 1).padStart(2, '0')}</span><span class="rail-name">${project.name}</span><span class="rail-keywords">${keywords.join(' · ')}</span>`;
       const destination = project.railLinked === false
         ? `<span class="rail-record" aria-label="${project.name}">${content}</span>`
@@ -291,15 +284,17 @@
   const renderProjects = () => {
     projectList.innerHTML = projects.map((project, index) => {
       const external = project.category === 'source';
-      const action = !project.action ? '' : external
+      const primaryAction = !project.action ? '' : external
         ? `<a class="row-action" href="${project.action}" target="_blank" rel="noreferrer">${t()[project.actionKey]}${iconExternal}</a>`
         : `<a class="row-action" href="${project.action}">${t()[project.actionKey]}</a>`;
+      const caseAction = project.casePath ? `<a class="row-action" href="${project.casePath}">${t().caseStudy}</a>` : '';
+      const action = primaryAction || caseAction ? `<div class="row-actions-home">${caseAction}${primaryAction}</div>` : '';
       const sourceOrRoute = external ? t().repository : t().route;
       const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
       return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
         <div><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
-        <div class="project-copy"><p class="project-description">${t().descriptions[project.id]}</p>${routeLine}<ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
+        <div class="project-copy"><p class="project-description">${project.safeSummary[currentLocale]}</p>${routeLine}<p class="project-evidence">${project.evidence.join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}
       </article>`;

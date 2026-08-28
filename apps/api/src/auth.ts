@@ -1,19 +1,15 @@
-import { createHash } from 'node:crypto';
-
 import type { MiddlewareHandler } from 'hono';
 
+import { hashApiKey } from '@pulseboard/core';
 import { prisma } from '@pulseboard/db';
+
+export { hashApiKey } from '@pulseboard/core';
 
 export type ApiVariables = {
   requestId: string;
   userId: string;
   apiKeyId: string;
 };
-
-export function hashApiKey(key: string) {
-  const salt = process.env.API_KEY_HASH_SALT ?? 'local-development-only';
-  return createHash('sha256').update(`${salt}:${key}`).digest('hex');
-}
 
 function readBearerToken(header: string | undefined) {
   if (!header?.startsWith('Bearer ')) return null;

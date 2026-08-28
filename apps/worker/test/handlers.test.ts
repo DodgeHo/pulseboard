@@ -1,4 +1,5 @@
 ﻿import type { PrismaClient } from '@pulseboard/db';
+import type { OperationalMetrics } from '@pulseboard/observability';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -18,7 +19,7 @@ const baseCheck = {
 };
 const baseExecution = {
   id: 'execution_1', idempotencyKey: 'check:check_1:2026-07-30T12:00:00.000Z', status: 'RUNNING',
-  attemptCount: 1, uptimeCheck: baseCheck,
+  attemptCount: 1, leaseExpiresAt: new Date('2026-07-30T12:01:00.000Z'), uptimeCheck: baseCheck,
 };
 
 function createQueuesStub() {
@@ -28,12 +29,20 @@ function createQueuesStub() {
   } satisfies WorkerQueues;
 }
 
+function createMetricsStub() {
+  return {
+    recordUptimeCheck: vi.fn().mockResolvedValue(undefined),
+    recordCheckExecutionLeaseContention: vi.fn().mockResolvedValue(undefined),
+    recordNotificationTerminalFailure: vi.fn().mockResolvedValue(undefined),
+  } satisfies OperationalMetrics;
+}
+
 function createPrismaStub(options: {
   recentStatuses?: Array<'UP' | 'DOWN' | 'DEGRADED'>;
   openIncident?: { id: string; title: string; status: 'OPEN' | 'ACKNOWLEDGED' } | null;
   claimResults?: number[];
   dueChecks?: Array<{ id: string; intervalSeconds: number; nextRunAt: Date }>;
-  pendingExecutions?: Array<{ id: string }>;
+  pendingExecutions?: Array<{ id: string; attemptCount: number }>;
   notification?: Record<string, unknown> | null;
 } = {}) {
   const claimResults = [...(options.claimResults ?? [1])];
@@ -84,6 +93,7 @@ function createHandlers(input: {
   queues?: WorkerQueues;
   runHttpCheck?: HttpCheckRunner;
   notificationProvider?: NotificationProvider;
+  metrics?: OperationalMetrics;
   testHooks?: { afterCheckRunPersisted?: () => Promise<void> };
 }) {
   return createWorkerHandlers({
@@ -108,13 +118,15 @@ describe('worker reliability handlers', () => {
 
   it('atomically records a healthy check result and its idempotent audit/usage records', async () => {
     const prisma = createPrismaStub({ recentStatuses: ['UP'] });
-    await createHandlers({ prisma }).performCheck('execution_1');
+    const metrics = createMetricsStub();
+    await createHandlers({ prisma, metrics }).performCheck('execution_1');
 
     expect(prisma.$transaction).toHaveBeenCalled();
     expect(prisma.checkRun.create).toHaveBeenCalledWith({ data: expect.objectContaining({ idempotencyKey: baseExecution.idempotencyKey, status: 'UP' }) });
     expect(prisma.incident.create).not.toHaveBeenCalled();
     expect(prisma.auditLog.create).toHaveBeenCalledWith({ data: expect.objectContaining({ idempotencyKey: 'audit:check-ran:run_1', action: 'CHECK_RAN' }) });
     expect(prisma.usageMetric.create).toHaveBeenCalledWith({ data: expect.objectContaining({ idempotencyKey: 'usage:check-ran:run_1' }) });
+    expect(metrics.recordUptimeCheck).toHaveBeenCalledWith('UP', 12);
   });
 
   it('opens one incident and durable notification after the unhealthy threshold', async () => {
@@ -145,11 +157,23 @@ describe('worker reliability handlers', () => {
     expect(prisma.checkRun.create).toHaveBeenCalledTimes(1);
   });
 
+  it('records lease contention only when another worker still holds a live execution lease', async () => {
+    const prisma = createPrismaStub({ claimResults: [0] });
+    const metrics = createMetricsStub();
+
+    await createHandlers({ prisma, metrics }).performCheck('execution_1', {
+      jobId: 'job_2',
+      queueName: 'uptime-checks',
+    });
+
+    expect(metrics.recordCheckExecutionLeaseContention).toHaveBeenCalledOnce();
+  });
+
   it('uses compare-and-swap scheduling and a stable execution job id', async () => {
     const scheduledFor = new Date('2026-07-30T11:59:00.000Z');
     const prisma = createPrismaStub({
       dueChecks: [{ id: 'check_1', intervalSeconds: 60, nextRunAt: scheduledFor }],
-      pendingExecutions: [{ id: 'execution_1' }],
+      pendingExecutions: [{ id: 'execution_1', attemptCount: 0 }],
     });
     const queues = createQueuesStub();
     await createHandlers({ prisma, queues }).runDueChecks();
@@ -161,7 +185,21 @@ describe('worker reliability handlers', () => {
     expect(prisma.checkExecution.upsert).toHaveBeenCalledWith(expect.objectContaining({
       where: { idempotencyKey: 'check:check_1:2026-07-30T11:59:00.000Z' },
     }));
-    expect(queues.uptimeChecks.add).toHaveBeenCalledWith('perform-check', { executionId: 'execution_1' }, { jobId: 'check-execution-execution_1' });
+    expect(queues.uptimeChecks.add).toHaveBeenCalledWith('perform-check', { executionId: 'execution_1' }, { jobId: 'check-execution-execution_1-1' });
+  });
+
+  it('uses a fresh dispatch generation after a claimed execution lease expires', async () => {
+    const prisma = createPrismaStub({
+      pendingExecutions: [{ id: 'execution_1', attemptCount: 1 }],
+    });
+    const queues = createQueuesStub();
+    await createHandlers({ prisma, queues }).runDueChecks();
+
+    expect(queues.uptimeChecks.add).toHaveBeenCalledWith(
+      'perform-check',
+      { executionId: 'execution_1' },
+      { jobId: 'check-execution-execution_1-2' },
+    );
   });
 
   it('records a temporary notification failure and schedules a retry', async () => {
@@ -176,9 +214,11 @@ describe('worker reliability handlers', () => {
   it('moves permanent notification failures to dead-letter', async () => {
     const prisma = createPrismaStub({ notification: notificationFixture() });
     const provider = vi.fn().mockRejectedValue(new NotificationDeliveryError('invalid endpoint', true, 400));
-    await createHandlers({ prisma, notificationProvider: provider }).sendNotification('notification_1');
+    const metrics = createMetricsStub();
+    await createHandlers({ prisma, notificationProvider: provider, metrics }).sendNotification('notification_1');
 
     expect(prisma.notification.update).toHaveBeenCalledWith({ where: { id: 'notification_1' }, data: expect.objectContaining({ status: 'DEAD_LETTER', deadLetteredAt: fixedNow }) });
+    expect(metrics.recordNotificationTerminalFailure).toHaveBeenCalledWith('WEBHOOK');
   });
 
   it('releases the execution when the external probe throws before persistence', async () => {
@@ -198,8 +238,10 @@ describe('worker reliability handlers', () => {
 
   it('does not continue the transaction after an injected mid-flight failure and releases the execution for retry', async () => {
     const prisma = createPrismaStub({ recentStatuses: ['DOWN', 'DOWN'] });
+    const metrics = createMetricsStub();
     const handlers = createHandlers({
       prisma,
+      metrics,
       runHttpCheck: vi.fn().mockResolvedValue({ status: 'DOWN', statusCode: 503, latencyMs: 1 }),
       testHooks: { afterCheckRunPersisted: vi.fn().mockRejectedValue(new Error('simulated transaction failure')) },
     });
@@ -207,6 +249,7 @@ describe('worker reliability handlers', () => {
     await expect(handlers.performCheck('execution_1')).rejects.toThrow('simulated transaction failure');
     expect(prisma.incident.create).not.toHaveBeenCalled();
     expect(prisma.auditLog.create).not.toHaveBeenCalled();
+    expect(metrics.recordUptimeCheck).not.toHaveBeenCalled();
     expect(prisma.checkExecution.updateMany).toHaveBeenLastCalledWith({
       where: { id: 'execution_1', status: 'RUNNING', leaseOwner: 'worker_1' },
       data: { status: 'PENDING', leaseOwner: null, leaseExpiresAt: null, lastError: 'simulated transaction failure' },

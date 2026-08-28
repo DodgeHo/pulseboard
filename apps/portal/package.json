@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "sync:github-inventory": "node scripts/sync-github-inventory.mjs",
     "verify": "node scripts/verify-artifact.mjs"
   }
 }
