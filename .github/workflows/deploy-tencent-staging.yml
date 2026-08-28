@@ -20,6 +20,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: tencent-staging
     permissions:
       contents: read
@@ -47,6 +48,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.deploy_ref }}
+
+      - name: Resolve deploy revision
+        id: release
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - uses: pnpm/action-setup@v6
         with:
@@ -95,26 +100,18 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-      - name: Upload public site assets
-        run: |
-          set -euo pipefail
-          tar -C deploy/anlan -czf /tmp/anlan-portal-static.tar.gz \
-            index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant
-          scp /tmp/anlan-portal-static.tar.gz pulseboard-staging:/tmp/anlan-portal-static.tar.gz
-          scp deploy/anlan/demo/index.html pulseboard-staging:/tmp/pulseboard-demo-index.html
-          scp deploy/anlan/demo/frontend/index.html pulseboard-staging:/tmp/pulseboard-demo-frontend-index.html
-          scp deploy/anlan/nginx/anlan.conf pulseboard-staging:/tmp/pulseboard-anlan.conf
-
       - name: Deploy and verify backend on staging host
         env:
           DEPLOY_REF: ${{ inputs.deploy_ref }}
+          DEPLOY_SHA: ${{ steps.release.outputs.sha }}
           PRESERVE_DIRTY_WORKTREE: ${{ inputs.preserve_dirty_worktree }}
         run: |
           set -euo pipefail
-          ssh pulseboard-staging bash -se -- "$DEPLOY_REF" "$PRESERVE_DIRTY_WORKTREE" <<'REMOTE'
+          ssh pulseboard-staging bash -se -- "$DEPLOY_REF" "$PRESERVE_DIRTY_WORKTREE" "$DEPLOY_SHA" <<'REMOTE'
           set -euo pipefail
           DEPLOY_REF="$1"
           PRESERVE_DIRTY_WORKTREE="$2"
+          DEPLOY_SHA="$3"
           cd ~/pulseboard
 
           if [ -n "$(git status --porcelain)" ]; then
@@ -142,7 +139,12 @@ jobs:
           fi
 
           git fetch origin "$DEPLOY_REF"
-          git checkout -B master FETCH_HEAD
+          fetched_revision="$(git rev-parse FETCH_HEAD)"
+          if [ "$fetched_revision" != "$DEPLOY_SHA" ]; then
+            echo "Deploy ref moved after runner checkout: expected $DEPLOY_SHA, fetched $fetched_revision." >&2
+            exit 1
+          fi
+          git checkout -B master "$DEPLOY_SHA"
 
           revision="$(git rev-parse HEAD)"
           export PULSEBOARD_IMAGE="pulseboard:git-$revision"
@@ -237,11 +239,13 @@ jobs:
           sudo cp /etc/nginx/sites-enabled/anlan.conf "$deploy_backup_dir/nginx/sites-enabled-anlan.conf"
 
           sudo install -d -m 0755 /var/www/html/demo/frontend
-          sudo tar --no-same-owner -xzf /tmp/anlan-portal-static.tar.gz -C /var/www/html
-          sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
-          sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
-          sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts
-          sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-enabled/anlan.conf.candidate-$ts
+          tar -C deploy/anlan -cf - \
+            index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant \
+            | sudo tar --no-same-owner -xf - -C /var/www/html
+          sudo install -m 0644 deploy/anlan/demo/index.html /var/www/html/demo/index.html
+          sudo install -m 0644 deploy/anlan/demo/frontend/index.html /var/www/html/demo/frontend/index.html
+          sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts
+          sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-enabled/anlan.conf.candidate-$ts
           sudo mv /etc/nginx/sites-available/anlan.conf.candidate-$ts /etc/nginx/sites-available/anlan.conf
           sudo mv /etc/nginx/sites-enabled/anlan.conf.candidate-$ts /etc/nginx/sites-enabled/anlan.conf
           if ! sudo nginx -t; then

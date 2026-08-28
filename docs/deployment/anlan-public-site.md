@@ -43,9 +43,11 @@ git diff --exit-code -- deploy/anlan
 
 `build:public` first creates the root portal, locale archives, project pages, and discovery metadata, then builds PulseBoard into `deploy/anlan/demo/`. The generated portal remains static and the PulseBoard surfaces remain self-contained HTML artifacts.
 
-## Upload
+## Manual Upload
 
 Use the approved staging SSH alias or replace `<staging-host>` with the approved host. Do not put private keys, passwords, or tokens in this repository.
+
+This path is for a manual recovery when the host does not have the reviewed repository checkout. The GitHub Actions deployment does not upload this approximately 72 MB archive over SSH. It verifies the generated artifacts on the runner, checks out the same reviewed ref on the host, and installs the artifacts from that checkout.
 
 ```bash
 tar -C deploy/anlan -czf /tmp/anlan-portal-static.tar.gz \
@@ -101,6 +103,18 @@ sudo systemctl reload nginx
 ```
 
 Never reload Nginx when `sudo nginx -t` fails.
+
+For the automated workflow, install directly from the checked-out release instead of the `/tmp` upload files:
+
+```bash
+tar -C deploy/anlan -cf - \
+  index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant \
+  | sudo tar --no-same-owner -xf - -C /var/www/html
+sudo install -m 0644 deploy/anlan/demo/index.html /var/www/html/demo/index.html
+sudo install -m 0644 deploy/anlan/demo/frontend/index.html /var/www/html/demo/frontend/index.html
+sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-available/anlan.conf
+sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-enabled/anlan.conf
+```
 
 ## Verification
 
