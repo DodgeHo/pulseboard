@@ -149,6 +149,8 @@ canvas { display: block; }
 
 .topbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
 
+.social-links { display: inline-flex; align-items: center; gap: 8px; }
+
 .profile-link {
   min-height: 44px;
   display: inline-flex;
@@ -166,6 +168,23 @@ canvas { display: block; }
 .profile-link > svg:first-child { width: 18px; height: 18px; color: var(--cyan); }
 .profile-link .external-mark { width: 13px; height: 13px; color: var(--faint); }
 .profile-link:hover { border-color: var(--cyan); background: #08172b; color: var(--ink); }
+
+.github-link {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule);
+  color: var(--violet);
+  text-decoration: none;
+  transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.github-link svg { width: 19px; height: 19px; }
+.github-link:hover { border-color: var(--violet); background: #130d2d; color: #b89dff; }
+.github-link:focus-visible, .profile-link:focus-visible { outline: 2px solid var(--hot); outline-offset: 3px; }
 
 .locale-switcher { display: inline-flex; min-height: 44px; border: 1px solid var(--rule); }
 .locale-switcher button {
@@ -542,7 +561,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
 @media (max-width: 510px) {
   .portal-shell { width: 100%; border: 0; }
   .topbar { padding: 13px 14px; }
-  .profile-link { flex: 1 1 100%; justify-content: center; }
+  .social-links { width: 100%; }
+  .profile-link { flex: 1 1 auto; min-width: 0; justify-content: center; }
   .locale-switcher { width: 100%; }
   .locale-switcher button { flex: 1; min-width: 0; padding-right: 4px; padding-left: 4px; }
   .rail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }

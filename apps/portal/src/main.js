@@ -1,5 +1,6 @@
 (() => {
   const profileUrl = 'https://www.linkedin.com/in/lang-he-a94655120/';
+  const githubUrl = 'https://github.com/DodgeHo';
   const localeStorageKey = 'anlan.portal.locale';
   const localeHashAliases = { '#en': 'en', '#zh': 'zh-Hans', '#zh-hant': 'zh-Hant', '#zh-hans': 'zh-Hans', '#ja': 'ja' };
   const localeCanonicalHashes = { en: '#en', 'zh-Hant': '#zh-hant', 'zh-Hans': '#zh-hans', ja: '#ja' };
@@ -11,6 +12,8 @@
       topbar: 'DODGE / PROJECT FREQUENCIES',
       profile: 'My LinkedIn profile',
       profileAria: 'Open My LinkedIn profile (external)',
+      githubAria: 'Open my GitHub profile (external)',
+      githubTitle: 'My GitHub profile',
       skip: 'Skip to project index',
       chooseLanguage: 'Choose portal language',
       railTitle: 'PROJECT DIRECTORY',
@@ -67,6 +70,8 @@
       topbar: '專案訊號頻段',
       profile: '我的 LinkedIn 個人資料',
       profileAria: '開啟我的 LinkedIn 個人資料（外部連結）',
+      githubAria: '開啟我的 GitHub 個人資料（外部連結）',
+      githubTitle: '我的 GitHub 個人資料',
       skip: '跳至專案目錄',
       chooseLanguage: '選擇入口網站語言',
       railTitle: '專案目錄',
@@ -123,6 +128,8 @@
       topbar: '项目信号频段',
       profile: '我的 LinkedIn 个人资料',
       profileAria: '打开我的 LinkedIn 个人资料（外部链接）',
+      githubAria: '打开我的 GitHub 个人资料（外部链接）',
+      githubTitle: '我的 GitHub 个人资料',
       skip: '跳至项目索引',
       chooseLanguage: '选择门户语言',
       railTitle: '项目目录',
@@ -179,6 +186,8 @@
       topbar: 'プロジェクト周波数',
       profile: '私の LinkedIn プロフィール',
       profileAria: '私の LinkedIn プロフィールを開く（外部リンク）',
+      githubAria: '私の GitHub プロフィールを開く（外部リンク）',
+      githubTitle: '私の GitHub プロフィール',
       skip: 'プロジェクト一覧へ移動',
       chooseLanguage: 'ポータル言語を選択',
       railTitle: 'プロジェクト目録',
@@ -373,6 +382,8 @@
     document.querySelector('#locale-switcher').setAttribute('aria-label', t().chooseLanguage);
     document.querySelector('#profile-link-label').textContent = t().profile;
     document.querySelector('.profile-link').setAttribute('aria-label', t().profileAria);
+    document.querySelector('#github-link').setAttribute('aria-label', t().githubAria);
+    document.querySelector('#github-link').setAttribute('title', t().githubTitle);
     document.querySelector('#rail-title').textContent = t().railTitle;
     document.querySelector('#rail-nav').setAttribute('aria-label', t().projectDirectory);
     document.querySelector('#rail-all-link span:nth-child(2)').textContent = t().railAll;
@@ -480,6 +491,7 @@
     if (hashLocale) applyLocale(hashLocale);
   });
   document.querySelector('.profile-link').href = profileUrl;
+  document.querySelector('#github-link').href = githubUrl;
   applyLocale(localeFromHash() || safeStoredLocale());
   drawWave();
   drawLattice();
