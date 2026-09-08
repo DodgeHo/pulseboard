@@ -116,6 +116,21 @@ jobs:
           completion_marker="$HOME/.pulseboard-deploy-complete-$DEPLOY_SHA"
           rm -f -- "$completion_marker"
 
+          backup_root="$HOME/pulseboard-deploy-backups"
+          if [ -d "$backup_root" ]; then
+            mapfile -t stale_backups < <(
+              find "$backup_root" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' \
+                | sort -n \
+                | awk 'NR>6 { sub(/^[^ ]+ /, ""); print }'
+            )
+            if [ "${#stale_backups[@]}" -gt 0 ]; then
+              rm -rf -- "${stale_backups[@]}"
+            fi
+          fi
+
+          git reflog expire --expire=now --all || true
+          git gc --prune=now --quiet || true
+
           if [ -n "$(git status --porcelain)" ]; then
             if [ "$PRESERVE_DIRTY_WORKTREE" != "true" ]; then
               echo "Refusing to deploy over a dirty staging worktree." >&2
