@@ -8,8 +8,10 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, '../../..');
 const artifactPath = resolve(repoRoot, 'deploy/anlan/demo/index.html');
 const frontendArtifactPath = resolve(repoRoot, 'deploy/anlan/demo/frontend/index.html');
+const reviewArtifactPath = resolve(repoRoot, 'deploy/anlan/demo/review/index.html');
 const html = await readFile(artifactPath, 'utf8');
 const frontendHtml = await readFile(frontendArtifactPath, 'utf8');
+const reviewHtml = await readFile(reviewArtifactPath, 'utf8');
 const failures = [];
 
 function expect(name, condition) {
@@ -41,6 +43,7 @@ const frontendLocaleNeedles = [
 
 expect('generated root artifact exists', html.length > 10000);
 expect('generated frontend artifact exists', frontendHtml.length > 10000);
+expect('generated review artifact exists', reviewHtml.length > 10000);
 
 expect('root homepage uses Live Ops Console title', html.includes('<title>PulseBoard - Live Ops Console</title>'));
 expect('root homepage uses Live Ops Console brand', html.includes('Live Ops Console'));
@@ -67,6 +70,15 @@ expect('frontend customer site includes workflow sections', frontendHtml.include
 expect('frontend customer site includes release and lifecycle sections', frontendHtml.includes('Release posture') && frontendHtml.includes('Lifecycle'));
 expect('frontend customer site includes pricing and FAQ sections', frontendHtml.includes('Starter') && frontendHtml.includes('Platform') && frontendHtml.includes('Built to be inspected.'));
 expect('frontend customer site surfaces backend infrastructure', frontendHtml.includes('PostgreSQL / Redis + BullMQ') && frontendHtml.includes('/demo/health/ready') && frontendHtml.includes('/demo/openapi.json'));
+
+expect('review page has its own title and canonical', reviewHtml.includes('<title>PulseBoard - Engineering Review Path</title>') && reviewHtml.includes('https://anlan.store/demo/review/'));
+expect('review page starts with recruiter-friendly summary', reviewHtml.includes('For recruiters and hiring managers') && reviewHtml.includes('Reliable software, explained clearly.') && reviewHtml.includes('Start with the 60-second overview'));
+expect('review page links preserved public routes', ['/demo/', '/demo/frontend/', '/demo/docs', '/demo/openapi.json', '/demo/health/live', '/demo/health/ready'].every((path) => reviewHtml.includes(path)));
+expect('review page includes review path and claim evidence', reviewHtml.includes('A 10-minute engineering review path') && reviewHtml.includes('Durable incident processing') && reviewHtml.includes('Tenant boundaries') && reviewHtml.includes('Operational readiness') && reviewHtml.includes('Deployment discipline'));
+expect('review page includes honest boundaries', reviewHtml.includes('production-shaped portfolio project') && reviewHtml.includes('Mock-compatible transports') && reviewHtml.includes('Backup/restore and rollback are rehearsals') && reviewHtml.includes('AWS stays plan-only'));
+expect('review page includes mobile-safe architecture section', reviewHtml.includes('review-architecture') && reviewHtml.includes('Browser / static surface') && reviewHtml.includes('Audit / metrics / outbox'));
+expect('review page includes all public probe paths', ['/demo/health/live', '/demo/health/ready', '/demo/openapi.json', '/demo/docs'].every((path) => reviewHtml.includes(path)));
+expect('review page includes all locale identifiers', localeOrderNeedle && reviewHtml.includes('zh-TW') && reviewHtml.includes('zh-CN') && reviewHtml.includes('ja') && reviewHtml.includes('ar'));
 
 for (const needle of frontendLocaleNeedles) {
   expect('frontend customer site includes translated text: ' + needle, frontendHtml.includes(needle));
@@ -103,6 +115,17 @@ if (frontendScriptMatch?.groups?.script) {
   expect('generated frontend inline script parses (' + (check.stderr || check.stdout || 'node --check failed') + ')', check.status === 0);
 }
 
+const reviewScriptMatch = reviewHtml.match(/<script type="module">(?<script>[\s\S]*)<\/script>/);
+expect('generated review inline script can be extracted', Boolean(reviewScriptMatch?.groups?.script));
+
+if (reviewScriptMatch?.groups?.script) {
+  const tempScript = join(tmpdir(), 'pulseboard-review-artifact-' + Date.now() + '.js');
+  await writeFile(tempScript, reviewScriptMatch.groups.script, 'utf8');
+  const check = spawnSync(process.execPath, ['--check', tempScript], { encoding: 'utf8' });
+  await rm(tempScript, { force: true });
+  expect('generated review inline script parses (' + (check.stderr || check.stdout || 'node --check failed') + ')', check.status === 0);
+}
+
 if (failures.length > 0) {
   console.error('PulseBoard web artifact verification failed:');
   for (const failure of failures) console.error('- ' + failure);
@@ -111,3 +134,4 @@ if (failures.length > 0) {
 
 console.log('PulseBoard web artifact verified: ' + artifactPath);
 console.log('PulseBoard frontend artifact verified: ' + frontendArtifactPath);
+console.log('PulseBoard review artifact verified: ' + reviewArtifactPath);

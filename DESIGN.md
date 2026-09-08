@@ -191,3 +191,29 @@ The form language is rectilinear and precise. Controls, locale segments, tags, i
 - Add a root-page link or action for ISPM, even though `/ispm/` remains deployed.
 - Make canvas the sole source of identity, project, status, route, or language state.
 - Infer a visitor’s language from the browser or probe external GitHub repositories as deployed routes.
+
+## Route-Specific System: `/hire/`
+
+The hiring profile is an intentional exception to the root portal's Signal Lattice visual system. It is a serious reading surface for recruiters and hiring managers, not another project directory, application dashboard, marketing landing page, or online resume. This exception applies only to `/hire/` and its four locale variants; the homepage and project archive retain the system above without modification.
+
+### Visual Direction
+
+- Use a warm-white paper field, charcoal text, neutral one-pixel rules, and one muted navy interaction color.
+- Use the existing self-hosted Inter family for editorial typography. Reserve monospace for elapsed-time markers and direct source identifiers.
+- Keep the reading width near 1120px, with a narrower prose measure and generous but disciplined margins.
+- Lead with the localized name, target capability directions, and a concise first-person engineering thesis.
+- Structure evidence as ruled editorial records, a semantic table, numbered review steps, and footnote-like boundary notes.
+- Use square geometry throughout. Do not add cards, shadows, gradients, illustrations, decorative animation, dashboards, signal graphics, or colored project families.
+
+### Content Boundaries
+
+- Role names describe directions being pursued, never employment history or acquired titles.
+- Do not add a timeline, education history, skill ratings, portrait, resume download, email address, application form, private data, or unsupported commercial outcomes.
+- PulseBoard must remain described as a production-shaped portfolio project. Mock-compatible notifications, absent AWS resources, and local or CI recovery rehearsals remain explicit.
+- The public review route must retain the PulseBoard operations surface, customer surface, API documentation, OpenAPI JSON, project record, GitHub profile, and LinkedIn profile.
+
+### Interaction and Access
+
+- The header contains only a quiet return link and the four-language selector.
+- Links use text labels rather than decorative icon controls. Keyboard focus uses a high-contrast navy outline.
+- Preserve semantic heading order, the table structure, the skip link, localized link names, responsive stacked table records, and reduced-motion behavior.

@@ -89,6 +89,26 @@ async function verifyPortal() {
   expect('portal has JSON-LD', body.includes('type="application/ld+json"'));
 }
 
+async function verifyHirePages() {
+  for (const [path, lang, marker] of [
+    ['/hire/', 'en', 'Dodge Ho / Lang He'],
+    ['/zh-hant/hire/', 'zh-Hant', 'Dodge Ho / 道安瀾'],
+    ['/zh-hans/hire/', 'zh-Hans', 'Dodge Ho / 道安澜'],
+    ['/ja/hire/', 'ja', '道安瀾（ドッジ・ホー）']
+  ]) {
+    const { response, body } = await fetchText(path);
+    expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
+    expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'));
+    expect(path + ' uses the expected locale', body.includes(`<html lang="${lang}">`) && body.includes(marker));
+    expect(path + ' exposes the complete recruiter reading path', ['id="approach"', 'id="evidence"', 'id="evidence-index"', 'id="review"', 'id="boundaries"', 'id="contact"'].every((value) => body.includes(value)));
+    expect(path + ' contains PulseBoard engineering evidence', ['Hono API', 'PostgreSQL', 'Redis', 'BullMQ', 'OpenAPI', 'worker recovery'].every((value) => body.includes(value)));
+    expect(path + ' contains honest public boundaries', ['production-shaped portfolio project', 'mock-compatible', 'AWS', 'RPO/RTO'].every((value) => body.includes(value)));
+    expect(path + ' contains required review links', ['/demo/', '/demo/frontend/', '/demo/docs', '/demo/openapi.json', 'https://github.com/DodgeHo', 'https://www.linkedin.com/in/lang-he-a94655120/'].every((value) => body.includes(`href="${value}"`)));
+    expect(path + ' has no hiring form or email leak', !body.includes('<form') && !body.includes('mailto:'));
+    verifyMetadata(body, path);
+  }
+}
+
 async function verifyArchive(path, languageMarker) {
   const { response, body } = await fetchText(path);
   expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
@@ -142,6 +162,13 @@ async function verifyPulseBoard() {
   const app = await fetchText('/demo/frontend/');
   expect('PulseBoard customer surface returns 200', app.response.status === 200, app.response.status + ' ' + app.response.statusText);
   expect('PulseBoard customer surface retains app shell', app.body.includes('PulseBoard') || app.body.includes('root'));
+
+  const review = await fetchText('/demo/review/');
+  expect('PulseBoard engineering review returns 200', review.response.status === 200, review.response.status + ' ' + review.response.statusText);
+  expect('PulseBoard engineering review is HTML', (review.response.headers.get('content-type') ?? '').includes('text/html'));
+  expect('PulseBoard engineering review has review title', review.body.includes('PulseBoard - Engineering Review Path'));
+  expect('PulseBoard engineering review links public evidence', ['/demo/health/live', '/demo/health/ready', '/demo/openapi.json', '/demo/docs'].every((path) => review.body.includes(path)));
+  expect('PulseBoard engineering review states honest boundaries', review.body.includes('production-shaped portfolio project') && review.body.includes('AWS stays plan-only'));
 
   const live = await fetchJson('/demo/health/live');
   expect('liveness returns 200', live.response.status === 200, live.response.status + ' ' + live.response.statusText);
@@ -218,6 +245,7 @@ async function verifyWwwRedirect() {
 
 try {
   await verifyPortal();
+  await verifyHirePages();
   await verifyProjectLibrary();
   await verifyPulseBoard();
   await verifyApplicationRoutes();
@@ -236,4 +264,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log('ANLAN.STORE portal, complete project archive, flagship cases, and preserved application routes verified.');
+console.log('ANLAN.STORE portal, multilingual hiring review, complete project archive, flagship cases, and preserved application routes verified.');

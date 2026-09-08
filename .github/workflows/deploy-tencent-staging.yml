@@ -199,7 +199,7 @@ jobs:
           deploy_backup_dir="$HOME/pulseboard-deploy-backups/$ts/public-surface"
           mkdir -p "$deploy_backup_dir/nginx"
 
-          portal_paths=(index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant)
+          portal_paths=(index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant)
           existing_portal_paths=()
           for portal_path in "${portal_paths[@]}"; do
             if [ -e "/var/www/html/$portal_path" ]; then
@@ -214,6 +214,9 @@ jobs:
           fi
           if [ -f /var/www/html/demo/frontend/index.html ]; then
             sudo cp /var/www/html/demo/frontend/index.html /var/www/html/demo/frontend/index.html.backup-$ts
+          fi
+          if [ -f /var/www/html/demo/review/index.html ]; then
+            sudo cp /var/www/html/demo/review/index.html /var/www/html/demo/review/index.html.backup-$ts
           fi
           for nginx_site in /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-enabled/anlan.conf; do
             if [ ! -f "$nginx_site" ]; then
@@ -240,12 +243,13 @@ jobs:
           sudo cp /etc/nginx/sites-available/anlan.conf "$deploy_backup_dir/nginx/sites-available-anlan.conf"
           sudo cp /etc/nginx/sites-enabled/anlan.conf "$deploy_backup_dir/nginx/sites-enabled-anlan.conf"
 
-          sudo install -d -m 0755 /var/www/html/demo/frontend
+          sudo install -d -m 0755 /var/www/html/demo/frontend /var/www/html/demo/review
           tar -C deploy/anlan -cf - \
-            index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant \
+            index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant \
             | sudo tar --no-same-owner -xf - -C /var/www/html
           sudo install -m 0644 deploy/anlan/demo/index.html /var/www/html/demo/index.html
           sudo install -m 0644 deploy/anlan/demo/frontend/index.html /var/www/html/demo/frontend/index.html
+          sudo install -m 0644 deploy/anlan/demo/review/index.html /var/www/html/demo/review/index.html
           sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts
           sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-enabled/anlan.conf.candidate-$ts
           sudo mv /etc/nginx/sites-available/anlan.conf.candidate-$ts /etc/nginx/sites-available/anlan.conf
@@ -267,6 +271,13 @@ jobs:
           printf 'Local Nginx /demo/ status: %s\n' "$local_demo_status"
           if [ "$local_demo_status" != "200" ]; then
             echo "Reloaded Nginx is not serving the reviewed /demo/ contract locally." >&2
+            exit 1
+          fi
+
+          local_review_status=$(curl -k -sS -o /tmp/pulseboard-review.html -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/demo/review/)
+          printf 'Local Nginx /demo/review/ status: %s\n' "$local_review_status"
+          if [ "$local_review_status" != "200" ] || ! grep -q 'Review this system' /tmp/pulseboard-review.html; then
+            echo "Reloaded Nginx is not serving the recruiter review page." >&2
             exit 1
           fi
 

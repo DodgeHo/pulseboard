@@ -13,10 +13,14 @@ const host = process.env.PUBLIC_PREVIEW_HOST ?? '127.0.0.1';
 const files = new Map([
   ['/', resolve(deployRoot, 'index.html')],
   ['/demo/', resolve(deployRoot, 'demo/index.html')],
+  ['/demo/review/', resolve(deployRoot, 'demo/review/index.html')],
   ['/demo/frontend/', resolve(deployRoot, 'demo/frontend/index.html')]
 ]);
 
-const generatedPrefixes = ['/projects/', '/zh-hans/projects/', '/zh-hant/projects/', '/ja/projects/'];
+const generatedPrefixes = [
+  '/hire/', '/zh-hans/hire/', '/zh-hant/hire/', '/ja/hire/',
+  '/projects/', '/zh-hans/projects/', '/zh-hant/projects/', '/ja/projects/'
+];
 const generatedFiles = new Set(['/sitemap.xml', '/robots.txt', '/feed.xml']);
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',

@@ -1,6 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { hireCopy, hireLinks } from "../content/hire-copy.mjs";
 import { assetTitles, localeConfig, siteCopy } from "../content/site-copy.mjs";
 import { loadCatalog, localeList } from "./lib/catalog.mjs";
 
@@ -27,11 +28,13 @@ const escapeJson = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 const localePath = (locale, suffix) => `${localeConfig[locale].prefix}${suffix}` || "/";
 const absoluteUrl = (path) => `${siteUrl}${path}`;
 
-const [template, portalCssRaw, portalJsRaw, archiveCssRaw, archiveJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
+const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCssRaw, archiveJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
   readText(resolve(sourceRoot, "index.html")),
+  readText(resolve(sourceRoot, "hire.html")),
   readText(resolve(sourceRoot, "styles.css")),
   readText(resolve(sourceRoot, "main.js")),
   readText(resolve(sourceRoot, "archive.css")),
+  readText(resolve(sourceRoot, "hire.css")),
   readText(resolve(sourceRoot, "archive.js")),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-ops.png"), "image/png"),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-customer.png"), "image/png"),
@@ -99,6 +102,9 @@ const portalJs = portalJsRaw
 const archiveCss = archiveCssRaw
   .replace("__INTER_REGULAR_FONT__", interRegular)
   .replace("__INTER_SEMIBOLD_FONT__", interSemibold);
+const hireCss = hireCssRaw
+  .replace("__INTER_REGULAR_FONT__", interRegular)
+  .replace("__INTER_SEMIBOLD_FONT__", interSemibold);
 
 let homeArtifact = template
   .replace("__PORTAL_CSS__", portalCss)
@@ -148,6 +154,49 @@ const basePage = ({ locale, suffix, title, description, body, type = "website", 
     <meta property="og:type" content="${type}"><meta property="og:title" content="${escapeHtml(title)} · ANLAN.STORE"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
     <style>${archiveCss}</style>${jsonLd ? `<script type="application/ld+json">${escapeJson(jsonLd)}</script>` : ""}
   </head><body><a class="archive-skip" href="#main">${escapeHtml(siteCopy[locale].skip)}</a><div class="archive-shell">${topbar(locale, suffix)}${body}<footer class="archive-footer"><span>${escapeHtml(siteCopy[locale].footer)}</span><a href="${localePath(locale, "/projects/")}">${escapeHtml(siteCopy[locale].backArchive)}</a></footer></div>${languageHashRedirect(suffix)}${script ? `<script>${script}</script>` : ""}</body></html>`;
+};
+
+const hireHref = (locale, key) => {
+  if (key === "home") return homeLocaleHref(locale);
+  const href = hireLinks[key];
+  if (!href) throw new Error(`Unknown hire link: ${key}`);
+  return key.endsWith("Record") ? localePath(locale, href) : href;
+};
+
+const hireAnchor = (locale, key, label, className = "text-link") => {
+  const href = hireHref(locale, key);
+  const external = href.startsWith("https://");
+  return `<a class="${className}" href="${href}"${external ? ' target="_blank" rel="noreferrer"' : ""}>${escapeHtml(label)}</a>`;
+};
+
+const hireSectionHead = ([title, description]) => `<header class="section-head"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(description)}</p></header>`;
+
+const hirePage = (locale) => {
+  const copy = hireCopy[locale];
+  const suffix = "/hire/";
+  const canonical = absoluteUrl(localePath(locale, suffix));
+  const body = `<a class="hire-skip" href="#main">${escapeHtml(copy.skip)}</a><div class="hire-shell">
+    <header class="hire-topbar"><a class="home-link" href="${homeLocaleHref(locale)}">${escapeHtml(copy.backHome)}</a><nav class="locale-links" aria-label="${escapeHtml(copy.languageLabel)}">${localeList.map((candidate) => `<a href="${localePath(candidate, suffix)}"${candidate === locale ? ' aria-current="page"' : ""}>${localeConfig[candidate].short}</a>`).join("")}</nav></header>
+    <main id="main">
+      <section class="hire-hero" aria-labelledby="hire-title"><div class="identity-column"><h1 id="hire-title">${escapeHtml(copy.name)}</h1><div class="thesis">${copy.thesis.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}</div></div><aside class="target-directions"><p>${escapeHtml(copy.targetNote)}</p><ul>${copy.targets.map((target) => `<li>${escapeHtml(target)}</li>`).join("")}</ul></aside></section>
+      <section class="hire-section approach-section" id="approach">${hireSectionHead(copy.sections.approach)}<div class="approach-copy">${copy.approachParagraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}</div></section>
+      <section class="hire-section evidence-section" id="evidence">${hireSectionHead(copy.sections.evidence)}<div class="evidence-list">${copy.evidenceItems.map(([name, kind, text, label, key], index) => `<article class="evidence-record${index === 0 ? " evidence-record-primary" : ""}"><header><h3>${escapeHtml(name)}</h3><p>${escapeHtml(kind)}</p></header><div class="evidence-body"><p>${escapeHtml(text)}</p>${hireAnchor(locale, key, label, "record-link")}</div></article>`).join("")}</div><div class="source-index"><p>${escapeHtml(copy.sourceLabel)}</p><div>${copy.sourceLinks.map(([label, key]) => hireAnchor(locale, key, label, "source-link")).join("")}</div></div></section>
+      <section class="hire-section index-section" id="evidence-index">${hireSectionHead(copy.sections.index)}<div class="evidence-table-wrap"><table class="evidence-table"><thead><tr>${copy.tableHeaders.map((header) => `<th scope="col">${escapeHtml(header)}</th>`).join("")}</tr></thead><tbody>${copy.tableRows.map(([capability, project, evidence, label, key]) => `<tr><td data-label="${escapeHtml(copy.tableHeaders[0])}">${escapeHtml(capability)}</td><td data-label="${escapeHtml(copy.tableHeaders[1])}">${escapeHtml(project)}</td><td data-label="${escapeHtml(copy.tableHeaders[2])}">${escapeHtml(evidence)}</td><td data-label="${escapeHtml(copy.tableHeaders[3])}">${hireAnchor(locale, key, label)}</td></tr>`).join("")}</tbody></table></div></section>
+      <section class="hire-section review-section" id="review">${hireSectionHead(copy.sections.review)}<ol class="review-list">${copy.reviewSteps.map(([time, label, description, key]) => `<li><span class="review-time">${escapeHtml(time)}</span><div><h3>${hireAnchor(locale, key, label, "review-link")}</h3><p>${escapeHtml(description)}</p></div></li>`).join("")}</ol></section>
+      <section class="hire-section boundary-section" id="boundaries">${hireSectionHead(copy.sections.boundaries)}<ol class="boundary-list">${copy.boundaries.map(([title, text]) => `<li><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></li>`).join("")}</ol></section>
+      <section class="hire-section contact-section" id="contact">${hireSectionHead(copy.sections.contact)}<nav class="contact-links" aria-label="${escapeHtml(copy.sections.contact[0])}">${copy.contacts.map(([label, key]) => hireAnchor(locale, key, label, "contact-link")).join("")}</nav></section>
+    </main><footer class="hire-footer"><span>${escapeHtml(copy.footer)}</span><span>${escapeHtml(copy.footerNote)}</span></footer></div>`;
+  const jsonLd = { "@context": "https://schema.org", "@type": "ProfilePage", name: copy.title, description: copy.description, url: canonical, mainEntity: { "@type": "Person", name: "Dodge Ho", alternateName: ["Lang He", "道安澜", "道安瀾"], sameAs: [hireLinks.linkedin, hireLinks.github] } };
+  return hireTemplate
+    .replace("__HTML_LANG__", localeConfig[locale].htmlLang)
+    .replaceAll("__DESCRIPTION__", escapeHtml(copy.description))
+    .replaceAll("__TITLE__", escapeHtml(copy.title))
+    .replaceAll("__CANONICAL__", canonical)
+    .replace("__HREFLANG__", hreflangLinks(suffix))
+    .replace("__JSON_LD__", escapeJson(jsonLd))
+    .replace("__HIRE_CSS__", hireCss)
+    .replace("__HIRE_BODY__", body)
+    .replace("__LANGUAGE_REDIRECT__", languageHashRedirect(suffix));
 };
 
 const icons = {
@@ -228,6 +277,11 @@ await writeOutput("index.html", homeArtifact);
 
 const sitemapPaths = ["/"];
 for (const locale of localeList) {
+  const hireSuffix = "/hire/";
+  const hireArtifact = hirePage(locale);
+  ensureResolved(hireArtifact, `${locale} hire page`);
+  await writeOutput(`${localePath(locale, hireSuffix).replace(/^\//, "")}index.html`, hireArtifact);
+  sitemapPaths.push(localePath(locale, hireSuffix));
   const archiveSuffix = "/projects/";
   await writeOutput(`${localePath(locale, archiveSuffix).replace(/^\//, "")}index.html`, archivePage(locale));
   sitemapPaths.push(localePath(locale, archiveSuffix));
@@ -246,7 +300,7 @@ for (const locale of localeList) {
   }
 }
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...new Set(sitemapPaths)].map((path) => `  <url><loc>${escapeHtml(absoluteUrl(path))}</loc><lastmod>2026-08-17</lastmod></url>`).join("\n")}\n</urlset>\n`;
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...new Set(sitemapPaths)].map((path) => `  <url><loc>${escapeHtml(absoluteUrl(path))}</loc><lastmod>${path.endsWith("/hire/") ? "2026-09-07" : "2026-08-17"}</lastmod></url>`).join("\n")}\n</urlset>\n`;
 const robots = `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`;
 const feedItems = [bySlug.get("heatstack"), bySlug.get("pulseboard"), bySlug.get("career-radar")].filter(Boolean).map((project) => `<item><title>${escapeHtml(project.name)}</title><link>${escapeHtml(absoluteUrl(projectDetailSuffix(project)))}</link><guid>${escapeHtml(absoluteUrl(projectDetailSuffix(project)))}</guid><pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate><description>${escapeHtml(project.safeSummary.en)}</description></item>`).join("");
 const feed = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>ANLAN.STORE Project Updates</title><link>${siteUrl}/projects/</link><description>Durable engineering evidence and project case studies by Dodge Ho.</description>${feedItems}</channel></rss>\n`;
@@ -257,7 +311,8 @@ await writeOutput("feed.xml", feed);
 for (const privateName of privateNames) {
   const escapedName = privateName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const privateUrlPattern = new RegExp(`https?://(?:www\\.)?github\\.com/DodgeHo/${escapedName}(?:[/?#\\s\"']|$)`, "i");
-  for (const content of [homeArtifact, sitemap, feed]) {
+  const hireArtifacts = localeList.map((locale) => hirePage(locale));
+  for (const content of [homeArtifact, sitemap, feed, ...hireArtifacts]) {
     if (privateUrlPattern.test(content)) throw new Error(`Generated core artifact leaks private repository URL: ${privateName}`);
   }
 }

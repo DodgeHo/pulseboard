@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://anlan.store/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/hire/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://anlan.store/projects/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/heatstack/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/heatstack/architecture/</loc><lastmod>2026-08-17</lastmod></url>
@@ -70,6 +71,7 @@
   <url><loc>https://anlan.store/projects/pathplanning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/pdfplumber/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/rpca/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hant/hire/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/heatstack/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/heatstack/architecture/</loc><lastmod>2026-08-17</lastmod></url>
@@ -139,6 +141,7 @@
   <url><loc>https://anlan.store/zh-hant/projects/pathplanning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/pdfplumber/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/rpca/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hans/hire/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/heatstack/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/heatstack/architecture/</loc><lastmod>2026-08-17</lastmod></url>
@@ -208,6 +211,7 @@
   <url><loc>https://anlan.store/zh-hans/projects/pathplanning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/pdfplumber/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/rpca/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/ja/hire/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/heatstack/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/heatstack/architecture/</loc><lastmod>2026-08-17</lastmod></url>

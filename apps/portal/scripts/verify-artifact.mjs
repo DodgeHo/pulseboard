@@ -104,6 +104,28 @@ async function verifyArchive(root, relativePath, locale) {
   verifyPageMetadata(artifact, `${locale} archive`);
 }
 
+async function verifyHirePage(root, relativePath, locale) {
+  const artifact = await read(root, relativePath);
+  const expectedLang = { en: "en", "zh-Hant": "zh-Hant", "zh-Hans": "zh-Hans", ja: "ja" }[locale];
+  assert(artifact.includes(`<html lang="${expectedLang}">`), `${relativePath} has the wrong document language`);
+  assert(artifact.includes('class="hire-skip"') && artifact.includes('href="#main"'), `${relativePath} is missing its skip link`);
+  assert(artifact.includes('id="approach"') && artifact.includes('id="evidence"') && artifact.includes('id="evidence-index"') && artifact.includes('id="review"') && artifact.includes('id="boundaries"') && artifact.includes('id="contact"'), `${relativePath} is missing the recruiter reading path`);
+  const expectedName = { en: "Dodge Ho / Lang He", "zh-Hant": "Dodge Ho / 道安瀾", "zh-Hans": "Dodge Ho / 道安澜", ja: "道安瀾（ドッジ・ホー）" }[locale];
+  assert(artifact.includes(`<h1 id="hire-title">${expectedName}</h1>`), `${relativePath} is missing the localized profile name`);
+  assert(artifact.includes('class="evidence-table"') && artifact.includes('class="review-list"') && artifact.includes('class="boundary-list"'), `${relativePath} is missing its semantic evidence structures`);
+  assert(!artifact.includes("hire-mark") && !artifact.includes("reading-path") && !artifact.includes("target-panel"), `${relativePath} still contains the discarded dashboard composition`);
+  for (const fact of ["Hono API", "PostgreSQL", "Redis", "BullMQ", "OpenAPI", "VMD_cpp", "PAL4_EnglishMod", "IELTS_writing_GPT", "Dynamic RRT Connect", "mock-compatible", "AWS", "RPO/RTO"]) {
+    assert(artifact.includes(fact), `${relativePath} is missing required evidence or boundary: ${fact}`);
+  }
+  for (const href of ["/demo/", "/demo/frontend/", "/demo/docs", "/demo/openapi.json", "https://github.com/DodgeHo", "https://www.linkedin.com/in/lang-he-a94655120/"]) {
+    assert(artifact.includes(`href="${href}"`), `${relativePath} is missing review link ${href}`);
+  }
+  assert(!artifact.includes("<form"), `${relativePath} must not publish a hiring form`);
+  assert(!artifact.includes("mailto:"), `${relativePath} must not publish an unconfirmed email address`);
+  assert(artifact.includes('"@type":"ProfilePage"') && !artifact.includes('"jobTitle"'), `${relativePath} has unsafe or incomplete profile JSON-LD`);
+  verifyPageMetadata(artifact, `${locale} hire page`);
+}
+
 async function verifyGeneratedPages(root) {
   const home = await read(root, "index.html");
   assert(home.includes("ANLAN.STORE") && home.includes('id="signal-lattice"'), "Homepage lost composition C identity");
@@ -119,6 +141,7 @@ async function verifyGeneratedPages(root) {
 
   for (const locale of localeList) {
     const prefix = localePrefixes[locale];
+    await verifyHirePage(root, `${prefix}hire/index.html`, locale);
     await verifyArchive(root, `${prefix}projects/index.html`, locale);
     for (const slug of flagshipSlugs) {
       const detail = await read(root, `${prefix}projects/${slug}/index.html`);
@@ -134,6 +157,7 @@ async function verifyGeneratedPages(root) {
   const robots = await read(root, "robots.txt");
   const feed = await read(root, "feed.xml");
   for (const slug of flagshipSlugs) assert(sitemap.includes(`https://anlan.store/projects/${slug}/`), `Sitemap is missing ${slug}`);
+  for (const path of ["/hire/", "/zh-hant/hire/", "/zh-hans/hire/", "/ja/hire/"]) assert(sitemap.includes(`https://anlan.store${path}`), `Sitemap is missing ${path}`);
   assert(!repositories.filter((repository) => repository.visibility === "private").some((repository) => sitemap.includes(`/projects/${repository.slug}/`)), "Sitemap includes an unpublished private project page");
   assert(robots.includes("Sitemap: https://anlan.store/sitemap.xml"), "robots.txt is missing the sitemap URL");
   assert(feed.includes("ANLAN.STORE Project Updates") && flagshipSlugs.every((slug) => feed.includes(`/projects/${slug}/`)), "RSS feed is missing flagship project updates");

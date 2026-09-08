@@ -25,6 +25,7 @@ PulseBoard remains a complete project, but its public surface moves under `/demo
 | Route | Purpose |
 | --- | --- |
 | `/` | Anlan project portal |
+| `/hire/` | Recruiter-focused engineering evidence and ten-minute review path |
 | `/heatstack/` | HeatStack bilingual AI engineering learning hub |
 | `/demo/` | PulseBoard Live Ops Console |
 | `/demo/frontend/` | PulseBoard customer-facing product surface |
@@ -52,6 +53,8 @@ The project portal supports four complete interface locales:
 Locale selection is visible, keyboard-operable, persisted only after an explicit visitor choice, and updates the document language. The portal must not infer a first-visit locale from browser preferences, IP location, or route.
 
 Shareable language hashes provide deterministic deep links: `/#en`, `/#zh-hant`, `/#zh-hans`, and `/#ja`. The shorter `/#zh` alias resolves to Simplified Chinese. A recognized language hash overrides a stored preference for that visit without persisting a new preference; unrelated hashes such as `#project-heatstack` keep their existing anchor behavior.
+
+The hiring review is generated as a separate static page in every portal locale: `/hire/`, `/zh-hant/hire/`, `/zh-hans/hire/`, and `/ja/hire/`. It defaults to English, reuses the portal's explicit locale mechanism, and must not change the homepage composition or route semantics. Its role labels are target directions rather than employment claims. The page publishes only verifiable project evidence and explicitly states that PulseBoard is a production-shaped portfolio project, its notification provider is mock-compatible, AWS resources were not created, and recovery exercises are local or CI rehearsals rather than production RPO/RTO proof.
 
 ## Project Inventory
 

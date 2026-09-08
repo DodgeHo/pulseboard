@@ -5,8 +5,10 @@ This runbook covers the existing `anlan.store` host only. It does not create or 
 ## Public Route Contract
 
 - Project portal: `https://anlan.store/`
+- Recruiter review: `https://anlan.store/hire/` with `/zh-hant/hire/`, `/zh-hans/hire/`, and `/ja/hire/` locale variants
 - PulseBoard operations surface: `https://anlan.store/demo/`
 - PulseBoard customer surface: `https://anlan.store/demo/frontend/`
+- PulseBoard recruiter review: `https://anlan.store/demo/review/`
 - PulseBoard API docs: `https://anlan.store/demo/docs`
 - PulseBoard OpenAPI JSON: `https://anlan.store/demo/openapi.json`
 - PulseBoard readiness: `https://anlan.store/demo/health/ready`
@@ -21,9 +23,10 @@ Legacy PulseBoard paths such as `/frontend/`, `/docs`, `/openapi.json`, `/health
 
 | Surface | Repository artifact | Server target |
 | --- | --- | --- |
-| Project portal | `deploy/anlan/index.html`, locale archives, project pages, sitemap, RSS, and robots metadata | `/var/www/html/` |
+| Project portal | `deploy/anlan/index.html`, hiring review pages, locale archives, project pages, sitemap, RSS, and robots metadata | `/var/www/html/` |
 | PulseBoard operations | `deploy/anlan/demo/index.html` | `/var/www/html/demo/index.html` |
 | PulseBoard customer UI | `deploy/anlan/demo/frontend/index.html` | `/var/www/html/demo/frontend/index.html` |
+| PulseBoard recruiter review | `deploy/anlan/demo/review/index.html` | `/var/www/html/demo/review/index.html` |
 | Nginx route contract | `deploy/anlan/nginx/anlan.conf` | `/etc/nginx/sites-available/anlan.conf` and `/etc/nginx/sites-enabled/anlan.conf` |
 
 The portal source is under `apps/portal`. PulseBoard web source remains under `apps/web`. The API remains bound to `127.0.0.1:4000` on the host and Nginx rewrites the public `/demo/` routes to the existing internal Hono routes.
@@ -41,7 +44,7 @@ pnpm verify:artifacts
 git diff --exit-code -- deploy/anlan
 ```
 
-`build:public` first creates the root portal, locale archives, project pages, and discovery metadata, then builds PulseBoard into `deploy/anlan/demo/`. The generated portal remains static and the PulseBoard surfaces remain self-contained HTML artifacts.
+`build:public` first creates the root portal, localized hiring review, locale archives, project pages, and discovery metadata, then builds PulseBoard into `deploy/anlan/demo/`. The generated portal remains static and the PulseBoard surfaces remain self-contained HTML artifacts.
 
 ## Manual Upload
 
@@ -51,10 +54,11 @@ This path is for a manual recovery when the host does not have the reviewed repo
 
 ```bash
 tar -C deploy/anlan -czf /tmp/anlan-portal-static.tar.gz \
-  index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant
+  index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant
 scp /tmp/anlan-portal-static.tar.gz <staging-host>:/tmp/anlan-portal-static.tar.gz
 scp deploy/anlan/demo/index.html <staging-host>:/tmp/pulseboard-demo-index.html
 scp deploy/anlan/demo/frontend/index.html <staging-host>:/tmp/pulseboard-demo-frontend-index.html
+scp deploy/anlan/demo/review/index.html <staging-host>:/tmp/pulseboard-demo-review-index.html
 scp deploy/anlan/nginx/anlan.conf <staging-host>:/tmp/pulseboard-anlan.conf
 ```
 
@@ -67,7 +71,7 @@ ts=$(date -u +%Y%m%dT%H%M%SZ)
 deploy_backup_dir="$HOME/pulseboard-deploy-backups/$ts/public-surface"
 mkdir -p "$deploy_backup_dir/nginx"
 
-portal_paths=(index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant)
+portal_paths=(index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant)
 existing_portal_paths=()
 for portal_path in "${portal_paths[@]}"; do
   if [ -e "/var/www/html/$portal_path" ]; then
@@ -83,6 +87,9 @@ fi
 if [ -f /var/www/html/demo/frontend/index.html ]; then
   sudo cp /var/www/html/demo/frontend/index.html /var/www/html/demo/frontend/index.html.backup-$ts
 fi
+if [ -f /var/www/html/demo/review/index.html ]; then
+  sudo cp /var/www/html/demo/review/index.html /var/www/html/demo/review/index.html.backup-$ts
+fi
 if [ -f /etc/nginx/sites-available/anlan.conf ]; then
   sudo cp /etc/nginx/sites-available/anlan.conf /etc/nginx/sites-available/anlan.conf.backup-$ts
 fi
@@ -90,10 +97,11 @@ if [ -f /etc/nginx/sites-enabled/anlan.conf ]; then
   sudo cp /etc/nginx/sites-enabled/anlan.conf /etc/nginx/sites-enabled/anlan.conf.backup-$ts
 fi
 
-sudo install -d -m 0755 /var/www/html/demo/frontend
+sudo install -d -m 0755 /var/www/html/demo/frontend /var/www/html/demo/review
 sudo tar --no-same-owner -xzf /tmp/anlan-portal-static.tar.gz -C /var/www/html
 sudo install -m 0644 /tmp/pulseboard-demo-index.html /var/www/html/demo/index.html
 sudo install -m 0644 /tmp/pulseboard-demo-frontend-index.html /var/www/html/demo/frontend/index.html
+sudo install -m 0644 /tmp/pulseboard-demo-review-index.html /var/www/html/demo/review/index.html
 sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-available/anlan.conf.candidate-$ts
 sudo install -m 0644 /tmp/pulseboard-anlan.conf /etc/nginx/sites-enabled/anlan.conf.candidate-$ts
 sudo mv /etc/nginx/sites-available/anlan.conf.candidate-$ts /etc/nginx/sites-available/anlan.conf
@@ -108,10 +116,11 @@ For the automated workflow, install directly from the checked-out release instea
 
 ```bash
 tar -C deploy/anlan -cf - \
-  index.html feed.xml robots.txt sitemap.xml projects ja zh-hans zh-hant \
+  index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant \
   | sudo tar --no-same-owner -xf - -C /var/www/html
 sudo install -m 0644 deploy/anlan/demo/index.html /var/www/html/demo/index.html
 sudo install -m 0644 deploy/anlan/demo/frontend/index.html /var/www/html/demo/frontend/index.html
+sudo install -m 0644 deploy/anlan/demo/review/index.html /var/www/html/demo/review/index.html
 sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-available/anlan.conf
 sudo install -m 0644 deploy/anlan/nginx/anlan.conf /etc/nginx/sites-enabled/anlan.conf
 ```
@@ -136,8 +145,13 @@ Useful manual checks:
 
 ```bash
 curl -I https://anlan.store/
+curl -I https://anlan.store/hire/
+curl -I https://anlan.store/zh-hant/hire/
+curl -I https://anlan.store/zh-hans/hire/
+curl -I https://anlan.store/ja/hire/
 curl -I https://anlan.store/demo/
 curl -I https://anlan.store/demo/frontend/
+curl -I https://anlan.store/demo/review/
 curl -fsS https://anlan.store/demo/health/live
 curl -fsS https://anlan.store/demo/health/ready
 curl -I https://anlan.store/demo/docs
@@ -155,8 +169,10 @@ sudo docker compose -f docker-compose.production.example.yml ps
 Expected results:
 
 - `/` renders the `ANLAN.STORE` project directory and links all five deployed projects.
+- `/hire/` and its three localized variants render the recruiter review page without changing the homepage.
 - `/demo/` renders the PulseBoard operations console.
 - `/demo/frontend/` renders the multilingual customer surface.
+- `/demo/review/` renders the recruiter-oriented engineering review path.
 - `/demo/health/live` returns `status: ok` and `/demo/health/ready` returns `status: ready`.
 - `/demo/openapi.json` describes `/demo/health/*` and `/demo/api/v1/*` as public paths.
 - `/demo/api/v1/workspaces` returns `401` without an API key.
@@ -172,6 +188,7 @@ Restore all artifacts from the same timestamp, validate Nginx, then reload:
 sudo install -m 0644 /var/www/html/index.html.backup-<timestamp> /var/www/html/index.html
 sudo install -m 0644 /var/www/html/demo/index.html.backup-<timestamp> /var/www/html/demo/index.html
 sudo install -m 0644 /var/www/html/demo/frontend/index.html.backup-<timestamp> /var/www/html/demo/frontend/index.html
+sudo install -m 0644 /var/www/html/demo/review/index.html.backup-<timestamp> /var/www/html/demo/review/index.html
 sudo install -m 0644 /etc/nginx/sites-available/anlan.conf.backup-<timestamp> /etc/nginx/sites-available/anlan.conf
 sudo install -m 0644 /etc/nginx/sites-enabled/anlan.conf.backup-<timestamp> /etc/nginx/sites-enabled/anlan.conf
 sudo nginx -t
