@@ -274,9 +274,10 @@ jobs:
             exit 1
           fi
 
-          local_review_status=$(curl -k -sS -o /tmp/pulseboard-review.html -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/demo/review/)
+          local_review_status=$(curl -k -sS -o /dev/null -w '%{http_code}' --resolve anlan.store:443:127.0.0.1 https://anlan.store/demo/review/)
+          local_review_html=$(curl -k -fsS --resolve anlan.store:443:127.0.0.1 https://anlan.store/demo/review/)
           printf 'Local Nginx /demo/review/ status: %s\n' "$local_review_status"
-          if [ "$local_review_status" != "200" ] || ! grep -q 'data-route="pulseboard-review"' /tmp/pulseboard-review.html; then
+          if [ "$local_review_status" != "200" ] || ! printf '%s' "$local_review_html" | grep -q 'data-route="pulseboard-review"'; then
             echo "Reloaded Nginx is not serving the recruiter review page." >&2
             exit 1
           fi
