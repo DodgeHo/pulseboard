@@ -27,6 +27,8 @@ const escapeHtml = (value = "") => String(value)
 const escapeJson = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 const localePath = (locale, suffix) => `${localeConfig[locale].prefix}${suffix}` || "/";
 const absoluteUrl = (path) => `${siteUrl}${path}`;
+const isExternalHref = (href = "") => /^https?:\/\//i.test(href);
+const linkAttrs = (href = "") => isExternalHref(href) ? ' target="_blank" rel="noreferrer"' : "";
 
 const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCssRaw, archiveJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
   readText(resolve(sourceRoot, "index.html")),
@@ -64,31 +66,49 @@ const genericPrivateSummary = {
 
 const homeDefinitions = [
   { lookup: "HeatStack", id: "heatstack", category: "live", layout: "feature", color: "orange", name: "HeatStack", alias: "AI 热栈", route: "/heatstack/", action: "/heatstack/", actionKey: "open" },
-  { lookup: "pulseboard", id: "pulseboard", category: "live", layout: "feature", color: "cyan", name: "PulseBoard", route: "/demo/", action: "/demo/", actionKey: "open" },
+  { lookup: "TapPhysics", id: "tapphysics", category: "live", layout: "major", color: "cyan", name: "TapPhysics", route: "/tapphysics/", action: "/tapphysics/", actionKey: "open" },
   { lookup: "Career Radar", id: "career", category: "live", layout: "major", color: "orange", name: "Career Radar", alias: "职海雷达 · キャリアレーダー", route: "/jobs/", action: "/jobs/", actionKey: "open" },
+  { lookup: "PuzzleWear", id: "puzzlewear", category: "live", layout: "study", color: "violet", name: "PuzzleWear", actionKey: "open" },
+  { lookup: "CWC", id: "cwc", category: "source", layout: "study-small", color: "orange", name: "CWC" },
+  { lookup: "pulseboard", id: "pulseboard", category: "live", layout: "feature", color: "cyan", name: "PulseBoard", route: "/demo/", action: "/demo/", actionKey: "open" },
   { lookup: "aws-saa-learning-skill", id: "saa", category: "study", layout: "study", color: "cobalt", name: "SAA Practice", route: "/saa/", action: "/saa/", actionKey: "open" },
   { lookup: "SAP Practice", id: "sap", category: "study", layout: "study-small", color: "violet", name: "SAP Practice", route: "/sap/", action: "/sap/", actionKey: "open" },
-  { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", railLinked: false, railKeywords: ["ITSM", "study", "unlinked"], tags: ["ITSM", "practice", "progress"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
-  { lookup: "VMD_cpp", id: "vmd", category: "source", layout: "research", color: "violet", name: "VMD_cpp" },
-  { lookup: "PAL4_EnglishMod", id: "pal4", category: "source", layout: "source", color: "orange", name: "PAL4 translation", alias: "PAL4_EnglishMod" },
+  { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", visibility: "private", privateRepository: false, closedSource: true, railLinked: false, railKeywords: ["ITSM", "study", "closed source"], tags: ["ITSM", "practice", "closed source"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
+  { lookup: "PAL4_EnglishMod", id: "pal4", category: "source", layout: "source", color: "orange", name: "PAL4 translation", alias: "PAL4_EnglishMod", homepageActions: [{ href: "https://dodgeho.github.io/PAL4_EnglishMod/", key: "homepage" }] },
   { lookup: "IELTS_writing_GPT", id: "ielts", category: "source", layout: "source-compact", color: "cobalt", name: "IELTS writing GPT", alias: "IELTS_writing_GPT" },
-  { lookup: "dynamic_rrt_connect", id: "rrt", category: "source", layout: "source-wide", color: "cyan", name: "Dynamic RRT Connect", alias: "dynamic_rrt_connect" }
+  { lookup: "dynamic_rrt_connect", id: "rrt", category: "source", layout: "source-wide", color: "cyan", name: "Dynamic RRT Connect", alias: "dynamic_rrt_connect" },
+  { lookup: "VMD_cpp", id: "vmd", category: "source", layout: "research", color: "violet", name: "VMD", family: "vmd", familyMembers: ["VMD_cpp", "VMD_2D_python", "VMD_2D_cpp"], actionKey: "open" },
+  { lookup: "CEEMDAN_cpp", id: "ceemdan", category: "source", layout: "research", color: "cobalt", name: "CEEMDAN" },
+  { lookup: "DevEnglish", id: "devenglish", category: "live", layout: "source", color: "cyan", name: "DevEnglish", actionKey: "open" }
 ];
 
 const homeProjects = homeDefinitions.map((definition) => {
   const project = definition.lookup ? byName.get(definition.lookup) : null;
   if (definition.lookup && !project) throw new Error(`Missing home project: ${definition.lookup}`);
-  const sourceAction = definition.category === "source" ? project.githubUrl : definition.action;
+  const familyMembers = (definition.familyMembers || []).map((name) => {
+    const member = byName.get(name);
+    if (!member) throw new Error(`Missing family member: ${name}`);
+    return { name: member.name, githubUrl: member.githubUrl, skills: member.skills };
+  });
+  const sourceAction = familyMembers.length
+    ? null
+    : definition.category === "source" ? project.githubUrl : definition.action || project?.liveRoutes?.[0] || null;
   return {
     ...definition,
-    route: definition.route || project?.githubUrl,
+    route: familyMembers.length ? null : definition.route || project?.githubUrl,
     action: sourceAction,
     actionKey: definition.actionKey || "external",
+    actionExternal: Boolean(sourceAction && isExternalHref(sourceAction)),
+    homepageActions: definition.homepageActions || [],
     railKeywords: definition.railKeywords || project.skills.slice(0, 3),
     tags: definition.tags || project.skills,
     safeSummary: definition.safeSummary || project.safeSummary,
     evidence: definition.evidence || project.evidence,
-    casePath: project?.publishCaseStudy ? `/projects/${project.slug}/` : null
+    casePath: project?.publishCaseStudy ? `/projects/${project.slug}/` : null,
+    visibility: definition.visibility || project?.visibility || "public",
+    privateRepository: Boolean(definition.privateRepository ?? project?.privateRepository),
+    closedSource: Boolean(definition.closedSource ?? project?.closedSource),
+    familyMembers
   };
 });
 
@@ -140,6 +160,7 @@ const topbar = (locale, suffix) => {
     <p class="archive-context">${escapeHtml(copy.context)}</p>
     <div class="archive-actions">
       <a class="archive-profile" href="https://www.linkedin.com/in/lang-he-a94655120/" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 3.4A1.8 1.8 0 1 1 5.2 7a1.8 1.8 0 0 1 0-3.6ZM3.7 8.4h3V20h-3V8.4Zm4.9 0h2.9V10c.4-.8 1.5-1.9 3.5-1.9 3.7 0 4.4 2.4 4.4 5.6V20h-3v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V20h-3V8.4Z" fill="currentColor"/></svg><span>${escapeHtml(copy.profile)}</span></a>
+      <a class="archive-profile" href="https://github.com/DodgeHo" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4a9.6 9.6 0 0 0-3 18.7c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-4.8 0-1.1.4-1.9 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.6 1a9 9 0 0 1 4.8 0c1.8-1.3 2.6-1 2.6-1 .5 1.3.2 2.3.1 2.6.7.7 1 1.5 1 2.6 0 3.7-2.3 4.5-4.6 4.8.4.3.8 1 .8 2v2.3c0 .3.2.6.7.5A9.6 9.6 0 0 0 12 2.4Z" fill="currentColor"/></svg><span>GitHub</span></a>
       <nav class="locale-links" aria-label="Language">${localeList.map((candidate) => `<a href="${localePath(candidate, suffix)}"${candidate === locale ? ' aria-current="page"' : ""}>${localeConfig[candidate].short}</a>`).join("")}</nav>
     </div>
   </header>`;
@@ -147,13 +168,14 @@ const topbar = (locale, suffix) => {
 
 const basePage = ({ locale, suffix, title, description, body, type = "website", script = "", jsonLd = null }) => {
   const canonical = absoluteUrl(localePath(locale, suffix));
+  const footerIcp = siteCopy[locale].icp ? `<span>${escapeHtml(siteCopy[locale].icp)}</span>` : "";
   return `<!doctype html><html lang="${localeConfig[locale].htmlLang}"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="${escapeHtml(description)}"><meta name="theme-color" content="#060817">
     <title>${escapeHtml(title)} · ANLAN.STORE</title><link rel="canonical" href="${canonical}">${hreflangLinks(suffix)}
     <meta property="og:type" content="${type}"><meta property="og:title" content="${escapeHtml(title)} · ANLAN.STORE"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
     <style>${archiveCss}</style>${jsonLd ? `<script type="application/ld+json">${escapeJson(jsonLd)}</script>` : ""}
-  </head><body><a class="archive-skip" href="#main">${escapeHtml(siteCopy[locale].skip)}</a><div class="archive-shell">${topbar(locale, suffix)}${body}<footer class="archive-footer"><span>${escapeHtml(siteCopy[locale].footer)}</span><a href="${localePath(locale, "/projects/")}">${escapeHtml(siteCopy[locale].backArchive)}</a></footer></div>${languageHashRedirect(suffix)}${script ? `<script>${script}</script>` : ""}</body></html>`;
+  </head><body><a class="archive-skip" href="#main">${escapeHtml(siteCopy[locale].skip)}</a><div class="archive-shell">${topbar(locale, suffix)}${body}<footer class="archive-footer"><span>${escapeHtml(siteCopy[locale].footer)}</span>${footerIcp}<a href="${localePath(locale, "/projects/")}">${escapeHtml(siteCopy[locale].backArchive)}</a></footer></div>${languageHashRedirect(suffix)}${script ? `<script>${script}</script>` : ""}</body></html>`;
 };
 
 const hireHref = (locale, key) => {
@@ -209,17 +231,18 @@ const projectDetailSuffix = (project) => `/projects/${project.slug}/`;
 const archiveRow = (project, locale, index) => {
   const copy = siteCopy[locale];
   const isPrivate = project.visibility === "private";
+  const isLocked = Boolean(project.privateRepository);
   const detailAvailable = !isPrivate || project.publishCaseStudy;
   const searchable = [project.name, project.safeSummary[locale], ...project.skills].join(" ").toLocaleLowerCase();
   const actions = [
-    ...project.liveRoutes.map((route) => `<a class="row-action" href="${route}">${escapeHtml(copy.live)}</a>`),
+    ...project.liveRoutes.map((route) => `<a class="row-action" href="${route}"${linkAttrs(route)}>${escapeHtml(copy.live)}</a>`),
     detailAvailable ? `<a class="row-action" href="${localePath(locale, projectDetailSuffix(project))}">${escapeHtml(project.publishCaseStudy ? copy.caseStudy : copy.details)}</a>` : "",
     project.githubUrl ? `<a class="row-action" href="${project.githubUrl}" target="_blank" rel="noreferrer">${escapeHtml(copy.github)}${icons.external}</a>` : "",
-    isPrivate ? `<span class="locked-state">${icons.lock}${escapeHtml(copy.locked)}</span>` : ""
+    isLocked ? `<span class="locked-state">${icons.lock}${escapeHtml(copy.locked)}</span>` : ""
   ].filter(Boolean).join("");
   return `<article class="archive-row" data-project-row data-category="${project.category}" data-origin="${project.origin}" data-visibility="${project.visibility}" data-featured="${project.featured}" data-score="${project.score}" data-updated="${project.updatedAt || ""}" data-name="${escapeHtml(project.name)}" data-search="${escapeHtml(searchable)}">
     <span class="row-index" data-row-index>${String(index + 1).padStart(2, "0")}</span>
-    <div class="row-name"><h3>${escapeHtml(project.name)}</h3><div class="row-flags"><span class="row-flag">${escapeHtml(isPrivate ? copy.private : copy.public)}</span><span class="row-flag is-origin">${escapeHtml(project.origin === "fork" ? copy.fork : copy.original)}</span>${project.featured ? `<span class="row-flag">${escapeHtml(copy.filters.featured)}</span>` : ""}</div></div>
+    <div class="row-name"><h3>${escapeHtml(project.name)}</h3><div class="row-flags"><span class="row-flag">${escapeHtml(isPrivate ? copy.private : copy.public)}</span><span class="row-flag is-origin">${escapeHtml(project.origin === "fork" ? copy.fork : copy.original)}</span>${project.closedSource ? `<span class="row-flag is-closed">${escapeHtml(copy.closedSource)}</span>` : ""}${project.featured ? `<span class="row-flag">${escapeHtml(copy.filters.featured)}</span>` : ""}</div></div>
     <div class="row-copy"><p>${escapeHtml(project.safeSummary[locale])}</p><ul class="row-skills">${project.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul></div>
     <p class="row-evidence"><strong>${escapeHtml(copy.evidence)}</strong>${project.evidence.map(escapeHtml).join("<br>")}</p>
     <div class="row-actions">${actions}</div>
@@ -248,14 +271,18 @@ const detailPage = (project, locale) => {
   const suffix = projectDetailSuffix(project);
   const study = caseStudies[project.slug];
   const actionLinks = [
-    ...project.liveRoutes.map((route) => `<a href="${route}">${escapeHtml(copy.live)}</a>`),
+    ...project.liveRoutes.map((route) => `<a href="${route}"${linkAttrs(route)}>${escapeHtml(copy.live)}</a>`),
     project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noreferrer">${escapeHtml(copy.github)}</a>` : ""
   ].filter(Boolean).join("");
   const mainContent = study
     ? sectionOrder.map((key) => `<section class="case-section"><h2>${escapeHtml(sectionLabel(copy, key))}</h2><p>${escapeHtml(study.sections[key][locale])}</p></section>`).join("")
     : `<section class="case-section"><h2>${escapeHtml(copy.metadata)}</h2><p>${escapeHtml(copy.sourceRecord)}</p></section><section class="case-section"><h2>${escapeHtml(copy.technologies)}</h2><p>${escapeHtml(project.skills.join(" · "))}</p></section><section class="case-section"><h2>${escapeHtml(copy.evidence)}</h2><p>${escapeHtml(project.evidence.join(" · "))}</p></section>`;
   const assets = study?.assets || [];
-  const aside = `<aside class="case-aside"><h2>${escapeHtml(copy.metadata)}</h2><dl class="archive-stats"><div><dt>${escapeHtml(copy.status)}</dt><dd>${escapeHtml(project.visibility === "private" ? copy.private : project.origin === "fork" ? copy.fork : copy.original)}</dd></div><div><dt>${escapeHtml(copy.updated)}</dt><dd>${escapeHtml(project.updatedAt?.slice(0, 10) || copy.noDate)}</dd></div></dl>${assets.length ? `<h2>${escapeHtml(copy.assets)}</h2><ul class="asset-nav">${assets.map((asset) => `<li><a href="${localePath(locale, `${suffix}${asset}/`)}">${escapeHtml(assetTitles[asset][locale])}</a></li>`).join("")}</ul>` : ""}<div class="related"><h2>${escapeHtml(copy.related)}</h2>${relatedProjects(project).map((related) => `<a href="${localePath(locale, projectDetailSuffix(related))}">${escapeHtml(related.name)}</a>`).join("")}</div></aside>`;
+  const status = [
+    project.privateRepository ? copy.private : project.visibility === "private" ? copy.private : project.origin === "fork" ? copy.fork : copy.original,
+    project.closedSource ? copy.closedSource : ""
+  ].filter(Boolean).join(" · ");
+  const aside = `<aside class="case-aside"><h2>${escapeHtml(copy.metadata)}</h2><dl class="archive-stats"><div><dt>${escapeHtml(copy.status)}</dt><dd>${escapeHtml(status)}</dd></div><div><dt>${escapeHtml(copy.updated)}</dt><dd>${escapeHtml(project.updatedAt?.slice(0, 10) || copy.noDate)}</dd></div></dl>${assets.length ? `<h2>${escapeHtml(copy.assets)}</h2><ul class="asset-nav">${assets.map((asset) => `<li><a href="${localePath(locale, `${suffix}${asset}/`)}">${escapeHtml(assetTitles[asset][locale])}</a></li>`).join("")}</ul>` : ""}<div class="related"><h2>${escapeHtml(copy.related)}</h2>${relatedProjects(project).map((related) => `<a href="${localePath(locale, projectDetailSuffix(related))}">${escapeHtml(related.name)}</a>`).join("")}</div></aside>`;
   const body = `<main id="main"><section class="case-hero"><h1>${escapeHtml(project.name)}</h1><p class="case-summary">${escapeHtml(project.safeSummary[locale])}</p><div class="case-actions">${actionLinks}<a href="${localePath(locale, "/projects/")}">${escapeHtml(copy.backArchive)}</a></div></section><div class="detail-main"><article class="case-content">${mainContent}</article>${aside}</div></main>`;
   const jsonLd = { "@context": "https://schema.org", "@type": study ? "TechArticle" : "CreativeWork", headline: project.name, description: project.safeSummary[locale], dateModified: study?.updatedAt || project.updatedAt || snapshot.syncedAt, url: absoluteUrl(localePath(locale, suffix)), author: { "@type": "Person", name: "Dodge Ho" } };
   return basePage({ locale, suffix, title: project.name, description: project.safeSummary[locale], body, type: "article", jsonLd });
@@ -277,6 +304,10 @@ await writeOutput("index.html", homeArtifact);
 
 const sitemapPaths = ["/"];
 for (const locale of localeList) {
+  if (locale !== "en") {
+    await writeOutput(`${localeConfig[locale].prefix.replace(/^\//, "")}/index.html`, homeArtifact);
+    sitemapPaths.push(localeConfig[locale].prefix + "/");
+  }
   const hireSuffix = "/hire/";
   const hireArtifact = hirePage(locale);
   ensureResolved(hireArtifact, `${locale} hire page`);

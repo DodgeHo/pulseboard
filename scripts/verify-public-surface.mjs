@@ -7,6 +7,8 @@ const privateNames = [
   'motion_example', 'myLittleLemon', 'P1117', 'PAL3_debug', 'PAL3_translation',
   'PAL4_translation', 'RogerPhysics', 'ros'
 ];
+const homeOrder = ['HeatStack', 'TapPhysics', 'Career Radar', 'PuzzleWear', 'CWC', 'PulseBoard', 'SAA Practice', 'SAP Practice', 'ISPM Practice', 'PAL4 translation', 'IELTS writing GPT', 'Dynamic RRT Connect', 'VMD', 'CEEMDAN', 'DevEnglish'];
+const vmdHomeUrls = ['https://github.com/DodgeHo/VMD_cpp', 'https://github.com/DodgeHo/VMD_2D_python', 'https://github.com/DodgeHo/VMD_2D_cpp'];
 
 function normalizeBaseUrl(value) {
   const url = new URL(value);
@@ -26,6 +28,10 @@ function expect(name, condition, detail = '') {
 
 function observe(name, value) {
   observations.push(name + ': ' + value);
+}
+
+function countOccurrences(haystack, needle) {
+  return haystack.split(needle).length - 1;
 }
 
 async function fetchText(path, options = {}) {
@@ -78,14 +84,29 @@ async function verifyPortal() {
   expect('portal is HTML', (response.headers.get('content-type') ?? '').includes('text/html'), response.headers.get('content-type') ?? '<missing>');
   expect('portal keeps colorful composition C', body.includes('ANLAN.STORE') && body.includes('DODGE HO.<br>BUILDS IN PUBLIC.') && body.includes('id="signal-lattice"'));
   expect('portal clearly labels the personal LinkedIn link', body.includes('https://www.linkedin.com/in/lang-he-a94655120/') && body.includes('My LinkedIn profile'));
+  expect('portal keeps the GitHub profile control', body.includes('https://github.com/DodgeHo') && body.includes('github-link'));
   expect('portal links the complete archive', body.includes('href="/projects/"'));
-  expect('HeatStack remains first', body.indexOf('"name":"HeatStack"') < body.indexOf('"name":"PulseBoard"'));
+  const homeIndexes = homeOrder.map((name) => body.indexOf(`"name":"${name}"`));
+  expect('homepage contains all 15 curated projects', homeIndexes.every((index) => index >= 0), homeOrder.filter((_, index) => homeIndexes[index] < 0).join(', '));
+  expect('homepage order matches required sequence', homeIndexes.every((index, position) => position === 0 || homeIndexes[position - 1] < index));
+  expect('homepage contains one VMD family row', countOccurrences(body, '"name":"VMD"') === 1, String(countOccurrences(body, '"name":"VMD"')));
+  for (const url of vmdHomeUrls) expect('homepage contains VMD URL ' + url, countOccurrences(body, url) === 1, String(countOccurrences(body, url)));
+  expect('homepage excludes VMD_2D_CPP_OpenCV', !body.includes('VMD_2D_CPP_OpenCV'));
+  expect('PAL4 homepage action precedes repository action', body.includes('https://dodgeho.github.io/PAL4_EnglishMod/') && body.indexOf('https://dodgeho.github.io/PAL4_EnglishMod/') < body.indexOf('https://github.com/DodgeHo/PAL4_EnglishMod'));
+  expect('homepage has TapPhysics live route', body.includes('"route":"/tapphysics/"') && body.includes('"action":"/tapphysics/"'));
+  expect('homepage has PuzzleWear and DevEnglish URLs', body.includes('https://puzzlewear.cn/') && body.includes('https://devenglish.club/'));
+  expect('homepage contains closed-source flags', ['CWC', 'PuzzleWear', 'DevEnglish', 'ISPM Practice'].every((name) => {
+    const start = body.indexOf(`"name":"${name}"`);
+    const next = homeIndexes.filter((index) => index > start).sort((a, b) => a - b)[0] ?? body.length;
+    return start >= 0 && body.slice(start, next).includes('"closedSource":true');
+  }));
   expect('ISPM remains unlinked from the homepage', !body.includes('href="/ispm/"') && !body.includes('"route":"/ispm/"'));
+  expect('portal removed old Ten project signals copy', !body.includes('Ten project signals'));
   for (const hash of ['#en', '#zh', '#zh-hans', '#zh-hant', '#ja']) {
     expect('portal supports ' + hash, body.toLowerCase().includes(`'${hash}'`) || body.toLowerCase().includes(`"${hash}"`));
   }
   expect('portal keeps four language controls', ['en', 'zh-Hant', 'zh-Hans', 'ja'].every((locale) => body.includes(`data-locale="${locale}"`)));
-  expect('portal links existing application routes', ['/heatstack/', '/demo/', '/jobs/', '/saa/', '/sap/'].every((path) => body.includes(path)));
+  expect('portal links existing application routes', ['/heatstack/', '/tapphysics/', '/demo/', '/jobs/', '/saa/', '/sap/'].every((path) => body.includes(path)));
   expect('portal has JSON-LD', body.includes('type="application/ld+json"'));
 }
 
@@ -109,31 +130,41 @@ async function verifyHirePages() {
   }
 }
 
-async function verifyArchive(path, languageMarker) {
+async function verifyArchive(path, languageMarker, lockedMarker, closedSourceMarker, expectIcp) {
   const { response, body } = await fetchText(path);
   expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'));
   const archiveRows = (body.match(/<article class="archive-row"/g) ?? []).length;
-  expect(path + ' has 73 archive rows', archiveRows === 73, String(archiveRows));
+  expect(path + ' has 77 archive rows', archiveRows === 77, String(archiveRows));
   expect(path + ' has search, filters, and sorting', body.includes('data-project-search') && body.includes('data-project-filter="featured"') && body.includes('data-project-filter="private"') && body.includes('data-project-filter="fork"') && body.includes('data-project-sort'));
   expect(path + ' uses the expected language', body.includes(languageMarker));
   const privateRow = rowFor(body, 'RogerPhysics');
-  expect(path + ' contains a locked private record', privateRow?.includes('data-visibility="private"') && privateRow.includes('Private repository · access unavailable'));
+  expect(path + ' contains a locked private record', privateRow?.includes('data-visibility="private"') && privateRow.includes(lockedMarker));
   expect(path + ' private record has no action or GitHub URL', privateRow && !privateRow.includes('class="row-action"') && !privateRow.includes('github.com'));
   const forkRow = rowFor(body, 'PathPlanning');
   expect(path + ' marks forks clearly', forkRow?.includes('data-origin="fork"') && forkRow.includes('Fork'));
   const publicRow = rowFor(body, 'VMD_cpp');
   expect(path + ' gives public repositories a GitHub action', publicRow?.includes('https://github.com/DodgeHo/VMD_cpp'));
+  for (const name of ['VMD_cpp', 'VMD_2D_python', 'VMD_2D_cpp', 'VMD_2D_CPP_OpenCV']) {
+    expect(path + ' contains ' + name + ' once', (body.match(new RegExp(`data-name="${name}"`, 'g')) ?? []).length === 1);
+  }
+  expect(path + ' uses CEEMDAN_cpp spelling', body.includes('CEEMDAN_cpp'));
+  expect(path + ' has TapPhysics /tapphysics/', rowFor(body, 'TapPhysics')?.includes('href="/tapphysics/"'));
+  expect(path + ' has PuzzleWear URL', rowFor(body, 'PuzzleWear')?.includes('href="https://puzzlewear.cn/"'));
+  expect(path + ' has DevEnglish URL', rowFor(body, 'DevEnglish')?.includes('href="https://devenglish.club/"'));
+  expect(path + ' keeps CWC source private', !rowFor(body, 'CWC')?.includes('github.com'));
+  expect(path + ' marks closed-source archive records', ['CWC', 'PuzzleWear', 'DevEnglish'].every((name) => rowFor(body, name)?.includes(closedSourceMarker)));
+  expect(path + ' ICP visibility is correct', expectIcp ? body.includes('粤ICP备2026035259号-1') : !body.includes('粤ICP备2026035259号-1'));
   verifyMetadata(body, path);
 }
 
 async function verifyProjectLibrary() {
-  for (const [path, marker] of [
-    ['/projects/', 'Complete Engineering Archive'],
-    ['/zh-hans/projects/', '完整工程资产档案'],
-    ['/zh-hant/projects/', '完整工程資產檔案'],
-    ['/ja/projects/', '完全なエンジニアリング資産目録']
-  ]) await verifyArchive(path, marker);
+  for (const [path, marker, lockedMarker, closedSourceMarker, expectIcp] of [
+    ['/projects/', 'Complete Engineering Archive', 'Private repository · access unavailable', 'Closed source', false],
+    ['/zh-hans/projects/', '完整工程资产档案', '私有仓库 · 无法公开访问', '闭源', true],
+    ['/zh-hant/projects/', '完整工程資產檔案', '私人儲存庫 · 無法公開存取', '閉源', false],
+    ['/ja/projects/', '完全なエンジニアリング資産目録', '非公開リポジトリ · アクセス不可', 'クローズドソース', false]
+  ]) await verifyArchive(path, marker, lockedMarker, closedSourceMarker, expectIcp);
 
   for (const path of ['/projects/pulseboard/', '/projects/heatstack/', '/projects/career-radar/']) {
     const { response, body } = await fetchText(path);

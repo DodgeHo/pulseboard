@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { siteCopy } from "../content/site-copy.mjs";
 import { loadCatalog, localeList } from "./lib/catalog.mjs";
 
 const packageRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -12,6 +13,8 @@ const { snapshot, projects, repositories, caseStudies } = await loadCatalog(pack
 const expectedInitialCounts = { total: 70, public: 57, private: 13, forks: 21, original: 49 };
 const localePrefixes = { en: "", "zh-Hant": "zh-hant/", "zh-Hans": "zh-hans/", ja: "ja/" };
 const flagshipSlugs = ["pulseboard", "heatstack", "career-radar"];
+const homeOrder = ["HeatStack", "TapPhysics", "Career Radar", "PuzzleWear", "CWC", "PulseBoard", "SAA Practice", "SAP Practice", "ISPM Practice", "PAL4 translation", "IELTS writing GPT", "Dynamic RRT Connect", "VMD", "CEEMDAN", "DevEnglish"];
+const vmdHomeUrls = ["https://github.com/DodgeHo/VMD_cpp", "https://github.com/DodgeHo/VMD_2D_python", "https://github.com/DodgeHo/VMD_2D_cpp"];
 const scanExtensions = new Set([".html", ".xml", ".json", ".js", ".map"]);
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -42,6 +45,10 @@ function rowName(row) {
   return row.match(/\bdata-name="([^"]+)"/)?.[1] ?? "";
 }
 
+function countOccurrences(haystack, needle) {
+  return haystack.split(needle).length - 1;
+}
+
 function verifyPageMetadata(artifact, label) {
   assert(/<title>[^<]+<\/title>/.test(artifact), `${label} is missing a title`);
   assert(artifact.includes('<meta name="description"'), `${label} is missing a description`);
@@ -63,7 +70,7 @@ function verifyInventoryCounts() {
   assert(repositories.filter((repository) => repository.visibility === "public").length === snapshot.counts.public, "Public repository count is inconsistent");
   assert(repositories.filter((repository) => repository.visibility === "private").length === snapshot.counts.private, "Private repository count is inconsistent");
   assert(repositories.filter((repository) => repository.origin === "fork").length === snapshot.counts.forks, "Fork count is inconsistent");
-  assert(projects.length === snapshot.counts.total + 3, `Archive should contain ${snapshot.counts.total + 3} records, found ${projects.length}`);
+  assert(projects.length === snapshot.counts.total + projects.filter((project) => !repositories.some((repository) => repository.name === project.name)).length, "Archive records are not derived from repositories plus explicit project records");
 }
 
 async function verifyArchive(root, relativePath, locale) {
@@ -85,10 +92,25 @@ async function verifyArchive(root, relativePath, locale) {
   for (const repository of repositories.filter((candidate) => candidate.visibility === "private")) {
     const row = rows.find((candidate) => rowName(candidate) === repository.name);
     assert(row?.includes('data-visibility="private"'), `${relativePath} is missing the private visibility marker for ${repository.name}`);
-    assert(row?.includes("Private repository · access unavailable"), `${relativePath} is missing the locked explanation for ${repository.name}`);
+    assert(row?.includes(siteCopy[locale].locked), `${relativePath} is missing the locked explanation for ${repository.name}`);
     assert(!row?.includes("github.com"), `${relativePath} exposes a GitHub link for private repository ${repository.name}`);
     assert(!row?.includes('class="row-action"'), `${relativePath} renders a fake action for private repository ${repository.name}`);
   }
+
+  for (const name of ["CWC", "PuzzleWear", "DevEnglish"]) {
+    const row = rows.find((candidate) => rowName(candidate) === name);
+    assert(row?.includes(siteCopy[locale].closedSource), `${relativePath} is missing closed-source status for ${name}`);
+  }
+
+  for (const name of ["VMD_cpp", "VMD_2D_python", "VMD_2D_cpp", "VMD_2D_CPP_OpenCV"]) {
+    assert(names.filter((candidate) => candidate === name).length === 1, `${relativePath} must contain ${name} exactly once`);
+  }
+  assert(artifact.includes("CEEMDAN_cpp"), `${relativePath} is missing the CEEMDAN_cpp spelling`);
+  assert(rowForArchive(rows, "PAL4_EnglishMod")?.includes("https://github.com/DodgeHo/PAL4_EnglishMod"), `${relativePath} is missing the PAL4 repository link`);
+  assert(rowForArchive(rows, "TapPhysics")?.includes('href="/tapphysics/"'), `${relativePath} is missing the TapPhysics /tapphysics/ route`);
+  assert(rowForArchive(rows, "PuzzleWear")?.includes('href="https://puzzlewear.cn/"'), `${relativePath} is missing the PuzzleWear live URL`);
+  assert(rowForArchive(rows, "DevEnglish")?.includes('href="https://devenglish.club/"'), `${relativePath} is missing the DevEnglish live URL`);
+  assert(!rowForArchive(rows, "CWC")?.includes("github.com"), `${relativePath} must not expose a CWC GitHub link`);
 
   for (const repository of repositories.filter((candidate) => candidate.origin === "fork")) {
     const row = rows.find((candidate) => rowName(candidate) === repository.name);
@@ -102,6 +124,10 @@ async function verifyArchive(root, relativePath, locale) {
   assert(artifact.includes('data-project-filter="fork"'), `${relativePath} is missing fork filtering`);
   assert(artifact.includes("data-project-sort"), `${relativePath} is missing project sorting`);
   verifyPageMetadata(artifact, `${locale} archive`);
+}
+
+function rowForArchive(rows, name) {
+  return rows.find((candidate) => rowName(candidate) === name);
 }
 
 async function verifyHirePage(root, relativePath, locale) {
@@ -130,9 +156,27 @@ async function verifyGeneratedPages(root) {
   const home = await read(root, "index.html");
   assert(home.includes("ANLAN.STORE") && home.includes('id="signal-lattice"'), "Homepage lost composition C identity");
   assert(home.includes("https://www.linkedin.com/in/lang-he-a94655120/") && home.includes("My LinkedIn profile"), "Homepage lost the labeled LinkedIn profile control");
+  assert(home.includes("https://github.com/DodgeHo") && home.includes("github-link"), "Homepage lost the GitHub profile control");
   assert(home.includes('href="/projects/"'), "Homepage does not link to the complete archive");
-  assert(home.indexOf('"name":"HeatStack"') < home.indexOf('"name":"PulseBoard"'), "HeatStack is not first in the homepage project data");
+  const homeIndexes = homeOrder.map((name) => home.indexOf(`"name":"${name}"`));
+  homeIndexes.forEach((index, position) => assert(index >= 0, `Homepage project data is missing ${homeOrder[position]}`));
+  assert(homeIndexes.every((index, position) => position === 0 || homeIndexes[position - 1] < index), "Homepage project order does not match the required sequence");
+  assert(countOccurrences(home, '"name":"VMD"') === 1, "Homepage must contain one VMD project-family record");
+  for (const url of vmdHomeUrls) assert(countOccurrences(home, url) === 1, `Homepage must contain the VMD family URL exactly once: ${url}`);
+  assert(!home.includes("VMD_2D_CPP_OpenCV"), "Homepage must not include VMD_2D_CPP_OpenCV");
+  assert(home.indexOf('"homepageActions"') < home.indexOf('"name":"IELTS writing GPT"'), "Homepage action data is unexpectedly reordered before PAL4 checks");
+  assert(home.includes("https://dodgeho.github.io/PAL4_EnglishMod/") && home.indexOf("https://dodgeho.github.io/PAL4_EnglishMod/") < home.indexOf("https://github.com/DodgeHo/PAL4_EnglishMod"), "PAL4 homepage action must appear before the repository action");
+  assert(home.includes('"route":"/tapphysics/"') && home.includes('"action":"/tapphysics/"'), "Homepage TapPhysics action must point to /tapphysics/");
+  assert(home.includes("https://puzzlewear.cn/"), "Homepage is missing PuzzleWear live URL");
+  assert(home.includes("https://devenglish.club/"), "Homepage is missing DevEnglish live URL");
+  for (const name of ["CWC", "PuzzleWear", "DevEnglish", "ISPM Practice"]) {
+    const nameIndex = home.indexOf(`"name":"${name}"`);
+    const nextIndex = homeOrder.map((candidate) => home.indexOf(`"name":"${candidate}"`)).filter((index) => index > nameIndex).sort((a, b) => a - b)[0] ?? home.length;
+    const block = home.slice(nameIndex, nextIndex);
+    assert(block.includes('"closedSource":true'), `Homepage is missing closed-source status for ${name}`);
+  }
   assert(!home.includes('href="/ispm/"') && !home.includes('route:"/ispm/"'), "Homepage must not expose an ISPM route");
+  assert(!home.includes("Ten project signals"), "Homepage still contains the old Ten project signals copy");
   for (const hash of ["#en", "#zh", "#zh-hans", "#zh-hant", "#ja"]) {
     assert(home.toLowerCase().includes(`'${hash}'`) || home.toLowerCase().includes(`"${hash}"`), `Homepage is missing language hash ${hash}`);
   }
@@ -143,6 +187,9 @@ async function verifyGeneratedPages(root) {
     const prefix = localePrefixes[locale];
     await verifyHirePage(root, `${prefix}hire/index.html`, locale);
     await verifyArchive(root, `${prefix}projects/index.html`, locale);
+    const archive = await read(root, `${prefix}projects/index.html`);
+    if (locale === "zh-Hans") assert(archive.includes("粤ICP备2026035259号-1"), "Simplified Chinese archive is missing ICP text");
+    else assert(!archive.includes("粤ICP备2026035259号-1"), `${locale} archive must not contain Simplified Chinese ICP text`);
     for (const slug of flagshipSlugs) {
       const detail = await read(root, `${prefix}projects/${slug}/index.html`);
       verifyPageMetadata(detail, `${locale} ${slug} case study`);
@@ -168,6 +215,7 @@ async function verifyNoPrivateLeaks(root) {
   for (const path of await listFiles(root)) {
     const artifact = await readFile(path, "utf8");
     assert(!artifact.includes("api.github.com"), `${path} contains a GitHub API address`);
+    assert(!artifact.includes("Ten project signals"), `${path} contains stale homepage copy`);
     for (const repository of privateRepositories) {
       const name = escapeRegExp(repository.name);
       const privateAddress = new RegExp(`(?:https?://)?(?:www\\.)?github\\.com/DodgeHo/${name}(?:\\.git)?(?:[/\\?#\\s"']|$)`, "i");

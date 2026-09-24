@@ -25,10 +25,12 @@ export const siteCopy = {
     empty: "No projects match this search and filter.",
     public: "Public",
     private: "Private project",
+    closedSource: "Closed source",
     original: "Original",
     fork: "Fork / contribution",
     evidence: "Evidence",
     github: "View GitHub repository",
+    homepage: "Open project homepage",
     details: "View project record",
     live: "Open live project",
     locked: "Private repository · access unavailable",
@@ -54,7 +56,8 @@ export const siteCopy = {
     noDate: "Not publicly disclosed",
     sourceRecord: "This project record links the archive facts, available source, live routes, and related evidence without inventing product outcomes.",
     assetNote: "This asset is a public, security-reviewed explanation. Secrets, credentials, private repository content, and internal operating records are excluded.",
-    footer: "ANLAN.STORE / DURABLE ENGINEERING EVIDENCE"
+    footer: "ANLAN.STORE / DURABLE ENGINEERING EVIDENCE",
+    icp: ""
   },
   "zh-Hant": {
     archiveTitle: "完整工程資產檔案",
@@ -63,11 +66,11 @@ export const siteCopy = {
     search: "搜尋專案名稱、技術與摘要", sort: "排序專案", sortValue: "求職價值與證據", sortUpdated: "最近更新", sortName: "名稱 A–Z",
     filters: { all: "全部", featured: "精選", applications: "應用與工具", research: "研究", private: "私人", fork: "Fork", learning: "學習" },
     inventory: "專案清單", inventoryIntro: "每個儲存庫只出現一次；若線上服務與原始碼屬於同一專案，會合併為同一筆記錄。", resultCount: "顯示 {count} 筆", empty: "沒有符合目前搜尋與篩選的專案。",
-    public: "公開", private: "私人專案", original: "原創", fork: "Fork / 貢獻", evidence: "證據", github: "查看 GitHub 儲存庫", details: "查看專案記錄", live: "開啟線上專案", locked: "Private repository · access unavailable",
+    public: "公開", private: "私人專案", closedSource: "閉源", original: "原創", fork: "Fork / 貢獻", evidence: "證據", github: "查看 GitHub 儲存庫", homepage: "開啟專案首頁", details: "查看專案記錄", live: "開啟線上專案", locked: "私人儲存庫 · 無法公開存取",
     total: "GitHub 儲存庫", publicCount: "公開", privateCount: "私人", caseStudy: "案例研究", assets: "工程資產", related: "相關專案", backArchive: "返回完整檔案",
     problem: "問題", role: "我的角色", constraints: "限制條件", decisions: "關鍵決策", architecture: "架構", evidenceSection: "工程證據", result: "成果", limits: "限制與下一步",
     metadata: "專案記錄", status: "狀態", technologies: "技術", updated: "儲存庫更新", noDate: "未公開", sourceRecord: "此專案記錄連接清單事實、可用原始碼、線上路由與相關證據，不虛構產品成果。",
-    assetNote: "此資產是經安全檢查的公開說明，不包含秘密、憑據、私人儲存庫內容與內部操作記錄。", footer: "ANLAN.STORE / 可持續工程證據"
+    assetNote: "此資產是經安全檢查的公開說明，不包含秘密、憑據、私人儲存庫內容與內部操作記錄。", footer: "ANLAN.STORE / 可持續工程證據", icp: ""
   },
   "zh-Hans": {
     archiveTitle: "完整工程资产档案",
@@ -76,11 +79,11 @@ export const siteCopy = {
     search: "搜索项目名称、技术与摘要", sort: "排序项目", sortValue: "求职价值与证据", sortUpdated: "最近更新", sortName: "名称 A–Z",
     filters: { all: "全部", featured: "精选", applications: "应用与工具", research: "研究", private: "私有", fork: "Fork", learning: "学习" },
     inventory: "项目清单", inventoryIntro: "每个仓库只出现一次；如果在线服务与源码属于同一项目，会合并为同一条记录。", resultCount: "显示 {count} 条", empty: "没有符合当前搜索与筛选的项目。",
-    public: "公开", private: "私有项目", original: "原创", fork: "Fork / 贡献", evidence: "证据", github: "查看 GitHub 仓库", details: "查看项目记录", live: "打开在线项目", locked: "Private repository · access unavailable",
+    public: "公开", private: "私有项目", closedSource: "闭源", original: "原创", fork: "Fork / 贡献", evidence: "证据", github: "查看 GitHub 仓库", homepage: "打开项目主页", details: "查看项目记录", live: "打开在线项目", locked: "私有仓库 · 无法公开访问",
     total: "GitHub 仓库", publicCount: "公开", privateCount: "私有", caseStudy: "案例研究", assets: "工程资产", related: "相关项目", backArchive: "返回完整档案",
     problem: "问题", role: "我的角色", constraints: "限制条件", decisions: "关键决策", architecture: "架构", evidenceSection: "工程证据", result: "成果", limits: "限制与下一步",
     metadata: "项目记录", status: "状态", technologies: "技术", updated: "仓库更新", noDate: "未公开", sourceRecord: "此项目记录连接清单事实、可用源码、在线路由与相关证据，不虚构产品成果。",
-    assetNote: "此资产是经过安全检查的公开说明，不包含秘密、凭据、私有仓库内容与内部操作记录。", footer: "ANLAN.STORE / 可持续工程证据"
+    assetNote: "此资产是经过安全检查的公开说明，不包含秘密、凭据、私有仓库内容与内部操作记录。", footer: "ANLAN.STORE / 可持续工程证据", icp: "粤ICP备2026035259号-1"
   },
   ja: {
     archiveTitle: "完全なエンジニアリング資産目録",
@@ -89,11 +92,11 @@ export const siteCopy = {
     search: "プロジェクト名、技術、概要を検索", sort: "プロジェクトを並べ替え", sortValue: "採用価値と証拠", sortUpdated: "最近の更新", sortName: "名前 A–Z",
     filters: { all: "すべて", featured: "注目", applications: "アプリとツール", research: "研究", private: "非公開", fork: "Fork", learning: "学習" },
     inventory: "プロジェクト目録", inventoryIntro: "各リポジトリは一度だけ表示します。公開サービスとソースが同じプロジェクトなら、一つの記録に統合します。", resultCount: "{count} 件を表示", empty: "現在の検索と絞り込みに一致するプロジェクトはありません。",
-    public: "公開", private: "非公開プロジェクト", original: "オリジナル", fork: "Fork / 貢献", evidence: "証拠", github: "GitHub リポジトリを見る", details: "プロジェクト記録を見る", live: "公開プロジェクトを開く", locked: "Private repository · access unavailable",
+    public: "公開", private: "非公開プロジェクト", closedSource: "クローズドソース", original: "オリジナル", fork: "Fork / 貢献", evidence: "証拠", github: "GitHub リポジトリを見る", homepage: "プロジェクトホームを開く", details: "プロジェクト記録を見る", live: "公開プロジェクトを開く", locked: "非公開リポジトリ · アクセス不可",
     total: "GitHub リポジトリ", publicCount: "公開", privateCount: "非公開", caseStudy: "ケーススタディ", assets: "エンジニアリング資産", related: "関連プロジェクト", backArchive: "完全な目録へ戻る",
     problem: "課題", role: "担当", constraints: "制約", decisions: "主要な判断", architecture: "アーキテクチャ", evidenceSection: "エンジニアリング証拠", result: "結果", limits: "制限と次の段階",
     metadata: "プロジェクト記録", status: "状態", technologies: "技術", updated: "リポジトリ更新", noDate: "非公開", sourceRecord: "この記録は、架空の成果を作らず、目録の事実、利用可能なソース、公開ルート、関連証拠を結びます。",
-    assetNote: "この資産はセキュリティ確認済みの公開説明です。シークレット、認証情報、非公開リポジトリ内容、内部運用記録は含みません。", footer: "ANLAN.STORE / 持続するエンジニアリング証拠"
+    assetNote: "この資産はセキュリティ確認済みの公開説明です。シークレット、認証情報、非公開リポジトリ内容、内部運用記録は含みません。", footer: "ANLAN.STORE / 持続するエンジニアリング証拠", icp: ""
   }
 };
 

@@ -18,6 +18,7 @@ const files = new Map([
 ]);
 
 const generatedPrefixes = [
+  '/zh-hans/', '/zh-hant/', '/ja/',
   '/hire/', '/zh-hans/hire/', '/zh-hant/hire/', '/ja/hire/',
   '/projects/', '/zh-hans/projects/', '/zh-hant/projects/', '/ja/projects/'
 ];

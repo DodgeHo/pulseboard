@@ -24,7 +24,7 @@
       heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
       identityFacts: [['IDENTITY', 'Dodge Ho · 道安澜'], ['PRACTICE', 'Systems · signals · tools'], ['SPACE', 'Public open-source work']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['Invite-only', 'Job inbox', 'Digests'], saa: ['AWS', 'Question bank', 'Progress'], sap: ['AWS', 'Architecture', 'Advanced'], ispm: ['ITSM', 'Study', 'Unlinked'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT']
+        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['Physics', 'Interactive', 'Simulation'], career: ['Invite-only', 'Job inbox', 'Digests'], puzzlewear: ['Closed source', 'Product site', 'Web'], cwc: ['Closed source', 'Boundary', 'Product'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', 'Question bank', 'Progress'], sap: ['AWS', 'Architecture', 'Advanced'], ispm: ['ITSM', 'Study', 'Closed source'], pal4: ['Homepage', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT'], vmd: ['Project family', 'C++', '2D'], ceemdan: ['C++', 'Signal', 'CEEMDAN'], devenglish: ['Closed source', 'English', 'Web']
       },
       liveAction: 'EXPLORE LIVE WORK',
       sourceAction: 'BROWSE SOURCE PROJECTS',
@@ -32,7 +32,7 @@
       live: 'LIVE',
       scopeRows: [['SIGNAL MODE', 'MULTI-SURFACE'], ['ROUTE STATE', 'AUDITABLE'], ['LANGUAGE LAYER', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'PROJECT SCOPE',
-      indexSummary: 'Ten project signals, scaled by live evidence, research depth, and study focus.',
+      indexSummary: 'Fifteen curated project signals, ordered for recruiter review while the full 70-repository archive stays available.',
       filterProjects: 'Filter projects',
       filters: { all: 'ALL', live: 'LIVE', source: 'SOURCE', study: 'STUDY' },
       availability: { checking: 'CHECKING ROUTE', online: 'ROUTE ONLINE', unavailable: 'CHECK ROUTE' },
@@ -40,7 +40,12 @@
       repository: 'PUBLIC REPOSITORY',
       external: 'OPEN REPOSITORY',
       open: 'OPEN PROJECT',
+      homepage: 'OPEN HOMEPAGE',
       caseStudy: 'VIEW CASE STUDY',
+      closedSource: 'CLOSED SOURCE',
+      privateRepository: 'PRIVATE REPOSITORY',
+      familyTitle: 'VMD PROJECT FAMILY',
+      familySummary: 'One decomposition project, three implementation outcomes.',
       previewOps: 'OPERATIONS',
       previewCustomer: 'CUSTOMER VIEW',
       pulseEvidence: 'PulseBoard interface evidence',
@@ -49,6 +54,7 @@
       customerAlt: 'PulseBoard customer reliability surface in Japanese',
       docs: 'API DOCS',
       footer: 'ANLAN.STORE / SIGNAL LATTICE DIRECTORY',
+      icp: '',
       backToTop: 'BACK TO TOP ↑',
       empty: 'No projects match this filter. Choose another signal group.',
       kinds: { live: 'DEPLOYED SYSTEM', source: 'OPEN-SOURCE PROJECT', study: 'STUDY TOOL' },
@@ -82,7 +88,7 @@
       heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
       identityFacts: [['身份', 'Dodge Ho · 道安瀾'], ['實踐', '系統 · 訊號 · 工具'], ['空間', '公開開源作品']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['僅限受邀', '職缺收件匣', '摘要'], saa: ['AWS', '題庫', '進度'], sap: ['AWS', '架構', '進階'], ispm: ['ITSM', '學習', '未連結'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT']
+        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['物理', '互動', '模擬'], career: ['僅限受邀', '職缺收件匣', '摘要'], puzzlewear: ['閉源', '專案網站', 'Web'], cwc: ['閉源', '邊界', '產品'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', '題庫', '進度'], sap: ['AWS', '架構', '進階'], ispm: ['ITSM', '學習', '閉源'], pal4: ['首頁', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT'], vmd: ['專案族', 'C++', '2D'], ceemdan: ['C++', '訊號', 'CEEMDAN'], devenglish: ['閉源', '英文', 'Web']
       },
       liveAction: '探索線上作品',
       sourceAction: '瀏覽開源專案',
@@ -90,7 +96,7 @@
       live: '運作中',
       scopeRows: [['訊號模式', '多重介面'], ['路由狀態', '可稽核'], ['語言層', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '專案範圍',
-      indexSummary: '十組專案訊號，依線上證據、研究深度與學習焦點配置尺度。',
+      indexSummary: '十五組精選專案訊號依招聘閱讀順序排列，完整 70 個 GitHub 倉庫仍保留在檔案中。',
       filterProjects: '篩選專案',
       filters: { all: '全部', live: '線上', source: '開源', study: '學習' },
       availability: { checking: '檢查路由中', online: '路由正常', unavailable: '請檢查路由' },
@@ -98,7 +104,12 @@
       repository: '公開儲存庫',
       external: '開啟儲存庫',
       open: '開啟專案',
+      homepage: '開啟首頁',
       caseStudy: '查看案例研究',
+      closedSource: '閉源',
+      privateRepository: '私人儲存庫',
+      familyTitle: 'VMD 專案族',
+      familySummary: '一個分解專案，三種實作成果。',
       previewOps: '營運畫面',
       previewCustomer: '客戶畫面',
       pulseEvidence: 'PulseBoard 介面證據',
@@ -107,6 +118,7 @@
       customerAlt: '日文版 PulseBoard 客戶可靠性介面',
       docs: 'API 文件',
       footer: 'ANLAN.STORE / SIGNAL LATTICE 專案目錄',
+      icp: '',
       backToTop: '回到頂端 ↑',
       empty: '沒有符合此篩選的專案。請選擇另一個訊號群組。',
       kinds: { live: '已部署系統', source: '開源專案', study: '學習工具' },
@@ -140,7 +152,7 @@
       heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
       identityFacts: [['身份', 'Dodge Ho · 道安澜'], ['实践', '系统 · 信号 · 工具'], ['空间', '公开开源作品']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['仅限受邀', '职位收件箱', '摘要'], saa: ['AWS', '题库', '进度'], sap: ['AWS', '架构', '进阶'], ispm: ['ITSM', '学习', '未链接'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT']
+        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['物理', '互动', '模拟'], career: ['仅限受邀', '职位收件箱', '摘要'], puzzlewear: ['闭源', '项目网站', 'Web'], cwc: ['闭源', '边界', '产品'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', '题库', '进度'], sap: ['AWS', '架构', '进阶'], ispm: ['ITSM', '学习', '闭源'], pal4: ['主页', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT'], vmd: ['项目族', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['闭源', '英语', 'Web']
       },
       liveAction: '探索在线作品',
       sourceAction: '浏览开源项目',
@@ -148,7 +160,7 @@
       live: '运行中',
       scopeRows: [['信号模式', '多重界面'], ['路由状态', '可审计'], ['语言层', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '项目范围',
-      indexSummary: '十组项目信号，依在线证据、研究深度与学习焦点配置尺度。',
+      indexSummary: '十五组精选项目信号按招聘阅读顺序排列，完整 70 个 GitHub 仓库仍保留在档案中。',
       filterProjects: '筛选项目',
       filters: { all: '全部', live: '在线', source: '开源', study: '学习' },
       availability: { checking: '正在检查路由', online: '路由正常', unavailable: '请检查路由' },
@@ -156,7 +168,12 @@
       repository: '公开仓库',
       external: '打开仓库',
       open: '打开项目',
+      homepage: '打开主页',
       caseStudy: '查看案例研究',
+      closedSource: '闭源',
+      privateRepository: '私有仓库',
+      familyTitle: 'VMD 项目族',
+      familySummary: '一个分解项目，三种实现成果。',
       previewOps: '运营界面',
       previewCustomer: '客户界面',
       pulseEvidence: 'PulseBoard 界面证据',
@@ -165,6 +182,7 @@
       customerAlt: '日文版 PulseBoard 客户可靠性界面',
       docs: 'API 文档',
       footer: 'ANLAN.STORE / SIGNAL LATTICE 项目目录',
+      icp: '粤ICP备2026035259号-1',
       backToTop: '返回顶部 ↑',
       empty: '没有项目符合此筛选条件。请选择另一组信号。',
       kinds: { live: '已部署系统', source: '开源项目', study: '学习工具' },
@@ -198,7 +216,7 @@
       heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
       identityFacts: [['アイデンティティ', '道安瀾（ドッジ・ホー）'], ['実践', 'システム · 信号 · ツール'], ['空間', '公開オープンソース作品']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], career: ['招待制', '求人受信箱', 'ダイジェスト'], saa: ['AWS', '問題バンク', '進捗'], sap: ['AWS', 'アーキテクチャ', '上級'], ispm: ['ITSM', '学習', '未リンク'], vmd: ['C++', 'Eigen', 'VMD'], pal4: ['Python', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT']
+        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['物理', 'インタラクティブ', 'シミュレーション'], career: ['招待制', '求人受信箱', 'ダイジェスト'], puzzlewear: ['クローズド', '公開サイト', 'Web'], cwc: ['クローズド', '境界', 'プロダクト'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', '問題バンク', '進捗'], sap: ['AWS', 'アーキテクチャ', '上級'], ispm: ['ITSM', '学習', 'クローズド'], pal4: ['ホーム', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT'], vmd: ['ファミリー', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['クローズド', '英語', 'Web']
       },
       liveAction: 'ライブ作品を見る',
       sourceAction: 'ソースプロジェクトを見る',
@@ -206,7 +224,7 @@
       live: '稼働中',
       scopeRows: [['信号モード', 'マルチサーフェス'], ['経路状態', '監査可能'], ['言語レイヤー', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'プロジェクト範囲',
-      indexSummary: 'ライブの根拠、研究の深さ、学習の焦点に応じて尺度を変えた 10 件のプロジェクト信号。',
+      indexSummary: '採用レビュー向けに並べた 15 件の注目プロジェクトです。70 件の GitHub リポジトリ全体は完全な目録に残しています。',
       filterProjects: 'プロジェクトを絞り込む',
       filters: { all: 'すべて', live: 'ライブ', source: 'ソース', study: '学習' },
       availability: { checking: '経路を確認中', online: '経路はオンライン', unavailable: '経路を確認' },
@@ -214,7 +232,12 @@
       repository: '公開リポジトリ',
       external: 'リポジトリを開く',
       open: 'プロジェクトを開く',
+      homepage: 'ホームを開く',
       caseStudy: 'ケーススタディを見る',
+      closedSource: 'クローズドソース',
+      privateRepository: '非公開リポジトリ',
+      familyTitle: 'VMD プロジェクトファミリー',
+      familySummary: '一つの分解プロジェクト、三つの実装成果。',
       previewOps: '運用画面',
       previewCustomer: '顧客画面',
       pulseEvidence: 'PulseBoard インターフェースの根拠',
@@ -223,6 +246,7 @@
       customerAlt: '日本語の PulseBoard 顧客向け信頼性画面',
       docs: 'API ドキュメント',
       footer: 'ANLAN.STORE / SIGNAL LATTICE ディレクトリ',
+      icp: '',
       backToTop: '先頭へ ↑',
       empty: 'この絞り込みに一致するプロジェクトはありません。別の信号グループを選んでください。',
       kinds: { live: 'デプロイ済みシステム', source: 'オープンソース', study: '学習ツール' },
@@ -262,6 +286,10 @@
   };
 
   const localeFromHash = () => localeHashAliases[window.location.hash.toLowerCase()] ?? null;
+  const localeFromPath = () => {
+    const firstSegment = window.location.pathname.split('/').filter(Boolean)[0]?.toLowerCase();
+    return ({ 'zh-hant': 'zh-Hant', 'zh-hans': 'zh-Hans', ja: 'ja' })[firstSegment] ?? null;
+  };
 
   const renderRail = () => {
     railList.innerHTML = projects.map((project, index) => {
@@ -274,8 +302,27 @@
     }).join('');
   };
 
-  const makeStatus = (project) => project.category !== 'live' || !project.route ? '' : `
-    <span class="status-label is-checking" data-route-status="${project.route}"><i aria-hidden="true"></i><span>${t().availability.checking}</span></span>`;
+  const makeStatus = (project) => {
+    const states = [];
+    if (project.category === 'live' && project.route && !project.actionExternal) {
+      states.push(`<span class="status-label is-checking" data-route-status="${project.route}"><i aria-hidden="true"></i><span>${t().availability.checking}</span></span>`);
+    }
+    if (project.closedSource) {
+      states.push(`<span class="status-label is-static"><i aria-hidden="true"></i><span>${t().closedSource}</span></span>`);
+    }
+    if (project.privateRepository) {
+      states.push(`<span class="status-label is-private"><i aria-hidden="true"></i><span>${t().privateRepository}</span></span>`);
+    }
+    return states.length ? `<div class="project-states">${states.join('')}</div>` : '';
+  };
+
+  const makeFamily = (project) => !project.familyMembers?.length ? '' : `
+    <div class="project-family" aria-label="${t().familyTitle}">
+      <p><strong>${t().familyTitle}</strong><span>${t().familySummary}</span></p>
+      <ul>${project.familyMembers.map((member) => `<li><a href="${member.githubUrl}" target="_blank" rel="noreferrer">${member.name}${iconExternal}</a><span>${member.skills.join(' · ')}</span></li>`).join('')}</ul>
+    </div>`;
+
+  const makeActionLink = ({ href, key, external = /^https?:\/\//i.test(href) }) => `<a class="row-action" href="${href}"${external ? ' target="_blank" rel="noreferrer"' : ''}>${t()[key]}${external ? iconExternal : ''}</a>`;
 
   const makeEvidence = () => `
     <div class="pulse-evidence" aria-label="${t().pulseEvidence}">
@@ -292,18 +339,16 @@
 
   const renderProjects = () => {
     projectList.innerHTML = projects.map((project, index) => {
-      const external = project.category === 'source';
-      const primaryAction = !project.action ? '' : external
-        ? `<a class="row-action" href="${project.action}" target="_blank" rel="noreferrer">${t()[project.actionKey]}${iconExternal}</a>`
-        : `<a class="row-action" href="${project.action}">${t()[project.actionKey]}</a>`;
+      const primaryAction = !project.action ? '' : makeActionLink({ href: project.action, key: project.actionKey, external: project.actionExternal });
+      const homepageActions = (project.homepageActions || []).map((item) => makeActionLink({ href: item.href, key: item.key, external: /^https?:\/\//i.test(item.href) })).join('');
       const caseAction = project.casePath ? `<a class="row-action" href="${project.casePath}">${t().caseStudy}</a>` : '';
-      const action = primaryAction || caseAction ? `<div class="row-actions-home">${caseAction}${primaryAction}</div>` : '';
-      const sourceOrRoute = external ? t().repository : t().route;
+      const action = homepageActions || primaryAction || caseAction ? `<div class="row-actions-home">${homepageActions}${primaryAction}${caseAction}</div>` : '';
+      const sourceOrRoute = project.category === 'source' ? t().repository : t().route;
       const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
-      return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${external || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
+      return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${project.actionExternal || project.category === 'source' || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
-        <div><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
-        <div class="project-copy"><p class="project-description">${project.safeSummary[currentLocale]}</p>${routeLine}<p class="project-evidence">${project.evidence.join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
+        <div class="project-heading"><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
+        <div class="project-copy"><p class="project-description">${project.safeSummary[currentLocale]}</p>${routeLine}${makeFamily(project)}<p class="project-evidence">${project.evidence.join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}
       </article>`;
@@ -364,7 +409,7 @@
   };
 
   const checkRoutes = async () => {
-    const routes = [...new Set(projects.filter((project) => project.category === 'live' && project.route).map((project) => project.route))];
+    const routes = [...new Set(projects.filter((project) => project.category === 'live' && project.route && !project.actionExternal).map((project) => project.route))];
     if (window.location.protocol === 'file:') {
       routes.forEach((path) => setRouteStatus(path, 'checking'));
       return;
@@ -396,7 +441,7 @@
     document.querySelector('#project-index-title').textContent = t().indexTitle;
     document.querySelector('#index-summary').textContent = t().indexSummary;
     document.querySelector('#filter-controls').setAttribute('aria-label', t().filterProjects);
-    document.querySelector('#footer-left').textContent = t().footer;
+    document.querySelector('#footer-left').textContent = t().icp ? `${t().footer} · ${t().icp}` : t().footer;
     document.querySelector('#footer-top').textContent = t().backToTop;
     document.querySelector('#empty-state').textContent = t().empty;
     filterButtons.forEach((button) => { button.textContent = t().filters[button.dataset.filter]; });
@@ -492,7 +537,7 @@
   });
   document.querySelector('.profile-link').href = profileUrl;
   document.querySelector('#github-link').href = githubUrl;
-  applyLocale(localeFromHash() || safeStoredLocale());
+  applyLocale(localeFromHash() || localeFromPath() || safeStoredLocale());
   drawWave();
   drawLattice();
 })();

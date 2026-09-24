@@ -49,6 +49,92 @@ export const liveProjects = [
     )
   },
   {
+    name: "TapPhysics",
+    slug: "tapphysics",
+    visibility: "public",
+    origin: "original",
+    featured: true,
+    showInArchive: true,
+    publishCaseStudy: false,
+    category: "applications",
+    score: 91,
+    skills: ["Physics", "Interactive web", "Simulation"],
+    liveRoutes: ["/tapphysics/"],
+    evidence: ["Live demo", "Interactive project"],
+    safeSummary: four(
+      "An interactive physics project presented as a live web experience, with the deployed route serving as the primary evidence surface.",
+      "以線上互動體驗呈現的物理專案，部署路由是目前主要的可檢查證據介面。",
+      "以在线互动体验呈现的物理项目，部署路由是目前主要的可检查证据界面。",
+      "公開ルートを主な証拠面とする、インタラクティブな物理プロジェクトです。"
+    )
+  },
+  {
+    name: "CWC",
+    slug: "cwc",
+    visibility: "private",
+    privateRepository: false,
+    closedSource: true,
+    origin: "original",
+    featured: true,
+    showInArchive: true,
+    publishCaseStudy: true,
+    category: "applications",
+    score: 90,
+    skills: ["Closed source", "Product engineering", "System design"],
+    liveRoutes: [],
+    evidence: ["Security-reviewed overview", "Project record"],
+    safeSummary: four(
+      "A closed-source engineering project documented through a concise, security-reviewed overview. The public page explains its project purpose and engineering boundary without exposing implementation or private operations.",
+      "以精簡且經安全檢查的公開說明記錄的閉源工程專案。公開頁面說明專案目的與工程邊界，不揭露實作或私人運作細節。",
+      "以精简且经过安全检查的公开说明记录的闭源工程项目。公开页面说明项目目的与工程边界，不披露实现或私有运行细节。",
+      "簡潔でセキュリティ確認済みの概要として記録したクローズドソースのエンジニアリングプロジェクトです。公開ページでは目的と工程上の境界だけを説明し、実装や非公開運用は公開しません。"
+    )
+  },
+  {
+    name: "PuzzleWear",
+    slug: "puzzlewear",
+    visibility: "private",
+    privateRepository: false,
+    closedSource: true,
+    origin: "original",
+    featured: true,
+    showInArchive: true,
+    publishCaseStudy: false,
+    category: "applications",
+    score: 87,
+    skills: ["Closed source", "Product interface", "Web"],
+    liveRoutes: ["https://puzzlewear.cn/"],
+    evidence: ["Public project site", "Closed-source record"],
+    safeSummary: four(
+      "A closed-source project represented by its public project site and a minimal portfolio record.",
+      "以公開專案網站與精簡作品記錄呈現的閉源專案。",
+      "以公开项目网站与精简作品记录呈现的闭源项目。",
+      "公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースのプロジェクトです。"
+    )
+  },
+  {
+    name: "DevEnglish",
+    slug: "devenglish",
+    visibility: "private",
+    privateRepository: false,
+    closedSource: true,
+    origin: "original",
+    featured: false,
+    showInArchive: true,
+    publishCaseStudy: false,
+    category: "applications",
+    score: 72,
+    skills: ["Closed source", "English learning", "Web"],
+    liveRoutes: ["https://devenglish.club/"],
+    evidence: ["Public project site", "Closed-source record"],
+    safeSummary: four(
+      "A closed-source English-learning project represented by its public project site and a concise portfolio record.",
+      "以公開專案網站與精簡作品記錄呈現的閉源英文學習專案。",
+      "以公开项目网站与精简作品记录呈现的闭源英语学习项目。",
+      "公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースの英語学習プロジェクトです。"
+    )
+  },
+  {
     name: "SAP Practice",
     slug: "sap-practice",
     visibility: "public",
@@ -91,13 +177,14 @@ export const repositoryOverrides = {
     featured: true,
     category: "research",
     score: 88,
+    family: "vmd",
     skills: ["C++", "Eigen", "Signal processing", "VMD"],
     evidence: ["Source", "Research implementation"],
     safeSummary: four(
-      "A C++ and Eigen implementation of Variational Mode Decomposition for signal-processing experiments.",
-      "以 C++ 與 Eigen 實作變分模態分解，用於訊號處理實驗。",
-      "以 C++ 与 Eigen 实现变分模态分解，用于信号处理实验。",
-      "信号処理実験のための Variational Mode Decomposition を C++ と Eigen で実装しています。"
+      "The core 1D implementation in a VMD project family, using C++ and Eigen for signal-processing experiments.",
+      "VMD 專案族的核心一維實作，以 C++ 與 Eigen 用於訊號處理實驗。",
+      "VMD 项目族的核心一维实现，以 C++ 与 Eigen 用于信号处理实验。",
+      "VMD プロジェクトファミリーの中核となる 1D 実装で、C++ と Eigen を信号処理実験に使います。"
     )
   },
   PAL4_EnglishMod: {
@@ -147,10 +234,21 @@ export const repositoryOverrides = {
     liveRoutes: ["/saa/"],
     evidence: ["Live demo", "Source"]
   },
-  CEEMDAN_cpp: { category: "research", score: 74, skills: ["C++", "CEEMDAN", "Signal processing"] },
-  VMD_2D_cpp: { category: "research", score: 70 },
+  CEEMDAN_cpp: {
+    category: "research",
+    score: 74,
+    skills: ["C++", "CEEMDAN", "Signal processing"],
+    evidence: ["Source", "Research implementation"],
+    safeSummary: four(
+      "A C++ implementation of CEEMDAN for empirical mode decomposition and signal-processing experiments, presented alongside the VMD project family.",
+      "以 C++ 實作 CEEMDAN，用於經驗模態分解與訊號處理實驗，並與 VMD 專案族並列呈現。",
+      "以 C++ 实现 CEEMDAN，用于经验模态分解与信号处理实验，并与 VMD 项目族并列呈现。",
+      "経験的モード分解と信号処理実験のための CEEMDAN を C++ で実装し、VMD プロジェクトファミリーと並べて示しています。"
+    )
+  },
+  VMD_2D_cpp: { category: "research", score: 70, family: "vmd", skills: ["C++", "2D VMD", "Signal processing"] },
   VMD_2D_CPP_OpenCV: { category: "research", score: 62 },
-  VMD_2D_python: { category: "research", score: 67 },
+  VMD_2D_python: { category: "research", score: 67, family: "vmd", skills: ["Python", "2D VMD", "Signal processing"] },
   PulsePal_test: { category: "research", score: 65 },
   EEG_Fourier_frequency_filter: { category: "research", score: 61 },
   MATLAB_Tutorials_and_Exercise: { category: "research", score: 58 },
@@ -168,6 +266,60 @@ export const repositoryOverrides = {
 };
 
 export const caseStudies = {
+  cwc: {
+    updatedAt: "2026-09-24",
+    assets: [],
+    sections: {
+      problem: four(
+        "CWC is a closed-source project, so its public portfolio surface must explain the project without turning private implementation context into public documentation.",
+        "CWC 是閉源專案，因此公開作品介面必須在不把私人實作背景變成公開文件的前提下，說明專案本身。",
+        "CWC 是闭源项目，因此公开作品界面必须在不把私有实现背景变成公开文档的前提下，说明项目本身。",
+        "CWC はクローズドソースのため、非公開の実装背景を公開文書に変えずに、プロジェクトの輪郭を説明できる公開面が必要です。"
+      ),
+      role: four(
+        "I am presenting CWC through a deliberately limited project record: enough context to understand why it belongs in the portfolio, without publishing private implementation details.",
+        "我以刻意受限的專案記錄呈現 CWC：提供足以理解其為何屬於作品集的背景，但不公開私人實作細節。",
+        "我以刻意受限的项目记录呈现 CWC：提供足以理解其为何属于作品集的背景，但不披露私有实现细节。",
+        "CWC がポートフォリオに含まれる理由を理解できるだけの背景を示し、非公開の実装詳細は出さない、意図的に限定した記録として公開しています。"
+      ),
+      constraints: four(
+        "The public boundary excludes source code, private infrastructure, credentials, client or employer details, internal data, and proprietary operating records.",
+        "公開邊界排除原始碼、私人基礎設施、憑據、客戶或雇主細節、內部資料與專有運作記錄。",
+        "公开边界排除源代码、私有基础设施、凭据、客户或雇主细节、内部数据与专有运行记录。",
+        "公開範囲にはソースコード、非公開インフラ、認証情報、顧客や雇用主の詳細、内部データ、専有の運用記録を含めません。"
+      ),
+      decisions: four(
+        "A static, multilingual page is the right evidence surface: it preserves a stable explanation while keeping the repository and operational boundary closed.",
+        "靜態多語言頁面是合適的證據介面：保留穩定說明，同時維持儲存庫與運作邊界的封閉。",
+        "静态多语言页面是合适的证据界面：保留稳定说明，同时维持仓库与运行边界的封闭。",
+        "静的な多言語ページを証拠面にすることで、安定した説明を保ちながら、リポジトリと運用の境界を非公開に保ちます。"
+      ),
+      architecture: four(
+        "The public architecture is intentionally simple: a static project overview, a clear private-project status, and no source or download action.",
+        "公開架構刻意保持簡單：靜態專案概覽、清楚的閉源狀態，以及不提供原始碼或下載操作。",
+        "公开架构刻意保持简单：静态项目概览、清楚的闭源状态，以及不提供源码或下载操作。",
+        "公開側の構成は意図的に単純です。静的な概要、明確な非公開ステータス、ソースやダウンロード操作を持たせません。"
+      ),
+      evidence: four(
+        "The evidence boundary is the public-safe project explanation itself. It is not a substitute for access to the closed repository.",
+        "證據邊界就是這份可公開的專案說明；它不是閉源儲存庫存取權的替代品。",
+        "证据边界就是这份可公开的项目说明；它不是闭源仓库存取权的替代品。",
+        "証拠の範囲は、この公開可能なプロジェクト説明そのものです。非公開リポジトリへのアクセスを代替するものではありません。"
+      ),
+      result: four(
+        "CWC now has a durable portfolio entry that communicates its place in the project set without exposing private material.",
+        "CWC 現在擁有可長期使用的作品入口，能說明其在專案集合中的位置，同時不暴露私人資料。",
+        "CWC 现在拥有可长期使用的作品入口，能说明其在项目集合中的位置，同时不暴露私有资料。",
+        "CWC は、非公開情報を露出せずにプロジェクト群の中での位置づけを伝える、長期利用可能なポートフォリオ入口になりました。"
+      ),
+      limits: four(
+        "This page intentionally does not claim private metrics, customers, deployment addresses, source access, or implementation details that are not approved for publication.",
+        "此頁面刻意不宣稱未獲准公開的私人指標、客戶、部署位址、原始碼存取權或實作細節。",
+        "此页面刻意不宣称未获准公开的私有指标、客户、部署地址、源码访问权或实现细节。",
+        "このページでは、公開承認されていない非公開の指標、顧客、デプロイ先、ソースアクセス、実装詳細を意図的に主張しません。"
+      )
+    }
+  },
   pulseboard: {
     updatedAt: "2026-08-17",
     assets: ["architecture", "deployment-runbook", "reliability-adr", "verification-record"],

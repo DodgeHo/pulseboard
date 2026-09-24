@@ -56,6 +56,8 @@ export async function loadCatalog(packageRoot) {
       name: repository.name,
       slug: override.slug || slugify(repository.name),
       visibility: repository.visibility,
+      privateRepository: repository.visibility === "private",
+      closedSource: Boolean(override.closedSource || repository.visibility === "private"),
       origin,
       featured: Boolean(override.featured),
       showInArchive: override.showInArchive !== false,
@@ -66,6 +68,7 @@ export async function loadCatalog(packageRoot) {
       liveRoutes: override.liveRoutes || [],
       evidence: override.evidence || [repository.visibility === "public" ? "Source" : "Inventory record"],
       safeSummary: override.safeSummary || defaultSummary(repository),
+      ...(override.family ? { family: override.family } : {}),
       updatedAt: repository.updatedAt || null,
       archived: Boolean(repository.archived),
       ...(repository.visibility === "public" ? { githubUrl: repository.url } : {})
