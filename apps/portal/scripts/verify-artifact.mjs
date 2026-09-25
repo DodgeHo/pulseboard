@@ -2,6 +2,7 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { siteCopy } from "../content/site-copy.mjs";
+import { upworkPortfolio } from "../content/upwork-copy.mjs";
 import { loadCatalog, localeList } from "./lib/catalog.mjs";
 
 const packageRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -9,12 +10,17 @@ const repositoryRoot = resolve(packageRoot, "../..");
 const localRoot = resolve(packageRoot, "dist");
 const deployRoot = resolve(repositoryRoot, "deploy/anlan");
 const { snapshot, projects, repositories, caseStudies } = await loadCatalog(packageRoot);
+const bySlug = new Map(projects.map((project) => [project.slug, project]));
 
 const expectedInitialCounts = { total: 70, public: 57, private: 13, forks: 21, original: 49 };
 const localePrefixes = { en: "", "zh-Hant": "zh-hant/", "zh-Hans": "zh-hans/", ja: "ja/" };
 const flagshipSlugs = ["pulseboard", "heatstack", "career-radar"];
 const homeOrder = ["HeatStack", "TapPhysics", "Career Radar", "PuzzleWear", "CWC", "PulseBoard", "SAA Practice", "SAP Practice", "ISPM Practice", "PAL4 translation", "IELTS writing GPT", "Dynamic RRT Connect", "VMD", "CEEMDAN", "DevEnglish"];
 const vmdHomeUrls = ["https://github.com/DodgeHo/VMD_cpp", "https://github.com/DodgeHo/VMD_2D_python", "https://github.com/DodgeHo/VMD_2D_cpp"];
+const puzzleWearUrl = "https://puzzlewear.cn/login";
+const requiredAuxiliaryNames = ["AI 热栈", "职海雷达", "一点物理", "CellLoc Web Controller- 细胞定位网络控制系统", "拼频品聘-服装创意设计", "开发者英语练习站", "运营脉冲板", "SAA Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习"];
+const staleHeatStackCopy = ["portfolio projects", "interview preparation", "作品项目", "面试准备", "作品集", "面試"];
+const staleTapPhysicsCopy = ["evidence surface", "部署路由", "证据界面", "證據介面"];
 const scanExtensions = new Set([".html", ".xml", ".json", ".js", ".map"]);
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -49,6 +55,25 @@ function countOccurrences(haystack, needle) {
   return haystack.split(needle).length - 1;
 }
 
+function assertIncludesAll(haystack, needles, label) {
+  for (const needle of needles) assert(haystack.includes(needle), `${label} is missing ${needle}`);
+}
+
+function assertExcludesAll(haystack, needles, label) {
+  for (const needle of needles) assert(!haystack.includes(needle), `${label} still contains stale copy: ${needle}`);
+}
+
+function homeProjectBlock(home, name) {
+  const start = home.indexOf(`"name":"${name}"`);
+  if (start < 0) return "";
+  const next = homeOrder.map((candidate) => home.indexOf(`"name":"${candidate}"`)).filter((index) => index > start).sort((a, b) => a - b)[0] ?? home.length;
+  return home.slice(start, next);
+}
+
+function localizedAuxiliaryName(project, locale) {
+  return project.auxiliaryName?.[locale] || project.auxiliaryName?.en || "";
+}
+
 function verifyPageMetadata(artifact, label) {
   assert(/<title>[^<]+<\/title>/.test(artifact), `${label} is missing a title`);
   assert(artifact.includes('<meta name="description"'), `${label} is missing a description`);
@@ -59,6 +84,16 @@ function verifyPageMetadata(artifact, label) {
   }
   assert(artifact.includes('type="application/ld+json"'), `${label} is missing JSON-LD`);
   assert(!/__[A-Z0-9_]+__/.test(artifact), `${label} contains an unresolved build placeholder`);
+}
+
+function verifyUpworkMetadata(artifact, label) {
+  assert(artifact.includes('<html lang="en">'), `${label} must be English-only`);
+  assert(artifact.includes('<link rel="canonical"'), `${label} is missing a canonical URL`);
+  assert(artifact.includes('hreflang="en"') && artifact.includes('hreflang="x-default"'), `${label} is missing English alternate metadata`);
+  assert(artifact.includes('type="application/ld+json"'), `${label} is missing JSON-LD`);
+  assert(!/__[A-Z0-9_]+__/.test(artifact), `${label} contains an unresolved build placeholder`);
+  assert(!artifact.includes("api.github.com"), `${label} contains a GitHub API address`);
+  assert(!artifact.includes("mailto:"), `${label} publishes an unconfirmed email address`);
 }
 
 function verifyInventoryCounts() {
@@ -108,7 +143,8 @@ async function verifyArchive(root, relativePath, locale) {
   assert(artifact.includes("CEEMDAN_cpp"), `${relativePath} is missing the CEEMDAN_cpp spelling`);
   assert(rowForArchive(rows, "PAL4_EnglishMod")?.includes("https://github.com/DodgeHo/PAL4_EnglishMod"), `${relativePath} is missing the PAL4 repository link`);
   assert(rowForArchive(rows, "TapPhysics")?.includes('href="/tapphysics/"'), `${relativePath} is missing the TapPhysics /tapphysics/ route`);
-  assert(rowForArchive(rows, "PuzzleWear")?.includes('href="https://puzzlewear.cn/"'), `${relativePath} is missing the PuzzleWear live URL`);
+  assert(rowForArchive(rows, "PuzzleWear")?.includes(`href="${puzzleWearUrl}"`), `${relativePath} is missing the exact PuzzleWear login URL`);
+  assert(!rowForArchive(rows, "PuzzleWear")?.includes('href="https://puzzlewear.cn/"'), `${relativePath} still points PuzzleWear at the root URL`);
   assert(rowForArchive(rows, "DevEnglish")?.includes('href="https://devenglish.club/"'), `${relativePath} is missing the DevEnglish live URL`);
   assert(!rowForArchive(rows, "CWC")?.includes("github.com"), `${relativePath} must not expose a CWC GitHub link`);
 
@@ -119,6 +155,13 @@ async function verifyArchive(root, relativePath, locale) {
   }
 
   assert(artifact.includes("data-project-search"), `${relativePath} is missing project search`);
+  for (const project of projects) {
+    const auxiliaryName = localizedAuxiliaryName(project, locale);
+    if (!auxiliaryName) continue;
+    assert(rowForArchive(rows, project.name)?.includes(auxiliaryName), `${relativePath} is missing auxiliary name for ${project.name}: ${auxiliaryName}`);
+  }
+  assertExcludesAll(rowForArchive(rows, "HeatStack") ?? "", staleHeatStackCopy, `${relativePath} HeatStack row`);
+  assertExcludesAll(rowForArchive(rows, "TapPhysics") ?? "", staleTapPhysicsCopy, `${relativePath} TapPhysics row`);
   assert(artifact.includes('data-project-filter="featured"'), `${relativePath} is missing featured filtering`);
   assert(artifact.includes('data-project-filter="private"'), `${relativePath} is missing private filtering`);
   assert(artifact.includes('data-project-filter="fork"'), `${relativePath} is missing fork filtering`);
@@ -167,8 +210,12 @@ async function verifyGeneratedPages(root) {
   assert(home.indexOf('"homepageActions"') < home.indexOf('"name":"IELTS writing GPT"'), "Homepage action data is unexpectedly reordered before PAL4 checks");
   assert(home.includes("https://dodgeho.github.io/PAL4_EnglishMod/") && home.indexOf("https://dodgeho.github.io/PAL4_EnglishMod/") < home.indexOf("https://github.com/DodgeHo/PAL4_EnglishMod"), "PAL4 homepage action must appear before the repository action");
   assert(home.includes('"route":"/tapphysics/"') && home.includes('"action":"/tapphysics/"'), "Homepage TapPhysics action must point to /tapphysics/");
-  assert(home.includes("https://puzzlewear.cn/"), "Homepage is missing PuzzleWear live URL");
+  assert(home.includes(`"action":"${puzzleWearUrl}"`), "Homepage is missing the exact PuzzleWear login URL");
+  assert(!home.includes('href="https://puzzlewear.cn/"'), "Homepage still points PuzzleWear at the root URL");
   assert(home.includes("https://devenglish.club/"), "Homepage is missing DevEnglish live URL");
+  assertIncludesAll(home, requiredAuxiliaryNames, "Homepage project data");
+  assertExcludesAll(homeProjectBlock(home, "HeatStack"), staleHeatStackCopy, "Homepage HeatStack project data");
+  assertExcludesAll(homeProjectBlock(home, "TapPhysics"), staleTapPhysicsCopy, "Homepage TapPhysics project data");
   for (const name of ["CWC", "PuzzleWear", "DevEnglish", "ISPM Practice"]) {
     const nameIndex = home.indexOf(`"name":"${name}"`);
     const nextIndex = homeOrder.map((candidate) => home.indexOf(`"name":"${candidate}"`)).filter((index) => index > nameIndex).sort((a, b) => a - b)[0] ?? home.length;
@@ -183,6 +230,22 @@ async function verifyGeneratedPages(root) {
   assert(home.includes('<script type="application/ld+json">'), "Homepage is missing JSON-LD");
   assert(!/__[A-Z0-9_]+__/.test(home), "Homepage contains an unresolved build placeholder");
 
+  const upwork = await read(root, "upwork/index.html");
+  verifyUpworkMetadata(upwork, "Upwork entry page");
+  assert(upwork.includes('data-upwork-page'), "Upwork entry page is missing its page root");
+  for (const portfolio of upworkPortfolio) assert(upwork.includes(portfolio.title), `Upwork entry page is missing ${portfolio.title}`);
+  assert(upwork.includes("representative browser-only simulation"), "Upwork entry page is missing its simulation boundary");
+  for (const portfolio of upworkPortfolio) {
+    const artifact = await read(root, `upwork/${portfolio.slug}/index.html`);
+    verifyUpworkMetadata(artifact, `Upwork ${portfolio.slug} case page`);
+    assert(artifact.includes(portfolio.title), `Upwork ${portfolio.slug} page is missing its title`);
+    assert(artifact.includes(`data-demo="${portfolio.demoType}"`), `Upwork ${portfolio.slug} page is missing its demo marker`);
+    assert(artifact.includes(portfolio.demoLabel), `Upwork ${portfolio.slug} page is missing its demo label`);
+    assert(artifact.includes("Problem") && artifact.includes("Approach") && artifact.includes("Proof") && artifact.includes("Limits") && artifact.includes("Delivery signals"), `Upwork ${portfolio.slug} page is missing case sections`);
+    if (portfolio.demoType === "reliability") assert(artifact.includes("Simulation only"), "Reliability page is missing its simulation boundary");
+    else assert(artifact.includes("Representative"), `${portfolio.slug} page is missing its representative-demo boundary`);
+  }
+
   for (const locale of localeList) {
     const prefix = localePrefixes[locale];
     await verifyHirePage(root, `${prefix}hire/index.html`, locale);
@@ -193,6 +256,9 @@ async function verifyGeneratedPages(root) {
     for (const slug of flagshipSlugs) {
       const detail = await read(root, `${prefix}projects/${slug}/index.html`);
       verifyPageMetadata(detail, `${locale} ${slug} case study`);
+      const auxiliaryName = localizedAuxiliaryName(bySlug.get(slug) ?? {}, locale);
+      if (auxiliaryName) assert(detail.includes(auxiliaryName), `${locale} ${slug} detail is missing auxiliary name ${auxiliaryName}`);
+      if (slug === "heatstack") assertExcludesAll(detail, staleHeatStackCopy, `${locale} HeatStack detail`);
       for (const asset of caseStudies[slug].assets) {
         const assetArtifact = await read(root, `${prefix}projects/${slug}/${asset}/index.html`);
         verifyPageMetadata(assetArtifact, `${locale} ${slug} ${asset}`);
@@ -205,6 +271,8 @@ async function verifyGeneratedPages(root) {
   const feed = await read(root, "feed.xml");
   for (const slug of flagshipSlugs) assert(sitemap.includes(`https://anlan.store/projects/${slug}/`), `Sitemap is missing ${slug}`);
   for (const path of ["/hire/", "/zh-hant/hire/", "/zh-hans/hire/", "/ja/hire/"]) assert(sitemap.includes(`https://anlan.store${path}`), `Sitemap is missing ${path}`);
+  assert(sitemap.includes("https://anlan.store/upwork/"), "Sitemap is missing the Upwork entry page");
+  for (const portfolio of upworkPortfolio) assert(sitemap.includes(`https://anlan.store/upwork/${portfolio.slug}/`), `Sitemap is missing Upwork ${portfolio.slug}`);
   assert(!repositories.filter((repository) => repository.visibility === "private").some((repository) => sitemap.includes(`/projects/${repository.slug}/`)), "Sitemap includes an unpublished private project page");
   assert(robots.includes("Sitemap: https://anlan.store/sitemap.xml"), "robots.txt is missing the sitemap URL");
   assert(feed.includes("ANLAN.STORE Project Updates") && flagshipSlugs.every((slug) => feed.includes(`/projects/${slug}/`)), "RSS feed is missing flagship project updates");

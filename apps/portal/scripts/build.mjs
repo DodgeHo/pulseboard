@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { hireCopy, hireLinks } from "../content/hire-copy.mjs";
 import { assetTitles, localeConfig, siteCopy } from "../content/site-copy.mjs";
+import { upworkPortfolio, upworkSite } from "../content/upwork-copy.mjs";
 import { loadCatalog, localeList } from "./lib/catalog.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -29,8 +30,9 @@ const localePath = (locale, suffix) => `${localeConfig[locale].prefix}${suffix}`
 const absoluteUrl = (path) => `${siteUrl}${path}`;
 const isExternalHref = (href = "") => /^https?:\/\//i.test(href);
 const linkAttrs = (href = "") => isExternalHref(href) ? ' target="_blank" rel="noreferrer"' : "";
+const four = (en, zhHant, zhHans, ja) => ({ en, "zh-Hant": zhHant, "zh-Hans": zhHans, ja });
 
-const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCssRaw, archiveJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
+const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCssRaw, archiveJs, upworkCssRaw, upworkJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
   readText(resolve(sourceRoot, "index.html")),
   readText(resolve(sourceRoot, "hire.html")),
   readText(resolve(sourceRoot, "styles.css")),
@@ -38,6 +40,8 @@ const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCss
   readText(resolve(sourceRoot, "archive.css")),
   readText(resolve(sourceRoot, "hire.css")),
   readText(resolve(sourceRoot, "archive.js")),
+  readText(resolve(sourceRoot, "upwork/upwork.css")),
+  readText(resolve(sourceRoot, "upwork/upwork.js")),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-ops.png"), "image/png"),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-customer.png"), "image/png"),
   readDataUri(resolve(sourceRoot, "assets/fonts/Inter-400.woff"), "font/woff"),
@@ -58,22 +62,22 @@ const bySlug = new Map(projects.map((project) => [project.slug, project]));
 const byName = new Map(projects.map((project) => [project.name, project]));
 
 const genericPrivateSummary = {
-  en: "A private study route retained without a public application link.",
-  "zh-Hant": "保留但不提供公開應用入口的私人學習路線。",
-  "zh-Hans": "保留但不提供公开应用入口的私有学习路线。",
-  ja: "公開アプリへのリンクを持たずに記録した非公開の学習ルートです。"
+  en: "A closed-source IT service management question-practice tool kept as a study record, with focused review available only through the preserved app route.",
+  "zh-Hant": "閉源的 IT 服務管理做題練習工具，作為學習記錄保留，聚焦複習僅透過保留的應用路由呈現。",
+  "zh-Hans": "闭源的 IT 服务管理做题练习工具，作为学习记录保留，聚焦复习仅通过保留的应用路由呈现。",
+  ja: "クローズドソースの IT サービス管理向け問題練習ツールで、学習記録として保持し、集中レビューは保存済みアプリ経路だけで扱います。"
 };
 
 const homeDefinitions = [
-  { lookup: "HeatStack", id: "heatstack", category: "live", layout: "feature", color: "orange", name: "HeatStack", alias: "AI 热栈", route: "/heatstack/", action: "/heatstack/", actionKey: "open" },
+  { lookup: "HeatStack", id: "heatstack", category: "live", layout: "feature", color: "orange", name: "HeatStack", route: "/heatstack/", action: "/heatstack/", actionKey: "open" },
   { lookup: "TapPhysics", id: "tapphysics", category: "live", layout: "major", color: "cyan", name: "TapPhysics", route: "/tapphysics/", action: "/tapphysics/", actionKey: "open" },
-  { lookup: "Career Radar", id: "career", category: "live", layout: "major", color: "orange", name: "Career Radar", alias: "职海雷达 · キャリアレーダー", route: "/jobs/", action: "/jobs/", actionKey: "open" },
+  { lookup: "Career Radar", id: "career", category: "live", layout: "major", color: "orange", name: "Career Radar", route: "/jobs/", action: "/jobs/", actionKey: "open" },
   { lookup: "PuzzleWear", id: "puzzlewear", category: "live", layout: "study", color: "violet", name: "PuzzleWear", actionKey: "open" },
   { lookup: "CWC", id: "cwc", category: "source", layout: "study-small", color: "orange", name: "CWC" },
   { lookup: "pulseboard", id: "pulseboard", category: "live", layout: "feature", color: "cyan", name: "PulseBoard", route: "/demo/", action: "/demo/", actionKey: "open" },
   { lookup: "aws-saa-learning-skill", id: "saa", category: "study", layout: "study", color: "cobalt", name: "SAA Practice", route: "/saa/", action: "/saa/", actionKey: "open" },
   { lookup: "SAP Practice", id: "sap", category: "study", layout: "study-small", color: "violet", name: "SAP Practice", route: "/sap/", action: "/sap/", actionKey: "open" },
-  { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", visibility: "private", privateRepository: false, closedSource: true, railLinked: false, railKeywords: ["ITSM", "study", "closed source"], tags: ["ITSM", "practice", "closed source"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
+  { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", auxiliaryName: four("ISPM Practice - service management question practice", "ISPM Practice-服務管理做題練習", "ISPM Practice-服务管理做题练习", "ISPM Practice - IT サービス管理問題練習"), visibility: "private", privateRepository: false, closedSource: true, railLinked: false, railKeywords: ["ITSM", "question practice", "closed source"], tags: ["ITSM", "question practice", "closed source"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
   { lookup: "PAL4_EnglishMod", id: "pal4", category: "source", layout: "source", color: "orange", name: "PAL4 translation", alias: "PAL4_EnglishMod", homepageActions: [{ href: "https://dodgeho.github.io/PAL4_EnglishMod/", key: "homepage" }] },
   { lookup: "IELTS_writing_GPT", id: "ielts", category: "source", layout: "source-compact", color: "cobalt", name: "IELTS writing GPT", alias: "IELTS_writing_GPT" },
   { lookup: "dynamic_rrt_connect", id: "rrt", category: "source", layout: "source-wide", color: "cyan", name: "Dynamic RRT Connect", alias: "dynamic_rrt_connect" },
@@ -103,6 +107,7 @@ const homeProjects = homeDefinitions.map((definition) => {
     railKeywords: definition.railKeywords || project.skills.slice(0, 3),
     tags: definition.tags || project.skills,
     safeSummary: definition.safeSummary || project.safeSummary,
+    auxiliaryName: definition.auxiliaryName || project?.auxiliaryName || null,
     evidence: definition.evidence || project.evidence,
     casePath: project?.publishCaseStudy ? `/projects/${project.slug}/` : null,
     visibility: definition.visibility || project?.visibility || "public",
@@ -123,6 +128,9 @@ const archiveCss = archiveCssRaw
   .replace("__INTER_REGULAR_FONT__", interRegular)
   .replace("__INTER_SEMIBOLD_FONT__", interSemibold);
 const hireCss = hireCssRaw
+  .replace("__INTER_REGULAR_FONT__", interRegular)
+  .replace("__INTER_SEMIBOLD_FONT__", interSemibold);
+const upworkCss = upworkCssRaw
   .replace("__INTER_REGULAR_FONT__", interRegular)
   .replace("__INTER_SEMIBOLD_FONT__", interSemibold);
 
@@ -221,19 +229,95 @@ const hirePage = (locale) => {
     .replace("__LANGUAGE_REDIRECT__", languageHashRedirect(suffix));
 };
 
+const upworkHeader = (current = "overview") => `<header class="upwork-topbar">
+  <a class="upwork-brand" href="/" aria-label="ANLAN.STORE home"><span class="upwork-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>ANLAN.STORE</span></a>
+  <nav class="upwork-nav" aria-label="Upwork portfolio navigation">
+    <a href="/upwork/"${current === "overview" ? ' aria-current="page"' : ""}>Overview</a>
+    ${upworkPortfolio.map((portfolio) => `<a href="/upwork/${portfolio.slug}/"${current === portfolio.slug ? ' aria-current="page"' : ""}>${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.title.split(" ")[0])}</a>`).join("")}
+    <a href="/hire/">Hire page</a>
+  </nav>
+</header>`;
+
+const upworkBasePage = ({ suffix, title, description, body, jsonLd, current = "overview" }) => {
+  const canonical = absoluteUrl(suffix);
+  const hrefLang = `<link rel="alternate" hreflang="en" href="${canonical}"><link rel="alternate" hreflang="x-default" href="${canonical}">`;
+  return `<!doctype html><html lang="en"><head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="${escapeHtml(description)}"><meta name="theme-color" content="#060817">
+    <title>${escapeHtml(title)} · ANLAN.STORE</title><link rel="canonical" href="${canonical}">${hrefLang}
+    <meta property="og:type" content="article"><meta property="og:title" content="${escapeHtml(title)} · ANLAN.STORE"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
+    <style>${upworkCss}</style>${jsonLd ? `<script type="application/ld+json">${escapeJson(jsonLd)}</script>` : ""}
+  </head><body><a class="upwork-skip" href="#main">Skip to content</a><div class="upwork-shell">${upworkHeader(current)}${body}<footer class="upwork-footer"><span>UPWORK / SOFTWARE DELIVERY</span><span>Representative demos. Honest boundaries.</span></footer></div><script>${upworkJs}</script></body></html>`;
+};
+
+const demoFor = (portfolio) => {
+  if (portfolio.demoType === "feature") return `<div class="upwork-demo" data-demo="feature">
+    <form class="demo-toolbar" data-feature-form>
+      <div class="demo-field grow"><label for="feature-title">Feature name</label><input id="feature-title" name="featureTitle" autocomplete="off" placeholder="e.g. Add release notes" required></div>
+      <div class="demo-field"><label for="feature-owner">Owner</label><input id="feature-owner" name="featureOwner" autocomplete="off" placeholder="Name" required></div>
+      <div class="demo-field"><label for="feature-priority">Priority</label><select id="feature-priority" name="featurePriority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select></div>
+      <button class="upwork-button" type="submit">Add to queue</button><p class="demo-error" data-feature-error role="status" aria-live="polite"></p>
+    </form>
+    <div class="demo-summary"><div class="demo-stat"><span class="demo-caption">Total records</span><strong data-feature-total>0</strong></div><div class="demo-stat"><span class="demo-caption">Planned</span><strong data-feature-planned>0</strong></div><div class="demo-stat"><span class="demo-caption">In review</span><strong data-feature-reviewed>0</strong></div><div class="demo-stat"><span class="demo-caption">Shipped</span><strong data-feature-shipped>0</strong></div></div>
+    <div class="demo-filterbar" aria-label="Feature status filters"><button class="demo-filter" type="button" data-feature-filter="all" aria-pressed="true">All</button><button class="demo-filter" type="button" data-feature-filter="planned" aria-pressed="false">Planned</button><button class="demo-filter" type="button" data-feature-filter="in review" aria-pressed="false">In review</button><button class="demo-filter" type="button" data-feature-filter="shipped" aria-pressed="false">Shipped</button></div>
+    <div class="demo-list" data-feature-list aria-live="polite"></div>
+  </div>`;
+  if (portfolio.demoType === "rescue") return `<div class="upwork-demo" data-demo="rescue"><div class="rescue-layout">
+    <div class="rescue-list" role="tablist" aria-label="Representative code samples">
+      <button class="rescue-choice" type="button" data-rescue-choice aria-pressed="true"><strong>Async state guard</strong><span>Prevent stale results</span></button>
+      <button class="rescue-choice" type="button" data-rescue-choice aria-pressed="false"><strong>Input boundary</strong><span>Scope data access</span></button>
+      <button class="rescue-choice" type="button" data-rescue-choice aria-pressed="false"><strong>Validation path</strong><span>Return useful errors</span></button>
+    </div><div class="rescue-panel"><p class="demo-caption">Selected representative sample</p><h3 data-rescue-title>Async state guard</h3><p data-rescue-summary></p><div class="code-window" aria-label="Code sample"><pre><code data-rescue-code></code></pre></div><div class="rescue-checks" data-rescue-checks></div><button class="upwork-button" type="button" data-rescue-toggle>Show repaired code</button><p class="rescue-result" data-rescue-result role="status" aria-live="polite"></p></div>
+  </div></div>`;
+  return `<div class="upwork-demo" data-demo="reliability"><div class="reliability-body"><div class="reliability-steps">
+    <article class="reliability-step" data-reliability-step data-state="idle"><strong>01 / HEALTH GATE</strong><h3>Check liveness</h3><p>Confirm the service boundary responds before changing state.</p></article>
+    <article class="reliability-step" data-reliability-step data-state="idle"><strong>02 / QUEUE RETRY</strong><h3>Retry work</h3><p>Make the retry decision visible instead of silently dropping a job.</p></article>
+    <article class="reliability-step" data-reliability-step data-state="idle"><strong>03 / RESTORE GATE</strong><h3>Validate restore</h3><p>Check the restored state before treating recovery as complete.</p></article>
+    <article class="reliability-step" data-reliability-step data-state="idle"><strong>04 / ROLLBACK CHECK</strong><h3>Verify rollback</h3><p>Confirm the release boundary before reopening the path.</p></article>
+  </div><button class="upwork-button" type="button" data-reliability-run>Run simulation</button><p class="reliability-output" data-reliability-output role="status" aria-live="polite">Ready. No external system will be touched.</p></div></div>`;
+};
+
+const upworkPage = () => {
+  const body = `<main id="main" class="upwork-main" data-upwork-page>
+    <section class="upwork-hero"><div class="upwork-hero-copy"><p class="upwork-eyebrow">${escapeHtml(upworkSite.eyebrow)}</p><h1>${escapeHtml(upworkSite.headline)}</h1><p class="upwork-lede">${escapeHtml(upworkSite.intro)}</p><div class="upwork-actions"><a class="upwork-button" href="#portfolio">Review the three work modes</a><a class="upwork-button secondary" href="/hire/">Open the evidence page</a></div></div><aside class="upwork-hero-note"><strong>First review</strong><p>${escapeHtml(upworkSite.note)}</p></aside></section>
+    <section class="upwork-proof" aria-label="Portfolio focus">${upworkSite.proof.map(([number, title, text]) => `<article><span class="upwork-proof-number">${escapeHtml(number)}</span><h2>${escapeHtml(title)}</h2><p>${escapeHtml(text)}</p></article>`).join("")}</section>
+    <section class="upwork-section" id="portfolio"><div class="upwork-section-head"><div><p class="upwork-label">Portfolio / three reviewable slices</p><h2>What I can help make clearer</h2></div><p class="upwork-section-intro">Each piece stays narrow on purpose: a useful behavior, a visible decision path, and a boundary around what the demo can prove.</p></div><div class="upwork-work-grid">${upworkPortfolio.map((portfolio) => `<article class="upwork-card"><span class="upwork-card-index">${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.demoLabel)}</span><h3>${escapeHtml(portfolio.title)}</h3><p>${escapeHtml(portfolio.short)}</p><ul class="upwork-tags">${portfolio.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}</ul><a class="upwork-card-link" href="/upwork/${portfolio.slug}/">Open case study + demo →</a></article>`).join("")}</div></section>
+    <section class="upwork-section upwork-method"><div><p class="upwork-label">Working pattern</p><h2>${escapeHtml(upworkSite.methodTitle)}</h2></div><div class="upwork-method-grid">${upworkSite.method.map(([title, text], index) => `<article class="upwork-method-step"><h3>${String(index + 1).padStart(2, "0")} / ${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></article>`).join("")}</div></section>
+    <section class="upwork-section upwork-boundary"><h2>${escapeHtml(upworkSite.boundaryTitle)}</h2><p>${escapeHtml(upworkSite.boundary)}</p></section>
+    <section class="upwork-section upwork-contact"><div class="upwork-contact-copy"><p class="upwork-label">Next conversation</p><h2>${escapeHtml(upworkSite.contactTitle)}</h2><p>${escapeHtml(upworkSite.contactText)}</p></div><a class="upwork-button" href="/hire/">Review working boundaries</a></section>
+  </main>`;
+  const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: upworkSite.title, description: upworkSite.description, url: absoluteUrl("/upwork/"), author: { "@type": "Person", name: "Dodge Ho" } };
+  return upworkBasePage({ suffix: "/upwork/", title: upworkSite.title, description: upworkSite.description, body, jsonLd });
+};
+
+const upworkCasePage = (portfolio) => {
+  const title = portfolio.title;
+  const description = `${portfolio.title}: ${portfolio.short}`;
+  const body = `<main id="main" class="upwork-main" data-upwork-page>
+    <section class="upwork-case-hero"><a class="upwork-back" href="/upwork/">← Back to Upwork portfolio</a><p class="upwork-eyebrow">${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.demoLabel)}</p><h1>${escapeHtml(title)}</h1><p class="upwork-case-intro">${escapeHtml(portfolio.short)}</p><span class="upwork-status">${escapeHtml(portfolio.demoNote)}</span></section>
+    <section class="upwork-case-layout"><article class="upwork-case-copy"><section><h2>Problem</h2><p>${escapeHtml(portfolio.problem)}</p></section><section><h2>Approach</h2><p>${escapeHtml(portfolio.approach)}</p></section><section><h2>Proof</h2><p>${escapeHtml(portfolio.proof)}</p></section><section><h2>Limits</h2><p>${escapeHtml(portfolio.limits)}</p></section></article><aside class="upwork-case-meta"><h2>Delivery signals</h2><ul class="upwork-delivery-list">${portfolio.delivery.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul><h2>Tools and boundaries</h2><ul class="upwork-tags">${portfolio.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}</ul></aside></section>
+    <section class="upwork-demo-section"><div class="upwork-demo-head"><div><p class="upwork-label">Interactive / ${escapeHtml(portfolio.demoLabel)}</p><h2>${escapeHtml(portfolio.demoTitle)}</h2></div><p class="upwork-demo-note">${escapeHtml(portfolio.demoNote)}</p></div>${demoFor(portfolio)}</section>
+    <section class="upwork-section upwork-contact"><div class="upwork-contact-copy"><p class="upwork-label">Continue the review</p><h2>Bring the existing codebase, constraint, or failure path.</h2><p>This page demonstrates a bounded working method. The next step would be to inspect the actual repository and agree on the smallest verifiable slice.</p></div><a class="upwork-button" href="/hire/">Open the evidence page</a></section>
+  </main>`;
+  const jsonLd = { "@context": "https://schema.org", "@type": "TechArticle", headline: title, description, url: absoluteUrl(`/upwork/${portfolio.slug}/`), author: { "@type": "Person", name: "Dodge Ho" } };
+  return upworkBasePage({ suffix: `/upwork/${portfolio.slug}/`, title, description, body, jsonLd, current: portfolio.slug });
+};
+
 const icons = {
   external: `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg>`,
   lock: `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5.4a3.5 3.5 0 0 1 7 0V7M3 7h10v7H3V7Z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>`
 };
 
 const projectDetailSuffix = (project) => `/projects/${project.slug}/`;
+const localizedAuxiliaryName = (project, locale) => project.auxiliaryName?.[locale] || project.auxiliaryName?.en || "";
 
 const archiveRow = (project, locale, index) => {
   const copy = siteCopy[locale];
+  const auxiliaryName = localizedAuxiliaryName(project, locale);
   const isPrivate = project.visibility === "private";
   const isLocked = Boolean(project.privateRepository);
   const detailAvailable = !isPrivate || project.publishCaseStudy;
-  const searchable = [project.name, project.safeSummary[locale], ...project.skills].join(" ").toLocaleLowerCase();
+  const searchable = [project.name, auxiliaryName, project.safeSummary[locale], ...project.skills].filter(Boolean).join(" ").toLocaleLowerCase();
   const actions = [
     ...project.liveRoutes.map((route) => `<a class="row-action" href="${route}"${linkAttrs(route)}>${escapeHtml(copy.live)}</a>`),
     detailAvailable ? `<a class="row-action" href="${localePath(locale, projectDetailSuffix(project))}">${escapeHtml(project.publishCaseStudy ? copy.caseStudy : copy.details)}</a>` : "",
@@ -242,7 +326,7 @@ const archiveRow = (project, locale, index) => {
   ].filter(Boolean).join("");
   return `<article class="archive-row" data-project-row data-category="${project.category}" data-origin="${project.origin}" data-visibility="${project.visibility}" data-featured="${project.featured}" data-score="${project.score}" data-updated="${project.updatedAt || ""}" data-name="${escapeHtml(project.name)}" data-search="${escapeHtml(searchable)}">
     <span class="row-index" data-row-index>${String(index + 1).padStart(2, "0")}</span>
-    <div class="row-name"><h3>${escapeHtml(project.name)}</h3><div class="row-flags"><span class="row-flag">${escapeHtml(isPrivate ? copy.private : copy.public)}</span><span class="row-flag is-origin">${escapeHtml(project.origin === "fork" ? copy.fork : copy.original)}</span>${project.closedSource ? `<span class="row-flag is-closed">${escapeHtml(copy.closedSource)}</span>` : ""}${project.featured ? `<span class="row-flag">${escapeHtml(copy.filters.featured)}</span>` : ""}</div></div>
+    <div class="row-name"><h3>${escapeHtml(project.name)}</h3>${auxiliaryName ? `<p class="row-name-alt">${escapeHtml(auxiliaryName)}</p>` : ""}<div class="row-flags"><span class="row-flag">${escapeHtml(isPrivate ? copy.private : copy.public)}</span><span class="row-flag is-origin">${escapeHtml(project.origin === "fork" ? copy.fork : copy.original)}</span>${project.closedSource ? `<span class="row-flag is-closed">${escapeHtml(copy.closedSource)}</span>` : ""}${project.featured ? `<span class="row-flag">${escapeHtml(copy.filters.featured)}</span>` : ""}</div></div>
     <div class="row-copy"><p>${escapeHtml(project.safeSummary[locale])}</p><ul class="row-skills">${project.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul></div>
     <p class="row-evidence"><strong>${escapeHtml(copy.evidence)}</strong>${project.evidence.map(escapeHtml).join("<br>")}</p>
     <div class="row-actions">${actions}</div>
@@ -269,6 +353,7 @@ const relatedProjects = (project) => projects.filter((candidate) => candidate.sl
 const detailPage = (project, locale) => {
   const copy = siteCopy[locale];
   const suffix = projectDetailSuffix(project);
+  const auxiliaryName = localizedAuxiliaryName(project, locale);
   const study = caseStudies[project.slug];
   const actionLinks = [
     ...project.liveRoutes.map((route) => `<a href="${route}"${linkAttrs(route)}>${escapeHtml(copy.live)}</a>`),
@@ -283,7 +368,7 @@ const detailPage = (project, locale) => {
     project.closedSource ? copy.closedSource : ""
   ].filter(Boolean).join(" · ");
   const aside = `<aside class="case-aside"><h2>${escapeHtml(copy.metadata)}</h2><dl class="archive-stats"><div><dt>${escapeHtml(copy.status)}</dt><dd>${escapeHtml(status)}</dd></div><div><dt>${escapeHtml(copy.updated)}</dt><dd>${escapeHtml(project.updatedAt?.slice(0, 10) || copy.noDate)}</dd></div></dl>${assets.length ? `<h2>${escapeHtml(copy.assets)}</h2><ul class="asset-nav">${assets.map((asset) => `<li><a href="${localePath(locale, `${suffix}${asset}/`)}">${escapeHtml(assetTitles[asset][locale])}</a></li>`).join("")}</ul>` : ""}<div class="related"><h2>${escapeHtml(copy.related)}</h2>${relatedProjects(project).map((related) => `<a href="${localePath(locale, projectDetailSuffix(related))}">${escapeHtml(related.name)}</a>`).join("")}</div></aside>`;
-  const body = `<main id="main"><section class="case-hero"><h1>${escapeHtml(project.name)}</h1><p class="case-summary">${escapeHtml(project.safeSummary[locale])}</p><div class="case-actions">${actionLinks}<a href="${localePath(locale, "/projects/")}">${escapeHtml(copy.backArchive)}</a></div></section><div class="detail-main"><article class="case-content">${mainContent}</article>${aside}</div></main>`;
+  const body = `<main id="main"><section class="case-hero"><h1>${escapeHtml(project.name)}</h1>${auxiliaryName ? `<p class="case-alt-name">${escapeHtml(auxiliaryName)}</p>` : ""}<p class="case-summary">${escapeHtml(project.safeSummary[locale])}</p><div class="case-actions">${actionLinks}<a href="${localePath(locale, "/projects/")}">${escapeHtml(copy.backArchive)}</a></div></section><div class="detail-main"><article class="case-content">${mainContent}</article>${aside}</div></main>`;
   const jsonLd = { "@context": "https://schema.org", "@type": study ? "TechArticle" : "CreativeWork", headline: project.name, description: project.safeSummary[locale], dateModified: study?.updatedAt || project.updatedAt || snapshot.syncedAt, url: absoluteUrl(localePath(locale, suffix)), author: { "@type": "Person", name: "Dodge Ho" } };
   return basePage({ locale, suffix, title: project.name, description: project.safeSummary[locale], body, type: "article", jsonLd });
 };
@@ -301,8 +386,17 @@ const assetPage = (project, asset, locale) => {
 
 await rm(localRoot, { recursive: true, force: true });
 await writeOutput("index.html", homeArtifact);
+const upworkArtifact = upworkPage();
+ensureResolved(upworkArtifact, "Upwork entry page");
+await writeOutput("upwork/index.html", upworkArtifact);
+for (const portfolio of upworkPortfolio) {
+  const artifact = upworkCasePage(portfolio);
+  ensureResolved(artifact, `Upwork ${portfolio.slug} case page`);
+  await writeOutput(`upwork/${portfolio.slug}/index.html`, artifact);
+}
 
 const sitemapPaths = ["/"];
+ sitemapPaths.push("/upwork/", ...upworkPortfolio.map((portfolio) => `/upwork/${portfolio.slug}/`));
 for (const locale of localeList) {
   if (locale !== "en") {
     await writeOutput(`${localeConfig[locale].prefix.replace(/^\//, "")}/index.html`, homeArtifact);

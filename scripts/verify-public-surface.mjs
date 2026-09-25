@@ -9,6 +9,16 @@ const privateNames = [
 ];
 const homeOrder = ['HeatStack', 'TapPhysics', 'Career Radar', 'PuzzleWear', 'CWC', 'PulseBoard', 'SAA Practice', 'SAP Practice', 'ISPM Practice', 'PAL4 translation', 'IELTS writing GPT', 'Dynamic RRT Connect', 'VMD', 'CEEMDAN', 'DevEnglish'];
 const vmdHomeUrls = ['https://github.com/DodgeHo/VMD_cpp', 'https://github.com/DodgeHo/VMD_2D_python', 'https://github.com/DodgeHo/VMD_2D_cpp'];
+const puzzleWearUrl = 'https://puzzlewear.cn/login';
+const requiredAuxiliaryNames = ['AI 热栈', '职海雷达', '一点物理', 'CellLoc Web Controller- 细胞定位网络控制系统', '拼频品聘-服装创意设计', '开发者英语练习站', '运营脉冲板', 'SAA Practice-亚马逊云做题练习', 'SAP Practice-亚马逊云做题练习'];
+const auxiliaryNamesByLocale = {
+  en: requiredAuxiliaryNames,
+  'zh-Hans': requiredAuxiliaryNames,
+  'zh-Hant': ['AI 熱棧', '職海雷達', '一點物理', 'CellLoc Web Controller- 細胞定位網路控制系統', '拼頻品聘-服裝創意設計', '開發者英語練習站', '營運脈衝板', 'SAA Practice-亞馬遜雲做題練習', 'SAP Practice-亞馬遜雲做題練習'],
+  ja: ['AI 熱棧', '職海雷達', '一点物理', 'CellLoc Web Controller- 细胞定位网络控制系统', '拼频品聘-服装创意设计', '开发者英语练习站', '运营脉冲板', 'SAA Practice-亚马逊云做题练习', 'SAP Practice-亚马逊云做题练习']
+};
+const staleHeatStackCopy = ['portfolio projects', 'interview preparation', '作品项目', '面试准备', '作品集', '面試'];
+const staleTapPhysicsCopy = ['evidence surface', '部署路由', '证据界面', '證據介面'];
 
 function normalizeBaseUrl(value) {
   const url = new URL(value);
@@ -32,6 +42,21 @@ function observe(name, value) {
 
 function countOccurrences(haystack, needle) {
   return haystack.split(needle).length - 1;
+}
+
+function includesAll(haystack, needles) {
+  return needles.every((needle) => haystack.includes(needle));
+}
+
+function excludesAll(haystack, needles) {
+  return needles.every((needle) => !haystack.includes(needle));
+}
+
+function homeProjectBlock(body, name) {
+  const start = body.indexOf(`"name":"${name}"`);
+  if (start < 0) return '';
+  const next = homeOrder.map((candidate) => body.indexOf(`"name":"${candidate}"`)).filter((index) => index > start).sort((a, b) => a - b)[0] ?? body.length;
+  return body.slice(start, next);
 }
 
 async function fetchText(path, options = {}) {
@@ -94,7 +119,11 @@ async function verifyPortal() {
   expect('homepage excludes VMD_2D_CPP_OpenCV', !body.includes('VMD_2D_CPP_OpenCV'));
   expect('PAL4 homepage action precedes repository action', body.includes('https://dodgeho.github.io/PAL4_EnglishMod/') && body.indexOf('https://dodgeho.github.io/PAL4_EnglishMod/') < body.indexOf('https://github.com/DodgeHo/PAL4_EnglishMod'));
   expect('homepage has TapPhysics live route', body.includes('"route":"/tapphysics/"') && body.includes('"action":"/tapphysics/"'));
-  expect('homepage has PuzzleWear and DevEnglish URLs', body.includes('https://puzzlewear.cn/') && body.includes('https://devenglish.club/'));
+  expect('homepage has exact PuzzleWear login and DevEnglish URLs', body.includes(`"action":"${puzzleWearUrl}"`) && body.includes('https://devenglish.club/'));
+  expect('homepage does not link PuzzleWear root URL', !body.includes('href="https://puzzlewear.cn/"'));
+  expect('homepage contains required auxiliary names', includesAll(body, requiredAuxiliaryNames), requiredAuxiliaryNames.filter((name) => !body.includes(name)).join(', '));
+  expect('homepage HeatStack copy is refreshed', excludesAll(homeProjectBlock(body, 'HeatStack'), staleHeatStackCopy));
+  expect('homepage TapPhysics copy is refreshed', excludesAll(homeProjectBlock(body, 'TapPhysics'), staleTapPhysicsCopy));
   expect('homepage contains closed-source flags', ['CWC', 'PuzzleWear', 'DevEnglish', 'ISPM Practice'].every((name) => {
     const start = body.indexOf(`"name":"${name}"`);
     const next = homeIndexes.filter((index) => index > start).sort((a, b) => a - b)[0] ?? body.length;
@@ -108,6 +137,30 @@ async function verifyPortal() {
   expect('portal keeps four language controls', ['en', 'zh-Hant', 'zh-Hans', 'ja'].every((locale) => body.includes(`data-locale="${locale}"`)));
   expect('portal links existing application routes', ['/heatstack/', '/tapphysics/', '/demo/', '/jobs/', '/saa/', '/sap/'].every((path) => body.includes(path)));
   expect('portal has JSON-LD', body.includes('type="application/ld+json"'));
+}
+
+async function verifyUpworkPages() {
+  const entry = await fetchText('/upwork/');
+  expect('Upwork entry returns 200', entry.response.status === 200, entry.response.status + ' ' + entry.response.statusText);
+  expect('Upwork entry is English', entry.body.includes('<html lang="en">'));
+  expect('Upwork entry explains the three work modes', ['React/Node Feature Delivery', 'AI-Generated Code Rescue', 'Backend/Reliability Work'].every((value) => entry.body.includes(value)));
+  expect('Upwork entry links the three case pages', ['/upwork/feature-delivery/', '/upwork/ai-code-rescue/', '/upwork/backend-reliability/'].every((value) => entry.body.includes(`href="${value}"`)));
+  expect('Upwork entry states demo boundaries', entry.body.includes('representative browser-only simulation') && entry.body.includes('production systems'));
+  expect('Upwork entry has metadata', entry.body.includes('<link rel="canonical"') && entry.body.includes('<meta property="og:title"') && entry.body.includes('type="application/ld+json"'));
+
+  for (const [path, title, demo, boundary] of [
+    ['/upwork/feature-delivery/', 'React/Node Feature Delivery', 'data-demo="feature"', 'Representative browser demo'],
+    ['/upwork/ai-code-rescue/', 'AI-Generated Code Rescue', 'data-demo="rescue"', 'Representative code-review demo'],
+    ['/upwork/backend-reliability/', 'Backend/Reliability Work', 'data-demo="reliability"', 'Explicit reliability simulation']
+  ]) {
+    const { response, body } = await fetchText(path);
+    expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
+    expect(path + ' is English', body.includes('<html lang="en">'));
+    expect(path + ' contains its title and demo', body.includes(title) && body.includes(demo));
+    expect(path + ' contains case sections', ['Problem', 'Approach', 'Proof', 'Limits', 'Delivery signals'].every((value) => body.includes(value)));
+    expect(path + ' states its evidence boundary', body.includes(boundary) && body.includes('No external'));
+    expect(path + ' has metadata and no email or placeholder leak', body.includes('<link rel="canonical"') && body.includes('<meta property="og:title"') && body.includes('type="application/ld+json"') && !body.includes('mailto:') && !/__[A-Z0-9_]+__/.test(body));
+  }
 }
 
 async function verifyHirePages() {
@@ -130,7 +183,7 @@ async function verifyHirePages() {
   }
 }
 
-async function verifyArchive(path, languageMarker, lockedMarker, closedSourceMarker, expectIcp) {
+async function verifyArchive(path, languageMarker, lockedMarker, closedSourceMarker, expectIcp, locale) {
   const { response, body } = await fetchText(path);
   expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'));
@@ -150,21 +203,25 @@ async function verifyArchive(path, languageMarker, lockedMarker, closedSourceMar
   }
   expect(path + ' uses CEEMDAN_cpp spelling', body.includes('CEEMDAN_cpp'));
   expect(path + ' has TapPhysics /tapphysics/', rowFor(body, 'TapPhysics')?.includes('href="/tapphysics/"'));
-  expect(path + ' has PuzzleWear URL', rowFor(body, 'PuzzleWear')?.includes('href="https://puzzlewear.cn/"'));
+  expect(path + ' has exact PuzzleWear login URL', rowFor(body, 'PuzzleWear')?.includes(`href="${puzzleWearUrl}"`));
+  expect(path + ' does not link PuzzleWear root URL', !rowFor(body, 'PuzzleWear')?.includes('href="https://puzzlewear.cn/"'));
   expect(path + ' has DevEnglish URL', rowFor(body, 'DevEnglish')?.includes('href="https://devenglish.club/"'));
   expect(path + ' keeps CWC source private', !rowFor(body, 'CWC')?.includes('github.com'));
   expect(path + ' marks closed-source archive records', ['CWC', 'PuzzleWear', 'DevEnglish'].every((name) => rowFor(body, name)?.includes(closedSourceMarker)));
+  expect(path + ' contains required auxiliary names', includesAll(body, auxiliaryNamesByLocale[locale]), auxiliaryNamesByLocale[locale].filter((name) => !body.includes(name)).join(', '));
+  expect(path + ' HeatStack row copy is refreshed', excludesAll(rowFor(body, 'HeatStack') ?? '', staleHeatStackCopy));
+  expect(path + ' TapPhysics row copy is refreshed', excludesAll(rowFor(body, 'TapPhysics') ?? '', staleTapPhysicsCopy));
   expect(path + ' ICP visibility is correct', expectIcp ? body.includes('粤ICP备2026035259号-1') : !body.includes('粤ICP备2026035259号-1'));
   verifyMetadata(body, path);
 }
 
 async function verifyProjectLibrary() {
-  for (const [path, marker, lockedMarker, closedSourceMarker, expectIcp] of [
-    ['/projects/', 'Complete Engineering Archive', 'Private repository · access unavailable', 'Closed source', false],
-    ['/zh-hans/projects/', '完整工程资产档案', '私有仓库 · 无法公开访问', '闭源', true],
-    ['/zh-hant/projects/', '完整工程資產檔案', '私人儲存庫 · 無法公開存取', '閉源', false],
-    ['/ja/projects/', '完全なエンジニアリング資産目録', '非公開リポジトリ · アクセス不可', 'クローズドソース', false]
-  ]) await verifyArchive(path, marker, lockedMarker, closedSourceMarker, expectIcp);
+  for (const [path, marker, lockedMarker, closedSourceMarker, expectIcp, locale] of [
+    ['/projects/', 'Complete Engineering Archive', 'Private repository · access unavailable', 'Closed source', false, 'en'],
+    ['/zh-hans/projects/', '完整工程资产档案', '私有仓库 · 无法公开访问', '闭源', true, 'zh-Hans'],
+    ['/zh-hant/projects/', '完整工程資產檔案', '私人儲存庫 · 無法公開存取', '閉源', false, 'zh-Hant'],
+    ['/ja/projects/', '完全なエンジニアリング資産目録', '非公開リポジトリ · アクセス不可', 'クローズドソース', false, 'ja']
+  ]) await verifyArchive(path, marker, lockedMarker, closedSourceMarker, expectIcp, locale);
 
   for (const path of ['/projects/pulseboard/', '/projects/heatstack/', '/projects/career-radar/']) {
     const { response, body } = await fetchText(path);
@@ -276,6 +333,7 @@ async function verifyWwwRedirect() {
 
 try {
   await verifyPortal();
+  await verifyUpworkPages();
   await verifyHirePages();
   await verifyProjectLibrary();
   await verifyPulseBoard();

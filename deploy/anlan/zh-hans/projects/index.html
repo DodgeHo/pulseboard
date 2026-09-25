@@ -115,6 +115,15 @@ button, input, select { font: inherit; }
 .row-index { color: var(--accent); font: 700 11px/1 var(--font-data); }
 .row-name { min-width: 0; }
 .row-name h3 { overflow-wrap: anywhere; margin: 0; font-size: clamp(18px, 2vw, 28px); letter-spacing: -.015em; }
+.row-name-alt {
+  max-width: 34ch;
+  margin: 9px 0 0;
+  color: var(--accent);
+  font-size: clamp(14px, 1.35vw, 20px);
+  font-weight: 750;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
 .row-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
 .row-flag { padding: 5px 7px; border: 1px solid var(--rule); color: var(--muted); font: 700 9px/1 var(--font-data); text-transform: uppercase; }
 .row-flag.is-origin { border-color: var(--accent); color: var(--accent); }
@@ -137,6 +146,15 @@ button, input, select { font: inherit; }
 .case-hero::after { position: absolute; right: -8%; bottom: 24%; width: 46%; height: 2px; background: var(--cyan); box-shadow: 0 -60px 0 var(--violet), 0 60px 0 var(--orange); transform: rotate(-11deg); content: ""; opacity: .72; }
 .case-hero > * { position: relative; z-index: 1; }
 .case-hero h1 { max-width: 12ch; margin: 0; overflow-wrap: anywhere; font-size: clamp(52px, 8vw, 118px); line-height: .88; letter-spacing: -.03em; }
+.case-alt-name {
+  max-width: min(760px, 72vw);
+  margin: 18px 0 0;
+  color: var(--cyan);
+  font-size: clamp(20px, 2.4vw, 34px);
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
 .case-summary { max-width: 68ch; margin: 28px 0 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
 .case-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
 .case-actions a { min-height: 42px; display: inline-flex; align-items: center; padding: 9px 13px; border: 1px solid var(--rule); font-size: 11px; font-weight: 800; text-decoration: none; }
@@ -185,6 +203,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .inventory { padding-inline: 16px; }
   .archive-row { grid-template-columns: 32px minmax(0, 1fr); gap: 13px; }
   .row-copy, .row-evidence, .row-actions { grid-column: 2; }
+  .row-name-alt { max-width: 100%; }
   .row-actions { display: flex; flex-wrap: wrap; min-width: 0; }
   .row-action, .locked-state { flex: 1 1 150px; }
   .case-section { grid-template-columns: 1fr; gap: 13px; }
@@ -194,6 +213,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .archive-shell { width: 100%; border: 0; }
   .archive-intro h1 { max-width: 100%; font-size: 44px; line-height: .9; }
   .case-hero h1 { max-width: 100%; font-size: 50px; line-height: .9; }
+  .case-alt-name { max-width: 100%; font-size: 20px; }
   .archive-stats { grid-template-columns: 1fr; }
   .archive-stats div { grid-template-columns: 90px 1fr; }
   .inventory-head { align-items: flex-start; flex-direction: column; }
@@ -216,34 +236,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   </header><main id="main">
     <section class="archive-hero"><div class="archive-intro"><h1>完整工程资产档案</h1><p>收录全部 70 个 GitHub 仓库，以及未与单一仓库一对一对应的在线系统。默认按求职价值与证据质量排序，而不是只看更新时间。</p></div><dl class="archive-stats"><div><dt>GitHub 仓库</dt><dd>70</dd></div><div><dt>公开</dt><dd>57</dd></div><div><dt>私有</dt><dd>13</dd></div></dl></section>
     <section class="archive-controls" aria-label="项目清单"><label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.7"/></svg><input type="search" data-project-search placeholder="搜索项目名称、技术与摘要" aria-label="搜索项目名称、技术与摘要"></label><div class="archive-filters"><button type="button" data-project-filter="all" aria-pressed="true">全部</button><button type="button" data-project-filter="featured" aria-pressed="false">精选</button><button type="button" data-project-filter="applications" aria-pressed="false">应用与工具</button><button type="button" data-project-filter="research" aria-pressed="false">研究</button><button type="button" data-project-filter="private" aria-pressed="false">私有</button><button type="button" data-project-filter="fork" aria-pressed="false">Fork</button><button type="button" data-project-filter="learning" aria-pressed="false">学习</button></div><select class="archive-sort" data-project-sort aria-label="排序项目"><option value="value">求职价值与证据</option><option value="updated">最近更新</option><option value="name">名称 A–Z</option></select></section>
-    <section class="inventory"><header class="inventory-head"><div><h2>项目清单</h2><p>每个仓库只出现一次；如果在线服务与源码属于同一项目，会合并为同一条记录。</p></div><span class="result-count" data-result-count data-template="显示 {count} 条">显示 77 条</span></header><div class="project-table" data-project-table><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="100" data-updated="" data-name="HeatStack" data-search="heatstack 双语 ai 工程学习中心，把快速变化的 skill 趋势转化为更安全的安装路径、结构化练习、作品集项目与面试准备。 astro ai skills windows cli">
+    <section class="inventory"><header class="inventory-head"><div><h2>项目清单</h2><p>每个仓库只出现一次；如果在线服务与源码属于同一项目，会合并为同一条记录。</p></div><span class="result-count" data-result-count data-template="显示 {count} 条">显示 77 条</span></header><div class="project-table" data-project-table><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="100" data-updated="" data-name="HeatStack" data-search="heatstack ai 热栈 ai skill 广场，面向 ai 学习、agent 科普与精进，整合每日热点 skill 浏览、批量 skill 下载安装，并提供《深入理解 ai agent》入口。 astro ai skills windows cli">
     <span class="row-index" data-row-index>01</span>
-    <div class="row-name"><h3>HeatStack</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
-    <div class="row-copy"><p>双语 AI 工程学习中心，把快速变化的 Skill 趋势转化为更安全的安装路径、结构化练习、作品集项目与面试准备。</p><ul class="row-skills"><li>Astro</li><li>AI Skills</li><li>Windows CLI</li></ul></div>
+    <div class="row-name"><h3>HeatStack</h3><p class="row-name-alt">AI 热栈</p><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
+    <div class="row-copy"><p>AI Skill 广场，面向 AI 学习、Agent 科普与精进，整合每日热点 Skill 浏览、批量 Skill 下载安装，并提供《深入理解 AI Agent》入口。</p><ul class="row-skills"><li>Astro</li><li>AI Skills</li><li>Windows CLI</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Live demo<br>Case study<br>Architecture</p>
     <div class="row-actions"><a class="row-action" href="/heatstack/">打开在线项目</a><a class="row-action" href="/zh-hans/projects/heatstack/">案例研究</a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="99" data-updated="2026-08-09T06:06:28Z" data-name="pulseboard" data-search="pulseboard 具备 api 密钥边界、队列、健康探针、openapi 与可检查运维证据的生产型可靠性 saas 作品。 hono postgresql redis bullmq docker">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="99" data-updated="2026-08-09T06:06:28Z" data-name="pulseboard" data-search="pulseboard 运营脉冲板 后端、平台与运营系统，公开呈现 api 文档、健康检查、后台 worker 流程、数据存储、限流和部署验证。 hono postgresql redis bullmq docker">
     <span class="row-index" data-row-index>02</span>
-    <div class="row-name"><h3>pulseboard</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
-    <div class="row-copy"><p>具备 API 密钥边界、队列、健康探针、OpenAPI 与可检查运维证据的生产型可靠性 SaaS 作品。</p><ul class="row-skills"><li>Hono</li><li>PostgreSQL</li><li>Redis</li><li>BullMQ</li><li>Docker</li></ul></div>
+    <div class="row-name"><h3>pulseboard</h3><p class="row-name-alt">运营脉冲板</p><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
+    <div class="row-copy"><p>后端、平台与运营系统，公开呈现 API 文档、健康检查、后台 worker 流程、数据存储、限流和部署验证。</p><ul class="row-skills"><li>Hono</li><li>PostgreSQL</li><li>Redis</li><li>BullMQ</li><li>Docker</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Live demo<br>Case study<br>Architecture<br>Runbook<br>ADR<br>Verification</p>
     <div class="row-actions"><a class="row-action" href="/demo/">打开在线项目</a><a class="row-action" href="/demo/frontend/">打开在线项目</a><a class="row-action" href="/demo/docs">打开在线项目</a><a class="row-action" href="/zh-hans/projects/pulseboard/">案例研究</a><a class="row-action" href="https://github.com/DodgeHo/pulseboard" target="_blank" rel="noreferrer">查看 GitHub 仓库<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="96" data-updated="" data-name="Career Radar" data-search="career radar 采用邀请制与账户隔离的职位探索及收件箱服务，包含收藏职位、未读状态与定时摘要。 account isolation job inbox scheduled digests">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="96" data-updated="" data-name="Career Radar" data-search="career radar 职海雷达 采用邀请制的职位探索产品，通过账户隔离的职位收藏、收件箱、未读状态与定时摘要支持持续筛选。 account isolation job inbox scheduled digests">
     <span class="row-index" data-row-index>03</span>
-    <div class="row-name"><h3>Career Radar</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
-    <div class="row-copy"><p>采用邀请制与账户隔离的职位探索及收件箱服务，包含收藏职位、未读状态与定时摘要。</p><ul class="row-skills"><li>Account isolation</li><li>Job inbox</li><li>Scheduled digests</li></ul></div>
+    <div class="row-name"><h3>Career Radar</h3><p class="row-name-alt">职海雷达</p><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
+    <div class="row-copy"><p>采用邀请制的职位探索产品，通过账户隔离的职位收藏、收件箱、未读状态与定时摘要支持持续筛选。</p><ul class="row-skills"><li>Account isolation</li><li>Job inbox</li><li>Scheduled digests</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Live demo<br>Case study<br>Architecture</p>
     <div class="row-actions"><a class="row-action" href="/jobs/">打开在线项目</a><a class="row-action" href="/zh-hans/projects/career-radar/">案例研究</a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="91" data-updated="" data-name="TapPhysics" data-search="tapphysics 以在线互动体验呈现的物理项目，部署路由是目前主要的可检查证据界面。 physics interactive web simulation">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="91" data-updated="" data-name="TapPhysics" data-search="tapphysics 一点物理 一点物理是一款面向高中生和物理教师的离线高考物理真题工具，支持本地找题、练习、组卷和打印准备。 physics interactive web simulation">
     <span class="row-index" data-row-index>04</span>
-    <div class="row-name"><h3>TapPhysics</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
-    <div class="row-copy"><p>以在线互动体验呈现的物理项目，部署路由是目前主要的可检查证据界面。</p><ul class="row-skills"><li>Physics</li><li>Interactive web</li><li>Simulation</li></ul></div>
+    <div class="row-name"><h3>TapPhysics</h3><p class="row-name-alt">一点物理</p><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
+    <div class="row-copy"><p>一点物理是一款面向高中生和物理教师的离线高考物理真题工具，支持本地找题、练习、组卷和打印准备。</p><ul class="row-skills"><li>Physics</li><li>Interactive web</li><li>Simulation</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Live demo<br>Interactive project</p>
     <div class="row-actions"><a class="row-action" href="/tapphysics/">打开在线项目</a><a class="row-action" href="/zh-hans/projects/tapphysics/">查看项目记录</a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="90" data-updated="" data-name="CWC" data-search="cwc 以精简且经过安全检查的公开说明记录的闭源工程项目。公开页面说明项目目的与工程边界，不披露实现或私有运行细节。 closed source product engineering system design">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="90" data-updated="" data-name="CWC" data-search="cwc cellloc web controller- 细胞定位网络控制系统 闭源的 cellloc 网络控制系统公开概览，只说明产品方向与可公开工程边界，不披露客户、数据、基础设施、内部实现或专有算法。 closed source product engineering system design">
     <span class="row-index" data-row-index>05</span>
-    <div class="row-name"><h3>CWC</h3><div class="row-flags"><span class="row-flag">私有项目</span><span class="row-flag is-origin">原创</span><span class="row-flag is-closed">闭源</span><span class="row-flag">精选</span></div></div>
-    <div class="row-copy"><p>以精简且经过安全检查的公开说明记录的闭源工程项目。公开页面说明项目目的与工程边界，不披露实现或私有运行细节。</p><ul class="row-skills"><li>Closed source</li><li>Product engineering</li><li>System design</li></ul></div>
+    <div class="row-name"><h3>CWC</h3><p class="row-name-alt">CellLoc Web Controller- 细胞定位网络控制系统</p><div class="row-flags"><span class="row-flag">私有项目</span><span class="row-flag is-origin">原创</span><span class="row-flag is-closed">闭源</span><span class="row-flag">精选</span></div></div>
+    <div class="row-copy"><p>闭源的 CellLoc 网络控制系统公开概览，只说明产品方向与可公开工程边界，不披露客户、数据、基础设施、内部实现或专有算法。</p><ul class="row-skills"><li>Closed source</li><li>Product engineering</li><li>System design</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Security-reviewed overview<br>Project record</p>
     <div class="row-actions"><a class="row-action" href="/zh-hans/projects/cwc/">案例研究</a></div>
   </article><article class="archive-row" data-project-row data-category="research" data-origin="original" data-visibility="public" data-featured="true" data-score="88" data-updated="2026-08-09T16:40:32Z" data-name="VMD_cpp" data-search="vmd_cpp vmd 项目族的核心一维实现，以 c++ 与 eigen 用于信号处理实验。 c++ eigen signal processing vmd">
@@ -252,12 +272,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>VMD 项目族的核心一维实现，以 C++ 与 Eigen 用于信号处理实验。</p><ul class="row-skills"><li>C++</li><li>Eigen</li><li>Signal processing</li><li>VMD</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Source<br>Research implementation</p>
     <div class="row-actions"><a class="row-action" href="/zh-hans/projects/vmd-cpp/">查看项目记录</a><a class="row-action" href="https://github.com/DodgeHo/VMD_cpp" target="_blank" rel="noreferrer">查看 GitHub 仓库<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="87" data-updated="" data-name="PuzzleWear" data-search="puzzlewear 以公开项目网站与精简作品记录呈现的闭源项目。 closed source product interface web">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="87" data-updated="" data-name="PuzzleWear" data-search="puzzlewear 拼频品聘-服装创意设计 闭源的服装创意设计项目，通过公开项目网站呈现产品方向，内部实现细节有意不进入公开项目页。 closed source product interface web">
     <span class="row-index" data-row-index>07</span>
-    <div class="row-name"><h3>PuzzleWear</h3><div class="row-flags"><span class="row-flag">私有项目</span><span class="row-flag is-origin">原创</span><span class="row-flag is-closed">闭源</span><span class="row-flag">精选</span></div></div>
-    <div class="row-copy"><p>以公开项目网站与精简作品记录呈现的闭源项目。</p><ul class="row-skills"><li>Closed source</li><li>Product interface</li><li>Web</li></ul></div>
+    <div class="row-name"><h3>PuzzleWear</h3><p class="row-name-alt">拼频品聘-服装创意设计</p><div class="row-flags"><span class="row-flag">私有项目</span><span class="row-flag is-origin">原创</span><span class="row-flag is-closed">闭源</span><span class="row-flag">精选</span></div></div>
+    <div class="row-copy"><p>闭源的服装创意设计项目，通过公开项目网站呈现产品方向，内部实现细节有意不进入公开项目页。</p><ul class="row-skills"><li>Closed source</li><li>Product interface</li><li>Web</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Public project site<br>Closed-source record</p>
-    <div class="row-actions"><a class="row-action" href="https://puzzlewear.cn/" target="_blank" rel="noreferrer">打开在线项目</a></div>
+    <div class="row-actions"><a class="row-action" href="https://puzzlewear.cn/login" target="_blank" rel="noreferrer">打开在线项目</a></div>
   </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="84" data-updated="2026-07-06T07:14:00Z" data-name="PAL4_EnglishMod" data-search="pal4_englishmod 为 pc 游戏《仙剑奇侠传四》制作的英文本地化工具与发布成果。 python localization game tooling">
     <span class="row-index" data-row-index>08</span>
     <div class="row-name"><h3>PAL4_EnglishMod</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span><span class="row-flag">精选</span></div></div>
@@ -282,10 +302,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>以 C++ 实现 CEEMDAN，用于经验模态分解与信号处理实验，并与 VMD 项目族并列呈现。</p><ul class="row-skills"><li>C++</li><li>CEEMDAN</li><li>Signal processing</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Source<br>Research implementation</p>
     <div class="row-actions"><a class="row-action" href="/zh-hans/projects/ceemdan-cpp/">查看项目记录</a><a class="row-action" href="https://github.com/DodgeHo/CEEMDAN_cpp" target="_blank" rel="noreferrer">查看 GitHub 仓库<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="false" data-score="72" data-updated="" data-name="DevEnglish" data-search="devenglish 以公开项目网站与精简作品记录呈现的闭源英语学习项目。 closed source english learning web">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="false" data-score="72" data-updated="" data-name="DevEnglish" data-search="devenglish 开发者英语练习站 闭源的开发者英语学习项目，公开网站呈现学习方向，私有实现细节不进入项目公开面。 closed source english learning web">
     <span class="row-index" data-row-index>12</span>
-    <div class="row-name"><h3>DevEnglish</h3><div class="row-flags"><span class="row-flag">私有项目</span><span class="row-flag is-origin">原创</span><span class="row-flag is-closed">闭源</span></div></div>
-    <div class="row-copy"><p>以公开项目网站与精简作品记录呈现的闭源英语学习项目。</p><ul class="row-skills"><li>Closed source</li><li>English learning</li><li>Web</li></ul></div>
+    <div class="row-name"><h3>DevEnglish</h3><p class="row-name-alt">开发者英语练习站</p><div class="row-flags"><span class="row-flag">私有项目</span><span class="row-flag is-origin">原创</span><span class="row-flag is-closed">闭源</span></div></div>
+    <div class="row-copy"><p>闭源的开发者英语学习项目，公开网站呈现学习方向，私有实现细节不进入项目公开面。</p><ul class="row-skills"><li>Closed source</li><li>English learning</li><li>Web</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Public project site<br>Closed-source record</p>
     <div class="row-actions"><a class="row-action" href="https://devenglish.club/" target="_blank" rel="noreferrer">打开在线项目</a></div>
   </article><article class="archive-row" data-project-row data-category="research" data-origin="original" data-visibility="public" data-featured="false" data-score="70" data-updated="2026-05-03T05:48:49Z" data-name="VMD_2D_cpp" data-search="vmd_2d_cpp 完整工程档案中的原创公开 c++ 仓库，可在 github 直接检查源码历史。 c++ 2d vmd signal processing">
@@ -354,10 +374,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>完整工程档案中的原创公开 Jupyter Notebook 仓库，可在 GitHub 直接检查源码历史。</p><ul class="row-skills"><li>Jupyter Notebook</li><li>digital-signal-processing</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Source</p>
     <div class="row-actions"><a class="row-action" href="/zh-hans/projects/eeg-fourier-frequency-filter/">查看项目记录</a><a class="row-action" href="https://github.com/DodgeHo/EEG_Fourier_frequency_filter" target="_blank" rel="noreferrer">查看 GitHub 仓库<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="60" data-updated="2026-04-06T05:43:02Z" data-name="aws-saa-learning-skill" data-search="aws-saa-learning-skill 完整工程档案中的原创公开 dart 仓库，可在 github 直接检查源码历史。 dart aws question bank progress tracking">
+  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="60" data-updated="2026-04-06T05:43:02Z" data-name="aws-saa-learning-skill" data-search="aws-saa-learning-skill saa practice-亚马逊云做题练习 面向 saa 备考的亚马逊云做题练习产品，结合聚焦题目练习与进度跟踪。 dart aws question bank progress tracking">
     <span class="row-index" data-row-index>24</span>
-    <div class="row-name"><h3>aws-saa-learning-skill</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span></div></div>
-    <div class="row-copy"><p>完整工程档案中的原创公开 Dart 仓库，可在 GitHub 直接检查源码历史。</p><ul class="row-skills"><li>Dart</li><li>AWS</li><li>Question bank</li><li>Progress tracking</li></ul></div>
+    <div class="row-name"><h3>aws-saa-learning-skill</h3><p class="row-name-alt">SAA Practice-亚马逊云做题练习</p><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span></div></div>
+    <div class="row-copy"><p>面向 SAA 备考的亚马逊云做题练习产品，结合聚焦题目练习与进度跟踪。</p><ul class="row-skills"><li>Dart</li><li>AWS</li><li>Question bank</li><li>Progress tracking</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Live demo<br>Source</p>
     <div class="row-actions"><a class="row-action" href="/saa/">打开在线项目</a><a class="row-action" href="/zh-hans/projects/saa-practice/">查看项目记录</a><a class="row-action" href="https://github.com/DodgeHo/aws-saa-learning-skill" target="_blank" rel="noreferrer">查看 GitHub 仓库<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
   </article><article class="archive-row" data-project-row data-category="research" data-origin="original" data-visibility="public" data-featured="false" data-score="60" data-updated="2026-05-03T05:52:04Z" data-name="ShapeContext_cpp" data-search="shapecontext_cpp 完整工程档案中的原创公开 c++ 仓库，可在 github 直接检查源码历史。 c++">
@@ -390,10 +410,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>完整工程档案中的原创公开 R 仓库，可在 GitHub 直接检查源码历史。</p><ul class="row-skills"><li>R</li><li>bioinformatics</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Source</p>
     <div class="row-actions"><a class="row-action" href="/zh-hans/projects/adebhmms/">查看项目记录</a><a class="row-action" href="https://github.com/DodgeHo/adEBHMMs" target="_blank" rel="noreferrer">查看 GitHub 仓库<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="54" data-updated="" data-name="SAP Practice" data-search="sap practice 具备进度跟踪的高级云架构题库练习路径。 aws architecture progress tracking">
+  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="54" data-updated="" data-name="SAP Practice" data-search="sap practice sap practice-亚马逊云做题练习 面向高级架构学习的亚马逊云做题练习产品，在独立 sap 路由中提供聚焦练习与进度回顾。 aws architecture progress tracking">
     <span class="row-index" data-row-index>30</span>
-    <div class="row-name"><h3>SAP Practice</h3><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span></div></div>
-    <div class="row-copy"><p>具备进度跟踪的高级云架构题库练习路径。</p><ul class="row-skills"><li>AWS</li><li>Architecture</li><li>Progress tracking</li></ul></div>
+    <div class="row-name"><h3>SAP Practice</h3><p class="row-name-alt">SAP Practice-亚马逊云做题练习</p><div class="row-flags"><span class="row-flag">公开</span><span class="row-flag is-origin">原创</span></div></div>
+    <div class="row-copy"><p>面向高级架构学习的亚马逊云做题练习产品，在独立 SAP 路由中提供聚焦练习与进度回顾。</p><ul class="row-skills"><li>AWS</li><li>Architecture</li><li>Progress tracking</li></ul></div>
     <p class="row-evidence"><strong>证据</strong>Live demo</p>
     <div class="row-actions"><a class="row-action" href="/sap/">打开在线项目</a><a class="row-action" href="/zh-hans/projects/sap-practice/">查看项目记录</a></div>
   </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="false" data-score="52" data-updated="2025-03-12T04:37:52Z" data-name="Wechat-questionnaire" data-search="wechat-questionnaire 完整工程档案中的原创公开 javascript 仓库，可在 github 直接检查源码历史。 javascript">

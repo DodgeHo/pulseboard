@@ -24,7 +24,7 @@
       heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
       identityFacts: [['IDENTITY', 'Dodge Ho · 道安澜'], ['PRACTICE', 'Systems · signals · tools'], ['SPACE', 'Public open-source work']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['Physics', 'Interactive', 'Simulation'], career: ['Invite-only', 'Job inbox', 'Digests'], puzzlewear: ['Closed source', 'Product site', 'Web'], cwc: ['Closed source', 'Boundary', 'Product'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', 'Question bank', 'Progress'], sap: ['AWS', 'Architecture', 'Advanced'], ispm: ['ITSM', 'Study', 'Closed source'], pal4: ['Homepage', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT'], vmd: ['Project family', 'C++', '2D'], ceemdan: ['C++', 'Signal', 'CEEMDAN'], devenglish: ['Closed source', 'English', 'Web']
+        heatstack: ['AI Skills', 'Batch install', 'Agent learning'], tapphysics: ['Gaokao physics', 'Question practice', 'Print prep'], career: ['Job inbox', 'Saved roles', 'Digests'], puzzlewear: ['Closed source', 'Clothing design', 'Web'], cwc: ['Closed source', 'Boundary', 'Product'], pulseboard: ['API docs', 'Workers', 'Health checks'], saa: ['Amazon cloud', 'Questions', 'Progress'], sap: ['Amazon cloud', 'Architecture', 'Practice'], ispm: ['ITSM', 'Question practice', 'Closed source'], pal4: ['Homepage', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT'], vmd: ['Project family', 'C++', '2D'], ceemdan: ['C++', 'Signal', 'CEEMDAN'], devenglish: ['Closed source', 'English learning', 'Web']
       },
       liveAction: 'EXPLORE LIVE WORK',
       sourceAction: 'BROWSE SOURCE PROJECTS',
@@ -48,8 +48,8 @@
       familySummary: 'One decomposition project, three implementation outcomes.',
       previewOps: 'OPERATIONS',
       previewCustomer: 'CUSTOMER VIEW',
-      pulseEvidence: 'PulseBoard interface evidence',
-      chooseEvidence: 'Choose PulseBoard evidence view',
+      pulseEvidence: 'PulseBoard engineering proof',
+      chooseEvidence: 'Choose PulseBoard proof view',
       opsAlt: 'PulseBoard Live Ops Console showing runtime evidence and health probe rows',
       customerAlt: 'PulseBoard customer reliability surface in Japanese',
       docs: 'API DOCS',
@@ -59,12 +59,12 @@
       empty: 'No projects match this filter. Choose another signal group.',
       kinds: { live: 'DEPLOYED SYSTEM', source: 'OPEN-SOURCE PROJECT', study: 'STUDY TOOL' },
       descriptions: {
-        heatstack: 'A bilingual AI engineering learning hub connecting daily Skill trends, safer local installation, Windows CLI workflows, structured practice, portfolio projects, and interview preparation.',
-        pulseboard: 'A production-shaped reliability SaaS portfolio: Hono API, PostgreSQL, Redis, BullMQ workers, API-key boundaries, OpenAPI, and operational evidence.',
+        heatstack: 'An AI Skill plaza for agent learning, daily hot Skill browsing, batch download and install flows, and the Understanding AI Agents learning entry.',
+        pulseboard: 'A backend, platform, and operations system showing public API docs, health checks, worker flow, storage, rate limiting, and deployment verification.',
         career: 'An invite-only, account-isolated job discovery and inbox service with saved roles, unread state, and scheduled digests.',
-        saa: 'Focused question-bank practice with learning progress tracking for cloud architecture preparation.',
-        sap: 'Advanced architecture practice using the same progress-aware study workflow on a separate route.',
-        ispm: 'A service-management practice route with focused questions and progress tracking.',
+        saa: 'An Amazon cloud question-practice product for SAA preparation, combining focused sessions with progress tracking.',
+        sap: 'An Amazon cloud question-practice product for advanced architecture study on a separate SAP route.',
+        ispm: 'A closed-source IT service management question-practice tool retained as a focused study record.',
         vmd: 'A C++ and Eigen implementation of Variational Mode Decomposition for signal-processing work.',
         pal4: 'English localization work for the PC game Sword and Fairy 4, published as PAL4_EnglishMod.',
         ielts: 'A GPT-assisted tool that evaluates and improves IELTS writing drafts.',
@@ -88,7 +88,7 @@
       heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
       identityFacts: [['身份', 'Dodge Ho · 道安瀾'], ['實踐', '系統 · 訊號 · 工具'], ['空間', '公開開源作品']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['物理', '互動', '模擬'], career: ['僅限受邀', '職缺收件匣', '摘要'], puzzlewear: ['閉源', '專案網站', 'Web'], cwc: ['閉源', '邊界', '產品'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', '題庫', '進度'], sap: ['AWS', '架構', '進階'], ispm: ['ITSM', '學習', '閉源'], pal4: ['首頁', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT'], vmd: ['專案族', 'C++', '2D'], ceemdan: ['C++', '訊號', 'CEEMDAN'], devenglish: ['閉源', '英文', 'Web']
+        heatstack: ['AI Skills', '批次安裝', 'Agent 學習'], tapphysics: ['高考物理', '做題練習', '列印準備'], career: ['職缺收件匣', '收藏職缺', '摘要'], puzzlewear: ['閉源', '服裝設計', 'Web'], cwc: ['閉源', '邊界', '產品'], pulseboard: ['API 文件', 'Worker', '健康檢查'], saa: ['亞馬遜雲', '做題', '進度'], sap: ['亞馬遜雲', '架構', '練習'], ispm: ['ITSM', '做題練習', '閉源'], pal4: ['首頁', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT'], vmd: ['專案族', 'C++', '2D'], ceemdan: ['C++', '訊號', 'CEEMDAN'], devenglish: ['閉源', '英語學習', 'Web']
       },
       liveAction: '探索線上作品',
       sourceAction: '瀏覽開源專案',
@@ -112,8 +112,8 @@
       familySummary: '一個分解專案，三種實作成果。',
       previewOps: '營運畫面',
       previewCustomer: '客戶畫面',
-      pulseEvidence: 'PulseBoard 介面證據',
-      chooseEvidence: '選擇 PulseBoard 證據畫面',
+      pulseEvidence: 'PulseBoard 工程證據',
+      chooseEvidence: '選擇 PulseBoard 工程視圖',
       opsAlt: '顯示執行期證據與健康探測列的 PulseBoard 營運主控台',
       customerAlt: '日文版 PulseBoard 客戶可靠性介面',
       docs: 'API 文件',
@@ -123,12 +123,12 @@
       empty: '沒有符合此篩選的專案。請選擇另一個訊號群組。',
       kinds: { live: '已部署系統', source: '開源專案', study: '學習工具' },
       descriptions: {
-        heatstack: '把每日 AI Skill 趨勢、安全安裝、Windows CLI、系統化練習、作品專案與面試準備串成一條工程能力路徑。',
-        pulseboard: '可供檢查的可靠性 SaaS 作品：Hono API、PostgreSQL、Redis、BullMQ 工作程序、API Key 邊界、OpenAPI 與營運證據。',
+        heatstack: 'AI Skill 廣場，串起 AI 學習、每日熱門 Skill 瀏覽、批次下載安裝流程與《深入理解 AI Agent》入口。',
+        pulseboard: '後端、平台與營運系統，公開呈現 API 文件、健康檢查、背景 worker、資料儲存、限流與部署驗證。',
         career: '僅限受邀者使用、帳戶隔離的職缺探索與收件匣服務，包含收藏職缺、未讀狀態與定期摘要。',
-        saa: '提供雲端架構準備的專注題庫練習與學習進度追蹤。',
-        sap: '在獨立路由上提供進階架構練習，沿用同一套具進度意識的學習流程。',
-        ispm: '提供聚焦題目與進度追蹤的服務管理練習路由。',
+        saa: '面向 SAA 準備的亞馬遜雲做題練習產品，結合聚焦練習與進度追蹤。',
+        sap: '面向進階架構學習的亞馬遜雲做題練習產品，在獨立 SAP 路由中呈現。',
+        ispm: '閉源的 IT 服務管理做題練習工具，作為聚焦學習記錄保留。',
         vmd: '使用 C++ 與 Eigen 實作的變分模態分解（Variational Mode Decomposition）訊號處理專案。',
         pal4: '為《仙劍奇俠傳四》PC 版製作的英文在地化工作，以 PAL4_EnglishMod 公開發布。',
         ielts: '使用 GPT 協助評估並改進 IELTS 寫作草稿的工具。',
@@ -152,7 +152,7 @@
       heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
       identityFacts: [['身份', 'Dodge Ho · 道安澜'], ['实践', '系统 · 信号 · 工具'], ['空间', '公开开源作品']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['物理', '互动', '模拟'], career: ['仅限受邀', '职位收件箱', '摘要'], puzzlewear: ['闭源', '项目网站', 'Web'], cwc: ['闭源', '边界', '产品'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', '题库', '进度'], sap: ['AWS', '架构', '进阶'], ispm: ['ITSM', '学习', '闭源'], pal4: ['主页', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT'], vmd: ['项目族', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['闭源', '英语', 'Web']
+        heatstack: ['AI Skills', '批量安装', 'Agent 学习'], tapphysics: ['高考物理', '做题练习', '打印准备'], career: ['职位收件箱', '收藏职位', '摘要'], puzzlewear: ['闭源', '服装设计', 'Web'], cwc: ['闭源', '边界', '产品'], pulseboard: ['API 文档', 'Worker', '健康检查'], saa: ['亚马逊云', '做题', '进度'], sap: ['亚马逊云', '架构', '练习'], ispm: ['ITSM', '做题练习', '闭源'], pal4: ['主页', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT'], vmd: ['项目族', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['闭源', '英语学习', 'Web']
       },
       liveAction: '探索在线作品',
       sourceAction: '浏览开源项目',
@@ -176,8 +176,8 @@
       familySummary: '一个分解项目，三种实现成果。',
       previewOps: '运营界面',
       previewCustomer: '客户界面',
-      pulseEvidence: 'PulseBoard 界面证据',
-      chooseEvidence: '选择 PulseBoard 证据界面',
+      pulseEvidence: 'PulseBoard 工程证据',
+      chooseEvidence: '选择 PulseBoard 工程视图',
       opsAlt: '显示运行时证据与健康探测行的 PulseBoard 运营控制台',
       customerAlt: '日文版 PulseBoard 客户可靠性界面',
       docs: 'API 文档',
@@ -187,12 +187,12 @@
       empty: '没有项目符合此筛选条件。请选择另一组信号。',
       kinds: { live: '已部署系统', source: '开源项目', study: '学习工具' },
       descriptions: {
-        heatstack: '把每日 AI Skill 趋势、安全安装、Windows CLI、系统化练习、作品项目与面试准备串成一条工程能力路径。',
-        pulseboard: '可供检查的可靠性 SaaS 作品：Hono API、PostgreSQL、Redis、BullMQ 工作进程、API Key 边界、OpenAPI 与运营证据。',
+        heatstack: 'AI Skill 广场，串起 AI 学习、每日热点 Skill 浏览、批量 Skill 下载安装与《深入理解 AI Agent》入口。',
+        pulseboard: '后端、平台与运营系统，公开呈现 API 文档、健康检查、后台 worker、数据存储、限流和部署验证。',
         career: '仅限受邀者使用、账户隔离的职位发现与收件箱服务，包含收藏职位、未读状态与定期摘要。',
-        saa: '提供云架构准备的专注题库练习与学习进度跟踪。',
-        sap: '在独立路由上提供高级架构练习，沿用同一套具进度意识的学习流程。',
-        ispm: '提供聚焦题目与进度跟踪的服务管理练习路由。',
+        saa: '面向 SAA 备考的亚马逊云做题练习产品，结合聚焦练习与进度跟踪。',
+        sap: '面向高级架构学习的亚马逊云做题练习产品，在独立 SAP 路由中呈现。',
+        ispm: '闭源的 IT 服务管理做题练习工具，作为聚焦学习记录保留。',
         vmd: '使用 C++ 与 Eigen 实现的变分模态分解（Variational Mode Decomposition）信号处理项目。',
         pal4: '为《仙剑奇侠传四》PC 版制作的英文本地化工作，以 PAL4_EnglishMod 公开发布。',
         ielts: '使用 GPT 协助评估并改进 IELTS 写作草稿的工具。',
@@ -216,7 +216,7 @@
       heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
       identityFacts: [['アイデンティティ', '道安瀾（ドッジ・ホー）'], ['実践', 'システム · 信号 · ツール'], ['空間', '公開オープンソース作品']],
       railKeywords: {
-        heatstack: ['Astro', 'AI Skills', 'Windows CLI'], tapphysics: ['物理', 'インタラクティブ', 'シミュレーション'], career: ['招待制', '求人受信箱', 'ダイジェスト'], puzzlewear: ['クローズド', '公開サイト', 'Web'], cwc: ['クローズド', '境界', 'プロダクト'], pulseboard: ['Hono', 'PostgreSQL', 'Redis'], saa: ['AWS', '問題バンク', '進捗'], sap: ['AWS', 'アーキテクチャ', '上級'], ispm: ['ITSM', '学習', 'クローズド'], pal4: ['ホーム', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT'], vmd: ['ファミリー', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['クローズド', '英語', 'Web']
+        heatstack: ['AI Skills', '一括導入', 'Agent 学習'], tapphysics: ['高考物理', '問題練習', '印刷準備'], career: ['求人受信箱', '保存求人', 'ダイジェスト'], puzzlewear: ['クローズド', '服飾設計', 'Web'], cwc: ['クローズド', '境界', 'プロダクト'], pulseboard: ['API 文書', 'Worker', 'ヘルスチェック'], saa: ['Amazon cloud', '問題練習', '進捗'], sap: ['Amazon cloud', '設計', '練習'], ispm: ['ITSM', '問題練習', 'クローズド'], pal4: ['ホーム', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT'], vmd: ['ファミリー', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['クローズド', '英語学習', 'Web']
       },
       liveAction: 'ライブ作品を見る',
       sourceAction: 'ソースプロジェクトを見る',
@@ -240,8 +240,8 @@
       familySummary: '一つの分解プロジェクト、三つの実装成果。',
       previewOps: '運用画面',
       previewCustomer: '顧客画面',
-      pulseEvidence: 'PulseBoard インターフェースの根拠',
-      chooseEvidence: 'PulseBoard の根拠画面を選択',
+      pulseEvidence: 'PulseBoard エンジニアリング証拠',
+      chooseEvidence: 'PulseBoard の確認ビューを選択',
       opsAlt: '実行時の根拠とヘルスプローブ行を表示した PulseBoard 運用コンソール',
       customerAlt: '日本語の PulseBoard 顧客向け信頼性画面',
       docs: 'API ドキュメント',
@@ -251,12 +251,12 @@
       empty: 'この絞り込みに一致するプロジェクトはありません。別の信号グループを選んでください。',
       kinds: { live: 'デプロイ済みシステム', source: 'オープンソース', study: '学習ツール' },
       descriptions: {
-        heatstack: '日々の AI Skill トレンド、安全な導入、Windows CLI、体系的な学習、ポートフォリオ制作、面接準備を一つのエンジニアリング経路につなぐ学習ハブです。',
-        pulseboard: 'Hono API、PostgreSQL、Redis、BullMQ ワーカー、API キー境界、OpenAPI、運用根拠を備えた、検証可能な信頼性 SaaS ポートフォリオです。',
+        heatstack: 'AI Skill の広場として、AI 学習、日々の注目 Skill 閲覧、一括ダウンロードと導入、『深入理解 AI Agent』への入口をつなぎます。',
+        pulseboard: 'API 文書、ヘルスチェック、バックグラウンド worker、データ保存、レート制限、デプロイ検証を示すバックエンド・運用システムです。',
         career: '保存した求人、未読状態、定期ダイジェストを備えた、招待制・アカウント分離型の求人探索と受信箱サービスです。',
-        saa: 'クラウドアーキテクチャの準備に向けた、学習進捗付きの集中特化問題バンクです。',
-        sap: '別経路で同じ進捗認識型の学習フローを使う、高度なアーキテクチャ練習です。',
-        ispm: '焦点を絞った問題と進捗管理を提供するサービスマネジメント練習経路です。',
+        saa: 'SAA 対策向けの Amazon クラウド問題練習プロダクトで、集中演習と進捗記録を組み合わせています。',
+        sap: '高度な設計学習向けの Amazon クラウド問題練習プロダクトで、SAP 専用ルートに分けています。',
+        ispm: 'クローズドソースの IT サービス管理向け問題練習ツールで、集中学習の記録として保持しています。',
         vmd: '信号処理向けの Variational Mode Decomposition を C++ と Eigen で実装したプロジェクトです。',
         pal4: 'PC 版『仙剣奇侠伝四』の英語ローカライズ作業で、PAL4_EnglishMod として公開されています。',
         ielts: 'IELTS ライティング草稿を GPT で評価・改善する支援ツールです。',
@@ -324,6 +324,8 @@
 
   const makeActionLink = ({ href, key, external = /^https?:\/\//i.test(href) }) => `<a class="row-action" href="${href}"${external ? ' target="_blank" rel="noreferrer"' : ''}>${t()[key]}${external ? iconExternal : ''}</a>`;
 
+  const localizedAuxiliaryName = (project) => project.auxiliaryName?.[currentLocale] || project.auxiliaryName?.en || '';
+
   const makeEvidence = () => `
     <div class="pulse-evidence" aria-label="${t().pulseEvidence}">
       <div class="evidence-frame">
@@ -339,6 +341,7 @@
 
   const renderProjects = () => {
     projectList.innerHTML = projects.map((project, index) => {
+      const auxiliaryName = localizedAuxiliaryName(project);
       const primaryAction = !project.action ? '' : makeActionLink({ href: project.action, key: project.actionKey, external: project.actionExternal });
       const homepageActions = (project.homepageActions || []).map((item) => makeActionLink({ href: item.href, key: item.key, external: /^https?:\/\//i.test(item.href) })).join('');
       const caseAction = project.casePath ? `<a class="row-action" href="${project.casePath}">${t().caseStudy}</a>` : '';
@@ -347,7 +350,7 @@
       const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
       return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${project.actionExternal || project.category === 'source' || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
-        <div class="project-heading"><p class="project-title">${project.name}</p>${project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
+        <div class="project-heading"><p class="project-title">${project.name}</p>${auxiliaryName ? `<p class="project-auxiliary">${auxiliaryName}</p>` : project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
         <div class="project-copy"><p class="project-description">${project.safeSummary[currentLocale]}</p>${routeLine}${makeFamily(project)}<p class="project-evidence">${project.evidence.join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}

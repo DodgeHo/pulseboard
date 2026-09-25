@@ -68,6 +68,7 @@ export async function loadCatalog(packageRoot) {
       liveRoutes: override.liveRoutes || [],
       evidence: override.evidence || [repository.visibility === "public" ? "Source" : "Inventory record"],
       safeSummary: override.safeSummary || defaultSummary(repository),
+      ...(override.auxiliaryName ? { auxiliaryName: override.auxiliaryName } : {}),
       ...(override.family ? { family: override.family } : {}),
       updatedAt: repository.updatedAt || null,
       archived: Boolean(repository.archived),

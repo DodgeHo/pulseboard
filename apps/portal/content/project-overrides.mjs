@@ -1,4 +1,5 @@
 const four = (en, zhHant, zhHans, ja) => ({ en, "zh-Hant": zhHant, "zh-Hans": zhHans, ja });
+const nameMap = four;
 
 export const privateSummary = four(
   "A private engineering project retained in the complete inventory. Its implementation, repository history, and operational details are intentionally not published.",
@@ -19,13 +20,14 @@ export const liveProjects = [
     category: "applications",
     score: 100,
     skills: ["Astro", "AI Skills", "Windows CLI"],
+    auxiliaryName: nameMap("AI 热栈", "AI 熱棧", "AI 热栈", "AI 熱棧"),
     liveRoutes: ["/heatstack/"],
     evidence: ["Live demo", "Case study", "Architecture"],
     safeSummary: four(
-      "A bilingual AI engineering learning hub that turns fast-moving Skill trends into safer installation paths, structured practice, portfolio work, and interview preparation.",
-      "雙語 AI 工程學習中心，把快速變動的 Skill 趨勢轉化為更安全的安裝路徑、結構化實作、作品集專案與面試準備。",
-      "双语 AI 工程学习中心，把快速变化的 Skill 趋势转化为更安全的安装路径、结构化练习、作品集项目与面试准备。",
-      "変化の速い AI Skill の動向を、安全な導入、体系的な実践、ポートフォリオ制作、面接準備へつなぐバイリンガル学習ハブです。"
+      "An AI Skill plaza for learning and improving with agents, combining daily hot Skill browsing, batch download and install flows, and an entry into Understanding AI Agents.",
+      "AI Skill 廣場，面向 AI 學習、Agent 科普與精進，整合每日熱門 Skill 瀏覽、批次下載安裝流程，並提供《深入理解 AI Agent》入口。",
+      "AI Skill 广场，面向 AI 学习、Agent 科普与精进，整合每日热点 Skill 浏览、批量 Skill 下载安装，并提供《深入理解 AI Agent》入口。",
+      "AI Skill の広場として、日々の注目 Skill の閲覧、まとめてダウンロードして導入する流れ、Agent の学習と理解を支援し、『深入理解 AI Agent』への入口も備えています。"
     )
   },
   {
@@ -39,13 +41,14 @@ export const liveProjects = [
     category: "applications",
     score: 96,
     skills: ["Account isolation", "Job inbox", "Scheduled digests"],
+    auxiliaryName: nameMap("职海雷达", "職海雷達", "职海雷达", "職海雷達"),
     liveRoutes: ["/jobs/"],
     evidence: ["Live demo", "Case study", "Architecture"],
     safeSummary: four(
-      "An invite-only, account-isolated job discovery and inbox service with saved roles, unread state, and scheduled digests.",
-      "採邀請制與帳戶隔離的職缺探索及收件匣服務，包含收藏職缺、未讀狀態與排程摘要。",
-      "采用邀请制与账户隔离的职位探索及收件箱服务，包含收藏职位、未读状态与定时摘要。",
-      "招待制とアカウント分離を採用し、保存求人、未読状態、定期ダイジェストを備えた求人探索・受信箱サービスです。"
+      "An invite-only job exploration product with account-isolated collection, a role inbox, unread state, and scheduled summaries for repeated review.",
+      "採邀請制的職缺探索產品，透過帳戶隔離的收藏、職缺收件匣、未讀狀態與排程摘要支援反覆檢視。",
+      "采用邀请制的职位探索产品，通过账户隔离的职位收藏、收件箱、未读状态与定时摘要支持持续筛选。",
+      "招待制の求人探索プロダクトで、アカウント分離された保存、求人受信箱、未読状態、定期サマリーによって継続的な確認を支えます。"
     )
   },
   {
@@ -59,13 +62,14 @@ export const liveProjects = [
     category: "applications",
     score: 91,
     skills: ["Physics", "Interactive web", "Simulation"],
+    auxiliaryName: nameMap("一点物理", "一點物理", "一点物理", "一点物理"),
     liveRoutes: ["/tapphysics/"],
     evidence: ["Live demo", "Interactive project"],
     safeSummary: four(
-      "An interactive physics project presented as a live web experience, with the deployed route serving as the primary evidence surface.",
-      "以線上互動體驗呈現的物理專案，部署路由是目前主要的可檢查證據介面。",
-      "以在线互动体验呈现的物理项目，部署路由是目前主要的可检查证据界面。",
-      "公開ルートを主な証拠面とする、インタラクティブな物理プロジェクトです。"
+      "An offline Gaokao physics past-question tool for high school students and physics teachers, covering local question search, practice, paper assembly, and print-ready workflows.",
+      "一點物理是面向高中生與物理教師的離線高考物理真題工具，支援本地找題、練習、組卷與列印前準備。",
+      "一点物理是一款面向高中生和物理教师的离线高考物理真题工具，支持本地找题、练习、组卷和打印准备。",
+      "高校生と物理教師向けのオフライン高考物理過去問ツールで、ローカルでの問題検索、練習、組題、印刷準備を支えます。"
     )
   },
   {
@@ -81,13 +85,14 @@ export const liveProjects = [
     category: "applications",
     score: 90,
     skills: ["Closed source", "Product engineering", "System design"],
+    auxiliaryName: nameMap("CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 細胞定位網路控制系統", "CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统"),
     liveRoutes: [],
     evidence: ["Security-reviewed overview", "Project record"],
     safeSummary: four(
-      "A closed-source engineering project documented through a concise, security-reviewed overview. The public page explains its project purpose and engineering boundary without exposing implementation or private operations.",
-      "以精簡且經安全檢查的公開說明記錄的閉源工程專案。公開頁面說明專案目的與工程邊界，不揭露實作或私人運作細節。",
-      "以精简且经过安全检查的公开说明记录的闭源工程项目。公开页面说明项目目的与工程边界，不披露实现或私有运行细节。",
-      "簡潔でセキュリティ確認済みの概要として記録したクローズドソースのエンジニアリングプロジェクトです。公開ページでは目的と工程上の境界だけを説明し、実装や非公開運用は公開しません。"
+      "A closed-source CellLoc web controller overview that states the product direction and public engineering boundary without exposing customers, data, infrastructure, internal implementation, or proprietary algorithms.",
+      "閉源的 CellLoc 網路控制系統公開概覽，只說明產品方向與可公開工程邊界，不揭露客戶、資料、基礎設施、內部實作或專有演算法。",
+      "闭源的 CellLoc 网络控制系统公开概览，只说明产品方向与可公开工程边界，不披露客户、数据、基础设施、内部实现或专有算法。",
+      "クローズドソースの CellLoc Web Controller 概要で、製品の方向性と公開可能な工程境界だけを示し、顧客、データ、インフラ、内部実装、独自アルゴリズムは公開しません。"
     )
   },
   {
@@ -103,13 +108,14 @@ export const liveProjects = [
     category: "applications",
     score: 87,
     skills: ["Closed source", "Product interface", "Web"],
-    liveRoutes: ["https://puzzlewear.cn/"],
+    auxiliaryName: nameMap("拼频品聘-服装创意设计", "拼頻品聘-服裝創意設計", "拼频品聘-服装创意设计", "拼频品聘-服装创意设计"),
+    liveRoutes: ["https://puzzlewear.cn/login"],
     evidence: ["Public project site", "Closed-source record"],
     safeSummary: four(
-      "A closed-source project represented by its public project site and a minimal portfolio record.",
-      "以公開專案網站與精簡作品記錄呈現的閉源專案。",
-      "以公开项目网站与精简作品记录呈现的闭源项目。",
-      "公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースのプロジェクトです。"
+      "A closed-source clothing creative design project presented through its public project site, with internal implementation details intentionally kept outside the public record.",
+      "閉源的服裝創意設計專案，透過公開專案網站呈現產品方向，內部實作細節刻意不放入公開作品面。",
+      "闭源的服装创意设计项目，通过公开项目网站呈现产品方向，内部实现细节有意不进入公开项目页。",
+      "クローズドソースの服飾クリエイティブデザインプロジェクトで、公開サイトでは製品の方向性だけを示し、内部実装は公開面に出しません。"
     )
   },
   {
@@ -125,13 +131,14 @@ export const liveProjects = [
     category: "applications",
     score: 72,
     skills: ["Closed source", "English learning", "Web"],
+    auxiliaryName: nameMap("开发者英语练习站", "開發者英語練習站", "开发者英语练习站", "开发者英语练习站"),
     liveRoutes: ["https://devenglish.club/"],
     evidence: ["Public project site", "Closed-source record"],
     safeSummary: four(
-      "A closed-source English-learning project represented by its public project site and a concise portfolio record.",
-      "以公開專案網站與精簡作品記錄呈現的閉源英文學習專案。",
-      "以公开项目网站与精简作品记录呈现的闭源英语学习项目。",
-      "公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースの英語学習プロジェクトです。"
+      "A closed-source developer English learning project whose public site shows the learning direction while keeping private implementation details outside the project surface.",
+      "閉源的開發者英語學習專案，公開網站呈現學習方向，私人實作細節不進入專案公開面。",
+      "闭源的开发者英语学习项目，公开网站呈现学习方向，私有实现细节不进入项目公开面。",
+      "クローズドソースの開発者向け英語学習プロジェクトで、公開サイトでは学習の方向性を示し、非公開実装はプロジェクト面に出しません。"
     )
   },
   {
@@ -145,13 +152,14 @@ export const liveProjects = [
     category: "learning",
     score: 54,
     skills: ["AWS", "Architecture", "Progress tracking"],
+    auxiliaryName: nameMap("SAP Practice-亚马逊云做题练习", "SAP Practice-亞馬遜雲做題練習", "SAP Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习"),
     liveRoutes: ["/sap/"],
     evidence: ["Live demo"],
     safeSummary: four(
-      "An advanced cloud architecture practice route with progress-aware question sessions.",
-      "具備進度追蹤的進階雲端架構題庫練習路徑。",
-      "具备进度跟踪的高级云架构题库练习路径。",
-      "進捗を記録する上級クラウドアーキテクチャ問題演習です。"
+      "An Amazon cloud question-practice product for advanced architecture study, with focused sessions and progress-aware review on a separate SAP route.",
+      "面向進階架構學習的亞馬遜雲做題練習產品，在獨立 SAP 路由中提供聚焦練習與進度回顧。",
+      "面向高级架构学习的亚马逊云做题练习产品，在独立 SAP 路由中提供聚焦练习与进度回顾。",
+      "高度なアーキテクチャ学習向けの Amazon クラウド問題練習プロダクトで、SAP 専用ルートで集中演習と進捗レビューを行います。"
     )
   }
 ];
@@ -164,13 +172,14 @@ export const repositoryOverrides = {
     category: "applications",
     score: 99,
     skills: ["Hono", "PostgreSQL", "Redis", "BullMQ", "Docker"],
+    auxiliaryName: nameMap("运营脉冲板", "營運脈衝板", "运营脉冲板", "运营脉冲板"),
     liveRoutes: ["/demo/", "/demo/frontend/", "/demo/docs"],
     evidence: ["Live demo", "Case study", "Architecture", "Runbook", "ADR", "Verification"],
     safeSummary: four(
-      "A production-shaped reliability SaaS portfolio with API-key boundaries, queues, health probes, OpenAPI, and inspectable operational evidence.",
-      "具備 API 金鑰邊界、佇列、健康探針、OpenAPI 與可檢查運維證據的生產型可靠性 SaaS 作品。",
-      "具备 API 密钥边界、队列、健康探针、OpenAPI 与可检查运维证据的生产型可靠性 SaaS 作品。",
-      "API キー境界、キュー、ヘルスプローブ、OpenAPI、検証可能な運用証拠を備えた本番志向の信頼性 SaaS ポートフォリオです。"
+      "A backend, platform, and operations system with public API docs, health checks, background worker flow, data storage, rate limiting, and deployment verification.",
+      "後端、平台與營運系統，公開呈現 API 文件、健康檢查、背景 worker 流程、資料儲存、限流與部署驗證。",
+      "后端、平台与运营系统，公开呈现 API 文档、健康检查、后台 worker 流程、数据存储、限流和部署验证。",
+      "バックエンド、プラットフォーム、運用のためのシステムで、API ドキュメント、ヘルスチェック、バックグラウンド worker、データ保存、レート制限、デプロイ検証を公開範囲で示します。"
     )
   },
   VMD_cpp: {
@@ -231,8 +240,15 @@ export const repositoryOverrides = {
     category: "learning",
     score: 60,
     skills: ["Dart", "AWS", "Question bank", "Progress tracking"],
+    auxiliaryName: nameMap("SAA Practice-亚马逊云做题练习", "SAA Practice-亞馬遜雲做題練習", "SAA Practice-亚马逊云做题练习", "SAA Practice-亚马逊云做题练习"),
     liveRoutes: ["/saa/"],
-    evidence: ["Live demo", "Source"]
+    evidence: ["Live demo", "Source"],
+    safeSummary: four(
+      "An Amazon cloud question-practice product for SAA preparation, combining focused practice sessions with progress tracking.",
+      "面向 SAA 準備的亞馬遜雲做題練習產品，結合聚焦題目練習與進度追蹤。",
+      "面向 SAA 备考的亚马逊云做题练习产品，结合聚焦题目练习与进度跟踪。",
+      "SAA 対策向けの Amazon クラウド問題練習プロダクトで、集中した問題演習と進捗記録を組み合わせています。"
+    )
   },
   CEEMDAN_cpp: {
     category: "research",
@@ -271,16 +287,16 @@ export const caseStudies = {
     assets: [],
     sections: {
       problem: four(
-        "CWC is a closed-source project, so its public portfolio surface must explain the project without turning private implementation context into public documentation.",
-        "CWC 是閉源專案，因此公開作品介面必須在不把私人實作背景變成公開文件的前提下，說明專案本身。",
-        "CWC 是闭源项目，因此公开作品界面必须在不把私有实现背景变成公开文档的前提下，说明项目本身。",
+        "CWC is a closed-source project, so its public record must explain the product direction without turning private implementation context into public documentation.",
+        "CWC 是閉源專案，因此公開記錄必須在不把私人實作背景變成公開文件的前提下，說明產品方向。",
+        "CWC 是闭源项目，因此公开记录必须在不把私有实现背景变成公开文档的前提下，说明产品方向。",
         "CWC はクローズドソースのため、非公開の実装背景を公開文書に変えずに、プロジェクトの輪郭を説明できる公開面が必要です。"
       ),
       role: four(
-        "I am presenting CWC through a deliberately limited project record: enough context to understand why it belongs in the portfolio, without publishing private implementation details.",
-        "我以刻意受限的專案記錄呈現 CWC：提供足以理解其為何屬於作品集的背景，但不公開私人實作細節。",
-        "我以刻意受限的项目记录呈现 CWC：提供足以理解其为何属于作品集的背景，但不披露私有实现细节。",
-        "CWC がポートフォリオに含まれる理由を理解できるだけの背景を示し、非公開の実装詳細は出さない、意図的に限定した記録として公開しています。"
+        "I present CWC through a deliberately limited project record: enough context to understand the product boundary, without publishing private implementation details.",
+        "我以刻意受限的專案記錄呈現 CWC：提供足以理解產品邊界的背景，但不公開私人實作細節。",
+        "我以刻意受限的项目记录呈现 CWC：提供足以理解产品边界的背景，但不披露私有实现细节。",
+        "製品境界を理解できるだけの背景を示し、非公開の実装詳細は出さない、意図的に限定した記録として CWC を公開しています。"
       ),
       constraints: four(
         "The public boundary excludes source code, private infrastructure, credentials, client or employer details, internal data, and proprietary operating records.",
@@ -289,10 +305,10 @@ export const caseStudies = {
         "公開範囲にはソースコード、非公開インフラ、認証情報、顧客や雇用主の詳細、内部データ、専有の運用記録を含めません。"
       ),
       decisions: four(
-        "A static, multilingual page is the right evidence surface: it preserves a stable explanation while keeping the repository and operational boundary closed.",
-        "靜態多語言頁面是合適的證據介面：保留穩定說明，同時維持儲存庫與運作邊界的封閉。",
-        "静态多语言页面是合适的证据界面：保留稳定说明，同时维持仓库与运行边界的封闭。",
-        "静的な多言語ページを証拠面にすることで、安定した説明を保ちながら、リポジトリと運用の境界を非公開に保ちます。"
+        "A static, multilingual page preserves a stable explanation while keeping the repository and operational boundary closed.",
+        "靜態多語言頁面保留穩定說明，同時維持儲存庫與運作邊界的封閉。",
+        "静态多语言页面保留稳定说明，同时维持仓库与运行边界的封闭。",
+        "静的な多言語ページで安定した説明を保ちながら、リポジトリと運用の境界を非公開に保ちます。"
       ),
       architecture: four(
         "The public architecture is intentionally simple: a static project overview, a clear private-project status, and no source or download action.",
@@ -307,10 +323,10 @@ export const caseStudies = {
         "証拠の範囲は、この公開可能なプロジェクト説明そのものです。非公開リポジトリへのアクセスを代替するものではありません。"
       ),
       result: four(
-        "CWC now has a durable portfolio entry that communicates its place in the project set without exposing private material.",
-        "CWC 現在擁有可長期使用的作品入口，能說明其在專案集合中的位置，同時不暴露私人資料。",
-        "CWC 现在拥有可长期使用的作品入口，能说明其在项目集合中的位置，同时不暴露私有资料。",
-        "CWC は、非公開情報を露出せずにプロジェクト群の中での位置づけを伝える、長期利用可能なポートフォリオ入口になりました。"
+        "CWC now has a durable public entry that communicates its place in the project set without exposing private material.",
+        "CWC 現在擁有可長期使用的公開入口，能說明其在專案集合中的位置，同時不暴露私人資料。",
+        "CWC 现在拥有可长期使用的公开入口，能说明其在项目集合中的位置，同时不暴露私有资料。",
+        "CWC は、非公開情報を露出せずにプロジェクト群の中での位置づけを伝える、長期利用可能な公開入口になりました。"
       ),
       limits: four(
         "This page intentionally does not claim private metrics, customers, deployment addresses, source access, or implementation details that are not approved for publication.",
@@ -330,20 +346,20 @@ export const caseStudies = {
       decisions: four("Hono keeps the API small, PostgreSQL owns durable state, Redis and BullMQ isolate asynchronous checks, and Nginx preserves a stable public namespace under /demo/.", "Hono 維持 API 精簡，PostgreSQL 管理持久狀態，Redis 與 BullMQ 隔離非同步檢查，Nginx 則維持 `/demo/` 下穩定的公開命名空間。", "Hono 保持 API 精简，PostgreSQL 管理持久状态，Redis 与 BullMQ 隔离异步检查，Nginx 则维持 `/demo/` 下稳定的公开命名空间。", "Hono で API を小さく保ち、PostgreSQL が永続状態を管理し、Redis と BullMQ が非同期チェックを分離し、Nginx が `/demo/` の公開名前空間を維持します。"),
       architecture: four("Requests cross an API-key boundary before reaching workspace-scoped resources. Jobs enter a queue, workers execute checks, and health endpoints expose liveness and dependency readiness separately.", "請求先通過 API 金鑰邊界，再進入工作區範圍資源。工作送入佇列，由 worker 執行檢查；健康端點分別呈現存活與相依服務就緒狀態。", "请求先通过 API 密钥边界，再进入工作区范围资源。任务送入队列，由 worker 执行检查；健康端点分别呈现存活与依赖服务就绪状态。", "リクエストは API キー境界を通過してからワークスペース単位の資源へ到達します。ジョブはキューに入り、ワーカーが検査を実行し、ヘルスエンドポイントは生存性と依存関係の準備状態を分けて示します。"),
       evidence: four("The live console, customer view, OpenAPI document, health probes, tests, ADR, deployment runbook, and public-surface verifier form the evidence set.", "線上控制台、客戶介面、OpenAPI、健康探針、測試、ADR、部署 Runbook 與公開介面驗證器共同構成工程證據。", "在线控制台、客户界面、OpenAPI、健康探针、测试、ADR、部署 Runbook 与公开界面验证器共同构成工程证据。", "ライブコンソール、顧客画面、OpenAPI、ヘルスプローブ、テスト、ADR、デプロイ Runbook、公開面検証が証拠を構成します。"),
-      result: four("The result is an inspectable portfolio system: visitors can move from product behavior to API and operational proof without relying on invented usage metrics.", "成果是一套可檢查的作品系統：訪客能從產品行為一路追到 API 與運維證據，不依賴虛構的使用數據。", "成果是一套可检查的作品系统：访客能从产品行为一路追到 API 与运维证据，不依赖虚构的使用数据。", "架空の利用指標に頼らず、製品挙動から API と運用証拠まで追跡できるポートフォリオシステムになりました。"),
-      limits: four("This remains a portfolio-scale deployment. Load testing, multi-region failover, and production alert delivery are intentionally outside the current evidence boundary.", "這仍是作品集規模的部署。負載測試、多區域容錯與正式告警投遞目前不在證據範圍內。", "这仍是作品集规模的部署。负载测试、多区域容错与正式告警投递目前不在证据范围内。", "これはポートフォリオ規模のデプロイです。負荷試験、マルチリージョンのフェイルオーバー、本番通知配信は現在の証拠範囲外です。")
+      result: four("The result is an inspectable engineering system: visitors can move from product behavior to API and operational proof without relying on invented usage metrics.", "成果是一套可檢查的工程系統：訪客能從產品行為一路追到 API 與運維證據，不依賴虛構的使用數據。", "成果是一套可检查的工程系统：访客能从产品行为一路追到 API 与运维证据，不依赖虚构的使用数据。", "架空の利用指標に頼らず、製品挙動から API と運用証拠まで追跡できるエンジニアリングシステムになりました。"),
+      limits: four("This remains a review-scale deployment. Load testing, multi-region failover, and production alert delivery are intentionally outside the current evidence boundary.", "這仍是審閱規模的部署。負載測試、多區域容錯與正式告警投遞目前不在證據範圍內。", "这仍是审阅规模的部署。负载测试、多区域容错与正式告警投递目前不在证据范围内。", "これはレビュー規模のデプロイです。負荷試験、マルチリージョンのフェイルオーバー、本番通知配信は現在の証拠範囲外です。")
     }
   },
   heatstack: {
     updatedAt: "2026-08-17",
     assets: ["architecture", "practice-guide"],
     sections: {
-      problem: four("AI learning resources move quickly, but trend lists alone do not help a Windows-based learner install tools safely or turn them into demonstrable engineering work.", "AI 學習資源變動很快，但單純的趨勢清單無法協助 Windows 使用者安全安裝工具，或把學習轉化為可展示的工程成果。", "AI 学习资源变化很快，但单纯的趋势清单无法帮助 Windows 用户安全安装工具，或把学习转化为可展示的工程成果。", "AI 学習資源は変化が速く、トレンド一覧だけでは Windows 利用者が安全に導入し、学習を実証可能な成果へ変えることはできません。"),
-      role: four("I designed the content model, bilingual learning path, local-installation safety guidance, portfolio progression, and deployed web experience.", "我設計內容模型、雙語學習路徑、本機安裝安全指引、作品集進程與部署後的網站體驗。", "我设计内容模型、双语学习路径、本地安装安全指引、作品集进程与部署后的网站体验。", "コンテンツモデル、バイリンガル学習経路、ローカル導入の安全指針、ポートフォリオ進行、公開 Web 体験を設計しました。"),
+      problem: four("AI learning resources move quickly, but trend lists alone do not help a Windows-based learner inspect Skills, install them safely, or keep a durable learning path.", "AI 學習資源變動很快，但單純的趨勢清單無法協助 Windows 使用者檢查 Skill、安全安裝，或維持可持續的學習路徑。", "AI 学习资源变化很快，但单纯的趋势清单无法帮助 Windows 用户检查 Skill、安全安装，或维持可持续的学习路径。", "AI 学習資源は変化が速く、トレンド一覧だけでは Windows 利用者が Skill を確認し、安全に導入し、継続的な学習経路を保つことはできません。"),
+      role: four("I designed the content model, bilingual learning path, local-installation safety guidance, Skill browsing flow, and deployed web experience.", "我設計內容模型、雙語學習路徑、本機安裝安全指引、Skill 瀏覽流程與部署後的網站體驗。", "我设计内容模型、双语学习路径、本地安装安全指引、Skill 浏览流程与部署后的网站体验。", "コンテンツモデル、バイリンガル学習経路、ローカル導入の安全指針、Skill 閲覧フロー、公開 Web 体験を設計しました。"),
       constraints: four("Recommendations must stay useful as tools change, avoid unsafe one-line installation habits, and work for learners who use Windows terminals.", "建議必須能因應工具變化，避免不安全的一行安裝習慣，並適用於使用 Windows 終端機的學習者。", "建议必须能应对工具变化，避免不安全的一行安装习惯，并适用于使用 Windows 终端的学习者。", "ツールの変化に耐え、危険な一行インストールを避け、Windows ターミナル利用者にも機能する必要があります。"),
-      decisions: four("The experience connects each trend to prerequisites, inspection steps, guided practice, a portfolio outcome, and interview prompts instead of treating popularity as mastery.", "每個趨勢都連接到先備條件、檢查步驟、引導式練習、作品成果與面試問題，而不是把熱門程度當成能力。", "每个趋势都连接到前置条件、检查步骤、引导式练习、作品成果与面试问题，而不是把热度当成能力。", "人気を習得と見なさず、各トレンドを前提条件、検査手順、ガイド付き実践、成果物、面接質問へ接続します。"),
+      decisions: four("The experience connects each trend to prerequisites, inspection steps, guided practice, batch install/download paths, and Agent learning notes instead of treating popularity as mastery.", "每個趨勢都連接到先備條件、檢查步驟、引導式練習、批次下載安裝路徑與 Agent 學習筆記，而不是把熱門程度當成能力。", "每个趋势都连接到前置条件、检查步骤、引导式练习、批量下载安装路径与 Agent 学习笔记，而不是把热度当成能力。", "人気を習得と見なさず、各トレンドを前提条件、確認手順、ガイド付き実践、一括ダウンロードと導入経路、Agent 学習メモへ接続します。"),
       architecture: four("A static-first Astro surface separates editorial content, ranked Skill data, safety notes, and reusable learning modules while remaining inexpensive to host.", "靜態優先的 Astro 介面分離編輯內容、Skill 排名資料、安全提示與可重用學習模組，同時維持低成本託管。", "静态优先的 Astro 界面分离编辑内容、Skill 排名数据、安全提示与可复用学习模块，同时保持低成本托管。", "静的優先の Astro 構成で、編集コンテンツ、Skill 順位、安全メモ、再利用可能な学習モジュールを分離し、低コストで配信します。"),
-      evidence: four("The deployed route, real learning modules, installation checks, bilingual content, and portfolio tasks provide inspectable proof.", "已部署路由、真實學習模組、安裝檢查、雙語內容與作品任務提供可檢查的證據。", "已部署路由、真实学习模块、安装检查、双语内容与作品任务提供可检查的证据。", "公開ルート、実際の学習モジュール、導入チェック、バイリンガル内容、制作課題が検証可能な証拠です。"),
+      evidence: four("The deployed route, real learning modules, Skill browsing data, installation checks, bilingual content, and Agent book entry provide inspectable proof.", "已部署路由、真實學習模組、Skill 瀏覽資料、安裝檢查、雙語內容與 Agent 書籍入口提供可檢查的證據。", "已部署路由、真实学习模块、Skill 浏览数据、安装检查、双语内容与 Agent 书籍入口提供可检查的证据。", "公開ルート、実際の学習モジュール、Skill 閲覧データ、導入チェック、バイリンガル内容、Agent 書籍入口が検証可能な証拠です。"),
       result: four("HeatStack acts as a durable learning asset rather than a disposable trend post, with a route from discovery to practice and proof.", "HeatStack 成為可持續累積的學習資產，而非一次性的趨勢文章，讓使用者從發現一路走到實作與證明。", "HeatStack 成为可持续积累的学习资产，而非一次性的趋势文章，让用户从发现一路走到实践与证明。", "HeatStack は使い捨てのトレンド投稿ではなく、発見から実践と証明へ進む持続的な学習資産です。"),
       limits: four("Trend freshness depends on the upstream collection process, and individual Skill quality still requires human judgment before recommendation.", "趨勢新鮮度取決於上游收集流程，每項 Skill 的品質仍需人工判斷後才能推薦。", "趋势新鲜度取决于上游收集流程，每项 Skill 的质量仍需人工判断后才能推荐。", "トレンドの鮮度は上流の収集工程に依存し、各 Skill の品質は推薦前に人の判断が必要です。")
     }

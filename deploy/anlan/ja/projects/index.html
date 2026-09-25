@@ -115,6 +115,15 @@ button, input, select { font: inherit; }
 .row-index { color: var(--accent); font: 700 11px/1 var(--font-data); }
 .row-name { min-width: 0; }
 .row-name h3 { overflow-wrap: anywhere; margin: 0; font-size: clamp(18px, 2vw, 28px); letter-spacing: -.015em; }
+.row-name-alt {
+  max-width: 34ch;
+  margin: 9px 0 0;
+  color: var(--accent);
+  font-size: clamp(14px, 1.35vw, 20px);
+  font-weight: 750;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
 .row-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
 .row-flag { padding: 5px 7px; border: 1px solid var(--rule); color: var(--muted); font: 700 9px/1 var(--font-data); text-transform: uppercase; }
 .row-flag.is-origin { border-color: var(--accent); color: var(--accent); }
@@ -137,6 +146,15 @@ button, input, select { font: inherit; }
 .case-hero::after { position: absolute; right: -8%; bottom: 24%; width: 46%; height: 2px; background: var(--cyan); box-shadow: 0 -60px 0 var(--violet), 0 60px 0 var(--orange); transform: rotate(-11deg); content: ""; opacity: .72; }
 .case-hero > * { position: relative; z-index: 1; }
 .case-hero h1 { max-width: 12ch; margin: 0; overflow-wrap: anywhere; font-size: clamp(52px, 8vw, 118px); line-height: .88; letter-spacing: -.03em; }
+.case-alt-name {
+  max-width: min(760px, 72vw);
+  margin: 18px 0 0;
+  color: var(--cyan);
+  font-size: clamp(20px, 2.4vw, 34px);
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
 .case-summary { max-width: 68ch; margin: 28px 0 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
 .case-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
 .case-actions a { min-height: 42px; display: inline-flex; align-items: center; padding: 9px 13px; border: 1px solid var(--rule); font-size: 11px; font-weight: 800; text-decoration: none; }
@@ -185,6 +203,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .inventory { padding-inline: 16px; }
   .archive-row { grid-template-columns: 32px minmax(0, 1fr); gap: 13px; }
   .row-copy, .row-evidence, .row-actions { grid-column: 2; }
+  .row-name-alt { max-width: 100%; }
   .row-actions { display: flex; flex-wrap: wrap; min-width: 0; }
   .row-action, .locked-state { flex: 1 1 150px; }
   .case-section { grid-template-columns: 1fr; gap: 13px; }
@@ -194,6 +213,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .archive-shell { width: 100%; border: 0; }
   .archive-intro h1 { max-width: 100%; font-size: 44px; line-height: .9; }
   .case-hero h1 { max-width: 100%; font-size: 50px; line-height: .9; }
+  .case-alt-name { max-width: 100%; font-size: 20px; }
   .archive-stats { grid-template-columns: 1fr; }
   .archive-stats div { grid-template-columns: 90px 1fr; }
   .inventory-head { align-items: flex-start; flex-direction: column; }
@@ -216,34 +236,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   </header><main id="main">
     <section class="archive-hero"><div class="archive-intro"><h1>完全なエンジニアリング資産目録</h1><p>70 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。</p></div><dl class="archive-stats"><div><dt>GitHub リポジトリ</dt><dd>70</dd></div><div><dt>公開</dt><dd>57</dd></div><div><dt>非公開</dt><dd>13</dd></div></dl></section>
     <section class="archive-controls" aria-label="プロジェクト目録"><label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.7"/></svg><input type="search" data-project-search placeholder="プロジェクト名、技術、概要を検索" aria-label="プロジェクト名、技術、概要を検索"></label><div class="archive-filters"><button type="button" data-project-filter="all" aria-pressed="true">すべて</button><button type="button" data-project-filter="featured" aria-pressed="false">注目</button><button type="button" data-project-filter="applications" aria-pressed="false">アプリとツール</button><button type="button" data-project-filter="research" aria-pressed="false">研究</button><button type="button" data-project-filter="private" aria-pressed="false">非公開</button><button type="button" data-project-filter="fork" aria-pressed="false">Fork</button><button type="button" data-project-filter="learning" aria-pressed="false">学習</button></div><select class="archive-sort" data-project-sort aria-label="プロジェクトを並べ替え"><option value="value">採用価値と証拠</option><option value="updated">最近の更新</option><option value="name">名前 A–Z</option></select></section>
-    <section class="inventory"><header class="inventory-head"><div><h2>プロジェクト目録</h2><p>各リポジトリは一度だけ表示します。公開サービスとソースが同じプロジェクトなら、一つの記録に統合します。</p></div><span class="result-count" data-result-count data-template="{count} 件を表示">77 件を表示</span></header><div class="project-table" data-project-table><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="100" data-updated="" data-name="HeatStack" data-search="heatstack 変化の速い ai skill の動向を、安全な導入、体系的な実践、ポートフォリオ制作、面接準備へつなぐバイリンガル学習ハブです。 astro ai skills windows cli">
+    <section class="inventory"><header class="inventory-head"><div><h2>プロジェクト目録</h2><p>各リポジトリは一度だけ表示します。公開サービスとソースが同じプロジェクトなら、一つの記録に統合します。</p></div><span class="result-count" data-result-count data-template="{count} 件を表示">77 件を表示</span></header><div class="project-table" data-project-table><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="100" data-updated="" data-name="HeatStack" data-search="heatstack ai 熱棧 ai skill の広場として、日々の注目 skill の閲覧、まとめてダウンロードして導入する流れ、agent の学習と理解を支援し、『深入理解 ai agent』への入口も備えています。 astro ai skills windows cli">
     <span class="row-index" data-row-index>01</span>
-    <div class="row-name"><h3>HeatStack</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
-    <div class="row-copy"><p>変化の速い AI Skill の動向を、安全な導入、体系的な実践、ポートフォリオ制作、面接準備へつなぐバイリンガル学習ハブです。</p><ul class="row-skills"><li>Astro</li><li>AI Skills</li><li>Windows CLI</li></ul></div>
+    <div class="row-name"><h3>HeatStack</h3><p class="row-name-alt">AI 熱棧</p><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
+    <div class="row-copy"><p>AI Skill の広場として、日々の注目 Skill の閲覧、まとめてダウンロードして導入する流れ、Agent の学習と理解を支援し、『深入理解 AI Agent』への入口も備えています。</p><ul class="row-skills"><li>Astro</li><li>AI Skills</li><li>Windows CLI</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Live demo<br>Case study<br>Architecture</p>
     <div class="row-actions"><a class="row-action" href="/heatstack/">公開プロジェクトを開く</a><a class="row-action" href="/ja/projects/heatstack/">ケーススタディ</a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="99" data-updated="2026-08-09T06:06:28Z" data-name="pulseboard" data-search="pulseboard api キー境界、キュー、ヘルスプローブ、openapi、検証可能な運用証拠を備えた本番志向の信頼性 saas ポートフォリオです。 hono postgresql redis bullmq docker">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="99" data-updated="2026-08-09T06:06:28Z" data-name="pulseboard" data-search="pulseboard 运营脉冲板 バックエンド、プラットフォーム、運用のためのシステムで、api ドキュメント、ヘルスチェック、バックグラウンド worker、データ保存、レート制限、デプロイ検証を公開範囲で示します。 hono postgresql redis bullmq docker">
     <span class="row-index" data-row-index>02</span>
-    <div class="row-name"><h3>pulseboard</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
-    <div class="row-copy"><p>API キー境界、キュー、ヘルスプローブ、OpenAPI、検証可能な運用証拠を備えた本番志向の信頼性 SaaS ポートフォリオです。</p><ul class="row-skills"><li>Hono</li><li>PostgreSQL</li><li>Redis</li><li>BullMQ</li><li>Docker</li></ul></div>
+    <div class="row-name"><h3>pulseboard</h3><p class="row-name-alt">运营脉冲板</p><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
+    <div class="row-copy"><p>バックエンド、プラットフォーム、運用のためのシステムで、API ドキュメント、ヘルスチェック、バックグラウンド worker、データ保存、レート制限、デプロイ検証を公開範囲で示します。</p><ul class="row-skills"><li>Hono</li><li>PostgreSQL</li><li>Redis</li><li>BullMQ</li><li>Docker</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Live demo<br>Case study<br>Architecture<br>Runbook<br>ADR<br>Verification</p>
     <div class="row-actions"><a class="row-action" href="/demo/">公開プロジェクトを開く</a><a class="row-action" href="/demo/frontend/">公開プロジェクトを開く</a><a class="row-action" href="/demo/docs">公開プロジェクトを開く</a><a class="row-action" href="/ja/projects/pulseboard/">ケーススタディ</a><a class="row-action" href="https://github.com/DodgeHo/pulseboard" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="96" data-updated="" data-name="Career Radar" data-search="career radar 招待制とアカウント分離を採用し、保存求人、未読状態、定期ダイジェストを備えた求人探索・受信箱サービスです。 account isolation job inbox scheduled digests">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="96" data-updated="" data-name="Career Radar" data-search="career radar 職海雷達 招待制の求人探索プロダクトで、アカウント分離された保存、求人受信箱、未読状態、定期サマリーによって継続的な確認を支えます。 account isolation job inbox scheduled digests">
     <span class="row-index" data-row-index>03</span>
-    <div class="row-name"><h3>Career Radar</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
-    <div class="row-copy"><p>招待制とアカウント分離を採用し、保存求人、未読状態、定期ダイジェストを備えた求人探索・受信箱サービスです。</p><ul class="row-skills"><li>Account isolation</li><li>Job inbox</li><li>Scheduled digests</li></ul></div>
+    <div class="row-name"><h3>Career Radar</h3><p class="row-name-alt">職海雷達</p><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
+    <div class="row-copy"><p>招待制の求人探索プロダクトで、アカウント分離された保存、求人受信箱、未読状態、定期サマリーによって継続的な確認を支えます。</p><ul class="row-skills"><li>Account isolation</li><li>Job inbox</li><li>Scheduled digests</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Live demo<br>Case study<br>Architecture</p>
     <div class="row-actions"><a class="row-action" href="/jobs/">公開プロジェクトを開く</a><a class="row-action" href="/ja/projects/career-radar/">ケーススタディ</a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="91" data-updated="" data-name="TapPhysics" data-search="tapphysics 公開ルートを主な証拠面とする、インタラクティブな物理プロジェクトです。 physics interactive web simulation">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="91" data-updated="" data-name="TapPhysics" data-search="tapphysics 一点物理 高校生と物理教師向けのオフライン高考物理過去問ツールで、ローカルでの問題検索、練習、組題、印刷準備を支えます。 physics interactive web simulation">
     <span class="row-index" data-row-index>04</span>
-    <div class="row-name"><h3>TapPhysics</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
-    <div class="row-copy"><p>公開ルートを主な証拠面とする、インタラクティブな物理プロジェクトです。</p><ul class="row-skills"><li>Physics</li><li>Interactive web</li><li>Simulation</li></ul></div>
+    <div class="row-name"><h3>TapPhysics</h3><p class="row-name-alt">一点物理</p><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
+    <div class="row-copy"><p>高校生と物理教師向けのオフライン高考物理過去問ツールで、ローカルでの問題検索、練習、組題、印刷準備を支えます。</p><ul class="row-skills"><li>Physics</li><li>Interactive web</li><li>Simulation</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Live demo<br>Interactive project</p>
     <div class="row-actions"><a class="row-action" href="/tapphysics/">公開プロジェクトを開く</a><a class="row-action" href="/ja/projects/tapphysics/">プロジェクト記録を見る</a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="90" data-updated="" data-name="CWC" data-search="cwc 簡潔でセキュリティ確認済みの概要として記録したクローズドソースのエンジニアリングプロジェクトです。公開ページでは目的と工程上の境界だけを説明し、実装や非公開運用は公開しません。 closed source product engineering system design">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="90" data-updated="" data-name="CWC" data-search="cwc cellloc web controller- 细胞定位网络控制系统 クローズドソースの cellloc web controller 概要で、製品の方向性と公開可能な工程境界だけを示し、顧客、データ、インフラ、内部実装、独自アルゴリズムは公開しません。 closed source product engineering system design">
     <span class="row-index" data-row-index>05</span>
-    <div class="row-name"><h3>CWC</h3><div class="row-flags"><span class="row-flag">非公開プロジェクト</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag is-closed">クローズドソース</span><span class="row-flag">注目</span></div></div>
-    <div class="row-copy"><p>簡潔でセキュリティ確認済みの概要として記録したクローズドソースのエンジニアリングプロジェクトです。公開ページでは目的と工程上の境界だけを説明し、実装や非公開運用は公開しません。</p><ul class="row-skills"><li>Closed source</li><li>Product engineering</li><li>System design</li></ul></div>
+    <div class="row-name"><h3>CWC</h3><p class="row-name-alt">CellLoc Web Controller- 细胞定位网络控制系统</p><div class="row-flags"><span class="row-flag">非公開プロジェクト</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag is-closed">クローズドソース</span><span class="row-flag">注目</span></div></div>
+    <div class="row-copy"><p>クローズドソースの CellLoc Web Controller 概要で、製品の方向性と公開可能な工程境界だけを示し、顧客、データ、インフラ、内部実装、独自アルゴリズムは公開しません。</p><ul class="row-skills"><li>Closed source</li><li>Product engineering</li><li>System design</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Security-reviewed overview<br>Project record</p>
     <div class="row-actions"><a class="row-action" href="/ja/projects/cwc/">ケーススタディ</a></div>
   </article><article class="archive-row" data-project-row data-category="research" data-origin="original" data-visibility="public" data-featured="true" data-score="88" data-updated="2026-08-09T16:40:32Z" data-name="VMD_cpp" data-search="vmd_cpp vmd プロジェクトファミリーの中核となる 1d 実装で、c++ と eigen を信号処理実験に使います。 c++ eigen signal processing vmd">
@@ -252,12 +272,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>VMD プロジェクトファミリーの中核となる 1D 実装で、C++ と Eigen を信号処理実験に使います。</p><ul class="row-skills"><li>C++</li><li>Eigen</li><li>Signal processing</li><li>VMD</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Source<br>Research implementation</p>
     <div class="row-actions"><a class="row-action" href="/ja/projects/vmd-cpp/">プロジェクト記録を見る</a><a class="row-action" href="https://github.com/DodgeHo/VMD_cpp" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="87" data-updated="" data-name="PuzzleWear" data-search="puzzlewear 公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースのプロジェクトです。 closed source product interface web">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="true" data-score="87" data-updated="" data-name="PuzzleWear" data-search="puzzlewear 拼频品聘-服装创意设计 クローズドソースの服飾クリエイティブデザインプロジェクトで、公開サイトでは製品の方向性だけを示し、内部実装は公開面に出しません。 closed source product interface web">
     <span class="row-index" data-row-index>07</span>
-    <div class="row-name"><h3>PuzzleWear</h3><div class="row-flags"><span class="row-flag">非公開プロジェクト</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag is-closed">クローズドソース</span><span class="row-flag">注目</span></div></div>
-    <div class="row-copy"><p>公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースのプロジェクトです。</p><ul class="row-skills"><li>Closed source</li><li>Product interface</li><li>Web</li></ul></div>
+    <div class="row-name"><h3>PuzzleWear</h3><p class="row-name-alt">拼频品聘-服装创意设计</p><div class="row-flags"><span class="row-flag">非公開プロジェクト</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag is-closed">クローズドソース</span><span class="row-flag">注目</span></div></div>
+    <div class="row-copy"><p>クローズドソースの服飾クリエイティブデザインプロジェクトで、公開サイトでは製品の方向性だけを示し、内部実装は公開面に出しません。</p><ul class="row-skills"><li>Closed source</li><li>Product interface</li><li>Web</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Public project site<br>Closed-source record</p>
-    <div class="row-actions"><a class="row-action" href="https://puzzlewear.cn/" target="_blank" rel="noreferrer">公開プロジェクトを開く</a></div>
+    <div class="row-actions"><a class="row-action" href="https://puzzlewear.cn/login" target="_blank" rel="noreferrer">公開プロジェクトを開く</a></div>
   </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="true" data-score="84" data-updated="2026-07-06T07:14:00Z" data-name="PAL4_EnglishMod" data-search="pal4_englishmod pc ゲーム『仙剣奇侠伝四』向けの英語ローカライズ用ツールと公開成果です。 python localization game tooling">
     <span class="row-index" data-row-index>08</span>
     <div class="row-name"><h3>PAL4_EnglishMod</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag">注目</span></div></div>
@@ -282,10 +302,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>経験的モード分解と信号処理実験のための CEEMDAN を C++ で実装し、VMD プロジェクトファミリーと並べて示しています。</p><ul class="row-skills"><li>C++</li><li>CEEMDAN</li><li>Signal processing</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Source<br>Research implementation</p>
     <div class="row-actions"><a class="row-action" href="/ja/projects/ceemdan-cpp/">プロジェクト記録を見る</a><a class="row-action" href="https://github.com/DodgeHo/CEEMDAN_cpp" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="false" data-score="72" data-updated="" data-name="DevEnglish" data-search="devenglish 公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースの英語学習プロジェクトです。 closed source english learning web">
+  </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="private" data-featured="false" data-score="72" data-updated="" data-name="DevEnglish" data-search="devenglish 开发者英语练习站 クローズドソースの開発者向け英語学習プロジェクトで、公開サイトでは学習の方向性を示し、非公開実装はプロジェクト面に出しません。 closed source english learning web">
     <span class="row-index" data-row-index>12</span>
-    <div class="row-name"><h3>DevEnglish</h3><div class="row-flags"><span class="row-flag">非公開プロジェクト</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag is-closed">クローズドソース</span></div></div>
-    <div class="row-copy"><p>公開プロジェクトサイトと簡潔なポートフォリオ記録で示すクローズドソースの英語学習プロジェクトです。</p><ul class="row-skills"><li>Closed source</li><li>English learning</li><li>Web</li></ul></div>
+    <div class="row-name"><h3>DevEnglish</h3><p class="row-name-alt">开发者英语练习站</p><div class="row-flags"><span class="row-flag">非公開プロジェクト</span><span class="row-flag is-origin">オリジナル</span><span class="row-flag is-closed">クローズドソース</span></div></div>
+    <div class="row-copy"><p>クローズドソースの開発者向け英語学習プロジェクトで、公開サイトでは学習の方向性を示し、非公開実装はプロジェクト面に出しません。</p><ul class="row-skills"><li>Closed source</li><li>English learning</li><li>Web</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Public project site<br>Closed-source record</p>
     <div class="row-actions"><a class="row-action" href="https://devenglish.club/" target="_blank" rel="noreferrer">公開プロジェクトを開く</a></div>
   </article><article class="archive-row" data-project-row data-category="research" data-origin="original" data-visibility="public" data-featured="false" data-score="70" data-updated="2026-05-03T05:48:49Z" data-name="VMD_2D_cpp" data-search="vmd_2d_cpp 完全なエンジニアリング目録に含まれるオリジナルの公開 c++ リポジトリです。github でソース履歴を確認できます。 c++ 2d vmd signal processing">
@@ -354,10 +374,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>完全なエンジニアリング目録に含まれるオリジナルの公開 Jupyter Notebook リポジトリです。GitHub でソース履歴を確認できます。</p><ul class="row-skills"><li>Jupyter Notebook</li><li>digital-signal-processing</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Source</p>
     <div class="row-actions"><a class="row-action" href="/ja/projects/eeg-fourier-frequency-filter/">プロジェクト記録を見る</a><a class="row-action" href="https://github.com/DodgeHo/EEG_Fourier_frequency_filter" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="60" data-updated="2026-04-06T05:43:02Z" data-name="aws-saa-learning-skill" data-search="aws-saa-learning-skill 完全なエンジニアリング目録に含まれるオリジナルの公開 dart リポジトリです。github でソース履歴を確認できます。 dart aws question bank progress tracking">
+  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="60" data-updated="2026-04-06T05:43:02Z" data-name="aws-saa-learning-skill" data-search="aws-saa-learning-skill saa practice-亚马逊云做题练习 saa 対策向けの amazon クラウド問題練習プロダクトで、集中した問題演習と進捗記録を組み合わせています。 dart aws question bank progress tracking">
     <span class="row-index" data-row-index>24</span>
-    <div class="row-name"><h3>aws-saa-learning-skill</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span></div></div>
-    <div class="row-copy"><p>完全なエンジニアリング目録に含まれるオリジナルの公開 Dart リポジトリです。GitHub でソース履歴を確認できます。</p><ul class="row-skills"><li>Dart</li><li>AWS</li><li>Question bank</li><li>Progress tracking</li></ul></div>
+    <div class="row-name"><h3>aws-saa-learning-skill</h3><p class="row-name-alt">SAA Practice-亚马逊云做题练习</p><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span></div></div>
+    <div class="row-copy"><p>SAA 対策向けの Amazon クラウド問題練習プロダクトで、集中した問題演習と進捗記録を組み合わせています。</p><ul class="row-skills"><li>Dart</li><li>AWS</li><li>Question bank</li><li>Progress tracking</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Live demo<br>Source</p>
     <div class="row-actions"><a class="row-action" href="/saa/">公開プロジェクトを開く</a><a class="row-action" href="/ja/projects/saa-practice/">プロジェクト記録を見る</a><a class="row-action" href="https://github.com/DodgeHo/aws-saa-learning-skill" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
   </article><article class="archive-row" data-project-row data-category="research" data-origin="original" data-visibility="public" data-featured="false" data-score="60" data-updated="2026-05-03T05:52:04Z" data-name="ShapeContext_cpp" data-search="shapecontext_cpp 完全なエンジニアリング目録に含まれるオリジナルの公開 c++ リポジトリです。github でソース履歴を確認できます。 c++">
@@ -390,10 +410,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="row-copy"><p>完全なエンジニアリング目録に含まれるオリジナルの公開 R リポジトリです。GitHub でソース履歴を確認できます。</p><ul class="row-skills"><li>R</li><li>bioinformatics</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Source</p>
     <div class="row-actions"><a class="row-action" href="/ja/projects/adebhmms/">プロジェクト記録を見る</a><a class="row-action" href="https://github.com/DodgeHo/adEBHMMs" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
-  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="54" data-updated="" data-name="SAP Practice" data-search="sap practice 進捗を記録する上級クラウドアーキテクチャ問題演習です。 aws architecture progress tracking">
+  </article><article class="archive-row" data-project-row data-category="learning" data-origin="original" data-visibility="public" data-featured="false" data-score="54" data-updated="" data-name="SAP Practice" data-search="sap practice sap practice-亚马逊云做题练习 高度なアーキテクチャ学習向けの amazon クラウド問題練習プロダクトで、sap 専用ルートで集中演習と進捗レビューを行います。 aws architecture progress tracking">
     <span class="row-index" data-row-index>30</span>
-    <div class="row-name"><h3>SAP Practice</h3><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span></div></div>
-    <div class="row-copy"><p>進捗を記録する上級クラウドアーキテクチャ問題演習です。</p><ul class="row-skills"><li>AWS</li><li>Architecture</li><li>Progress tracking</li></ul></div>
+    <div class="row-name"><h3>SAP Practice</h3><p class="row-name-alt">SAP Practice-亚马逊云做题练习</p><div class="row-flags"><span class="row-flag">公開</span><span class="row-flag is-origin">オリジナル</span></div></div>
+    <div class="row-copy"><p>高度なアーキテクチャ学習向けの Amazon クラウド問題練習プロダクトで、SAP 専用ルートで集中演習と進捗レビューを行います。</p><ul class="row-skills"><li>AWS</li><li>Architecture</li><li>Progress tracking</li></ul></div>
     <p class="row-evidence"><strong>証拠</strong>Live demo</p>
     <div class="row-actions"><a class="row-action" href="/sap/">公開プロジェクトを開く</a><a class="row-action" href="/ja/projects/sap-practice/">プロジェクト記録を見る</a></div>
   </article><article class="archive-row" data-project-row data-category="applications" data-origin="original" data-visibility="public" data-featured="false" data-score="52" data-updated="2025-03-12T04:37:52Z" data-name="Wechat-questionnaire" data-search="wechat-questionnaire 完全なエンジニアリング目録に含まれるオリジナルの公開 javascript リポジトリです。github でソース履歴を確認できます。 javascript">

@@ -110,6 +110,15 @@ button, input, select { font: inherit; }
 .row-index { color: var(--accent); font: 700 11px/1 var(--font-data); }
 .row-name { min-width: 0; }
 .row-name h3 { overflow-wrap: anywhere; margin: 0; font-size: clamp(18px, 2vw, 28px); letter-spacing: -.015em; }
+.row-name-alt {
+  max-width: 34ch;
+  margin: 9px 0 0;
+  color: var(--accent);
+  font-size: clamp(14px, 1.35vw, 20px);
+  font-weight: 750;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
 .row-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
 .row-flag { padding: 5px 7px; border: 1px solid var(--rule); color: var(--muted); font: 700 9px/1 var(--font-data); text-transform: uppercase; }
 .row-flag.is-origin { border-color: var(--accent); color: var(--accent); }
@@ -132,6 +141,15 @@ button, input, select { font: inherit; }
 .case-hero::after { position: absolute; right: -8%; bottom: 24%; width: 46%; height: 2px; background: var(--cyan); box-shadow: 0 -60px 0 var(--violet), 0 60px 0 var(--orange); transform: rotate(-11deg); content: ""; opacity: .72; }
 .case-hero > * { position: relative; z-index: 1; }
 .case-hero h1 { max-width: 12ch; margin: 0; overflow-wrap: anywhere; font-size: clamp(52px, 8vw, 118px); line-height: .88; letter-spacing: -.03em; }
+.case-alt-name {
+  max-width: min(760px, 72vw);
+  margin: 18px 0 0;
+  color: var(--cyan);
+  font-size: clamp(20px, 2.4vw, 34px);
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
 .case-summary { max-width: 68ch; margin: 28px 0 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
 .case-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
 .case-actions a { min-height: 42px; display: inline-flex; align-items: center; padding: 9px 13px; border: 1px solid var(--rule); font-size: 11px; font-weight: 800; text-decoration: none; }
@@ -180,6 +198,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .inventory { padding-inline: 16px; }
   .archive-row { grid-template-columns: 32px minmax(0, 1fr); gap: 13px; }
   .row-copy, .row-evidence, .row-actions { grid-column: 2; }
+  .row-name-alt { max-width: 100%; }
   .row-actions { display: flex; flex-wrap: wrap; min-width: 0; }
   .row-action, .locked-state { flex: 1 1 150px; }
   .case-section { grid-template-columns: 1fr; gap: 13px; }
@@ -189,6 +208,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .archive-shell { width: 100%; border: 0; }
   .archive-intro h1 { max-width: 100%; font-size: 44px; line-height: .9; }
   .case-hero h1 { max-width: 100%; font-size: 50px; line-height: .9; }
+  .case-alt-name { max-width: 100%; font-size: 20px; }
   .archive-stats { grid-template-columns: 1fr; }
   .archive-stats div { grid-template-columns: 90px 1fr; }
   .inventory-head { align-items: flex-start; flex-direction: column; }
