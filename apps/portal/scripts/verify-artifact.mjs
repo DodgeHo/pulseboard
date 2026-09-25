@@ -18,7 +18,8 @@ const loadOptionalUpworkContent = async () => {
     throw error;
   }
 };
-const upworkPortfolio = (await loadOptionalUpworkContent())?.upworkPortfolio ?? [];
+const verifyUpworkArtifacts = process.env.ANLAN_INCLUDE_UPWORK === "true";
+const upworkPortfolio = verifyUpworkArtifacts ? (await loadOptionalUpworkContent())?.upworkPortfolio ?? [] : [];
 
 const expectedInitialCounts = { total: 70, public: 57, private: 13, forks: 21, original: 49 };
 const localePrefixes = { en: "", "zh-Hant": "zh-hant/", "zh-Hans": "zh-hans/", ja: "ja/" };
@@ -247,7 +248,7 @@ async function verifyGeneratedPages(root) {
   assert(home.includes('<script type="application/ld+json">'), "Homepage is missing JSON-LD");
   assert(!/__[A-Z0-9_]+__/.test(home), "Homepage contains an unresolved build placeholder");
 
-  const hasUpworkEntry = await fileExists(root, "upwork/index.html");
+  const hasUpworkEntry = verifyUpworkArtifacts && await fileExists(root, "upwork/index.html");
   if (hasUpworkEntry) {
     assert(upworkPortfolio.length > 0, "Upwork artifacts exist but optional Upwork content is unavailable");
     const upwork = await read(root, "upwork/index.html");

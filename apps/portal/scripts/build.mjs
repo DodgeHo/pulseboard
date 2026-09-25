@@ -61,7 +61,8 @@ const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCss
   readDataUri(resolve(sourceRoot, "assets/fonts/Inter-400.woff"), "font/woff"),
   readDataUri(resolve(sourceRoot, "assets/fonts/Inter-600.woff"), "font/woff")
 ]);
-const upworkContent = await loadOptionalUpworkContent();
+const includeUpwork = process.env.ANLAN_INCLUDE_UPWORK === "true";
+const upworkContent = includeUpwork ? await loadOptionalUpworkContent() : null;
 const [upworkCssRaw, upworkJs] = upworkContent ? await Promise.all([
   readTextOptional(resolve(sourceRoot, "upwork/upwork.css")),
   readTextOptional(resolve(sourceRoot, "upwork/upwork.js"))
