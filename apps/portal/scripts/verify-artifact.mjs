@@ -2,7 +2,6 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { siteCopy } from "../content/site-copy.mjs";
-import { upworkPortfolio } from "../content/upwork-copy.mjs";
 import { loadCatalog, localeList } from "./lib/catalog.mjs";
 
 const packageRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -11,6 +10,15 @@ const localRoot = resolve(packageRoot, "dist");
 const deployRoot = resolve(repositoryRoot, "deploy/anlan");
 const { snapshot, projects, repositories, caseStudies } = await loadCatalog(packageRoot);
 const bySlug = new Map(projects.map((project) => [project.slug, project]));
+const loadOptionalUpworkContent = async () => {
+  try {
+    return await import("../content/upwork-copy.mjs");
+  } catch (error) {
+    if (error?.code === "ERR_MODULE_NOT_FOUND" && String(error.message).includes("upwork-copy.mjs")) return null;
+    throw error;
+  }
+};
+const upworkPortfolio = (await loadOptionalUpworkContent())?.upworkPortfolio ?? [];
 
 const expectedInitialCounts = { total: 70, public: 57, private: 13, forks: 21, original: 49 };
 const localePrefixes = { en: "", "zh-Hant": "zh-hant/", "zh-Hans": "zh-hans/", ja: "ja/" };
@@ -41,6 +49,15 @@ async function listFiles(root) {
   };
   await visit(root);
   return files;
+}
+
+async function fileExists(root, relativePath) {
+  try {
+    return (await stat(resolve(root, relativePath))).isFile();
+  } catch (error) {
+    if (error?.code === "ENOENT") return false;
+    throw error;
+  }
 }
 
 function rowsFrom(artifact) {
@@ -230,20 +247,24 @@ async function verifyGeneratedPages(root) {
   assert(home.includes('<script type="application/ld+json">'), "Homepage is missing JSON-LD");
   assert(!/__[A-Z0-9_]+__/.test(home), "Homepage contains an unresolved build placeholder");
 
-  const upwork = await read(root, "upwork/index.html");
-  verifyUpworkMetadata(upwork, "Upwork entry page");
-  assert(upwork.includes('data-upwork-page'), "Upwork entry page is missing its page root");
-  for (const portfolio of upworkPortfolio) assert(upwork.includes(portfolio.title), `Upwork entry page is missing ${portfolio.title}`);
-  assert(upwork.includes("representative browser-only simulation"), "Upwork entry page is missing its simulation boundary");
-  for (const portfolio of upworkPortfolio) {
-    const artifact = await read(root, `upwork/${portfolio.slug}/index.html`);
-    verifyUpworkMetadata(artifact, `Upwork ${portfolio.slug} case page`);
-    assert(artifact.includes(portfolio.title), `Upwork ${portfolio.slug} page is missing its title`);
-    assert(artifact.includes(`data-demo="${portfolio.demoType}"`), `Upwork ${portfolio.slug} page is missing its demo marker`);
-    assert(artifact.includes(portfolio.demoLabel), `Upwork ${portfolio.slug} page is missing its demo label`);
-    assert(artifact.includes("Problem") && artifact.includes("Approach") && artifact.includes("Proof") && artifact.includes("Limits") && artifact.includes("Delivery signals"), `Upwork ${portfolio.slug} page is missing case sections`);
-    if (portfolio.demoType === "reliability") assert(artifact.includes("Simulation only"), "Reliability page is missing its simulation boundary");
-    else assert(artifact.includes("Representative"), `${portfolio.slug} page is missing its representative-demo boundary`);
+  const hasUpworkEntry = await fileExists(root, "upwork/index.html");
+  if (hasUpworkEntry) {
+    assert(upworkPortfolio.length > 0, "Upwork artifacts exist but optional Upwork content is unavailable");
+    const upwork = await read(root, "upwork/index.html");
+    verifyUpworkMetadata(upwork, "Upwork entry page");
+    assert(upwork.includes('data-upwork-page'), "Upwork entry page is missing its page root");
+    for (const portfolio of upworkPortfolio) assert(upwork.includes(portfolio.title), `Upwork entry page is missing ${portfolio.title}`);
+    assert(upwork.includes("representative browser-only simulation"), "Upwork entry page is missing its simulation boundary");
+    for (const portfolio of upworkPortfolio) {
+      const artifact = await read(root, `upwork/${portfolio.slug}/index.html`);
+      verifyUpworkMetadata(artifact, `Upwork ${portfolio.slug} case page`);
+      assert(artifact.includes(portfolio.title), `Upwork ${portfolio.slug} page is missing its title`);
+      assert(artifact.includes(`data-demo="${portfolio.demoType}"`), `Upwork ${portfolio.slug} page is missing its demo marker`);
+      assert(artifact.includes(portfolio.demoLabel), `Upwork ${portfolio.slug} page is missing its demo label`);
+      assert(artifact.includes("Problem") && artifact.includes("Approach") && artifact.includes("Proof") && artifact.includes("Limits") && artifact.includes("Delivery signals"), `Upwork ${portfolio.slug} page is missing case sections`);
+      if (portfolio.demoType === "reliability") assert(artifact.includes("Simulation only"), "Reliability page is missing its simulation boundary");
+      else assert(artifact.includes("Representative"), `${portfolio.slug} page is missing its representative-demo boundary`);
+    }
   }
 
   for (const locale of localeList) {
@@ -271,8 +292,10 @@ async function verifyGeneratedPages(root) {
   const feed = await read(root, "feed.xml");
   for (const slug of flagshipSlugs) assert(sitemap.includes(`https://anlan.store/projects/${slug}/`), `Sitemap is missing ${slug}`);
   for (const path of ["/hire/", "/zh-hant/hire/", "/zh-hans/hire/", "/ja/hire/"]) assert(sitemap.includes(`https://anlan.store${path}`), `Sitemap is missing ${path}`);
-  assert(sitemap.includes("https://anlan.store/upwork/"), "Sitemap is missing the Upwork entry page");
-  for (const portfolio of upworkPortfolio) assert(sitemap.includes(`https://anlan.store/upwork/${portfolio.slug}/`), `Sitemap is missing Upwork ${portfolio.slug}`);
+  if (hasUpworkEntry) {
+    assert(sitemap.includes("https://anlan.store/upwork/"), "Sitemap is missing the Upwork entry page");
+    for (const portfolio of upworkPortfolio) assert(sitemap.includes(`https://anlan.store/upwork/${portfolio.slug}/`), `Sitemap is missing Upwork ${portfolio.slug}`);
+  }
   assert(!repositories.filter((repository) => repository.visibility === "private").some((repository) => sitemap.includes(`/projects/${repository.slug}/`)), "Sitemap includes an unpublished private project page");
   assert(robots.includes("Sitemap: https://anlan.store/sitemap.xml"), "robots.txt is missing the sitemap URL");
   assert(feed.includes("ANLAN.STORE Project Updates") && flagshipSlugs.every((slug) => feed.includes(`/projects/${slug}/`)), "RSS feed is missing flagship project updates");

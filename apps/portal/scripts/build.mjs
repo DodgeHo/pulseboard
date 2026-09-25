@@ -3,7 +3,6 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { hireCopy, hireLinks } from "../content/hire-copy.mjs";
 import { assetTitles, localeConfig, siteCopy } from "../content/site-copy.mjs";
-import { upworkPortfolio, upworkSite } from "../content/upwork-copy.mjs";
 import { loadCatalog, localeList } from "./lib/catalog.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -15,6 +14,14 @@ const siteUrl = "https://anlan.store";
 
 const normalizeNewlines = (value) => value.replace(/\r\n?/g, "\n");
 const readText = async (path) => normalizeNewlines(await readFile(path, "utf8"));
+const readTextOptional = async (path) => {
+  try {
+    return await readText(path);
+  } catch (error) {
+    if (error?.code === "ENOENT") return "";
+    throw error;
+  }
+};
 const readDataUri = async (path, mimeType) => {
   const bytes = await readFile(path);
   return `data:${mimeType};base64,${bytes.toString("base64")}`;
@@ -32,7 +39,16 @@ const isExternalHref = (href = "") => /^https?:\/\//i.test(href);
 const linkAttrs = (href = "") => isExternalHref(href) ? ' target="_blank" rel="noreferrer"' : "";
 const four = (en, zhHant, zhHans, ja) => ({ en, "zh-Hant": zhHant, "zh-Hans": zhHans, ja });
 
-const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCssRaw, archiveJs, upworkCssRaw, upworkJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
+const loadOptionalUpworkContent = async () => {
+  try {
+    return await import("../content/upwork-copy.mjs");
+  } catch (error) {
+    if (error?.code === "ERR_MODULE_NOT_FOUND" && String(error.message).includes("upwork-copy.mjs")) return null;
+    throw error;
+  }
+};
+
+const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCssRaw, archiveJs, operationsImage, customerImage, interRegular, interSemibold] = await Promise.all([
   readText(resolve(sourceRoot, "index.html")),
   readText(resolve(sourceRoot, "hire.html")),
   readText(resolve(sourceRoot, "styles.css")),
@@ -40,13 +56,19 @@ const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCss
   readText(resolve(sourceRoot, "archive.css")),
   readText(resolve(sourceRoot, "hire.css")),
   readText(resolve(sourceRoot, "archive.js")),
-  readText(resolve(sourceRoot, "upwork/upwork.css")),
-  readText(resolve(sourceRoot, "upwork/upwork.js")),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-ops.png"), "image/png"),
   readDataUri(resolve(sourceRoot, "assets/pulseboard-customer.png"), "image/png"),
   readDataUri(resolve(sourceRoot, "assets/fonts/Inter-400.woff"), "font/woff"),
   readDataUri(resolve(sourceRoot, "assets/fonts/Inter-600.woff"), "font/woff")
 ]);
+const upworkContent = await loadOptionalUpworkContent();
+const [upworkCssRaw, upworkJs] = upworkContent ? await Promise.all([
+  readTextOptional(resolve(sourceRoot, "upwork/upwork.css")),
+  readTextOptional(resolve(sourceRoot, "upwork/upwork.js"))
+]) : ["", ""];
+const upworkPortfolio = upworkContent?.upworkPortfolio ?? [];
+const upworkSite = upworkContent?.upworkSite ?? null;
+const upworkEnabled = Boolean(upworkSite && upworkPortfolio.length > 0 && upworkCssRaw && upworkJs);
 
 const { snapshot, projects, repositories, caseStudies } = await loadCatalog(packageRoot);
 if (
@@ -386,17 +408,19 @@ const assetPage = (project, asset, locale) => {
 
 await rm(localRoot, { recursive: true, force: true });
 await writeOutput("index.html", homeArtifact);
-const upworkArtifact = upworkPage();
-ensureResolved(upworkArtifact, "Upwork entry page");
-await writeOutput("upwork/index.html", upworkArtifact);
-for (const portfolio of upworkPortfolio) {
-  const artifact = upworkCasePage(portfolio);
-  ensureResolved(artifact, `Upwork ${portfolio.slug} case page`);
-  await writeOutput(`upwork/${portfolio.slug}/index.html`, artifact);
-}
 
 const sitemapPaths = ["/"];
- sitemapPaths.push("/upwork/", ...upworkPortfolio.map((portfolio) => `/upwork/${portfolio.slug}/`));
+if (upworkEnabled) {
+  const upworkArtifact = upworkPage();
+  ensureResolved(upworkArtifact, "Upwork entry page");
+  await writeOutput("upwork/index.html", upworkArtifact);
+  for (const portfolio of upworkPortfolio) {
+    const artifact = upworkCasePage(portfolio);
+    ensureResolved(artifact, `Upwork ${portfolio.slug} case page`);
+    await writeOutput(`upwork/${portfolio.slug}/index.html`, artifact);
+  }
+  sitemapPaths.push("/upwork/", ...upworkPortfolio.map((portfolio) => `/upwork/${portfolio.slug}/`));
+}
 for (const locale of localeList) {
   if (locale !== "en") {
     await writeOutput(`${localeConfig[locale].prefix.replace(/^\//, "")}/index.html`, homeArtifact);
