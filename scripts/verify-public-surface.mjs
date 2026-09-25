@@ -1,5 +1,6 @@
 const baseUrl = normalizeBaseUrl(process.env.PUBLIC_BASE_URL ?? 'https://anlan.store');
 const expectedReleaseSha = process.env.EXPECTED_RELEASE_SHA?.trim();
+const verifyUpworkPagesEnabled = process.env.ANLAN_INCLUDE_UPWORK === 'true';
 const failures = [];
 const observations = [];
 const privateNames = [
@@ -140,6 +141,11 @@ async function verifyPortal() {
 }
 
 async function verifyUpworkPages() {
+  if (!verifyUpworkPagesEnabled) {
+    observe('Upwork optional portfolio', 'skipped because ANLAN_INCLUDE_UPWORK is not true');
+    return;
+  }
+
   const entry = await fetchText('/upwork/');
   if (entry.response.status === 404) {
     observe('Upwork optional portfolio', 'not published on this build');
