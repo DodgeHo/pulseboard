@@ -216,7 +216,7 @@ jobs:
           deploy_backup_dir="$HOME/pulseboard-deploy-backups/$ts/public-surface"
           mkdir -p "$deploy_backup_dir/nginx"
 
-          portal_paths=(index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant)
+          portal_paths=(index.html feed.xml robots.txt sitemap.xml hire projects upwork ja zh-hans zh-hant)
           existing_portal_paths=()
           for portal_path in "${portal_paths[@]}"; do
             if [ -e "/var/www/html/$portal_path" ]; then
@@ -262,7 +262,7 @@ jobs:
 
           sudo install -d -m 0755 /var/www/html/demo/frontend /var/www/html/demo/review
           tar -C deploy/anlan -cf - \
-            index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant \
+            index.html feed.xml robots.txt sitemap.xml hire projects upwork ja zh-hans zh-hant \
             | sudo tar --no-same-owner -xf - -C /var/www/html
           sudo install -m 0644 deploy/anlan/demo/index.html /var/www/html/demo/index.html
           sudo install -m 0644 deploy/anlan/demo/frontend/index.html /var/www/html/demo/frontend/index.html
