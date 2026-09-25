@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-label="Feature delivery flow: requirement slice to status model to validation to review hand-off">
+  <rect width="1200" height="520" fill="#060817"/>
+  <rect x="0.5" y="0.5" width="1199" height="519" fill="none" stroke="#1c426d"/>
+  <rect x="0.5" y="0.5" width="1199" height="52" fill="#0b1228"/>
+  <line x1="0" y1="52.5" x2="1200" y2="52.5" stroke="#1c426d"/>
+  <rect x="28" y="17" width="4" height="18" fill="#17d6ff"/>
+  <text x="44" y="31" font-family="Cascadia Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#f4f8ff" letter-spacing="1">FEATURE DELIVERY FLOW</text>
+  <text x="1172" y="31" text-anchor="end" font-family="Cascadia Mono, Consolas, monospace" font-size="10" fill="#7893b2" letter-spacing="1">REPRESENTATIVE BROWSER DEMO</text>
+
+  <!-- stage 1 -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="34" y="96" width="248" height="270" fill="#101b34" stroke="#1c426d"/>
+    <rect x="34" y="96" width="248" height="3" fill="#17d6ff"/>
+    <text x="54" y="132" font-size="11" font-weight="700" fill="#17d6ff">01 / REQUIREMENT SLICE</text>
+    <text x="54" y="164" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">Name the smallest</text>
+    <text x="54" y="184" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">useful behavior</text>
+    <line x1="54" y1="204" x2="262" y2="204" stroke="#1c426d"/>
+    <text x="54" y="230" font-size="10" fill="#a9bdd6">feature name</text>
+    <text x="54" y="252" font-size="10" fill="#a9bdd6">owner (hand-off target)</text>
+    <text x="54" y="274" font-size="10" fill="#a9bdd6">priority: high / med / low</text>
+    <text x="54" y="308" font-size="9" fill="#7893b2" letter-spacing="1">INPUT IS EXPLICIT</text>
+    <text x="54" y="330" font-size="9" fill="#7893b2" letter-spacing="1">BEFORE ANY CODE RUNS</text>
+  </g>
+  <path d="M282 231 h30 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+
+  <!-- stage 2 -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="322" y="96" width="248" height="270" fill="#101b34" stroke="#1c426d"/>
+    <rect x="322" y="96" width="248" height="3" fill="#17d6ff"/>
+    <text x="342" y="132" font-size="11" font-weight="700" fill="#17d6ff">02 / STATUS MODEL</text>
+    <text x="342" y="164" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">Make state visible,</text>
+    <text x="342" y="184" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">not implied</text>
+    <line x1="342" y1="204" x2="550" y2="204" stroke="#1c426d"/>
+    <rect x="342" y="220" width="96" height="24" fill="#060817" stroke="#17d6ff"/>
+    <text x="352" y="236" font-size="9" fill="#17d6ff">PLANNED</text>
+    <rect x="342" y="252" width="96" height="24" fill="#060817" stroke="#ff9d2e"/>
+    <text x="352" y="268" font-size="9" fill="#ff9d2e">IN REVIEW</text>
+    <rect x="342" y="284" width="96" height="24" fill="#060817" stroke="#61d9a1"/>
+    <text x="352" y="300" font-size="9" fill="#61d9a1">SHIPPED</text>
+    <text x="456" y="236" font-size="9" fill="#7893b2">queued work</text>
+    <text x="456" y="268" font-size="9" fill="#7893b2">reviewer attention</text>
+    <text x="456" y="300" font-size="9" fill="#7893b2">done means done</text>
+    <text x="342" y="340" font-size="9" fill="#7893b2" letter-spacing="1">FILTERS PRESERVE THE PATH</text>
+  </g>
+  <path d="M570 231 h30 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+
+  <!-- stage 3 -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="610" y="96" width="248" height="270" fill="#101b34" stroke="#1c426d"/>
+    <rect x="610" y="96" width="248" height="3" fill="#ff9d2e"/>
+    <text x="630" y="132" font-size="11" font-weight="700" fill="#ff9d2e">03 / VALIDATION</text>
+    <text x="630" y="164" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">Reject bad input</text>
+    <text x="630" y="184" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">with a readable error</text>
+    <line x1="630" y1="204" x2="838" y2="204" stroke="#1c426d"/>
+    <rect x="630" y="222" width="208" height="26" fill="#060817" stroke="#1c426d"/>
+    <text x="642" y="239" font-size="9" fill="#7893b2">NAME: ""</text>
+    <rect x="630" y="256" width="208" height="26" fill="#060817" stroke="#ff9d2e"/>
+    <text x="642" y="273" font-size="9" fill="#ff9d2e">ERR: at least 4 characters</text>
+    <text x="630" y="308" font-size="9" fill="#7893b2" letter-spacing="1">INVALID INPUT STAYS LOCAL</text>
+    <text x="630" y="330" font-size="9" fill="#7893b2" letter-spacing="1">VALID INPUT BECOMES A RECORD</text>
+  </g>
+  <path d="M858 231 h30 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+
+  <!-- stage 4 -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="898" y="96" width="268" height="270" fill="#101b34" stroke="#1c426d"/>
+    <rect x="898" y="96" width="268" height="3" fill="#61d9a1"/>
+    <text x="918" y="132" font-size="11" font-weight="700" fill="#61d9a1">04 / REVIEW HAND-OFF</text>
+    <text x="918" y="164" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">A reviewer can inspect</text>
+    <text x="918" y="184" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#f4f8ff">and continue the work</text>
+    <line x1="918" y1="204" x2="1146" y2="204" stroke="#1c426d"/>
+    <text x="918" y="230" font-size="10" fill="#a9bdd6">queue statistics: 4 totals</text>
+    <text x="918" y="252" font-size="10" fill="#a9bdd6">status filters: all/planned/</text>
+    <text x="918" y="270" font-size="10" fill="#a9bdd6">in review/shipped</text>
+    <text x="918" y="292" font-size="10" fill="#a9bdd6">records show owner + priority</text>
+    <text x="918" y="326" font-size="9" fill="#7893b2" letter-spacing="1">NO HIDDEN STATE,</text>
+    <text x="918" y="344" font-size="9" fill="#7893b2" letter-spacing="1">NO UNEXPLAINED PATH</text>
+  </g>
+
+  <!-- footer boundary -->
+  <line x1="34" y1="410" x2="1166" y2="410" stroke="#1c426d"/>
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <text x="34" y="440" font-size="10" fill="#ff9d2e" font-weight="700">BOUNDARY</text>
+    <text x="130" y="440" font-size="10" fill="#a9bdd6">This flow is a representative browser demo: data lives in the page and resets on refresh.</text>
+    <text x="130" y="462" font-size="10" fill="#a9bdd6">It does not claim a remote API, real PostgreSQL writes, or a production deployment.</text>
+    <text x="34" y="492" font-size="9" fill="#456182" letter-spacing="1">NEXT VERIFICATION STEPS IN A CLIENT REPO: REAL API CONTRACT, MIGRATIONS, INTEGRATION TESTS</text>
+  </g>
+</svg>

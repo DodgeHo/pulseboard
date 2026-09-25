@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-label="PulseBoard backend architecture: Hono API, PostgreSQL with Prisma, Redis with BullMQ, worker, health gates; the recovery runbook on this page is a browser-only simulation and AWS is plan-only">
+  <rect width="1200" height="700" fill="#060817"/>
+  <rect x="0.5" y="0.5" width="1199" height="699" fill="none" stroke="#1c426d"/>
+  <rect x="0.5" y="0.5" width="1199" height="52" fill="#0b1228"/>
+  <line x1="0" y1="52.5" x2="1200" y2="52.5" stroke="#1c426d"/>
+  <rect x="28" y="17" width="4" height="18" fill="#17d6ff"/>
+  <text x="44" y="31" font-family="Cascadia Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#f4f8ff" letter-spacing="1">PULSEBOARD BACKEND / WHAT THE REPOSITORY CONTAINS</text>
+  <text x="1172" y="31" text-anchor="end" font-family="Cascadia Mono, Consolas, monospace" font-size="10" fill="#7893b2" letter-spacing="1">PRODUCTION-SHAPED PORTFOLIO PROJECT</text>
+
+  <!-- evidence zone -->
+  <rect x="34" y="80" width="740" height="470" fill="#0b1228" stroke="#2874b0"/>
+  <text x="54" y="110" font-family="Cascadia Mono, Consolas, monospace" font-size="11" font-weight="700" fill="#17d6ff" letter-spacing="1">ZONE A — REPOSITORY EVIDENCE (REAL CODE, RUNS LOCALLY)</text>
+
+  <!-- client surface -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="64" y="140" width="180" height="84" fill="#101b34" stroke="#1c426d"/>
+    <text x="80" y="168" font-size="11" font-weight="700" fill="#f4f8ff">CLIENT SURFACE</text>
+    <text x="80" y="192" font-size="9" fill="#7893b2">/demo/ ops + customer</text>
+    <text x="80" y="208" font-size="9" fill="#7893b2">review path</text>
+
+    <!-- hono api -->
+    <rect x="324" y="140" width="220" height="84" fill="#101b34" stroke="#17d6ff"/>
+    <text x="340" y="168" font-size="11" font-weight="700" fill="#17d6ff">HONO API</text>
+    <text x="340" y="192" font-size="9" fill="#a9bdd6">OpenAPI document</text>
+    <text x="340" y="208" font-size="9" fill="#a9bdd6">API-key boundary on writes</text>
+    <path d="M244 182 h72 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+
+    <!-- health gates -->
+    <rect x="624" y="140" width="130" height="84" fill="#101b34" stroke="#61d9a1"/>
+    <text x="640" y="168" font-size="11" font-weight="700" fill="#61d9a1">HEALTH</text>
+    <text x="640" y="192" font-size="9" fill="#a9bdd6">/health/live</text>
+    <text x="640" y="208" font-size="9" fill="#a9bdd6">/health/ready</text>
+    <path d="M544 182 h72 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+
+    <!-- postgres -->
+    <rect x="64" y="300" width="220" height="84" fill="#101b34" stroke="#1c426d"/>
+    <text x="80" y="328" font-size="11" font-weight="700" fill="#f4f8ff">POSTGRESQL / PRISMA</text>
+    <text x="80" y="352" font-size="9" fill="#a9bdd6">durable state, migrations</text>
+    <text x="80" y="368" font-size="9" fill="#a9bdd6">local backup / restore</text>
+
+    <!-- redis -->
+    <rect x="324" y="300" width="220" height="84" fill="#101b34" stroke="#1c426d"/>
+    <text x="340" y="328" font-size="11" font-weight="700" fill="#f4f8ff">REDIS / BULLMQ</text>
+    <text x="340" y="352" font-size="9" fill="#a9bdd6">background queue</text>
+    <text x="340" y="368" font-size="9" fill="#a9bdd6">visible retry decisions</text>
+
+    <!-- worker -->
+    <rect x="624" y="300" width="130" height="84" fill="#101b34" stroke="#1c426d"/>
+    <text x="640" y="328" font-size="11" font-weight="700" fill="#f4f8ff">WORKER</text>
+    <text x="640" y="352" font-size="9" fill="#a9bdd6">recovery path</text>
+    <text x="640" y="368" font-size="9" fill="#a9bdd6">rollback rehearsal</text>
+    <path d="M434 224 v68 m-7 -8 7 8 7 -8" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+    <path d="M174 224 v68 m-7 -8 7 8 7 -8" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+    <path d="M284 342 h32 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+    <path d="M544 342 h72 m-8 -7 8 7 -8 7" stroke="#ff9d2e" stroke-width="1.5" fill="none"/>
+
+    <!-- rehearsals strip -->
+    <rect x="64" y="440" width="690" height="76" fill="#060817" stroke="#1c426d"/>
+    <text x="80" y="468" font-size="10" font-weight="700" fill="#f4f8ff">LOCAL REHEARSALS IN THE REPO</text>
+    <text x="80" y="492" font-size="9" fill="#a9bdd6">postgres backup-restore rehearsal · compose rollback rehearsal · fault injection · local e2e</text>
+  </g>
+
+  <!-- simulation zone -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="806" y="80" width="360" height="470" fill="#060817" stroke="#ff9d2e" stroke-dasharray="6 5"/>
+    <text x="826" y="110" font-size="11" font-weight="700" fill="#ff9d2e" letter-spacing="1">ZONE B — THIS PAGE ONLY</text>
+    <text x="826" y="130" font-size="10" fill="#a9bdd6">Recovery runbook simulation.</text>
+    <text x="826" y="148" font-size="10" fill="#a9bdd6">Runs in the browser; no external</text>
+    <text x="826" y="166" font-size="10" fill="#a9bdd6">system is touched.</text>
+    <rect x="826" y="188" width="320" height="52" fill="#101b34" stroke="#1c426d"/>
+    <text x="842" y="210" font-size="10" font-weight="700" fill="#f4f8ff">01 / HEALTH GATE</text>
+    <text x="842" y="228" font-size="9" fill="#7893b2">confirm service boundary responds</text>
+    <rect x="826" y="252" width="320" height="52" fill="#101b34" stroke="#1c426d"/>
+    <text x="842" y="274" font-size="10" font-weight="700" fill="#f4f8ff">02 / QUEUE RETRY</text>
+    <text x="842" y="292" font-size="9" fill="#7893b2">make the retry decision visible</text>
+    <rect x="826" y="316" width="320" height="52" fill="#101b34" stroke="#1c426d"/>
+    <text x="842" y="338" font-size="10" font-weight="700" fill="#f4f8ff">03 / RESTORE GATE</text>
+    <text x="842" y="356" font-size="9" fill="#7893b2">validate restored state before done</text>
+    <rect x="826" y="380" width="320" height="52" fill="#101b34" stroke="#1c426d"/>
+    <text x="842" y="402" font-size="10" font-weight="700" fill="#f4f8ff">04 / ROLLBACK CHECK</text>
+    <text x="842" y="420" font-size="9" fill="#7893b2">confirm release boundary</text>
+    <text x="826" y="462" font-size="10" fill="#ff9d2e" font-weight="700">RELATIONSHIP</text>
+    <text x="826" y="484" font-size="9" fill="#a9bdd6">The simulation documents the same</text>
+    <text x="826" y="502" font-size="9" fill="#a9bdd6">procedure rehearsed in Zone A scripts;</text>
+    <text x="826" y="520" font-size="9" fill="#a9bdd6">it is not a live incident system.</text>
+  </g>
+
+  <!-- relation arrow -->
+  <path d="M774 315 h24" stroke="#7893b2" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+
+  <!-- footer boundary -->
+  <line x1="34" y1="586" x2="1166" y2="586" stroke="#1c426d"/>
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <text x="34" y="616" font-size="10" fill="#ff9d2e" font-weight="700">BOUNDARY</text>
+    <text x="130" y="616" font-size="10" fill="#a9bdd6">Zone A is code and rehearsal scripts inside the public PulseBoard repository, run locally. Zone B is an in-page simulation.</text>
+    <text x="130" y="638" font-size="10" fill="#a9bdd6">No production traffic, SLA, or RPO/RTO is claimed. No cloud account is connected.</text>
+    <text x="34" y="668" font-size="9" fill="#456182" letter-spacing="1">AWS DEPLOYMENT: PLAN-ONLY — ARCHITECTURE DOCUMENTED, NOT DEPLOYED</text>
+  </g>
+</svg>

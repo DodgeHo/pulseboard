@@ -255,7 +255,7 @@ async function verifyGeneratedPages(root) {
     verifyUpworkMetadata(upwork, "Upwork entry page");
     assert(upwork.includes('data-upwork-page'), "Upwork entry page is missing its page root");
     for (const portfolio of upworkPortfolio) assert(upwork.includes(portfolio.title), `Upwork entry page is missing ${portfolio.title}`);
-    assert(upwork.includes("representative browser-only simulation"), "Upwork entry page is missing its simulation boundary");
+    assert(upwork.includes("self-contained browser experiences") && upwork.includes("commercial production systems"), "Upwork entry page is missing its simulation boundary");
     for (const portfolio of upworkPortfolio) {
       const artifact = await read(root, `upwork/${portfolio.slug}/index.html`);
       verifyUpworkMetadata(artifact, `Upwork ${portfolio.slug} case page`);

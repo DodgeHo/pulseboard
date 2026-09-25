@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-label="Three recurring risks in generated code and their repairs: async state guard, input boundary, validation error path">
+  <rect width="1200" height="620" fill="#060817"/>
+  <rect x="0.5" y="0.5" width="1199" height="619" fill="none" stroke="#1c426d"/>
+  <rect x="0.5" y="0.5" width="1199" height="52" fill="#0b1228"/>
+  <line x1="0" y1="52.5" x2="1200" y2="52.5" stroke="#1c426d"/>
+  <rect x="28" y="17" width="4" height="18" fill="#ff9d2e"/>
+  <text x="44" y="31" font-family="Cascadia Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#f4f8ff" letter-spacing="1">WHERE GENERATED CODE BREAKS</text>
+  <text x="1172" y="31" text-anchor="end" font-family="Cascadia Mono, Consolas, monospace" font-size="10" fill="#7893b2" letter-spacing="1">THREE REPRESENTATIVE RISK POINTS</text>
+
+  <!-- risk 1: async state -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="34" y="88" width="356" height="380" fill="#101b34" stroke="#1c426d"/>
+    <rect x="34" y="88" width="356" height="3" fill="#ff9d2e"/>
+    <text x="54" y="122" font-size="11" font-weight="700" fill="#ff9d2e">RISK 01 / ASYNC STATE GUARD</text>
+    <text x="54" y="150" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f4f8ff">A late response overwrites</text>
+    <text x="54" y="170" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f4f8ff">the result of a newer request</text>
+    <line x1="54" y1="190" x2="370" y2="190" stroke="#1c426d"/>
+    <rect x="54" y="206" width="316" height="96" fill="#050a18" stroke="#1c426d"/>
+    <text x="68" y="230" font-size="10" fill="#d9e8fa">const r = await fetch(url);</text>
+    <text x="68" y="252" font-size="10" fill="#ff9d2e">preview.textContent =</text>
+    <text x="82" y="272" font-size="10" fill="#ff9d2e">await r.text();  // no guard</text>
+    <text x="54" y="330" font-size="9" fill="#ff9d2e" font-weight="700">REPAIR</text>
+    <text x="118" y="330" font-size="10" fill="#a9bdd6">request token per load;</text>
+    <text x="118" y="350" font-size="10" fill="#a9bdd6">read body first, then compare</text>
+    <text x="118" y="370" font-size="10" fill="#a9bdd6">token before writing state</text>
+    <rect x="54" y="398" width="130" height="26" fill="#060817" stroke="#61d9a1"/>
+    <text x="68" y="415" font-size="9" fill="#61d9a1" font-weight="700">3 CHECKS PASS</text>
+    <text x="54" y="450" font-size="9" fill="#7893b2" letter-spacing="1">DETERMINISTIC / LOCAL</text>
+  </g>
+
+  <!-- risk 2: input boundary -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="422" y="88" width="356" height="380" fill="#101b34" stroke="#1c426d"/>
+    <rect x="422" y="88" width="356" height="3" fill="#ff9d2e"/>
+    <text x="442" y="122" font-size="11" font-weight="700" fill="#ff9d2e">RISK 02 / INPUT BOUNDARY</text>
+    <text x="442" y="150" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f4f8ff">A handler trusts a caller-</text>
+    <text x="442" y="170" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f4f8ff">controlled identifier</text>
+    <line x1="442" y1="190" x2="758" y2="190" stroke="#1c426d"/>
+    <rect x="442" y="206" width="316" height="96" fill="#050a18" stroke="#1c426d"/>
+    <text x="456" y="230" font-size="10" fill="#d9e8fa">function getWorkspace(id) {</text>
+    <text x="456" y="252" font-size="10" fill="#ff9d2e">findUnique({ where: { id } })</text>
+    <text x="456" y="272" font-size="10" fill="#7893b2">// no caller scope</text>
+    <text x="456" y="292" font-size="10" fill="#7893b2">// membership unchecked</text>
+    <text x="442" y="330" font-size="9" fill="#ff9d2e" font-weight="700">REPAIR</text>
+    <text x="506" y="330" font-size="10" fill="#a9bdd6">caller identity joins the</text>
+    <text x="506" y="350" font-size="10" fill="#a9bdd6">query contract; records are</text>
+    <text x="506" y="370" font-size="10" fill="#a9bdd6">scoped to membership</text>
+    <rect x="442" y="398" width="130" height="26" fill="#060817" stroke="#61d9a1"/>
+    <text x="456" y="415" font-size="9" fill="#61d9a1" font-weight="700">3 CHECKS PASS</text>
+    <text x="442" y="450" font-size="9" fill="#7893b2" letter-spacing="1">AUTHZ IS A DATA-SHAPE DECISION</text>
+  </g>
+
+  <!-- risk 3: validation path -->
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <rect x="810" y="88" width="356" height="380" fill="#101b34" stroke="#1c426d"/>
+    <rect x="810" y="88" width="356" height="3" fill="#ff9d2e"/>
+    <text x="830" y="122" font-size="11" font-weight="700" fill="#ff9d2e">RISK 03 / VALIDATION PATH</text>
+    <text x="830" y="150" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f4f8ff">A catch block hides malformed</text>
+    <text x="830" y="170" font-family="Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f4f8ff">input as a server error</text>
+    <line x1="830" y1="190" x2="1146" y2="190" stroke="#1c426d"/>
+    <rect x="830" y="206" width="316" height="96" fill="#050a18" stroke="#1c426d"/>
+    <text x="844" y="230" font-size="10" fill="#d9e8fa">try { save(JSON.parse(body)) }</text>
+    <text x="844" y="252" font-size="10" fill="#ff9d2e">catch { return { status: 500 } }</text>
+    <text x="844" y="272" font-size="10" fill="#7893b2">// client bug becomes 500</text>
+    <text x="844" y="292" font-size="10" fill="#7893b2">// error is undebuggable</text>
+    <text x="830" y="330" font-size="9" fill="#ff9d2e" font-weight="700">REPAIR</text>
+    <text x="894" y="330" font-size="10" fill="#a9bdd6">parse before persist; return a</text>
+    <text x="894" y="350" font-size="10" fill="#a9bdd6">specific 400 path that is safe</text>
+    <text x="894" y="370" font-size="10" fill="#a9bdd6">to show and easy to debug</text>
+    <rect x="830" y="398" width="130" height="26" fill="#060817" stroke="#61d9a1"/>
+    <text x="844" y="415" font-size="9" fill="#61d9a1" font-weight="700">3 CHECKS PASS</text>
+    <text x="830" y="450" font-size="9" fill="#7893b2" letter-spacing="1">ERROR PATHS ARE PRODUCT SURFACE</text>
+  </g>
+
+  <!-- footer -->
+  <line x1="34" y1="508" x2="1166" y2="508" stroke="#1c426d"/>
+  <g font-family="Cascadia Mono, Consolas, monospace">
+    <text x="34" y="538" font-size="10" fill="#ff9d2e" font-weight="700">BOUNDARY</text>
+    <text x="130" y="538" font-size="10" fill="#a9bdd6">Representative teaching samples, reviewed and repaired by hand. No client code, no model call, no measured customer result.</text>
+    <text x="130" y="560" font-size="10" fill="#a9bdd6">The method transfers to a real codebase; these exact files are not from one.</text>
+    <text x="34" y="592" font-size="9" fill="#456182" letter-spacing="1">REVIEW ORDER: BOUNDARY FIRST, THEN ASYNC CORRECTNESS, THEN THE ERROR PATH A USER ACTUALLY SEES</text>
+  </g>
+</svg>

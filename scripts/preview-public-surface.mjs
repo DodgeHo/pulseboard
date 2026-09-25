@@ -14,19 +14,28 @@ const files = new Map([
   ['/', resolve(deployRoot, 'index.html')],
   ['/demo/', resolve(deployRoot, 'demo/index.html')],
   ['/demo/review/', resolve(deployRoot, 'demo/review/index.html')],
-  ['/demo/frontend/', resolve(deployRoot, 'demo/frontend/index.html')]
+  ['/demo/frontend/', resolve(deployRoot, 'demo/frontend/index.html')],
+  ['/upwork/', resolve(deployRoot, 'upwork/index.html')],
+  ['/upwork/feature-delivery/', resolve(deployRoot, 'upwork/feature-delivery/index.html')],
+  ['/upwork/ai-code-rescue/', resolve(deployRoot, 'upwork/ai-code-rescue/index.html')],
+  ['/upwork/backend-reliability/', resolve(deployRoot, 'upwork/backend-reliability/index.html')]
 ]);
 
 const generatedPrefixes = [
   '/zh-hans/', '/zh-hant/', '/ja/',
   '/hire/', '/zh-hans/hire/', '/zh-hant/hire/', '/ja/hire/',
-  '/projects/', '/zh-hans/projects/', '/zh-hant/projects/', '/ja/projects/'
+  '/projects/', '/zh-hans/projects/', '/zh-hant/projects/', '/ja/projects/', '/upwork/'
 ];
 const generatedFiles = new Set(['/sitemap.xml', '/robots.txt', '/feed.xml']);
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',
-  '.txt': 'text/plain; charset=utf-8'
+  '.txt': 'text/plain; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp'
 };
 
 const openApiDocument = {
@@ -89,6 +98,7 @@ async function handle(request, response) {
   const path = url.pathname;
 
   if (path === '/demo') return redirect(response, '/demo/');
+  if (path === '/upwork') return redirect(response, '/upwork/');
   if (path === '/heatstack') return redirect(response, '/heatstack/');
   if (path === '/jobs') return redirect(response, '/jobs/', 308);
   if (path === '/jobs/') return redirect(response, '/jobs/login', 303);
@@ -125,6 +135,10 @@ async function handle(request, response) {
   }
   if (path === '/heatstack/') {
     const html = '<!doctype html><html lang="zh-CN"><head><title>AI 热栈 HeatStack — 把 AI 热度变成工程能力</title><link rel="icon" href="/heatstack/favicon.svg"></head><body><main><strong>HeatStack</strong><span>AI 热栈</span></main></body></html>';
+    return send(response, 200, 'text/html; charset=utf-8', html);
+  }
+  if (path === '/tapphysics/') {
+    const html = '<!doctype html><html lang="zh-CN"><head><title>一点物理 TapPhysics</title></head><body><main><strong>TapPhysics</strong><span>Offline physics practice surface</span></main></body></html>';
     return send(response, 200, 'text/html; charset=utf-8', html);
   }
   if (path === '/heatstack/api/v1/health') {

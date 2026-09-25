@@ -63,6 +63,8 @@ jobs:
           cache: pnpm
 
       - name: Build and verify public site artifacts
+        env:
+          ANLAN_INCLUDE_UPWORK: "true"
         run: |
           set -euo pipefail
           pnpm install --frozen-lockfile
@@ -334,6 +336,7 @@ jobs:
 
       - name: Verify portal, HeatStack, PulseBoard demo, and backend surface
         env:
+          ANLAN_INCLUDE_UPWORK: "true"
           PUBLIC_BASE_URL: ${{ vars.TENCENT_STAGING_PUBLIC_BASE_URL || 'https://anlan.store' }}
           EXPECTED_RELEASE_SHA: ${{ steps.release.outputs.sha }}
         run: pnpm verify:public

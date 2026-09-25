@@ -153,15 +153,15 @@ async function verifyUpworkPages() {
   }
   expect('Upwork entry returns 200', entry.response.status === 200, entry.response.status + ' ' + entry.response.statusText);
   expect('Upwork entry is English', entry.body.includes('<html lang="en">'));
-  expect('Upwork entry explains the three work modes', ['React/Node Feature Delivery', 'AI-Generated Code Rescue', 'Backend/Reliability Work'].every((value) => entry.body.includes(value)));
+  expect('Upwork entry explains the three work modes', ['Build a focused product feature', 'Repair and improve existing code', 'Strengthen the backend and reliability'].every((value) => entry.body.includes(value)));
   expect('Upwork entry links the three case pages', ['/upwork/feature-delivery/', '/upwork/ai-code-rescue/', '/upwork/backend-reliability/'].every((value) => entry.body.includes(`href="${value}"`)));
-  expect('Upwork entry states demo boundaries', entry.body.includes('representative browser-only simulation') && entry.body.includes('production systems'));
+  expect('Upwork entry states demo boundaries', entry.body.includes('self-contained browser experiences') && entry.body.includes('commercial production systems'));
   expect('Upwork entry has metadata', entry.body.includes('<link rel="canonical"') && entry.body.includes('<meta property="og:title"') && entry.body.includes('type="application/ld+json"'));
 
   for (const [path, title, demo, boundary] of [
-    ['/upwork/feature-delivery/', 'React/Node Feature Delivery', 'data-demo="feature"', 'Representative browser demo'],
-    ['/upwork/ai-code-rescue/', 'AI-Generated Code Rescue', 'data-demo="rescue"', 'Representative code-review demo'],
-    ['/upwork/backend-reliability/', 'Backend/Reliability Work', 'data-demo="reliability"', 'Explicit reliability simulation']
+    ['/upwork/feature-delivery/', 'Build a focused product feature', 'data-demo="feature"', 'Representative browser demo'],
+    ['/upwork/ai-code-rescue/', 'Repair and improve existing code', 'data-demo="rescue"', 'Representative code-review demo'],
+    ['/upwork/backend-reliability/', 'Strengthen the backend and reliability', 'data-demo="reliability"', 'Explicit reliability simulation']
   ]) {
     const { response, body } = await fetchText(path);
     expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);

@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { hireCopy, hireLinks } from "../content/hire-copy.mjs";
@@ -67,6 +67,11 @@ const [upworkCssRaw, upworkJs] = upworkContent ? await Promise.all([
   readTextOptional(resolve(sourceRoot, "upwork/upwork.css")),
   readTextOptional(resolve(sourceRoot, "upwork/upwork.js"))
 ]) : ["", ""];
+const upworkAssetDir = resolve(sourceRoot, "upwork/assets");
+const upworkAssetFiles = upworkContent ? (await readdir(upworkAssetDir).catch((error) => {
+  if (error?.code === "ENOENT") return [];
+  throw error;
+})).sort() : [];
 const upworkPortfolio = upworkContent?.upworkPortfolio ?? [];
 const upworkSite = upworkContent?.upworkSite ?? null;
 const upworkEnabled = Boolean(upworkSite && upworkPortfolio.length > 0 && upworkCssRaw && upworkJs);
@@ -270,7 +275,7 @@ const upworkBasePage = ({ suffix, title, description, body, jsonLd, current = "o
     <title>${escapeHtml(title)} · ANLAN.STORE</title><link rel="canonical" href="${canonical}">${hrefLang}
     <meta property="og:type" content="article"><meta property="og:title" content="${escapeHtml(title)} · ANLAN.STORE"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
     <style>${upworkCss}</style>${jsonLd ? `<script type="application/ld+json">${escapeJson(jsonLd)}</script>` : ""}
-  </head><body><a class="upwork-skip" href="#main">Skip to content</a><div class="upwork-shell">${upworkHeader(current)}${body}<footer class="upwork-footer"><span>UPWORK / SOFTWARE DELIVERY</span><span>Representative demos. Honest boundaries.</span></footer></div><script>${upworkJs}</script></body></html>`;
+  </head><body><a class="upwork-skip" href="#main">Skip to content</a><div class="upwork-shell">${upworkHeader(current)}${body}<footer class="upwork-footer"><span>${escapeHtml(upworkSite.eyebrow)}</span><span>Representative demos. Honest boundaries.</span></footer></div><script>${upworkJs}</script></body></html>`;
 };
 
 const demoFor = (portfolio) => {
@@ -300,14 +305,37 @@ const demoFor = (portfolio) => {
   </div><button class="upwork-button" type="button" data-reliability-run>Run simulation</button><p class="reliability-output" data-reliability-output role="status" aria-live="polite">Ready. No external system will be touched.</p></div></div>`;
 };
 
+const upworkTile = (portfolio) => portfolio.tile ? `<a class="upwork-tile" href="/upwork/${portfolio.slug}/"><img src="${escapeHtml(portfolio.tile.src)}" alt="${escapeHtml(portfolio.tile.alt)}" width="${portfolio.tile.width ?? 660}" height="${portfolio.tile.height ?? 392}" loading="eager" decoding="async"><span class="upwork-tile-label">${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.tile.label)}</span></a>` : "";
+
+const upworkFigure = (visual, eager = false, className = "") => `<figure class="upwork-figure${className ? ` ${className}` : ""}"><img src="${escapeHtml(visual.src)}" alt="${escapeHtml(visual.alt)}" width="${visual.width}" height="${visual.height}"${eager ? "" : ' loading="lazy"'} decoding="async"><figcaption><span class="upwork-figure-label">${escapeHtml(visual.label)}</span>${visual.caption ? `<span class="upwork-figure-caption">${escapeHtml(visual.caption)}</span>` : ""}</figcaption></figure>`;
+
+const upworkHeroModes = ["BUILD", "REPAIR", "STRENGTHEN"];
+const upworkHeroVisual = () => `<div class="upwork-hero-visual" data-hero-visual aria-label="Three ways to move a web product forward">
+  <div class="upwork-hero-visual-stage">
+    ${upworkPortfolio.map((portfolio, index) => `<figure class="upwork-hero-slide${index === 0 ? " is-active" : ""}" data-hero-slide="${index}" data-hero-label="${escapeHtml(upworkHeroModes[index])}" data-hero-caption="${escapeHtml(portfolio.short)}" aria-hidden="${index === 0 ? "false" : "true"}"><img src="${escapeHtml(portfolio.concept.src)}" alt="${escapeHtml(portfolio.concept.alt)}" width="${portfolio.concept.width}" height="${portfolio.concept.height}" loading="eager" decoding="async"><figcaption><span>Representative concept illustration</span><strong>${escapeHtml(portfolio.title)}</strong></figcaption></figure>`).join("")}
+    <div class="upwork-hero-signal" aria-hidden="true"><span class="upwork-hero-signal-line"></span><span data-hero-signal>01 / BUILD</span></div>
+  </div>
+  <div class="upwork-hero-visual-meta"><span data-hero-counter>01 / 03</span><span>Scroll to inspect the work</span></div>
+  <nav class="upwork-hero-switcher" aria-label="Choose a work mode">${upworkPortfolio.map((portfolio, index) => `<button type="button" data-hero-index="${index}" aria-pressed="${index === 0 ? "true" : "false"}"><span>${escapeHtml(portfolio.index)}</span><strong>${escapeHtml(upworkHeroModes[index])}</strong><small>${escapeHtml(portfolio.title)}</small></button>`).join("")}</nav>
+  <p class="upwork-hero-caption" data-hero-caption>${escapeHtml(upworkPortfolio[0].short)}</p>
+</div>`;
+
+const upworkCaseHeroVisual = (portfolio) => {
+  if (!portfolio.heroVisual && !portfolio.concept) return "";
+  const hero = portfolio.heroVisual ? upworkFigure(portfolio.heroVisual, true, "upwork-figure-hero") : "";
+  const concept = portfolio.concept ? upworkFigure(portfolio.concept, true, "upwork-figure-concept") : "";
+  return `<section class="upwork-case-visual"><div class="upwork-case-visual-grid">${hero}${concept}</div></section>`;
+};
+
 const upworkPage = () => {
   const body = `<main id="main" class="upwork-main" data-upwork-page>
-    <section class="upwork-hero"><div class="upwork-hero-copy"><p class="upwork-eyebrow">${escapeHtml(upworkSite.eyebrow)}</p><h1>${escapeHtml(upworkSite.headline)}</h1><p class="upwork-lede">${escapeHtml(upworkSite.intro)}</p><div class="upwork-actions"><a class="upwork-button" href="#portfolio">Review the three work modes</a><a class="upwork-button secondary" href="/hire/">Open the evidence page</a></div></div><aside class="upwork-hero-note"><strong>First review</strong><p>${escapeHtml(upworkSite.note)}</p></aside></section>
+    <section class="upwork-hero"><div class="upwork-hero-grid"><div class="upwork-hero-copy"><p class="upwork-eyebrow">${escapeHtml(upworkSite.eyebrow)}</p><h1>${escapeHtml(upworkSite.headline)}</h1><p class="upwork-lede">${escapeHtml(upworkSite.intro)}</p><div class="upwork-actions"><a class="upwork-button" href="#portfolio">${escapeHtml(upworkSite.heroPrimaryAction)}</a><a class="upwork-button secondary" href="/hire/">${escapeHtml(upworkSite.heroSecondaryAction)}</a></div><aside class="upwork-hero-note"><strong>${escapeHtml(upworkSite.heroNoteTitle)}</strong><p>${escapeHtml(upworkSite.note)}</p></aside></div>${upworkHeroVisual()}</div></section>
+    <blockquote class="upwork-principle"><span class="upwork-principle-label">${escapeHtml(upworkSite.principleLabel)}</span><p>${upworkSite.principle.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}</p></blockquote>
     <section class="upwork-proof" aria-label="Portfolio focus">${upworkSite.proof.map(([number, title, text]) => `<article><span class="upwork-proof-number">${escapeHtml(number)}</span><h2>${escapeHtml(title)}</h2><p>${escapeHtml(text)}</p></article>`).join("")}</section>
-    <section class="upwork-section" id="portfolio"><div class="upwork-section-head"><div><p class="upwork-label">Portfolio / three reviewable slices</p><h2>What I can help make clearer</h2></div><p class="upwork-section-intro">Each piece stays narrow on purpose: a useful behavior, a visible decision path, and a boundary around what the demo can prove.</p></div><div class="upwork-work-grid">${upworkPortfolio.map((portfolio) => `<article class="upwork-card"><span class="upwork-card-index">${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.demoLabel)}</span><h3>${escapeHtml(portfolio.title)}</h3><p>${escapeHtml(portfolio.short)}</p><ul class="upwork-tags">${portfolio.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}</ul><a class="upwork-card-link" href="/upwork/${portfolio.slug}/">Open case study + demo →</a></article>`).join("")}</div></section>
-    <section class="upwork-section upwork-method"><div><p class="upwork-label">Working pattern</p><h2>${escapeHtml(upworkSite.methodTitle)}</h2></div><div class="upwork-method-grid">${upworkSite.method.map(([title, text], index) => `<article class="upwork-method-step"><h3>${String(index + 1).padStart(2, "0")} / ${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></article>`).join("")}</div></section>
+    <section class="upwork-section" id="portfolio"><div class="upwork-section-head"><div><p class="upwork-label">${escapeHtml(upworkSite.portfolioLabel)}</p><h2>${escapeHtml(upworkSite.portfolioTitle)}</h2></div><p class="upwork-section-intro">${escapeHtml(upworkSite.portfolioIntro)}</p></div><div class="upwork-work-grid">${upworkPortfolio.map((portfolio) => `<article class="upwork-card"><span class="upwork-card-index">${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.demoLabel)}</span><h3>${escapeHtml(portfolio.title)}</h3><p>${escapeHtml(portfolio.short)}</p><ul class="upwork-tags">${portfolio.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}</ul><a class="upwork-card-link" href="/upwork/${portfolio.slug}/">Open case study + demo →</a></article>`).join("")}</div></section>
+    <section class="upwork-section upwork-method"><div><p class="upwork-label">${escapeHtml(upworkSite.methodLabel)}</p><h2>${escapeHtml(upworkSite.methodTitle)}</h2></div><div class="upwork-method-grid">${upworkSite.method.map(([title, text], index) => `<article class="upwork-method-step"><h3>${String(index + 1).padStart(2, "0")} / ${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></article>`).join("")}</div></section>
     <section class="upwork-section upwork-boundary"><h2>${escapeHtml(upworkSite.boundaryTitle)}</h2><p>${escapeHtml(upworkSite.boundary)}</p></section>
-    <section class="upwork-section upwork-contact"><div class="upwork-contact-copy"><p class="upwork-label">Next conversation</p><h2>${escapeHtml(upworkSite.contactTitle)}</h2><p>${escapeHtml(upworkSite.contactText)}</p></div><a class="upwork-button" href="/hire/">Review working boundaries</a></section>
+    <section class="upwork-section upwork-contact"><div class="upwork-contact-copy"><p class="upwork-label">${escapeHtml(upworkSite.contactLabel)}</p><h2>${escapeHtml(upworkSite.contactTitle)}</h2><p>${escapeHtml(upworkSite.contactText)}</p></div><a class="upwork-button" href="/hire/">${escapeHtml(upworkSite.contactAction)}</a></section>
   </main>`;
   const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: upworkSite.title, description: upworkSite.description, url: absoluteUrl("/upwork/"), author: { "@type": "Person", name: "Dodge Ho" } };
   return upworkBasePage({ suffix: "/upwork/", title: upworkSite.title, description: upworkSite.description, body, jsonLd });
@@ -318,8 +346,11 @@ const upworkCasePage = (portfolio) => {
   const description = `${portfolio.title}: ${portfolio.short}`;
   const body = `<main id="main" class="upwork-main" data-upwork-page>
     <section class="upwork-case-hero"><a class="upwork-back" href="/upwork/">← Back to Upwork portfolio</a><p class="upwork-eyebrow">${escapeHtml(portfolio.index)} / ${escapeHtml(portfolio.demoLabel)}</p><h1>${escapeHtml(title)}</h1><p class="upwork-case-intro">${escapeHtml(portfolio.short)}</p><span class="upwork-status">${escapeHtml(portfolio.demoNote)}</span></section>
+    ${upworkCaseHeroVisual(portfolio)}
     <section class="upwork-case-layout"><article class="upwork-case-copy"><section><h2>Problem</h2><p>${escapeHtml(portfolio.problem)}</p></section><section><h2>Approach</h2><p>${escapeHtml(portfolio.approach)}</p></section><section><h2>Proof</h2><p>${escapeHtml(portfolio.proof)}</p></section><section><h2>Limits</h2><p>${escapeHtml(portfolio.limits)}</p></section></article><aside class="upwork-case-meta"><h2>Delivery signals</h2><ul class="upwork-delivery-list">${portfolio.delivery.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul><h2>Tools and boundaries</h2><ul class="upwork-tags">${portfolio.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}</ul></aside></section>
+    ${portfolio.productVisuals?.length ? `<section class="upwork-section upwork-visual-evidence"><div class="upwork-section-head"><div><p class="upwork-label">Product walkthrough</p><h2>What it looks like in use</h2></div><p class="upwork-section-intro">Real states of the interactive demo below: what a reviewer sees when the flow succeeds and when it fails.</p></div><div class="upwork-visual-grid">${portfolio.productVisuals.map((visual) => upworkFigure(visual)).join("")}</div></section>` : ""}
     <section class="upwork-demo-section"><div class="upwork-demo-head"><div><p class="upwork-label">Interactive / ${escapeHtml(portfolio.demoLabel)}</p><h2>${escapeHtml(portfolio.demoTitle)}</h2></div><p class="upwork-demo-note">${escapeHtml(portfolio.demoNote)}</p></div>${demoFor(portfolio)}</section>
+    ${portfolio.diagrams?.length ? `<section class="upwork-section upwork-diagrams"><div class="upwork-section-head"><div><p class="upwork-label">For detailed review</p><h2>Engineering diagrams</h2></div><p class="upwork-section-intro">Denser diagrams of the same boundaries, for reviewers who want the full structure.</p></div><div class="upwork-visual-grid">${portfolio.diagrams.map((visual) => upworkFigure(visual)).join("")}</div></section>` : ""}
     <section class="upwork-section upwork-contact"><div class="upwork-contact-copy"><p class="upwork-label">Continue the review</p><h2>Bring the existing codebase, constraint, or failure path.</h2><p>This page demonstrates a bounded working method. The next step would be to inspect the actual repository and agree on the smallest verifiable slice.</p></div><a class="upwork-button" href="/hire/">Open the evidence page</a></section>
   </main>`;
   const jsonLd = { "@context": "https://schema.org", "@type": "TechArticle", headline: title, description, url: absoluteUrl(`/upwork/${portfolio.slug}/`), author: { "@type": "Person", name: "Dodge Ho" } };
@@ -419,6 +450,15 @@ if (upworkEnabled) {
     const artifact = upworkCasePage(portfolio);
     ensureResolved(artifact, `Upwork ${portfolio.slug} case page`);
     await writeOutput(`upwork/${portfolio.slug}/index.html`, artifact);
+  }
+  for (const assetName of upworkAssetFiles) {
+    const assetSource = resolve(upworkAssetDir, assetName);
+    for (const root of [localRoot, deployRoot]) {
+      const assetTarget = resolve(root, "upwork/assets", assetName);
+      await mkdir(dirname(assetTarget), { recursive: true });
+      await copyFile(assetSource, assetTarget);
+      outputPaths.push(assetTarget);
+    }
   }
   sitemapPaths.push("/upwork/", ...upworkPortfolio.map((portfolio) => `/upwork/${portfolio.slug}/`));
 }
