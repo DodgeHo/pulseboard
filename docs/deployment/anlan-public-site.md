@@ -23,7 +23,7 @@ Legacy PulseBoard paths such as `/frontend/`, `/docs`, `/openapi.json`, `/health
 
 | Surface | Repository artifact | Server target |
 | --- | --- | --- |
-| Project portal | `deploy/anlan/index.html`, hiring review pages, locale archives, project pages, sitemap, RSS, and robots metadata | `/var/www/html/` |
+| Project portal | `deploy/anlan/index.html`, `deploy/anlan/assets/`, hiring review pages, locale archives, project pages, sitemap, RSS, and robots metadata | `/var/www/html/` |
 | PulseBoard operations | `deploy/anlan/demo/index.html` | `/var/www/html/demo/index.html` |
 | PulseBoard customer UI | `deploy/anlan/demo/frontend/index.html` | `/var/www/html/demo/frontend/index.html` |
 | PulseBoard recruiter review | `deploy/anlan/demo/review/index.html` | `/var/www/html/demo/review/index.html` |
@@ -54,7 +54,7 @@ This path is for a manual recovery when the host does not have the reviewed repo
 
 ```bash
 tar -C deploy/anlan -czf /tmp/anlan-portal-static.tar.gz \
-  index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant
+  index.html feed.xml robots.txt sitemap.xml assets hire projects upwork ja zh-hans zh-hant
 scp /tmp/anlan-portal-static.tar.gz <staging-host>:/tmp/anlan-portal-static.tar.gz
 scp deploy/anlan/demo/index.html <staging-host>:/tmp/pulseboard-demo-index.html
 scp deploy/anlan/demo/frontend/index.html <staging-host>:/tmp/pulseboard-demo-frontend-index.html
@@ -71,7 +71,7 @@ ts=$(date -u +%Y%m%dT%H%M%SZ)
 deploy_backup_dir="$HOME/pulseboard-deploy-backups/$ts/public-surface"
 mkdir -p "$deploy_backup_dir/nginx"
 
-portal_paths=(index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant)
+portal_paths=(index.html feed.xml robots.txt sitemap.xml assets hire projects upwork ja zh-hans zh-hant)
 existing_portal_paths=()
 for portal_path in "${portal_paths[@]}"; do
   if [ -e "/var/www/html/$portal_path" ]; then
@@ -116,7 +116,7 @@ For the automated workflow, install directly from the checked-out release instea
 
 ```bash
 tar -C deploy/anlan -cf - \
-  index.html feed.xml robots.txt sitemap.xml hire projects ja zh-hans zh-hant \
+  index.html feed.xml robots.txt sitemap.xml assets hire projects upwork ja zh-hans zh-hant \
   | sudo tar --no-same-owner -xf - -C /var/www/html
 sudo install -m 0644 deploy/anlan/demo/index.html /var/www/html/demo/index.html
 sudo install -m 0644 deploy/anlan/demo/frontend/index.html /var/www/html/demo/frontend/index.html

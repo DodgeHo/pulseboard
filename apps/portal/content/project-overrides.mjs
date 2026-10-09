@@ -1,5 +1,10 @@
 const four = (en, zhHant, zhHans, ja) => ({ en, "zh-Hant": zhHant, "zh-Hans": zhHans, ja });
 const nameMap = four;
+const media = (fileName, source, kind = "mark") => ({
+  src: `/assets/project-media/${fileName}`,
+  source,
+  kind
+});
 
 export const privateSummary = four(
   "A private engineering project retained in the complete inventory. Its implementation, repository history, and operational details are intentionally not published.",
@@ -40,15 +45,15 @@ export const liveProjects = [
     publishCaseStudy: true,
     category: "applications",
     score: 96,
-    skills: ["Account isolation", "Job inbox", "Scheduled digests"],
+    skills: ["Account isolation", "Agent workflows", "Scheduled digests"],
     auxiliaryName: nameMap("职海雷达", "职海雷达", "职海雷达", "职海雷达"),
     liveRoutes: ["/jobs/"],
     evidence: ["Live demo", "Case study", "Architecture"],
     safeSummary: four(
-      "An invite-only job exploration product that collects public roles into an account-isolated inbox with saved jobs, unread state, and scheduled summaries.",
-      "採邀請制的職缺探索產品，把公開職位收進帳戶隔離的收件匣，並支援收藏、未讀狀態與排程摘要。",
-      "采用邀请制的职位探索产品，把公开职位收进账户隔离的收件箱，并支持收藏、未读状态与定时摘要。",
-      "招待制の求人探索プロダクトです。公開求人をアカウント分離された受信箱に集め、保存、未読状態、定期サマリーを支えます。"
+      "An invite-only Career Radar product that separates public discovery, tenant-scoped matching/explanation, delivery digests, AI assessment preparation, and inbox state into reviewable agent-labeled workflows.",
+      "採邀請制的 Career Radar 產品，把公開職缺探索、帳戶範圍匹配與解釋、投遞摘要、AI 評估準備和收件匣狀態拆成可檢查的 Agent 標記工作流。",
+      "采用邀请制的 Career Radar 产品，把公开职位发现、账户范围匹配与解释、投递摘要、AI 评估准备和收件箱状态拆成可检查的 Agent 标记工作流。",
+      "招待制の Career Radar です。公開求人の発見、アカウント単位のマッチングと説明、配信ダイジェスト、AI 評価準備、受信箱状態を、確認可能な Agent ラベル付きワークフローに分けています。"
     )
   },
   {
@@ -61,15 +66,15 @@ export const liveProjects = [
     publishCaseStudy: false,
     category: "applications",
     score: 91,
-    skills: ["Physics", "Interactive web", "Simulation"],
+    skills: ["Tauri", "SQLite", "Question review"],
     auxiliaryName: nameMap("一点物理", "一点物理", "一点物理", "一点物理"),
     liveRoutes: ["/tapphysics/"],
     evidence: ["Live demo", "Interactive project"],
     safeSummary: four(
-      "An offline Gaokao physics past-question tool for high school students and teachers, with local question search, practice, paper assembly, and print-ready workflows.",
-      "一点物理是面向高中生與物理教師的離線高考物理真題工具，支援本地找題、練習、組卷與列印前準備。",
-      "一点物理是一款面向高中生和物理教师的离线高考物理真题工具，支持本地找题、练习、组卷和打印准备。",
-      "高校生と物理教師向けのオフライン高考物理過去問ツールで、ローカルでの問題検索、練習、組題、印刷準備を支えます。"
+      "An offline Gaokao physics question-bank desktop app for search, practice, paper assembly, rich question review, and export. Evidence supports a Tauri-style Alpha/Beta desktop workflow over SQLite-backed data; Windows/macOS packaging is kept as a target boundary rather than a published-release claim. Agent help stays bounded to supervised export/review workflows.",
+      "一点物理是離線高考物理桌面題庫工具，支援找題、練習、組卷、富文本題目審閱與匯出。證據支援以 Tauri 形態維護 Alpha/Beta 桌面流程與 SQLite 資料；Windows/macOS 只作為桌面封裝目標邊界，不宣稱已公開發版。Agent 只在受監督的匯出與審閱流程中輔助。",
+      "一点物理是离线高考物理桌面题库工具，支持找题、练习、组卷、富文本题目审阅与导出。证据支持以 Tauri 形态维护 Alpha/Beta 桌面流程与 SQLite 数据；Windows/macOS 只作为桌面打包目标边界，不宣称已公开发版。Agent 只在受监督的导出与审阅流程中辅助。",
+      "オフライン高考物理のデスクトップ問題バンクアプリです。検索、演習、組題、リッチな問題レビュー、エクスポートを扱います。証拠上は SQLite データを使う Tauri 型の Alpha/Beta デスクトップ工程として示し、Windows/macOS は公開リリースの主張ではなくパッケージング対象の境界として扱います。Agent は人が監督する書き出し・レビュー工程で補助する範囲に留めています。"
     )
   },
   {
@@ -88,11 +93,12 @@ export const liveProjects = [
     auxiliaryName: nameMap("CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统"),
     liveRoutes: [],
     evidence: ["Security-reviewed overview", "Project record"],
+    media: media("cwc-coordinate-record.png", "D:\\CWC\\Screenshots20260608\\1.png, reviewed and copied as a public-safe CWC prototype screenshot", "screenshot"),
     safeSummary: four(
-      "A closed-source web control system for cell-location workflows, published only as a safe product-and-engineering overview without customer, data, infrastructure, or proprietary implementation details.",
-      "閉源的 CellLoc 網路控制系統，用於細胞定位相關工作流；公開頁只說明產品方向和工程邊界，不披露客戶、資料、基礎設施或專有實作。",
-      "闭源的 CellLoc 网络控制系统，用于细胞定位相关工作流；公开页只说明产品方向和工程边界，不披露客户、数据、基础设施或专有实现。",
-      "細胞定位ワークフロー向けのクローズドソース Web 制御システムです。公開面では製品方向と工程境界だけを示し、顧客、データ、インフラ、専有実装は出しません。"
+      "A closed-source web controller for cell-location workflows: coordinate recording, image association, embedding, trimming, session organization, and export are shown through a limited public overview.",
+      "閉源的 CellLoc Web 控制系統，涵蓋座標記錄、圖像關聯、包埋、修塊、Session 組織與匯出；公開頁只呈現受限且安全的概覽。",
+      "闭源的 CellLoc Web 控制系统，涵盖坐标记录、图像关联、包埋、修块、Session 组织与导出；公开页只呈现受限且安全的概览。",
+      "細胞定位ワークフロー向けのクローズドソース Web Controller です。座標記録、画像関連付け、包埋、修塊、Session 管理、エクスポートを、限定した公開概要として示します。"
     )
   },
   {
@@ -112,10 +118,10 @@ export const liveProjects = [
     liveRoutes: ["https://puzzlewear.cn/login"],
     evidence: ["Public project site", "Closed-source record"],
     safeSummary: four(
-      "A closed-source clothing creative design project for product and outfit composition workflows, linked only through its public login entry and kept free of internal implementation details.",
-      "閉源的服裝創意設計專案，面向服裝產品與搭配創作流程；公開頁只連結登入入口，不展示內部實作細節。",
-      "闭源的服装创意设计项目，面向服装产品与搭配创作流程；公开页只链接登录入口，不展示内部实现细节。",
-      "服飾プロダクトとコーディネート制作の流れを扱うクローズドソースのクリエイティブデザインプロジェクトです。公開面はログイン入口に限定しています。"
+      "A closed-source fashion design platform for product configuration, outfit composition, component choices, colors, pattern matrices, and layer-structure workflows.\n\nThe engineering record is limited to the latest resume-backed scope: REST API design, PostgreSQL/JSONB models for design sessions and product parameters, admin/backend modules, supply-chain data flows, and supervised AI-assisted delivery evidence.",
+      "閉源的服裝設計平台，面向產品配置、服裝搭配、組件選擇、顏色、版型矩陣與圖層結構流程。\n\n工程記錄僅保守呈現最新簡歷可支持的範圍：REST API、面向設計 Session 與產品參數的 PostgreSQL/JSONB 模型、後台/後端模組、供應鏈資料流與受監督 AI 輔助交付證據。",
+      "闭源的服装设计平台，面向产品配置、服装搭配、组件选择、颜色、版型矩阵与图层结构流程。\n\n工程记录仅保守呈现最新简历可支持的范围：REST API、面向设计 Session 与产品参数的 PostgreSQL/JSONB 模型、后台/后端模块、供应链数据流与受监督 AI 辅助交付证据。",
+      "製品設定、コーディネート、コンポーネント選択、色、パターン行列、レイヤー構造のワークフローを扱うクローズドソースのファッション設計プラットフォームです。\n\n工程記録は最新レジュメで裏付けられる範囲に限定します。REST API、デザインセッションと製品パラメータ向けの PostgreSQL/JSONB モデル、管理・バックエンドモジュール、サプライチェーンデータフロー、監督下の AI 支援開発です。"
     )
   },
   {
@@ -135,10 +141,10 @@ export const liveProjects = [
     liveRoutes: ["https://devenglish.club/"],
     evidence: ["Public project site", "Closed-source record"],
     safeSummary: four(
-      "A closed-source developer English learning project whose public site presents the learning surface while private course, account, and implementation details stay outside the portfolio record.",
-      "閉源的開發者英語學習專案，公開站點呈現學習入口，課程、帳戶與實作細節不進入作品集公開面。",
-      "闭源的开发者英语学习项目，公开站点呈现学习入口，课程、账户与实现细节不进入作品集公开面。",
-      "開発者向け英語学習のクローズドソースプロジェクトです。公開サイトは学習入口を示し、コース、アカウント、実装詳細はポートフォリオ面に出しません。"
+      "A closed-source developer English learning site that presents the learning entry while course, account, and operational details stay outside the public portfolio surface.\n\nThe verified engineering scope comes from the latest resume-backed online education work behind it: React, NestJS, Drizzle ORM, PostgreSQL, REST APIs, course purchase, scheduling, payment/refund support, and teacher/student/admin role flows.",
+      "閉源的開發者英語學習站，公開面呈現學習入口，課程、帳戶與運營細節不放入作品集公開面。\n\n可核對的工程範圍來自最新簡歷支持的線上教育平台工作：React、NestJS、Drizzle ORM、PostgreSQL、REST API、課程購買、排課、付款/退款支援，以及教師、學生、管理員角色流程。",
+      "闭源的开发者英语学习站，公开面呈现学习入口，课程、账户与运营细节不放入作品集公开面。\n\n可核对的工程范围来自最新简历支持的在线教育平台工作：React、NestJS、Drizzle ORM、PostgreSQL、REST API、课程购买、排课、付款/退款支持，以及教师、学生、管理员角色流程。",
+      "開発者向け英語学習のクローズドソースサイトです。公開面では学習入口を示し、コース、アカウント、運用詳細は公開ポートフォリオ面に出しません。\n\n確認できる工程範囲は、最新レジュメで裏付けられるオンライン教育プラットフォームの仕事です。React、NestJS、Drizzle ORM、PostgreSQL、REST API、コース購入、スケジューリング、支払い・返金支援、教師・学生・管理者ロールのフローを含みます。"
     )
   },
   {
@@ -175,11 +181,12 @@ export const repositoryOverrides = {
     auxiliaryName: nameMap("运营脉冲板", "运营脉冲板", "运营脉冲板", "运营脉冲板"),
     liveRoutes: ["/demo/", "/demo/frontend/", "/demo/docs"],
     evidence: ["Live demo", "Case study", "Architecture", "Runbook", "ADR", "Verification"],
+    media: media("pulseboard-ops.png", "apps/portal/src/assets/pulseboard-ops.png, real PulseBoard operations screenshot", "screenshot"),
     safeSummary: four(
-      "A backend and operations system that exposes a reviewable API surface, health checks, background worker flow, storage boundaries, rate limiting, and deployment verification.",
-      "後端、平台與營運系統，公開呈現可檢查的 API、健康檢查、背景 worker 流程、資料儲存邊界、限流和部署驗證。",
-      "后端、平台与运营系统，公开呈现可检查的 API、健康检查、后台 worker 流程、数据存储边界、限流和部署验证。",
-      "確認可能な API、ヘルスチェック、worker フロー、保存境界、レート制限、デプロイ検証を示すバックエンド・運用システムです。"
+      "A production-shaped Hono/PostgreSQL/Redis/BullMQ SaaS engineering template with ten implemented interface locales for foreign-trade scenarios, API-key boundaries, OpenAPI, health probes, workers, and verification scripts.",
+      "面向外貿 SaaS 場景的工程模板：以 Hono、PostgreSQL、Redis、BullMQ 串起十種已實作介面語言、API key 邊界、OpenAPI、健康探測、worker 與驗證腳本。",
+      "面向外贸 SaaS 场景的工程模板：以 Hono、PostgreSQL、Redis、BullMQ 串起十种已实现界面语言、API key 边界、OpenAPI、健康探测、worker 与验证脚本。",
+      "外貿 SaaS 場面を想定した Hono/PostgreSQL/Redis/BullMQ の工程テンプレートです。実装済みの 10 UI ロケール、API key 境界、OpenAPI、ヘルスプローブ、worker、検証スクリプトを備えます。"
     )
   },
   VMD_cpp: {
@@ -220,6 +227,20 @@ export const repositoryOverrides = {
       "使用 GPT 協助評估與改善 IELTS 寫作草稿的工具。",
       "使用 GPT 协助评估与改善 IELTS 写作草稿的工具。",
       "IELTS ライティング草稿の評価と改善を GPT で支援するツールです。"
+    )
+  },
+  BiliDownTrans: {
+    featured: true,
+    category: "applications",
+    score: 77,
+    skills: ["Python", "Bilibili", "faster-whisper", "PySide6"],
+    evidence: ["Source", "README", "Release notes"],
+    media: media("bilidowntrans-icon.svg", "https://github.com/DodgeHo/BiliDownTrans/blob/main/assets/pipeline_icon.svg", "icon"),
+    safeSummary: four(
+      "A fork-based desktop pipeline that combines Bili23 Downloader with faster-whisper so completed Bilibili downloads can enter a local GPU transcription queue and produce subtitle/text outputs.",
+      "基於 Fork 整合的桌面流水線，把 Bili23 Downloader 與 faster-whisper 串起來，讓 B 站下載完成後進入本機 GPU 轉錄佇列並輸出字幕與文字。",
+      "基于 Fork 整合的桌面流水线，把 Bili23 Downloader 与 faster-whisper 串起来，让 B 站下载完成后进入本机 GPU 转录队列并输出字幕与文本。",
+      "Bili23 Downloader と faster-whisper を組み合わせた Fork ベースのデスクトップパイプラインです。Bilibili のダウンロード完了後、ローカル GPU 文字起こしキューに入り、字幕とテキストを出力します。"
     )
   },
   dynamic_rrt_connect: {
@@ -283,20 +304,49 @@ export const repositoryOverrides = {
 
 export const caseStudies = {
   cwc: {
-    updatedAt: "2026-09-24",
+    updatedAt: "2026-10-09",
     assets: [],
+    visuals: [
+      {
+        src: "/assets/project-media/cwc-coordinate-record.png",
+        caption: four(
+          "Coordinate-recording prototype view with calibration, position capture, motion controls, and an event log.",
+          "座標記錄原型畫面，呈現校準、位置記錄、運動控制與事件日誌。",
+          "坐标记录原型画面，呈现校准、位置记录、运动控制与事件日志。",
+          "校正、位置記録、運動制御、イベントログを含む座標記録プロトタイプ画面です。"
+        )
+      },
+      {
+        src: "/assets/project-media/cwc-embedding-flow.png",
+        caption: four(
+          "Embedding workflow view with pre-checks, target selection, alignment, path planning, and hardware-state panels.",
+          "包埋流程畫面，包含前置檢查、目標選擇、對準、路徑規劃與硬體狀態面板。",
+          "包埋流程画面，包含前置检查、目标选择、对准、路径规划与硬件状态面板。",
+          "前提チェック、対象選択、位置合わせ、経路計画、ハードウェア状態を示す包埋ワークフロー画面です。"
+        )
+      },
+      {
+        src: "/assets/project-media/cwc-session-export.png",
+        caption: four(
+          "Session organization view showing the JSON/CSV/image export boundary used for archived experiment data.",
+          "Session 組織畫面，展示用於實驗歸檔的 JSON/CSV/圖像匯出邊界。",
+          "Session 组织画面，展示用于实验归档的 JSON/CSV/图像导出边界。",
+          "実験データの保管に使う JSON/CSV/画像エクスポート境界を示す Session 管理画面です。"
+        )
+      }
+    ],
     sections: {
       problem: four(
-        "CWC is a closed-source project, so its public record must explain the product direction without turning private implementation context into public documentation.",
-        "CWC 是閉源專案，因此公開記錄必須在不把私人實作背景變成公開文件的前提下，說明產品方向。",
-        "CWC 是闭源项目，因此公开记录必须在不把私有实现背景变成公开文档的前提下，说明产品方向。",
-        "CWC はクローズドソースのため、非公開の実装背景を公開文書に変えずに、プロジェクトの輪郭を説明できる公開面が必要です。"
+        "Biomedical cell-location work can lose position context when microscope capture, embedding, trimming, and data export live in separate tools.",
+        "生物醫學細胞定位流程若把顯微鏡拍攝、包埋、修塊與資料匯出分散在不同工具中，很容易丟失位置上下文。",
+        "生物医学细胞定位流程如果把显微镜拍摄、包埋、修块与数据导出分散在不同工具中，很容易丢失位置上下文。",
+        "顕微鏡での取得、包埋、修塊、データ出力が別々のツールに分かれると、生物医学の細胞定位作業では位置文脈を失いやすくなります。"
       ),
       role: four(
-        "I present CWC through a deliberately limited project record: enough context to understand the product boundary, without publishing private implementation details.",
-        "我以刻意受限的專案記錄呈現 CWC：提供足以理解產品邊界的背景，但不公開私人實作細節。",
-        "我以刻意受限的项目记录呈现 CWC：提供足以理解产品边界的背景，但不披露私有实现细节。",
-        "製品境界を理解できるだけの背景を示し、非公開の実装詳細は出さない、意図的に限定した記録として CWC を公開しています。"
+        "I built the public-safe explanation from the PRD, software manual, local source metadata, and reviewed prototype screenshots while keeping source code and operational details private.",
+        "我根據 PRD、軟體說明書、本地源碼元資料與已審核原型截圖製作可公開說明，同時保留源碼與運行細節的閉源邊界。",
+        "我根据 PRD、软件说明书、本地源码元数据与已审核原型截图制作可公开说明，同时保留源码与运行细节的闭源边界。",
+        "PRD、ソフトウェア説明書、ローカルのソースメタ情報、確認済みプロトタイプ画像から公開可能な説明を作り、ソースコードと運用詳細は非公開に保っています。"
       ),
       constraints: four(
         "The public boundary excludes source code, private infrastructure, credentials, client or employer details, internal data, and proprietary operating records.",
@@ -305,22 +355,22 @@ export const caseStudies = {
         "公開範囲にはソースコード、非公開インフラ、認証情報、顧客や雇用主の詳細、内部データ、専有の運用記録を含めません。"
       ),
       decisions: four(
-        "A static, multilingual page preserves a stable explanation while keeping the repository and operational boundary closed.",
-        "靜態多語言頁面保留穩定說明，同時維持儲存庫與運作邊界的封閉。",
-        "静态多语言页面保留稳定说明，同时维持仓库与运行边界的封闭。",
-        "静的な多言語ページで安定した説明を保ちながら、リポジトリと運用の境界を非公開に保ちます。"
+        "The public page uses only a static overview and sanitized screenshots: enough to show the workflow, not enough to publish clone, API, download, credentials, internal addresses, customer data, or proprietary operating records.",
+        "公開頁只使用靜態概覽與經檢查截圖：足以展示流程，但不公開 clone/API/下載入口、憑據、內部地址、客戶資料或專有運行記錄。",
+        "公开页只使用静态概览与经过检查的截图：足以展示流程，但不公开 clone/API/下载入口、凭据、内部地址、客户资料或专有运行记录。",
+        "公開ページは静的な概要と確認済み画像だけを使います。流れは示しますが、clone/API/ダウンロード入口、認証情報、内部アドレス、顧客データ、専有運用記録は公開しません。"
       ),
       architecture: four(
-        "The public architecture is intentionally simple: a static project overview, a clear private-project status, and no source or download action.",
-        "公開架構刻意保持簡單：靜態專案概覽、清楚的閉源狀態，以及不提供原始碼或下載操作。",
-        "公开架构刻意保持简单：静态项目概览、清楚的闭源状态，以及不提供源码或下载操作。",
-        "公開側の構成は意図的に単純です。静的な概要、明確な非公開ステータス、ソースやダウンロード操作を持たせません。"
+        "The verified local stack is a web UI plus Python FastAPI backend: the manual describes HTTP REST and WebSocket communication, a hardware abstraction layer for Moonraker and RS485 devices, and file-based JSON/image session storage.",
+        "已核對的本地技術邊界是 Web UI 加 Python FastAPI 後端：說明書描述 HTTP REST、WebSocket、面向 Moonraker 與 RS485 設備的硬體抽象層，以及 JSON/圖像檔案式 Session 存儲。",
+        "已核对的本地技术边界是 Web UI 加 Python FastAPI 后端：说明书描述 HTTP REST、WebSocket、面向 Moonraker 与 RS485 设备的硬件抽象层，以及 JSON/图像文件式 Session 存储。",
+        "確認済みのローカル構成は Web UI と Python FastAPI バックエンドです。説明書では HTTP REST、WebSocket、Moonraker と RS485 デバイス向け HAL、JSON/画像ファイルによる Session 保存を説明しています。"
       ),
       evidence: four(
-        "The evidence boundary is the public-safe project explanation itself. It is not a substitute for access to the closed repository.",
-        "證據邊界就是這份可公開的專案說明；它不是閉源儲存庫存取權的替代品。",
-        "证据边界就是这份可公开的项目说明；它不是闭源仓库存取权的替代品。",
-        "証拠の範囲は、この公開可能なプロジェクト説明そのものです。非公開リポジトリへのアクセスを代替するものではありません。"
+        "Evidence used here is limited to the latest local README/PRD-derived material, the June 2026 software manual/PDF, local package metadata, and three reviewed screenshots from the coordinate, embedding, and session-export flows.",
+        "此頁使用的證據限於最新本地 README/PRD 來源資料、2026 年 6 月軟體說明書/PDF、本地套件元資料，以及三張經審核的座標、包埋與 Session 匯出流程截圖。",
+        "此页使用的证据限于最新本地 README/PRD 来源资料、2026 年 6 月软件说明书/PDF、本地包元数据，以及三张经审核的坐标、包埋与 Session 导出流程截图。",
+        "ここで使う証拠は、最新のローカル README/PRD 由来資料、2026 年 6 月のソフトウェア説明書/PDF、ローカル package メタ情報、座標・包埋・Session 出力の確認済み画像 3 点に限定しています。"
       ),
       result: four(
         "CWC now has a durable public entry that communicates its place in the project set without exposing private material.",
@@ -371,9 +421,9 @@ export const caseStudies = {
       problem: four("Job discovery becomes noisy when saved roles, unread changes, and recurring searches live in separate tools.", "當收藏職缺、未讀變化與定期搜尋分散在不同工具時，求職探索很快就會變得混亂。", "当收藏职位、未读变化与定期搜索分散在不同工具时，求职探索很快就会变得混乱。", "保存求人、未読更新、定期検索が別々のツールに分かれると、求人探索はすぐに雑然とします。"),
       role: four("I designed the invite-only workflow, account boundaries, inbox model, scheduled digest behavior, and public deployment route.", "我設計邀請制流程、帳戶邊界、收件匣模型、排程摘要行為與公開部署路由。", "我设计邀请制流程、账户边界、收件箱模型、定时摘要行为与公开部署路由。", "招待制フロー、アカウント境界、受信箱モデル、定期ダイジェスト、公開ルートを設計しました。"),
       constraints: four("The service must keep account data isolated, avoid exposing job activity publicly, and still provide a reviewable product surface.", "服務必須隔離帳戶資料、不公開求職活動，同時仍提供可供檢查的產品介面。", "服务必须隔离账户数据、不公开求职活动，同时仍提供可供检查的产品界面。", "アカウントデータを分離し、求人活動を公開せず、それでも確認可能な製品面を提供する必要があります。"),
-      decisions: four("Invite-only access narrows exposure; account-scoped records keep saved and unread state separate; scheduled digests turn repeated checking into a deliberate workflow.", "邀請制縮小暴露面；帳戶範圍記錄分離收藏與未讀狀態；排程摘要把重複檢查轉成明確流程。", "邀请制缩小暴露面；账户范围记录分离收藏与未读状态；定时摘要把重复检查转成明确流程。", "招待制で露出を絞り、アカウント単位の記録で保存・未読状態を分離し、定期ダイジェストで反復確認を明確な流れに変えます。"),
-      architecture: four("A routed application surface sits behind authentication, with account-scoped inbox data and scheduled work separated from request-time interaction.", "路由式應用介面置於驗證之後，帳戶範圍收件匣資料與排程工作也和請求時互動分離。", "路由式应用界面位于认证之后，账户范围收件箱数据与定时任务也和请求时交互分离。", "ルーティングされたアプリ面を認証の後ろに置き、アカウント単位の受信箱データと定期処理をリクエスト時の操作から分離します。"),
-      evidence: four("The live login route, isolated product shell, inbox states, and scheduled digest behavior are the current evidence boundary.", "線上登入路由、隔離的產品介面、收件匣狀態與排程摘要行為構成目前的證據邊界。", "在线登录路由、隔离的产品界面、收件箱状态与定时摘要行为构成目前的证据边界。", "公開ログインルート、分離された製品面、受信箱状態、定期ダイジェストの挙動が現在の証拠範囲です。"),
+      decisions: four("Invite-only access narrows exposure; account-scoped records keep saved and unread state separate; discovery, matching/explanation, and delivery-agent labels make the workflow boundaries visible; scheduled digests turn repeated checking into a deliberate workflow.", "邀請制縮小暴露面；帳戶範圍記錄分離收藏與未讀狀態；探索、匹配/解釋與投遞 Agent 標籤讓工作流邊界可見；排程摘要把重複檢查轉成明確流程。", "邀请制缩小暴露面；账户范围记录分离收藏与未读状态；探索、匹配/解释与投递 Agent 标签让工作流边界可见；定时摘要把重复检查转成明确流程。", "招待制で露出を絞り、アカウント単位の記録で保存・未読状態を分離します。発見、マッチング/説明、配信 Agent のラベルでワークフロー境界を見えるようにし、定期ダイジェストで反復確認を明確な流れに変えます。"),
+      architecture: four("A routed application surface sits behind authentication, with tenant-scoped inbox data, preview-only email behavior, AI-assessment gates, and scheduled pipeline/notify/backup work separated from request-time interaction.", "路由式應用介面置於驗證之後，帳戶範圍收件匣資料、僅預覽的郵件行為、AI 評估門檻，以及 pipeline/notify/backup 排程工作都和請求時互動分離。", "路由式应用界面位于认证之后，账户范围收件箱数据、仅预览的邮件行为、AI 评估门槛，以及 pipeline/notify/backup 定时任务都和请求时交互分离。", "ルーティングされたアプリ面を認証の後ろに置き、テナント単位の受信箱データ、プレビューのみのメール挙動、AI 評価ゲート、pipeline/notify/backup の定期処理を、リクエスト時の操作から分離します。"),
+      evidence: four("The live login route, isolated product shell, inbox states, scheduled digest controls, workflow labels, tests, and documented privacy boundary are the current evidence boundary.", "線上登入路由、隔離的產品介面、收件匣狀態、排程摘要控制、工作流標籤、測試與隱私邊界文件構成目前的證據邊界。", "在线登录路由、隔离的产品界面、收件箱状态、定时摘要控制、工作流标签、测试与隐私边界文档构成目前的证据边界。", "公開ログインルート、分離された製品面、受信箱状態、定期ダイジェスト制御、ワークフローラベル、テスト、プライバシー境界文書が現在の証拠範囲です。"),
       result: four("The project demonstrates product and privacy judgment without publishing user data or inventing business outcomes.", "此專案展示產品與隱私判斷，同時不公開使用者資料，也不虛構商業成果。", "此项目展示产品与隐私判断，同时不公开用户数据，也不虚构商业成果。", "ユーザーデータや架空の事業成果を公開せずに、製品とプライバシーの判断を示しています。"),
       limits: four("The public case study deliberately omits internal data structures, account details, infrastructure addresses, and private operational records.", "公開案例刻意省略內部資料結構、帳戶細節、基礎設施位址與私人運維記錄。", "公开案例有意省略内部数据结构、账户细节、基础设施地址与私人运维记录。", "公開ケーススタディでは、内部データ構造、アカウント詳細、インフラアドレス、非公開運用記録を意図的に省略しています。")
     }

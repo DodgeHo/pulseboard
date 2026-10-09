@@ -68,6 +68,7 @@ const [upworkCssRaw, upworkJs] = upworkContent ? await Promise.all([
   readTextOptional(resolve(sourceRoot, "upwork/upwork.js"))
 ]) : ["", ""];
 const upworkAssetDir = resolve(sourceRoot, "upwork/assets");
+const projectMediaDir = resolve(sourceRoot, "assets/project-media");
 const upworkAssetFiles = upworkContent ? (await readdir(upworkAssetDir).catch((error) => {
   if (error?.code === "ENOENT") return [];
   throw error;
@@ -108,6 +109,7 @@ const homeDefinitions = [
   { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", auxiliaryName: four("ISPM Practice-服务管理做题练习", "ISPM Practice-服务管理做题练习", "ISPM Practice-服务管理做题练习", "ISPM Practice-服务管理做题练习"), visibility: "private", privateRepository: false, closedSource: true, railLinked: false, railKeywords: ["ITSM", "question practice", "closed source"], tags: ["ITSM", "question practice", "closed source"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
   { lookup: "PAL4_EnglishMod", id: "pal4", category: "source", layout: "source", color: "orange", name: "PAL4 translation", alias: "PAL4_EnglishMod", homepageActions: [{ href: "https://dodgeho.github.io/PAL4_EnglishMod/", key: "homepage" }] },
   { lookup: "IELTS_writing_GPT", id: "ielts", category: "source", layout: "source-compact", color: "cobalt", name: "IELTS writing GPT", alias: "IELTS_writing_GPT" },
+  { lookup: "BiliDownTrans", id: "bilidowntrans", category: "source", layout: "source-compact", color: "cyan", name: "BiliDownTrans" },
   { lookup: "dynamic_rrt_connect", id: "rrt", category: "source", layout: "source-wide", color: "cyan", name: "Dynamic RRT Connect", alias: "dynamic_rrt_connect" },
   { lookup: "VMD_cpp", id: "vmd", category: "source", layout: "research", color: "violet", name: "VMD", family: "vmd", familyMembers: ["VMD_cpp", "VMD_2D_python", "VMD_2D_cpp"], actionKey: "open" },
   { lookup: "CEEMDAN_cpp", id: "ceemdan", category: "source", layout: "research", color: "cobalt", name: "CEEMDAN" },
@@ -135,6 +137,7 @@ const homeProjects = homeDefinitions.map((definition) => {
     railKeywords: definition.railKeywords || project.skills.slice(0, 3),
     tags: definition.tags || project.skills,
     safeSummary: definition.safeSummary || project.safeSummary,
+    media: definition.media || project?.media || null,
     auxiliaryName: definition.auxiliaryName || project?.auxiliaryName || null,
     evidence: definition.evidence || project.evidence,
     casePath: project?.publishCaseStudy ? `/projects/${project.slug}/` : null,
@@ -178,6 +181,24 @@ const writeOutput = async (relativePath, content) => {
     const target = resolve(root, relativePath);
     await mkdir(dirname(target), { recursive: true });
     await writeFile(target, content, "utf8");
+    outputPaths.push(target);
+  }
+};
+
+const copyStaticDirectory = async (sourceDirectory, targetDirectory) => {
+  const entries = await readdir(sourceDirectory, { withFileTypes: true }).catch((error) => {
+    if (error?.code === "ENOENT") return [];
+    throw error;
+  });
+  for (const entry of entries) {
+    const source = resolve(sourceDirectory, entry.name);
+    const target = resolve(targetDirectory, entry.name);
+    if (entry.isDirectory()) {
+      await copyStaticDirectory(source, target);
+      continue;
+    }
+    await mkdir(dirname(target), { recursive: true });
+    await copyFile(source, target);
     outputPaths.push(target);
   }
 };
@@ -364,6 +385,12 @@ const icons = {
 
 const projectDetailSuffix = (project) => `/projects/${project.slug}/`;
 const localizedAuxiliaryName = (project, locale) => project.auxiliaryName?.[locale] || project.auxiliaryName?.en || "";
+const localizedMediaAlt = (project, locale) => project.media?.alt?.[locale] || project.media?.alt?.en || `${project.name} project image`;
+const summaryParagraphs = (value = "") => String(value).split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
+const summaryHtml = (value = "", className = "") => summaryParagraphs(value).map((paragraph) => `<p${className ? ` class="${className}"` : ""}>${escapeHtml(paragraph)}</p>`).join("");
+const mediaMarkup = (project, locale, className) => project.media?.src
+  ? `<img class="${className}" src="${escapeHtml(project.media.src)}" alt="${escapeHtml(localizedMediaAlt(project, locale))}" loading="lazy" decoding="async">`
+  : "";
 
 const archiveRow = (project, locale, index) => {
   const copy = siteCopy[locale];
@@ -378,10 +405,11 @@ const archiveRow = (project, locale, index) => {
     project.githubUrl ? `<a class="row-action" href="${project.githubUrl}" target="_blank" rel="noreferrer">${escapeHtml(copy.github)}${icons.external}</a>` : "",
     isLocked ? `<span class="locked-state">${icons.lock}${escapeHtml(copy.locked)}</span>` : ""
   ].filter(Boolean).join("");
+  const rowMedia = mediaMarkup(project, locale, "row-media");
   return `<article class="archive-row" data-project-row data-category="${project.category}" data-origin="${project.origin}" data-visibility="${project.visibility}" data-featured="${project.featured}" data-score="${project.score}" data-updated="${project.updatedAt || ""}" data-name="${escapeHtml(project.name)}" data-search="${escapeHtml(searchable)}">
     <span class="row-index" data-row-index>${String(index + 1).padStart(2, "0")}</span>
-    <div class="row-name"><h3>${escapeHtml(project.name)}</h3>${auxiliaryName ? `<p class="row-name-alt">${escapeHtml(auxiliaryName)}</p>` : ""}<div class="row-flags"><span class="row-flag">${escapeHtml(isPrivate ? copy.private : copy.public)}</span><span class="row-flag is-origin">${escapeHtml(project.origin === "fork" ? copy.fork : copy.original)}</span>${project.closedSource ? `<span class="row-flag is-closed">${escapeHtml(copy.closedSource)}</span>` : ""}${project.featured ? `<span class="row-flag">${escapeHtml(copy.filters.featured)}</span>` : ""}</div></div>
-    <div class="row-copy"><p>${escapeHtml(project.safeSummary[locale])}</p><ul class="row-skills">${project.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul></div>
+    <div class="row-name"><div class="row-title-line">${rowMedia}<h3>${escapeHtml(project.name)}</h3></div>${auxiliaryName ? `<p class="row-name-alt">${escapeHtml(auxiliaryName)}</p>` : ""}<div class="row-flags"><span class="row-flag">${escapeHtml(isPrivate ? copy.private : copy.public)}</span><span class="row-flag is-origin">${escapeHtml(project.origin === "fork" ? copy.fork : copy.original)}</span>${project.closedSource ? `<span class="row-flag is-closed">${escapeHtml(copy.closedSource)}</span>` : ""}${project.featured ? `<span class="row-flag">${escapeHtml(copy.filters.featured)}</span>` : ""}</div></div>
+    <div class="row-copy">${summaryHtml(project.safeSummary[locale])}<ul class="row-skills">${project.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul></div>
     <p class="row-evidence"><strong>${escapeHtml(copy.evidence)}</strong>${project.evidence.map(escapeHtml).join("<br>")}</p>
     <div class="row-actions">${actions}</div>
   </article>`;
@@ -417,12 +445,15 @@ const detailPage = (project, locale) => {
     ? sectionOrder.map((key) => `<section class="case-section"><h2>${escapeHtml(sectionLabel(copy, key))}</h2><p>${escapeHtml(study.sections[key][locale])}</p></section>`).join("")
     : `<section class="case-section"><h2>${escapeHtml(copy.metadata)}</h2><p>${escapeHtml(copy.sourceRecord)}</p></section><section class="case-section"><h2>${escapeHtml(copy.technologies)}</h2><p>${escapeHtml(project.skills.join(" · "))}</p></section><section class="case-section"><h2>${escapeHtml(copy.evidence)}</h2><p>${escapeHtml(project.evidence.join(" · "))}</p></section>`;
   const assets = study?.assets || [];
+  const visuals = study?.visuals || [];
+  const heroMedia = mediaMarkup(project, locale, "case-media");
+  const visualGallery = visuals.length ? `<section class="case-visuals" aria-label="${escapeHtml(copy.assets)}">${visuals.map((visual) => `<figure><img src="${escapeHtml(visual.src)}" alt="${escapeHtml(visual.caption[locale])}" loading="lazy" decoding="async"><figcaption>${escapeHtml(visual.caption[locale])}</figcaption></figure>`).join("")}</section>` : "";
   const status = [
     project.privateRepository ? copy.private : project.visibility === "private" ? copy.private : project.origin === "fork" ? copy.fork : copy.original,
     project.closedSource ? copy.closedSource : ""
   ].filter(Boolean).join(" · ");
   const aside = `<aside class="case-aside"><h2>${escapeHtml(copy.metadata)}</h2><dl class="archive-stats"><div><dt>${escapeHtml(copy.status)}</dt><dd>${escapeHtml(status)}</dd></div><div><dt>${escapeHtml(copy.updated)}</dt><dd>${escapeHtml(project.updatedAt?.slice(0, 10) || copy.noDate)}</dd></div></dl>${assets.length ? `<h2>${escapeHtml(copy.assets)}</h2><ul class="asset-nav">${assets.map((asset) => `<li><a href="${localePath(locale, `${suffix}${asset}/`)}">${escapeHtml(assetTitles[asset][locale])}</a></li>`).join("")}</ul>` : ""}<div class="related"><h2>${escapeHtml(copy.related)}</h2>${relatedProjects(project).map((related) => `<a href="${localePath(locale, projectDetailSuffix(related))}">${escapeHtml(related.name)}</a>`).join("")}</div></aside>`;
-  const body = `<main id="main"><section class="case-hero"><h1>${escapeHtml(project.name)}</h1>${auxiliaryName ? `<p class="case-alt-name">${escapeHtml(auxiliaryName)}</p>` : ""}<p class="case-summary">${escapeHtml(project.safeSummary[locale])}</p><div class="case-actions">${actionLinks}<a href="${localePath(locale, "/projects/")}">${escapeHtml(copy.backArchive)}</a></div></section><div class="detail-main"><article class="case-content">${mainContent}</article>${aside}</div></main>`;
+  const body = `<main id="main"><section class="case-hero"><div class="case-title-line">${heroMedia}<h1>${escapeHtml(project.name)}</h1></div>${auxiliaryName ? `<p class="case-alt-name">${escapeHtml(auxiliaryName)}</p>` : ""}<div class="case-summary">${summaryHtml(project.safeSummary[locale])}</div><div class="case-actions">${actionLinks}<a href="${localePath(locale, "/projects/")}">${escapeHtml(copy.backArchive)}</a></div></section>${visualGallery}<div class="detail-main"><article class="case-content">${mainContent}</article>${aside}</div></main>`;
   const jsonLd = { "@context": "https://schema.org", "@type": study ? "TechArticle" : "CreativeWork", headline: project.name, description: project.safeSummary[locale], dateModified: study?.updatedAt || project.updatedAt || snapshot.syncedAt, url: absoluteUrl(localePath(locale, suffix)), author: { "@type": "Person", name: "Dodge Ho" } };
   return basePage({ locale, suffix, title: project.name, description: project.safeSummary[locale], body, type: "article", jsonLd });
 };
@@ -440,6 +471,9 @@ const assetPage = (project, asset, locale) => {
 
 await rm(localRoot, { recursive: true, force: true });
 await writeOutput("index.html", homeArtifact);
+for (const root of [localRoot, deployRoot]) {
+  await copyStaticDirectory(projectMediaDir, resolve(root, "assets/project-media"));
+}
 
 const sitemapPaths = ["/"];
 if (upworkEnabled) {

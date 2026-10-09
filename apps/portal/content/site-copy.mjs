@@ -8,7 +8,7 @@ export const localeConfig = {
 export const siteCopy = {
   en: {
     archiveTitle: "Complete Engineering Archive",
-    archiveDescription: "All 70 GitHub repositories, plus deployed systems that do not map one-to-one to a repository. Ranked by hiring value and evidence quality, not recency alone.",
+    archiveDescription: "All 74 GitHub repositories, plus deployed systems that do not map one-to-one to a repository. Ranked by hiring value and evidence quality, not recency alone.",
     context: "PROJECT ASSET LIBRARY",
     profile: "My LinkedIn profile",
     home: "ANLAN.STORE home",
@@ -61,7 +61,7 @@ export const siteCopy = {
   },
   "zh-Hant": {
     archiveTitle: "完整工程資產檔案",
-    archiveDescription: "收錄全部 70 個 GitHub 儲存庫，以及未與單一儲存庫一對一對應的線上系統。預設依求職價值與證據品質排序，而非只看更新時間。",
+    archiveDescription: "收錄全部 74 個 GitHub 儲存庫，以及未與單一儲存庫一對一對應的線上系統。預設依求職價值與證據品質排序，而非只看更新時間。",
     context: "專案資產庫", profile: "我的 LinkedIn 個人資料", home: "ANLAN.STORE 首頁", skip: "跳至專案清單",
     search: "搜尋專案名稱、技術與摘要", sort: "排序專案", sortValue: "求職價值與證據", sortUpdated: "最近更新", sortName: "名稱 A–Z",
     filters: { all: "全部", featured: "精選", applications: "應用與工具", research: "研究", private: "私人", fork: "Fork", learning: "學習" },
@@ -74,7 +74,7 @@ export const siteCopy = {
   },
   "zh-Hans": {
     archiveTitle: "完整工程资产档案",
-    archiveDescription: "收录全部 70 个 GitHub 仓库，以及未与单一仓库一对一对应的在线系统。默认按求职价值与证据质量排序，而不是只看更新时间。",
+    archiveDescription: "收录全部 74 个 GitHub 仓库，以及未与单一仓库一对一对应的在线系统。默认按求职价值与证据质量排序，而不是只看更新时间。",
     context: "项目资产库", profile: "我的 LinkedIn 个人资料", home: "ANLAN.STORE 首页", skip: "跳至项目清单",
     search: "搜索项目名称、技术与摘要", sort: "排序项目", sortValue: "求职价值与证据", sortUpdated: "最近更新", sortName: "名称 A–Z",
     filters: { all: "全部", featured: "精选", applications: "应用与工具", research: "研究", private: "私有", fork: "Fork", learning: "学习" },
@@ -87,7 +87,7 @@ export const siteCopy = {
   },
   ja: {
     archiveTitle: "完全なエンジニアリング資産目録",
-    archiveDescription: "70 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。",
+    archiveDescription: "74 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。",
     context: "プロジェクト資産ライブラリ", profile: "私の LinkedIn プロフィール", home: "ANLAN.STORE ホーム", skip: "プロジェクト目録へ移動",
     search: "プロジェクト名、技術、概要を検索", sort: "プロジェクトを並べ替え", sortValue: "採用価値と証拠", sortUpdated: "最近の更新", sortName: "名前 A–Z",
     filters: { all: "すべて", featured: "注目", applications: "アプリとツール", research: "研究", private: "非公開", fork: "Fork", learning: "学習" },

@@ -21,10 +21,11 @@ const loadOptionalUpworkContent = async () => {
 const verifyUpworkArtifacts = process.env.ANLAN_INCLUDE_UPWORK === "true";
 const upworkPortfolio = verifyUpworkArtifacts ? (await loadOptionalUpworkContent())?.upworkPortfolio ?? [] : [];
 
-const expectedInitialCounts = { total: 70, public: 57, private: 13, forks: 21, original: 49 };
+const expectedInitialCounts = { total: 74, public: 61, private: 13, forks: 22, original: 52 };
 const localePrefixes = { en: "", "zh-Hant": "zh-hant/", "zh-Hans": "zh-hans/", ja: "ja/" };
 const flagshipSlugs = ["pulseboard", "heatstack", "career-radar"];
-const homeOrder = ["HeatStack", "TapPhysics", "Career Radar", "PuzzleWear", "CWC", "PulseBoard", "SAA Practice", "SAP Practice", "ISPM Practice", "PAL4 translation", "IELTS writing GPT", "Dynamic RRT Connect", "VMD", "CEEMDAN", "DevEnglish"];
+const caseStudySlugs = [...flagshipSlugs, "cwc"];
+const homeOrder = ["HeatStack", "TapPhysics", "Career Radar", "PuzzleWear", "CWC", "PulseBoard", "SAA Practice", "SAP Practice", "ISPM Practice", "PAL4 translation", "IELTS writing GPT", "BiliDownTrans", "Dynamic RRT Connect", "VMD", "CEEMDAN", "DevEnglish"];
 const vmdHomeUrls = ["https://github.com/DodgeHo/VMD_cpp", "https://github.com/DodgeHo/VMD_2D_python", "https://github.com/DodgeHo/VMD_2D_cpp"];
 const puzzleWearUrl = "https://puzzlewear.cn/login";
 const requiredAuxiliaryNames = ["AI 热栈", "职海雷达", "一点物理", "CellLoc Web Controller- 细胞定位网络控制系统", "拼频品聘-服装创意设计", "开发者英语练习站", "运营脉冲板", "SAA Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习"];
@@ -161,6 +162,8 @@ async function verifyArchive(root, relativePath, locale) {
   }
   assert(artifact.includes("CEEMDAN_cpp"), `${relativePath} is missing the CEEMDAN_cpp spelling`);
   assert(rowForArchive(rows, "PAL4_EnglishMod")?.includes("https://github.com/DodgeHo/PAL4_EnglishMod"), `${relativePath} is missing the PAL4 repository link`);
+  assert(rowForArchive(rows, "BiliDownTrans")?.includes("https://github.com/DodgeHo/BiliDownTrans"), `${relativePath} is missing the BiliDownTrans repository link`);
+  assert(rowForArchive(rows, "BiliDownTrans")?.includes("/assets/project-media/bilidowntrans-icon.svg"), `${relativePath} is missing the BiliDownTrans icon`);
   assert(rowForArchive(rows, "TapPhysics")?.includes('href="/tapphysics/"'), `${relativePath} is missing the TapPhysics /tapphysics/ route`);
   assert(rowForArchive(rows, "PuzzleWear")?.includes(`href="${puzzleWearUrl}"`), `${relativePath} is missing the exact PuzzleWear login URL`);
   assert(!rowForArchive(rows, "PuzzleWear")?.includes('href="https://puzzlewear.cn/"'), `${relativePath} still points PuzzleWear at the root URL`);
@@ -232,6 +235,9 @@ async function verifyGeneratedPages(root) {
   assert(home.includes(`"action":"${puzzleWearUrl}"`), "Homepage is missing the exact PuzzleWear login URL");
   assert(!home.includes('href="https://puzzlewear.cn/"'), "Homepage still points PuzzleWear at the root URL");
   assert(home.includes("https://devenglish.club/"), "Homepage is missing DevEnglish live URL");
+  assert(home.includes("https://github.com/DodgeHo/BiliDownTrans"), "Homepage is missing BiliDownTrans repository URL");
+  assert(home.includes("/assets/project-media/bilidowntrans-icon.svg"), "Homepage is missing the BiliDownTrans icon asset");
+  assert(home.includes("/assets/project-media/pulseboard-ops.png") && home.includes("/assets/project-media/cwc-coordinate-record.png"), "Homepage is missing project media data");
   assertIncludesAll(home, requiredHomeAuxiliaryNames, "Homepage project data");
   assertExcludesAll(homeProjectBlock(home, "HeatStack"), staleHeatStackCopy, "Homepage HeatStack project data");
   assertExcludesAll(homeProjectBlock(home, "TapPhysics"), staleTapPhysicsCopy, "Homepage TapPhysics project data");
@@ -242,7 +248,7 @@ async function verifyGeneratedPages(root) {
     assert(block.includes('"closedSource":true'), `Homepage is missing closed-source status for ${name}`);
   }
   assert(!home.includes('href="/ispm/"') && !home.includes('route:"/ispm/"'), "Homepage must not expose an ISPM route");
-  assert(!home.includes("Ten project signals"), "Homepage still contains the old Ten project signals copy");
+  assert(!home.includes("Ten project signals") && !home.includes("Fifteen curated"), "Homepage still contains old project-count copy");
   for (const hash of ["#en", "#zh", "#zh-hans", "#zh-hant", "#ja"]) {
     assert(home.toLowerCase().includes(`'${hash}'`) || home.toLowerCase().includes(`"${hash}"`), `Homepage is missing language hash ${hash}`);
   }
@@ -276,17 +282,25 @@ async function verifyGeneratedPages(root) {
     const archive = await read(root, `${prefix}projects/index.html`);
     if (locale === "zh-Hans") assert(archive.includes("粤ICP备2026035259号-1"), "Simplified Chinese archive is missing ICP text");
     else assert(!archive.includes("粤ICP备2026035259号-1"), `${locale} archive must not contain Simplified Chinese ICP text`);
-    for (const slug of flagshipSlugs) {
+    for (const slug of caseStudySlugs) {
       const detail = await read(root, `${prefix}projects/${slug}/index.html`);
       verifyPageMetadata(detail, `${locale} ${slug} case study`);
       const auxiliaryName = localizedAuxiliaryName(bySlug.get(slug) ?? {}, locale);
       if (auxiliaryName) assert(detail.includes(auxiliaryName), `${locale} ${slug} detail is missing auxiliary name ${auxiliaryName}`);
       if (slug === "heatstack") assertExcludesAll(detail, staleHeatStackCopy, `${locale} HeatStack detail`);
+      if (slug === "cwc") {
+        assert(detail.includes("/assets/project-media/cwc-coordinate-record.png") && detail.includes("/assets/project-media/cwc-embedding-flow.png") && detail.includes("/assets/project-media/cwc-session-export.png"), `${locale} CWC detail is missing reviewed screenshots`);
+        assert(!/github\.com\/DodgeHo\/CWC/i.test(detail) && !detail.includes("git clone"), `${locale} CWC detail leaks a forbidden source boundary`);
+      }
       for (const asset of caseStudies[slug].assets) {
         const assetArtifact = await read(root, `${prefix}projects/${slug}/${asset}/index.html`);
         verifyPageMetadata(assetArtifact, `${locale} ${slug} ${asset}`);
       }
     }
+  }
+
+  for (const mediaPath of ["assets/project-media/bilidowntrans-icon.svg", "assets/project-media/cwc-coordinate-record.png", "assets/project-media/cwc-embedding-flow.png", "assets/project-media/cwc-session-export.png", "assets/project-media/pulseboard-ops.png", "assets/project-media/pulseboard-customer.png"]) {
+    assert(await fileExists(root, mediaPath), `${mediaPath} was not copied to ${root}`);
   }
 
   const sitemap = await read(root, "sitemap.xml");

@@ -114,6 +114,15 @@ button, input, select { font: inherit; }
 .archive-row[data-category="private"] { --accent: var(--hot); }
 .row-index { color: var(--accent); font: 700 11px/1 var(--font-data); }
 .row-name { min-width: 0; }
+.row-title-line { min-width: 0; display: flex; align-items: center; gap: 10px; }
+.row-media {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(25, 62, 103, .9);
+  background: #07101f;
+  object-fit: contain;
+}
 .row-name h3 { overflow-wrap: anywhere; margin: 0; font-size: clamp(18px, 2vw, 28px); letter-spacing: -.015em; }
 .row-name-alt {
   max-width: 34ch;
@@ -128,6 +137,7 @@ button, input, select { font: inherit; }
 .row-flag { padding: 5px 7px; border: 1px solid var(--rule); color: var(--muted); font: 700 9px/1 var(--font-data); text-transform: uppercase; }
 .row-flag.is-origin { border-color: var(--accent); color: var(--accent); }
 .row-copy p { max-width: 65ch; margin: 0; color: var(--muted); line-height: 1.68; }
+.row-copy p + p { margin-top: 9px; }
 .row-skills { display: flex; flex-wrap: wrap; gap: 6px; margin: 17px 0 0; padding: 0; list-style: none; }
 .row-skills li { color: var(--ink); font: 700 10px/1.3 var(--font-data); }
 .row-skills li:not(:last-child)::after { margin-left: 6px; color: var(--accent); content: "/"; }
@@ -145,6 +155,15 @@ button, input, select { font: inherit; }
 .case-hero { position: relative; overflow: hidden; min-height: 420px; padding: clamp(52px, 8vw, 112px) clamp(24px, 7vw, 100px); border-bottom: 1px solid var(--rule); }
 .case-hero::after { position: absolute; right: -8%; bottom: 24%; width: 46%; height: 2px; background: var(--cyan); box-shadow: 0 -60px 0 var(--violet), 0 60px 0 var(--orange); transform: rotate(-11deg); content: ""; opacity: .72; }
 .case-hero > * { position: relative; z-index: 1; }
+.case-title-line { min-width: 0; display: flex; align-items: center; gap: 16px; }
+.case-media {
+  flex: 0 0 auto;
+  width: clamp(42px, 5vw, 64px);
+  height: clamp(42px, 5vw, 64px);
+  border: 1px solid rgba(25, 62, 103, .9);
+  background: #07101f;
+  object-fit: contain;
+}
 .case-hero h1 { max-width: 12ch; margin: 0; overflow-wrap: anywhere; font-size: clamp(52px, 8vw, 118px); line-height: .88; letter-spacing: -.03em; }
 .case-alt-name {
   max-width: min(760px, 72vw);
@@ -156,6 +175,8 @@ button, input, select { font: inherit; }
   overflow-wrap: anywhere;
 }
 .case-summary { max-width: 68ch; margin: 28px 0 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
+.case-summary p { margin: 0; }
+.case-summary p + p { margin-top: 13px; }
 .case-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
 .case-actions a { min-height: 42px; display: inline-flex; align-items: center; padding: 9px 13px; border: 1px solid var(--rule); font-size: 11px; font-weight: 800; text-decoration: none; }
 .case-actions a:first-child { border-color: var(--cyan); background: var(--cyan); color: #07101d; }
@@ -172,6 +193,23 @@ button, input, select { font: inherit; }
 .related { margin-top: 46px; }
 .related a { display: block; padding: 12px 0; border-top: 1px solid var(--rule); color: var(--muted); text-decoration: none; }
 .related a:hover { color: var(--cyan); }
+.case-visuals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 22px clamp(16px, 4vw, 42px);
+  border-bottom: 1px solid var(--rule);
+  background: rgba(7, 12, 31, .48);
+}
+.case-visuals figure { min-width: 0; margin: 0; }
+.case-visuals img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--rule);
+  background: #07101f;
+  object-fit: cover;
+}
+.case-visuals figcaption { margin-top: 9px; color: var(--faint); font-size: 12px; line-height: 1.55; }
 
 .archive-footer { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 22px; border-top: 1px solid var(--rule); color: var(--faint); font: 700 10px/1.4 var(--font-data); }
 .archive-footer a { color: var(--cyan); text-decoration: none; }
@@ -207,12 +245,16 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .row-actions { display: flex; flex-wrap: wrap; min-width: 0; }
   .row-action, .locked-state { flex: 1 1 150px; }
   .case-section { grid-template-columns: 1fr; gap: 13px; }
+  .case-visuals { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
   .archive-shell { width: 100%; border: 0; }
   .archive-intro h1 { max-width: 100%; font-size: 44px; line-height: .9; }
   .case-hero h1 { max-width: 100%; font-size: 50px; line-height: .9; }
+  .case-title-line { align-items: flex-start; gap: 10px; }
+  .case-media { width: 38px; height: 38px; }
+  .row-media { width: 30px; height: 30px; }
   .case-alt-name { max-width: 100%; font-size: 20px; }
   .archive-stats { grid-template-columns: 1fr; }
   .archive-stats div { grid-template-columns: 90px 1fr; }
@@ -233,4 +275,4 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
       <a class="archive-profile" href="https://github.com/DodgeHo" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4a9.6 9.6 0 0 0-3 18.7c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-4.8 0-1.1.4-1.9 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.6 1a9 9 0 0 1 4.8 0c1.8-1.3 2.6-1 2.6-1 .5 1.3.2 2.3.1 2.6.7.7 1 1.5 1 2.6 0 3.7-2.3 4.5-4.6 4.8.4.3.8 1 .8 2v2.3c0 .3.2.6.7.5A9.6 9.6 0 0 0 12 2.4Z" fill="currentColor"/></svg><span>GitHub</span></a>
       <nav class="locale-links" aria-label="Language"><a href="/projects/heatstack/">EN</a><a href="/zh-hant/projects/heatstack/" aria-current="page">繁中</a><a href="/zh-hans/projects/heatstack/">简中</a><a href="/ja/projects/heatstack/">日本語</a></nav>
     </div>
-  </header><main id="main"><section class="case-hero"><h1>HeatStack</h1><p class="case-alt-name">AI 热栈</p><p class="case-summary">AI Skill 廣場，面向 AI 學習、Agent 科普與精進，整合每日熱門 Skill 瀏覽、批次下載安裝流程，並提供《深入理解 AI Agent》入口。</p><div class="case-actions"><a href="/heatstack/">開啟線上專案</a><a href="/zh-hant/projects/">返回完整檔案</a></div></section><div class="detail-main"><article class="case-content"><section class="case-section"><h2>問題</h2><p>AI 學習資源變動很快，但單純的趨勢清單無法協助 Windows 使用者檢查 Skill、安全安裝，或維持可持續的學習路徑。</p></section><section class="case-section"><h2>我的角色</h2><p>我設計內容模型、雙語學習路徑、本機安裝安全指引、Skill 瀏覽流程與部署後的網站體驗。</p></section><section class="case-section"><h2>限制條件</h2><p>建議必須能因應工具變化，避免不安全的一行安裝習慣，並適用於使用 Windows 終端機的學習者。</p></section><section class="case-section"><h2>關鍵決策</h2><p>每個趨勢都連接到先備條件、檢查步驟、引導式練習、批次下載安裝路徑與 Agent 學習筆記，而不是把熱門程度當成能力。</p></section><section class="case-section"><h2>架構</h2><p>靜態優先的 Astro 介面分離編輯內容、Skill 排名資料、安全提示與可重用學習模組，同時維持低成本託管。</p></section><section class="case-section"><h2>工程證據</h2><p>已部署路由、真實學習模組、Skill 瀏覽資料、安裝檢查、雙語內容與 Agent 書籍入口提供可檢查的證據。</p></section><section class="case-section"><h2>成果</h2><p>HeatStack 成為可持續累積的學習資產，而非一次性的趨勢文章，讓使用者從發現一路走到實作與證明。</p></section><section class="case-section"><h2>限制與下一步</h2><p>趨勢新鮮度取決於上游收集流程，每項 Skill 的品質仍需人工判斷後才能推薦。</p></section></article><aside class="case-aside"><h2>專案記錄</h2><dl class="archive-stats"><div><dt>狀態</dt><dd>原創</dd></div><div><dt>儲存庫更新</dt><dd>未公開</dd></div></dl><h2>工程資產</h2><ul class="asset-nav"><li><a href="/zh-hant/projects/heatstack/architecture/">架構說明</a></li><li><a href="/zh-hant/projects/heatstack/practice-guide/">實作指南</a></li></ul><div class="related"><h2>相關專案</h2><a href="/zh-hant/projects/pulseboard/">pulseboard</a><a href="/zh-hant/projects/career-radar/">Career Radar</a><a href="/zh-hant/projects/tapphysics/">TapPhysics</a><a href="/zh-hant/projects/pal4-englishmod/">PAL4_EnglishMod</a></div></aside></div></main><footer class="archive-footer"><span>ANLAN.STORE / 可持續工程證據</span><a href="/zh-hant/projects/">返回完整檔案</a></footer></div><script>(()=>{const m={'#en':'en','#zh':'zh-Hans','#zh-hans':'zh-Hans','#zh-hant':'zh-Hant','#ja':'ja'};const p={en:'', 'zh-Hans':'/zh-hans','zh-Hant':'/zh-hant',ja:'/ja'};const l=m[location.hash.toLowerCase()];if(l){const n=p[l]+'/projects/heatstack/';if(location.pathname!==n)location.replace(n);}})();</script></body></html>
+  </header><main id="main"><section class="case-hero"><div class="case-title-line"><h1>HeatStack</h1></div><p class="case-alt-name">AI 热栈</p><div class="case-summary"><p>AI Skill 廣場，面向 AI 學習、Agent 科普與精進，整合每日熱門 Skill 瀏覽、批次下載安裝流程，並提供《深入理解 AI Agent》入口。</p></div><div class="case-actions"><a href="/heatstack/">開啟線上專案</a><a href="/zh-hant/projects/">返回完整檔案</a></div></section><div class="detail-main"><article class="case-content"><section class="case-section"><h2>問題</h2><p>AI 學習資源變動很快，但單純的趨勢清單無法協助 Windows 使用者檢查 Skill、安全安裝，或維持可持續的學習路徑。</p></section><section class="case-section"><h2>我的角色</h2><p>我設計內容模型、雙語學習路徑、本機安裝安全指引、Skill 瀏覽流程與部署後的網站體驗。</p></section><section class="case-section"><h2>限制條件</h2><p>建議必須能因應工具變化，避免不安全的一行安裝習慣，並適用於使用 Windows 終端機的學習者。</p></section><section class="case-section"><h2>關鍵決策</h2><p>每個趨勢都連接到先備條件、檢查步驟、引導式練習、批次下載安裝路徑與 Agent 學習筆記，而不是把熱門程度當成能力。</p></section><section class="case-section"><h2>架構</h2><p>靜態優先的 Astro 介面分離編輯內容、Skill 排名資料、安全提示與可重用學習模組，同時維持低成本託管。</p></section><section class="case-section"><h2>工程證據</h2><p>已部署路由、真實學習模組、Skill 瀏覽資料、安裝檢查、雙語內容與 Agent 書籍入口提供可檢查的證據。</p></section><section class="case-section"><h2>成果</h2><p>HeatStack 成為可持續累積的學習資產，而非一次性的趨勢文章，讓使用者從發現一路走到實作與證明。</p></section><section class="case-section"><h2>限制與下一步</h2><p>趨勢新鮮度取決於上游收集流程，每項 Skill 的品質仍需人工判斷後才能推薦。</p></section></article><aside class="case-aside"><h2>專案記錄</h2><dl class="archive-stats"><div><dt>狀態</dt><dd>原創</dd></div><div><dt>儲存庫更新</dt><dd>未公開</dd></div></dl><h2>工程資產</h2><ul class="asset-nav"><li><a href="/zh-hant/projects/heatstack/architecture/">架構說明</a></li><li><a href="/zh-hant/projects/heatstack/practice-guide/">實作指南</a></li></ul><div class="related"><h2>相關專案</h2><a href="/zh-hant/projects/pulseboard/">pulseboard</a><a href="/zh-hant/projects/career-radar/">Career Radar</a><a href="/zh-hant/projects/tapphysics/">TapPhysics</a><a href="/zh-hant/projects/pal4-englishmod/">PAL4_EnglishMod</a></div></aside></div></main><footer class="archive-footer"><span>ANLAN.STORE / 可持續工程證據</span><a href="/zh-hant/projects/">返回完整檔案</a></footer></div><script>(()=>{const m={'#en':'en','#zh':'zh-Hans','#zh-hans':'zh-Hans','#zh-hant':'zh-Hant','#ja':'ja'};const p={en:'', 'zh-Hans':'/zh-hans','zh-Hant':'/zh-hant',ja:'/ja'};const l=m[location.hash.toLowerCase()];if(l){const n=p[l]+'/projects/heatstack/';if(location.pathname!==n)location.replace(n);}})();</script></body></html>

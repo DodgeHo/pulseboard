@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "owner": "DodgeHo",
-  "syncedAt": "2026-08-17T06:59:28.961Z",
+  "syncedAt": "2026-10-09T07:19:56.122Z",
   "counts": {
-    "total": 70,
-    "public": 57,
+    "total": 74,
+    "public": 61,
     "private": 13,
-    "forks": 21,
-    "original": 49,
+    "forks": 22,
+    "original": 52,
     "archived": 0
   },
   "repositories": [
@@ -131,6 +131,23 @@
       "updatedAt": "2025-03-12T04:37:54Z"
     },
     {
+      "name": "BiliDownTrans",
+      "visibility": "public",
+      "fork": true,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/BiliDownTrans",
+      "language": "Python",
+      "topics": [
+        "bilibili",
+        "downloader",
+        "faster-whisper",
+        "pyside6",
+        "subtitles",
+        "transcription"
+      ],
+      "updatedAt": "2026-10-09T02:40:08Z"
+    },
+    {
       "name": "careerforge-autoapply",
       "visibility": "private",
       "fork": false,
@@ -188,7 +205,7 @@
       "url": "https://github.com/DodgeHo/DodgeHo",
       "language": null,
       "topics": [],
-      "updatedAt": "2026-07-23T06:18:52Z"
+      "updatedAt": "2026-10-09T02:45:05Z"
     },
     {
       "name": "DodgeHo.github.io",
@@ -348,6 +365,16 @@
       "updatedAt": "2025-05-16T02:26:14Z"
     },
     {
+      "name": "inkpanel",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/inkpanel",
+      "language": "Python",
+      "topics": [],
+      "updatedAt": "2026-09-17T08:09:46Z"
+    },
+    {
       "name": "interval_map",
       "visibility": "private",
       "fork": false,
@@ -420,6 +447,16 @@
       "visibility": "private",
       "fork": false,
       "archived": false
+    },
+    {
+      "name": "newAPIHelper",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/newAPIHelper",
+      "language": "Swift",
+      "topics": [],
+      "updatedAt": "2026-08-17T12:26:43Z"
     },
     {
       "name": "OpenCPN",
@@ -533,7 +570,7 @@
       "url": "https://github.com/DodgeHo/pulseboard",
       "language": "HTML",
       "topics": [],
-      "updatedAt": "2026-08-09T06:06:28Z"
+      "updatedAt": "2026-10-09T05:56:01Z"
     },
     {
       "name": "PulsePal_test",
@@ -673,6 +710,16 @@
         "digital-signal-processing"
       ],
       "updatedAt": "2026-08-09T16:40:32Z"
+    },
+    {
+      "name": "vocapip",
+      "visibility": "public",
+      "fork": false,
+      "archived": false,
+      "url": "https://github.com/DodgeHo/vocapip",
+      "language": "Rust",
+      "topics": [],
+      "updatedAt": "2026-08-20T12:17:31Z"
     },
     {
       "name": "Web3-notebook",

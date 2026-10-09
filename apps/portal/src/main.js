@@ -24,7 +24,7 @@
       heroLede: 'I’m Dodge Ho — 道安澜 in Chinese — and this is my open-source project space for inspectable systems, signal work, and practical tools.',
       identityFacts: [['IDENTITY', 'Dodge Ho · 道安澜'], ['PRACTICE', 'Systems · signals · tools'], ['SPACE', 'Public open-source work']],
       railKeywords: {
-        heatstack: ['AI Skills', 'Batch install', 'Agent learning'], tapphysics: ['Gaokao physics', 'Question practice', 'Print prep'], career: ['Job inbox', 'Saved roles', 'Digests'], puzzlewear: ['Closed source', 'Clothing design', 'Web'], cwc: ['Closed source', 'Boundary', 'Product'], pulseboard: ['API docs', 'Workers', 'Health checks'], saa: ['Amazon cloud', 'Questions', 'Progress'], sap: ['Amazon cloud', 'Architecture', 'Practice'], ispm: ['ITSM', 'Question practice', 'Closed source'], pal4: ['Homepage', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], rrt: ['Python', 'Robotics', 'RRT'], vmd: ['Project family', 'C++', '2D'], ceemdan: ['C++', 'Signal', 'CEEMDAN'], devenglish: ['Closed source', 'English learning', 'Web']
+        heatstack: ['AI Skills', 'Batch install', 'Agent learning'], tapphysics: ['Gaokao physics', 'Question practice', 'Print prep'], career: ['Job inbox', 'Saved roles', 'Digests'], puzzlewear: ['Closed source', 'Clothing design', 'Web'], cwc: ['Closed source', 'Boundary', 'Product'], pulseboard: ['API docs', 'Workers', 'Health checks'], saa: ['Amazon cloud', 'Questions', 'Progress'], sap: ['Amazon cloud', 'Architecture', 'Practice'], ispm: ['ITSM', 'Question practice', 'Closed source'], pal4: ['Homepage', 'Localization', 'MIT'], ielts: ['GPT', 'Writing', 'Python'], bilidowntrans: ['Bilibili', 'Whisper', 'Subtitles'], rrt: ['Python', 'Robotics', 'RRT'], vmd: ['Project family', 'C++', '2D'], ceemdan: ['C++', 'Signal', 'CEEMDAN'], devenglish: ['Closed source', 'English learning', 'Web']
       },
       liveAction: 'EXPLORE LIVE WORK',
       sourceAction: 'BROWSE SOURCE PROJECTS',
@@ -32,7 +32,7 @@
       live: 'LIVE',
       scopeRows: [['SIGNAL MODE', 'MULTI-SURFACE'], ['ROUTE STATE', 'AUDITABLE'], ['LANGUAGE LAYER', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'PROJECT SCOPE',
-      indexSummary: 'Fifteen curated project signals, ordered for recruiter review while the full 70-repository archive stays available.',
+      indexSummary: 'Sixteen curated project signals, ordered for recruiter review while the full 74-repository archive stays available.',
       filterProjects: 'Filter projects',
       filters: { all: 'ALL', live: 'LIVE', source: 'SOURCE', study: 'STUDY' },
       availability: { checking: 'CHECKING ROUTE', online: 'ROUTE ONLINE', unavailable: 'CHECK ROUTE' },
@@ -71,6 +71,7 @@
         vmd: 'A C++ and Eigen implementation of Variational Mode Decomposition for signal-processing work.',
         pal4: 'English localization work for the PC game Sword and Fairy 4, published as PAL4_EnglishMod.',
         ielts: 'A GPT-assisted tool that evaluates and improves IELTS writing drafts.',
+        bilidowntrans: 'A Bili23 Downloader and faster-whisper desktop pipeline for local Bilibili download transcription.',
         rrt: 'A Python implementation of bidirectional RRT Connect with dynamic-obstacle avoidance.'
       }
     },
@@ -91,7 +92,7 @@
       heroLede: '我是 Dodge Ho，中文名道安瀾。這是我的開源專案空間，收錄可檢查的系統、訊號工作與實用工具。',
       identityFacts: [['身份', 'Dodge Ho · 道安瀾'], ['實踐', '系統 · 訊號 · 工具'], ['空間', '公開開源作品']],
       railKeywords: {
-        heatstack: ['AI Skills', '批次安裝', 'Agent 學習'], tapphysics: ['高考物理', '做題練習', '列印準備'], career: ['職缺收件匣', '收藏職缺', '摘要'], puzzlewear: ['閉源', '服裝設計', 'Web'], cwc: ['閉源', '邊界', '產品'], pulseboard: ['API 文件', 'Worker', '健康檢查'], saa: ['亞馬遜雲', '做題', '進度'], sap: ['亞馬遜雲', '架構', '練習'], ispm: ['ITSM', '做題練習', '閉源'], pal4: ['首頁', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], rrt: ['Python', '機器人', 'RRT'], vmd: ['專案族', 'C++', '2D'], ceemdan: ['C++', '訊號', 'CEEMDAN'], devenglish: ['閉源', '英語學習', 'Web']
+        heatstack: ['AI Skills', '批次安裝', 'Agent 學習'], tapphysics: ['高考物理', '做題練習', '列印準備'], career: ['職缺收件匣', '收藏職缺', '摘要'], puzzlewear: ['閉源', '服裝設計', 'Web'], cwc: ['閉源', '邊界', '產品'], pulseboard: ['API 文件', 'Worker', '健康檢查'], saa: ['亞馬遜雲', '做題', '進度'], sap: ['亞馬遜雲', '架構', '練習'], ispm: ['ITSM', '做題練習', '閉源'], pal4: ['首頁', '在地化', 'MIT'], ielts: ['GPT', '寫作', 'Python'], bilidowntrans: ['Bilibili', 'Whisper', '字幕'], rrt: ['Python', '機器人', 'RRT'], vmd: ['專案族', 'C++', '2D'], ceemdan: ['C++', '訊號', 'CEEMDAN'], devenglish: ['閉源', '英語學習', 'Web']
       },
       liveAction: '探索線上作品',
       sourceAction: '瀏覽開源專案',
@@ -99,7 +100,7 @@
       live: '運作中',
       scopeRows: [['訊號模式', '多重介面'], ['路由狀態', '可稽核'], ['語言層', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '專案範圍',
-      indexSummary: '十五組精選專案訊號依招聘閱讀順序排列，完整 70 個 GitHub 倉庫仍保留在檔案中。',
+      indexSummary: '十六組精選專案訊號依招聘閱讀順序排列，完整 74 個 GitHub 倉庫仍保留在檔案中。',
       filterProjects: '篩選專案',
       filters: { all: '全部', live: '線上', source: '開源', study: '學習' },
       availability: { checking: '檢查路由中', online: '路由正常', unavailable: '請檢查路由' },
@@ -138,6 +139,7 @@
         vmd: '使用 C++ 與 Eigen 實作的變分模態分解（Variational Mode Decomposition）訊號處理專案。',
         pal4: '為《仙劍奇俠傳四》PC 版製作的英文在地化工作，以 PAL4_EnglishMod 公開發布。',
         ielts: '使用 GPT 協助評估並改進 IELTS 寫作草稿的工具。',
+        bilidowntrans: '整合 Bili23 Downloader 與 faster-whisper 的桌面流水線，用於本機 Bilibili 下載轉錄與字幕輸出。',
         rrt: '使用 Python 實作的雙向 RRT Connect 與動態障礙物迴避演算法。'
       }
     },
@@ -158,7 +160,7 @@
       heroLede: '我是 Dodge Ho，中文名道安澜。这是我的开源项目空间，收录可检查的系统、信号工作与实用工具。',
       identityFacts: [['身份', 'Dodge Ho · 道安澜'], ['实践', '系统 · 信号 · 工具'], ['空间', '公开开源作品']],
       railKeywords: {
-        heatstack: ['AI Skills', '批量安装', 'Agent 学习'], tapphysics: ['高考物理', '做题练习', '打印准备'], career: ['职位收件箱', '收藏职位', '摘要'], puzzlewear: ['闭源', '服装设计', 'Web'], cwc: ['闭源', '边界', '产品'], pulseboard: ['API 文档', 'Worker', '健康检查'], saa: ['亚马逊云', '做题', '进度'], sap: ['亚马逊云', '架构', '练习'], ispm: ['ITSM', '做题练习', '闭源'], pal4: ['主页', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], rrt: ['Python', '机器人', 'RRT'], vmd: ['项目族', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['闭源', '英语学习', 'Web']
+        heatstack: ['AI Skills', '批量安装', 'Agent 学习'], tapphysics: ['高考物理', '做题练习', '打印准备'], career: ['职位收件箱', '收藏职位', '摘要'], puzzlewear: ['闭源', '服装设计', 'Web'], cwc: ['闭源', '边界', '产品'], pulseboard: ['API 文档', 'Worker', '健康检查'], saa: ['亚马逊云', '做题', '进度'], sap: ['亚马逊云', '架构', '练习'], ispm: ['ITSM', '做题练习', '闭源'], pal4: ['主页', '本地化', 'MIT'], ielts: ['GPT', '写作', 'Python'], bilidowntrans: ['Bilibili', 'Whisper', '字幕'], rrt: ['Python', '机器人', 'RRT'], vmd: ['项目族', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['闭源', '英语学习', 'Web']
       },
       liveAction: '探索在线作品',
       sourceAction: '浏览开源项目',
@@ -166,7 +168,7 @@
       live: '运行中',
       scopeRows: [['信号模式', '多重界面'], ['路由状态', '可审计'], ['语言层', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: '项目范围',
-      indexSummary: '十五组精选项目信号按招聘阅读顺序排列，完整 70 个 GitHub 仓库仍保留在档案中。',
+      indexSummary: '十六组精选项目信号按招聘阅读顺序排列，完整 74 个 GitHub 仓库仍保留在档案中。',
       filterProjects: '筛选项目',
       filters: { all: '全部', live: '在线', source: '开源', study: '学习' },
       availability: { checking: '正在检查路由', online: '路由正常', unavailable: '请检查路由' },
@@ -205,6 +207,7 @@
         vmd: '使用 C++ 与 Eigen 实现的变分模态分解（Variational Mode Decomposition）信号处理项目。',
         pal4: '为《仙剑奇侠传四》PC 版制作的英文本地化工作，以 PAL4_EnglishMod 公开发布。',
         ielts: '使用 GPT 协助评估并改进 IELTS 写作草稿的工具。',
+        bilidowntrans: '整合 Bili23 Downloader 与 faster-whisper 的桌面流水线，用于本机 Bilibili 下载转录与字幕输出。',
         rrt: '使用 Python 实现的双向 RRT Connect 与动态障碍物避障算法。'
       }
     },
@@ -225,7 +228,7 @@
       heroLede: '私は Dodge Ho、中国語名は道安瀾です。これは検証可能なシステム、信号の仕事、実用ツールを集めた私のオープンソース・プロジェクト空間です。',
       identityFacts: [['アイデンティティ', '道安瀾（ドッジ・ホー）'], ['実践', 'システム · 信号 · ツール'], ['空間', '公開オープンソース作品']],
       railKeywords: {
-        heatstack: ['AI Skills', '一括導入', 'Agent 学習'], tapphysics: ['高考物理', '問題練習', '印刷準備'], career: ['求人受信箱', '保存求人', 'ダイジェスト'], puzzlewear: ['クローズド', '服飾設計', 'Web'], cwc: ['クローズド', '境界', 'プロダクト'], pulseboard: ['API 文書', 'Worker', 'ヘルスチェック'], saa: ['Amazon cloud', '問題練習', '進捗'], sap: ['Amazon cloud', '設計', '練習'], ispm: ['ITSM', '問題練習', 'クローズド'], pal4: ['ホーム', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], rrt: ['Python', 'ロボティクス', 'RRT'], vmd: ['ファミリー', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['クローズド', '英語学習', 'Web']
+        heatstack: ['AI Skills', '一括導入', 'Agent 学習'], tapphysics: ['高考物理', '問題練習', '印刷準備'], career: ['求人受信箱', '保存求人', 'ダイジェスト'], puzzlewear: ['クローズド', '服飾設計', 'Web'], cwc: ['クローズド', '境界', 'プロダクト'], pulseboard: ['API 文書', 'Worker', 'ヘルスチェック'], saa: ['Amazon cloud', '問題練習', '進捗'], sap: ['Amazon cloud', '設計', '練習'], ispm: ['ITSM', '問題練習', 'クローズド'], pal4: ['ホーム', 'ローカライズ', 'MIT'], ielts: ['GPT', 'ライティング', 'Python'], bilidowntrans: ['Bilibili', 'Whisper', '字幕'], rrt: ['Python', 'ロボティクス', 'RRT'], vmd: ['ファミリー', 'C++', '2D'], ceemdan: ['C++', '信号', 'CEEMDAN'], devenglish: ['クローズド', '英語学習', 'Web']
       },
       liveAction: 'ライブ作品を見る',
       sourceAction: 'ソースプロジェクトを見る',
@@ -233,7 +236,7 @@
       live: '稼働中',
       scopeRows: [['信号モード', 'マルチサーフェス'], ['経路状態', '監査可能'], ['言語レイヤー', 'EN · 繁中 · 简中 · 日本語']],
       indexTitle: 'プロジェクト範囲',
-      indexSummary: '採用レビュー向けに並べた 15 件の注目プロジェクトです。70 件の GitHub リポジトリ全体は完全な目録に残しています。',
+      indexSummary: '採用レビュー向けに並べた 16 件の注目プロジェクトです。74 件の GitHub リポジトリ全体は完全な目録に残しています。',
       filterProjects: 'プロジェクトを絞り込む',
       filters: { all: 'すべて', live: 'ライブ', source: 'ソース', study: '学習' },
       availability: { checking: '経路を確認中', online: '経路はオンライン', unavailable: '経路を確認' },
@@ -272,6 +275,7 @@
         vmd: '信号処理向けの Variational Mode Decomposition を C++ と Eigen で実装したプロジェクトです。',
         pal4: 'PC 版『仙剣奇侠伝四』の英語ローカライズ作業で、PAL4_EnglishMod として公開されています。',
         ielts: 'IELTS ライティング草稿を GPT で評価・改善する支援ツールです。',
+        bilidowntrans: 'Bili23 Downloader と faster-whisper を組み合わせた、Bilibili ダウンロードのローカル文字起こし・字幕出力用デスクトップパイプラインです。',
         rrt: '動的障害物回避を備えた双方向 RRT Connect の Python 実装です。'
       }
     }
@@ -289,6 +293,22 @@
 
   const t = () => copy[currentLocale];
   const iconExternal = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"/></svg>';
+  const escapeHtml = (value = '') => String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+  const summaryHtml = (value = '') => String(value)
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => `<p class="project-description">${escapeHtml(paragraph)}</p>`)
+    .join('');
+  const mediaAlt = (project) => project.media?.alt?.[currentLocale] || project.media?.alt?.en || `${project.name} project image`;
+  const projectMedia = (project) => project.media?.src
+    ? `<img class="project-media-mark" src="${escapeHtml(project.media.src)}" alt="${escapeHtml(mediaAlt(project))}" loading="lazy" decoding="async">`
+    : '';
 
   const safeStoredLocale = () => {
     try {
@@ -362,8 +382,8 @@
       const routeLine = project.route ? `<p class="project-route"><span>${sourceOrRoute}</span><code>${project.route}</code></p>` : '';
       return `<article class="project-row layout-${project.layout}" id="project-${project.id}" data-project data-category="${project.category}" data-route="${project.actionExternal || project.category === 'source' || !project.route ? '' : project.route}" style="--project-color:${projectColors[project.color]}">
         <span class="project-order">${String(index + 1).padStart(2, '0')}</span>
-        <div class="project-heading"><p class="project-title">${project.name}</p>${auxiliaryName ? `<p class="project-auxiliary">${auxiliaryName}</p>` : project.alias ? `<p class="project-alias">${project.alias}</p>` : ''}</div>
-        <div class="project-copy"><p class="project-description">${project.safeSummary[currentLocale]}</p>${routeLine}${makeFamily(project)}<p class="project-evidence">${project.evidence.join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join('')}</ul>${makeStatus(project)}</div>
+        <div class="project-heading"><div class="project-title-line">${projectMedia(project)}<p class="project-title">${escapeHtml(project.name)}</p></div>${auxiliaryName ? `<p class="project-auxiliary">${escapeHtml(auxiliaryName)}</p>` : project.alias ? `<p class="project-alias">${escapeHtml(project.alias)}</p>` : ''}</div>
+        <div class="project-copy">${summaryHtml(project.safeSummary[currentLocale])}${routeLine}${makeFamily(project)}<p class="project-evidence">${project.evidence.map(escapeHtml).join(' · ')}</p><ul class="project-tags">${project.tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join('')}</ul>${makeStatus(project)}</div>
         ${action}
         ${project.id === 'pulseboard' ? makeEvidence() : ''}
       </article>`;

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://anlan.store/</loc><lastmod>2026-08-17</lastmod></url>
-  <url><loc>https://anlan.store/upwork/</loc><lastmod>2026-08-17</lastmod></url>
-  <url><loc>https://anlan.store/upwork/feature-delivery/</loc><lastmod>2026-08-17</lastmod></url>
-  <url><loc>https://anlan.store/upwork/ai-code-rescue/</loc><lastmod>2026-08-17</lastmod></url>
-  <url><loc>https://anlan.store/upwork/backend-reliability/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/hire/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://anlan.store/projects/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/heatstack/</loc><lastmod>2026-08-17</lastmod></url>
@@ -24,6 +20,7 @@
   <url><loc>https://anlan.store/projects/pal4-englishmod/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/dynamic-rrt-connect/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/ielts-writing-gpt/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/projects/bilidowntrans/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/ceemdan-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/vmd-2d-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/codelexicon/</loc><lastmod>2026-08-17</lastmod></url>
@@ -47,8 +44,11 @@
   <url><loc>https://anlan.store/projects/acca-learning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/aso-cows/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/asofront/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/projects/inkpanel/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/lottery/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/projects/newapihelper/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/tenfoldcrossvalidation/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/projects/vocapip/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/wtf-aitrainingplan-load-snapshot/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/dodgeho/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/projects/dodgeho-github-io/</loc><lastmod>2026-08-17</lastmod></url>
@@ -97,6 +97,7 @@
   <url><loc>https://anlan.store/zh-hant/projects/pal4-englishmod/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/dynamic-rrt-connect/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/ielts-writing-gpt/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hant/projects/bilidowntrans/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/ceemdan-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/vmd-2d-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/codelexicon/</loc><lastmod>2026-08-17</lastmod></url>
@@ -120,8 +121,11 @@
   <url><loc>https://anlan.store/zh-hant/projects/acca-learning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/aso-cows/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/asofront/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hant/projects/inkpanel/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/lottery/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hant/projects/newapihelper/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/tenfoldcrossvalidation/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hant/projects/vocapip/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/wtf-aitrainingplan-load-snapshot/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/dodgeho/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hant/projects/dodgeho-github-io/</loc><lastmod>2026-08-17</lastmod></url>
@@ -170,6 +174,7 @@
   <url><loc>https://anlan.store/zh-hans/projects/pal4-englishmod/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/dynamic-rrt-connect/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/ielts-writing-gpt/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hans/projects/bilidowntrans/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/ceemdan-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/vmd-2d-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/codelexicon/</loc><lastmod>2026-08-17</lastmod></url>
@@ -193,8 +198,11 @@
   <url><loc>https://anlan.store/zh-hans/projects/acca-learning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/aso-cows/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/asofront/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hans/projects/inkpanel/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/lottery/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hans/projects/newapihelper/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/tenfoldcrossvalidation/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/zh-hans/projects/vocapip/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/wtf-aitrainingplan-load-snapshot/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/dodgeho/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/zh-hans/projects/dodgeho-github-io/</loc><lastmod>2026-08-17</lastmod></url>
@@ -243,6 +251,7 @@
   <url><loc>https://anlan.store/ja/projects/pal4-englishmod/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/dynamic-rrt-connect/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/ielts-writing-gpt/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/ja/projects/bilidowntrans/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/ceemdan-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/vmd-2d-cpp/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/codelexicon/</loc><lastmod>2026-08-17</lastmod></url>
@@ -266,8 +275,11 @@
   <url><loc>https://anlan.store/ja/projects/acca-learning/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/aso-cows/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/asofront/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/ja/projects/inkpanel/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/lottery/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/ja/projects/newapihelper/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/tenfoldcrossvalidation/</loc><lastmod>2026-08-17</lastmod></url>
+  <url><loc>https://anlan.store/ja/projects/vocapip/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/wtf-aitrainingplan-load-snapshot/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/dodgeho/</loc><lastmod>2026-08-17</lastmod></url>
   <url><loc>https://anlan.store/ja/projects/dodgeho-github-io/</loc><lastmod>2026-08-17</lastmod></url>

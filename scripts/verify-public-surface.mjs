@@ -8,7 +8,7 @@ const privateNames = [
   'motion_example', 'myLittleLemon', 'P1117', 'PAL3_debug', 'PAL3_translation',
   'PAL4_translation', 'RogerPhysics', 'ros'
 ];
-const homeOrder = ['HeatStack', 'TapPhysics', 'Career Radar', 'PuzzleWear', 'CWC', 'PulseBoard', 'SAA Practice', 'SAP Practice', 'ISPM Practice', 'PAL4 translation', 'IELTS writing GPT', 'Dynamic RRT Connect', 'VMD', 'CEEMDAN', 'DevEnglish'];
+const homeOrder = ['HeatStack', 'TapPhysics', 'Career Radar', 'PuzzleWear', 'CWC', 'PulseBoard', 'SAA Practice', 'SAP Practice', 'ISPM Practice', 'PAL4 translation', 'IELTS writing GPT', 'BiliDownTrans', 'Dynamic RRT Connect', 'VMD', 'CEEMDAN', 'DevEnglish'];
 const vmdHomeUrls = ['https://github.com/DodgeHo/VMD_cpp', 'https://github.com/DodgeHo/VMD_2D_python', 'https://github.com/DodgeHo/VMD_2D_cpp'];
 const puzzleWearUrl = 'https://puzzlewear.cn/login';
 const requiredAuxiliaryNames = ['AI 热栈', '职海雷达', '一点物理', 'CellLoc Web Controller- 细胞定位网络控制系统', '拼频品聘-服装创意设计', '开发者英语练习站', '运营脉冲板', 'SAA Practice-亚马逊云做题练习', 'SAP Practice-亚马逊云做题练习'];
@@ -114,7 +114,7 @@ async function verifyPortal() {
   expect('portal keeps the GitHub profile control', body.includes('https://github.com/DodgeHo') && body.includes('github-link'));
   expect('portal links the complete archive', body.includes('href="/projects/"'));
   const homeIndexes = homeOrder.map((name) => body.indexOf(`"name":"${name}"`));
-  expect('homepage contains all 15 curated projects', homeIndexes.every((index) => index >= 0), homeOrder.filter((_, index) => homeIndexes[index] < 0).join(', '));
+  expect('homepage contains all 16 curated projects', homeIndexes.every((index) => index >= 0), homeOrder.filter((_, index) => homeIndexes[index] < 0).join(', '));
   expect('homepage order matches required sequence', homeIndexes.every((index, position) => position === 0 || homeIndexes[position - 1] < index));
   expect('homepage contains one VMD family row', countOccurrences(body, '"name":"VMD"') === 1, String(countOccurrences(body, '"name":"VMD"')));
   for (const url of vmdHomeUrls) expect('homepage contains VMD URL ' + url, countOccurrences(body, url) === 1, String(countOccurrences(body, url)));
@@ -122,6 +122,8 @@ async function verifyPortal() {
   expect('PAL4 homepage action precedes repository action', body.includes('https://dodgeho.github.io/PAL4_EnglishMod/') && body.indexOf('https://dodgeho.github.io/PAL4_EnglishMod/') < body.indexOf('https://github.com/DodgeHo/PAL4_EnglishMod'));
   expect('homepage has TapPhysics live route', body.includes('"route":"/tapphysics/"') && body.includes('"action":"/tapphysics/"'));
   expect('homepage has exact PuzzleWear login and DevEnglish URLs', body.includes(`"action":"${puzzleWearUrl}"`) && body.includes('https://devenglish.club/'));
+  expect('homepage has BiliDownTrans repository and icon', body.includes('https://github.com/DodgeHo/BiliDownTrans') && body.includes('/assets/project-media/bilidowntrans-icon.svg'));
+  expect('homepage has project media data', body.includes('/assets/project-media/pulseboard-ops.png') && body.includes('/assets/project-media/cwc-coordinate-record.png'));
   expect('homepage does not link PuzzleWear root URL', !body.includes('href="https://puzzlewear.cn/"'));
   expect('homepage contains required auxiliary names', includesAll(body, requiredHomeAuxiliaryNames), requiredHomeAuxiliaryNames.filter((name) => !body.includes(name)).join(', '));
   expect('homepage HeatStack copy is refreshed', excludesAll(homeProjectBlock(body, 'HeatStack'), staleHeatStackCopy));
@@ -132,7 +134,7 @@ async function verifyPortal() {
     return start >= 0 && body.slice(start, next).includes('"closedSource":true');
   }));
   expect('ISPM remains unlinked from the homepage', !body.includes('href="/ispm/"') && !body.includes('"route":"/ispm/"'));
-  expect('portal removed old Ten project signals copy', !body.includes('Ten project signals'));
+  expect('portal removed old project-count copy', !body.includes('Ten project signals') && !body.includes('Fifteen curated'));
   for (const hash of ['#en', '#zh', '#zh-hans', '#zh-hant', '#ja']) {
     expect('portal supports ' + hash, body.toLowerCase().includes(`'${hash}'`) || body.toLowerCase().includes(`"${hash}"`));
   }
@@ -199,7 +201,7 @@ async function verifyArchive(path, languageMarker, lockedMarker, closedSourceMar
   expect(path + ' returns 200', response.status === 200, response.status + ' ' + response.statusText);
   expect(path + ' is HTML', (response.headers.get('content-type') ?? '').includes('text/html'));
   const archiveRows = (body.match(/<article class="archive-row"/g) ?? []).length;
-  expect(path + ' has 77 archive rows', archiveRows === 77, String(archiveRows));
+  expect(path + ' has 81 archive rows', archiveRows === 81, String(archiveRows));
   expect(path + ' has search, filters, and sorting', body.includes('data-project-search') && body.includes('data-project-filter="featured"') && body.includes('data-project-filter="private"') && body.includes('data-project-filter="fork"') && body.includes('data-project-sort'));
   expect(path + ' uses the expected language', body.includes(languageMarker));
   const privateRow = rowFor(body, 'RogerPhysics');
@@ -213,6 +215,7 @@ async function verifyArchive(path, languageMarker, lockedMarker, closedSourceMar
     expect(path + ' contains ' + name + ' once', (body.match(new RegExp(`data-name="${name}"`, 'g')) ?? []).length === 1);
   }
   expect(path + ' uses CEEMDAN_cpp spelling', body.includes('CEEMDAN_cpp'));
+  expect(path + ' has BiliDownTrans repository and icon', rowFor(body, 'BiliDownTrans')?.includes('https://github.com/DodgeHo/BiliDownTrans') && rowFor(body, 'BiliDownTrans')?.includes('/assets/project-media/bilidowntrans-icon.svg'));
   expect(path + ' has TapPhysics /tapphysics/', rowFor(body, 'TapPhysics')?.includes('href="/tapphysics/"'));
   expect(path + ' has exact PuzzleWear login URL', rowFor(body, 'PuzzleWear')?.includes(`href="${puzzleWearUrl}"`));
   expect(path + ' does not link PuzzleWear root URL', !rowFor(body, 'PuzzleWear')?.includes('href="https://puzzlewear.cn/"'));
@@ -234,10 +237,18 @@ async function verifyProjectLibrary() {
     ['/ja/projects/', '完全なエンジニアリング資産目録', '非公開リポジトリ · アクセス不可', 'クローズドソース', false, 'ja']
   ]) await verifyArchive(path, marker, lockedMarker, closedSourceMarker, expectIcp, locale);
 
-  for (const path of ['/projects/pulseboard/', '/projects/heatstack/', '/projects/career-radar/']) {
+  for (const path of ['/projects/pulseboard/', '/projects/heatstack/', '/projects/career-radar/', '/projects/cwc/']) {
     const { response, body } = await fetchText(path);
     expect(path + ' flagship case returns 200', response.status === 200, response.status + ' ' + response.statusText);
     expect(path + ' contains case study sections', body.includes('Problem') && body.includes('My role') && body.includes('Key decisions') && body.includes('Engineering evidence'));
+    verifyMetadata(body, path);
+  }
+
+  for (const path of ['/projects/cwc/', '/zh-hans/projects/cwc/', '/zh-hant/projects/cwc/', '/ja/projects/cwc/']) {
+    const { response, body } = await fetchText(path);
+    expect(path + ' CWC case returns 200', response.status === 200, response.status + ' ' + response.statusText);
+    expect(path + ' has reviewed CWC visuals', ['/assets/project-media/cwc-coordinate-record.png', '/assets/project-media/cwc-embedding-flow.png', '/assets/project-media/cwc-session-export.png'].every((assetPath) => body.includes(assetPath)));
+    expect(path + ' keeps CWC source private', !/github\.com\/DodgeHo\/CWC/i.test(body) && !body.includes('git clone'));
     verifyMetadata(body, path);
   }
 
