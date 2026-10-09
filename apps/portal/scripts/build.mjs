@@ -90,10 +90,10 @@ const bySlug = new Map(projects.map((project) => [project.slug, project]));
 const byName = new Map(projects.map((project) => [project.name, project]));
 
 const genericPrivateSummary = {
-  en: "A closed-source IT service management question-practice tool kept as a study record, with focused review available only through the preserved app route.",
-  "zh-Hant": "閉源的 IT 服務管理做題練習工具，作為學習記錄保留，聚焦複習僅透過保留的應用路由呈現。",
-  "zh-Hans": "闭源的 IT 服务管理做题练习工具，作为学习记录保留，聚焦复习仅通过保留的应用路由呈现。",
-  ja: "クローズドソースの IT サービス管理向け問題練習ツールで、学習記録として保持し、集中レビューは保存済みアプリ経路だけで扱います。"
+  en: "A closed-source IT service management question-practice tool for focused study, kept as a private learning record without publishing source or internal data.",
+  "zh-Hant": "閉源的 IT 服務管理做題練習工具，面向聚焦學習場景保留，不公開源碼或內部資料。",
+  "zh-Hans": "闭源的 IT 服务管理做题练习工具，面向聚焦学习场景保留，不公开源码或内部数据。",
+  ja: "IT サービス管理の集中学習向けクローズドソース問題練習ツールです。ソースや内部データは公開しません。"
 };
 
 const homeDefinitions = [
@@ -105,7 +105,7 @@ const homeDefinitions = [
   { lookup: "pulseboard", id: "pulseboard", category: "live", layout: "feature", color: "cyan", name: "PulseBoard", route: "/demo/", action: "/demo/", actionKey: "open" },
   { lookup: "aws-saa-learning-skill", id: "saa", category: "study", layout: "study", color: "cobalt", name: "SAA Practice", route: "/saa/", action: "/saa/", actionKey: "open" },
   { lookup: "SAP Practice", id: "sap", category: "study", layout: "study-small", color: "violet", name: "SAP Practice", route: "/sap/", action: "/sap/", actionKey: "open" },
-  { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", auxiliaryName: four("ISPM Practice - service management question practice", "ISPM Practice-服務管理做題練習", "ISPM Practice-服务管理做题练习", "ISPM Practice - IT サービス管理問題練習"), visibility: "private", privateRepository: false, closedSource: true, railLinked: false, railKeywords: ["ITSM", "question practice", "closed source"], tags: ["ITSM", "question practice", "closed source"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
+  { id: "ispm", category: "study", layout: "quiet", color: "orange", name: "ISPM Practice", auxiliaryName: four("ISPM Practice-服务管理做题练习", "ISPM Practice-服务管理做题练习", "ISPM Practice-服务管理做题练习", "ISPM Practice-服务管理做题练习"), visibility: "private", privateRepository: false, closedSource: true, railLinked: false, railKeywords: ["ITSM", "question practice", "closed source"], tags: ["ITSM", "question practice", "closed source"], safeSummary: genericPrivateSummary, evidence: ["Unlinked study route"] },
   { lookup: "PAL4_EnglishMod", id: "pal4", category: "source", layout: "source", color: "orange", name: "PAL4 translation", alias: "PAL4_EnglishMod", homepageActions: [{ href: "https://dodgeho.github.io/PAL4_EnglishMod/", key: "homepage" }] },
   { lookup: "IELTS_writing_GPT", id: "ielts", category: "source", layout: "source-compact", color: "cobalt", name: "IELTS writing GPT", alias: "IELTS_writing_GPT" },
   { lookup: "dynamic_rrt_connect", id: "rrt", category: "source", layout: "source-wide", color: "cyan", name: "Dynamic RRT Connect", alias: "dynamic_rrt_connect" },

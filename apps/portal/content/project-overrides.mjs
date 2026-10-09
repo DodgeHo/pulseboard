@@ -20,14 +20,14 @@ export const liveProjects = [
     category: "applications",
     score: 100,
     skills: ["Astro", "AI Skills", "Windows CLI"],
-    auxiliaryName: nameMap("AI 热栈", "AI 熱棧", "AI 热栈", "AI 熱棧"),
+    auxiliaryName: nameMap("AI 热栈", "AI 热栈", "AI 热栈", "AI 热栈"),
     liveRoutes: ["/heatstack/"],
     evidence: ["Live demo", "Case study", "Architecture"],
     safeSummary: four(
-      "An AI Skill plaza for learning and improving with agents, combining daily hot Skill browsing, batch download and install flows, and an entry into Understanding AI Agents.",
+      "An AI Skill plaza for agent learning: daily hot Skill browsing, batch Skill download and installation, and the Understanding AI Agents learning entry.",
       "AI Skill 廣場，面向 AI 學習、Agent 科普與精進，整合每日熱門 Skill 瀏覽、批次下載安裝流程，並提供《深入理解 AI Agent》入口。",
       "AI Skill 广场，面向 AI 学习、Agent 科普与精进，整合每日热点 Skill 浏览、批量 Skill 下载安装，并提供《深入理解 AI Agent》入口。",
-      "AI Skill の広場として、日々の注目 Skill の閲覧、まとめてダウンロードして導入する流れ、Agent の学習と理解を支援し、『深入理解 AI Agent』への入口も備えています。"
+      "Agent 学習のための AI Skill 広場です。日々の注目 Skill、まとめてダウンロードして導入する流れ、『深入理解 AI Agent』への入口を備えています。"
     )
   },
   {
@@ -41,14 +41,14 @@ export const liveProjects = [
     category: "applications",
     score: 96,
     skills: ["Account isolation", "Job inbox", "Scheduled digests"],
-    auxiliaryName: nameMap("职海雷达", "職海雷達", "职海雷达", "職海雷達"),
+    auxiliaryName: nameMap("职海雷达", "职海雷达", "职海雷达", "职海雷达"),
     liveRoutes: ["/jobs/"],
     evidence: ["Live demo", "Case study", "Architecture"],
     safeSummary: four(
-      "An invite-only job exploration product with account-isolated collection, a role inbox, unread state, and scheduled summaries for repeated review.",
-      "採邀請制的職缺探索產品，透過帳戶隔離的收藏、職缺收件匣、未讀狀態與排程摘要支援反覆檢視。",
-      "采用邀请制的职位探索产品，通过账户隔离的职位收藏、收件箱、未读状态与定时摘要支持持续筛选。",
-      "招待制の求人探索プロダクトで、アカウント分離された保存、求人受信箱、未読状態、定期サマリーによって継続的な確認を支えます。"
+      "An invite-only job exploration product that collects public roles into an account-isolated inbox with saved jobs, unread state, and scheduled summaries.",
+      "採邀請制的職缺探索產品，把公開職位收進帳戶隔離的收件匣，並支援收藏、未讀狀態與排程摘要。",
+      "采用邀请制的职位探索产品，把公开职位收进账户隔离的收件箱，并支持收藏、未读状态与定时摘要。",
+      "招待制の求人探索プロダクトです。公開求人をアカウント分離された受信箱に集め、保存、未読状態、定期サマリーを支えます。"
     )
   },
   {
@@ -62,12 +62,12 @@ export const liveProjects = [
     category: "applications",
     score: 91,
     skills: ["Physics", "Interactive web", "Simulation"],
-    auxiliaryName: nameMap("一点物理", "一點物理", "一点物理", "一点物理"),
+    auxiliaryName: nameMap("一点物理", "一点物理", "一点物理", "一点物理"),
     liveRoutes: ["/tapphysics/"],
     evidence: ["Live demo", "Interactive project"],
     safeSummary: four(
-      "An offline Gaokao physics past-question tool for high school students and physics teachers, covering local question search, practice, paper assembly, and print-ready workflows.",
-      "一點物理是面向高中生與物理教師的離線高考物理真題工具，支援本地找題、練習、組卷與列印前準備。",
+      "An offline Gaokao physics past-question tool for high school students and teachers, with local question search, practice, paper assembly, and print-ready workflows.",
+      "一点物理是面向高中生與物理教師的離線高考物理真題工具，支援本地找題、練習、組卷與列印前準備。",
       "一点物理是一款面向高中生和物理教师的离线高考物理真题工具，支持本地找题、练习、组卷和打印准备。",
       "高校生と物理教師向けのオフライン高考物理過去問ツールで、ローカルでの問題検索、練習、組題、印刷準備を支えます。"
     )
@@ -85,14 +85,14 @@ export const liveProjects = [
     category: "applications",
     score: 90,
     skills: ["Closed source", "Product engineering", "System design"],
-    auxiliaryName: nameMap("CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 細胞定位網路控制系統", "CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统"),
+    auxiliaryName: nameMap("CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统", "CellLoc Web Controller- 细胞定位网络控制系统"),
     liveRoutes: [],
     evidence: ["Security-reviewed overview", "Project record"],
     safeSummary: four(
-      "A closed-source CellLoc web controller overview that states the product direction and public engineering boundary without exposing customers, data, infrastructure, internal implementation, or proprietary algorithms.",
-      "閉源的 CellLoc 網路控制系統公開概覽，只說明產品方向與可公開工程邊界，不揭露客戶、資料、基礎設施、內部實作或專有演算法。",
-      "闭源的 CellLoc 网络控制系统公开概览，只说明产品方向与可公开工程边界，不披露客户、数据、基础设施、内部实现或专有算法。",
-      "クローズドソースの CellLoc Web Controller 概要で、製品の方向性と公開可能な工程境界だけを示し、顧客、データ、インフラ、内部実装、独自アルゴリズムは公開しません。"
+      "A closed-source web control system for cell-location workflows, published only as a safe product-and-engineering overview without customer, data, infrastructure, or proprietary implementation details.",
+      "閉源的 CellLoc 網路控制系統，用於細胞定位相關工作流；公開頁只說明產品方向和工程邊界，不披露客戶、資料、基礎設施或專有實作。",
+      "闭源的 CellLoc 网络控制系统，用于细胞定位相关工作流；公开页只说明产品方向和工程边界，不披露客户、数据、基础设施或专有实现。",
+      "細胞定位ワークフロー向けのクローズドソース Web 制御システムです。公開面では製品方向と工程境界だけを示し、顧客、データ、インフラ、専有実装は出しません。"
     )
   },
   {
@@ -108,14 +108,14 @@ export const liveProjects = [
     category: "applications",
     score: 87,
     skills: ["Closed source", "Product interface", "Web"],
-    auxiliaryName: nameMap("拼频品聘-服装创意设计", "拼頻品聘-服裝創意設計", "拼频品聘-服装创意设计", "拼频品聘-服装创意设计"),
+    auxiliaryName: nameMap("拼频品聘-服装创意设计", "拼频品聘-服装创意设计", "拼频品聘-服装创意设计", "拼频品聘-服装创意设计"),
     liveRoutes: ["https://puzzlewear.cn/login"],
     evidence: ["Public project site", "Closed-source record"],
     safeSummary: four(
-      "A closed-source clothing creative design project presented through its public project site, with internal implementation details intentionally kept outside the public record.",
-      "閉源的服裝創意設計專案，透過公開專案網站呈現產品方向，內部實作細節刻意不放入公開作品面。",
-      "闭源的服装创意设计项目，通过公开项目网站呈现产品方向，内部实现细节有意不进入公开项目页。",
-      "クローズドソースの服飾クリエイティブデザインプロジェクトで、公開サイトでは製品の方向性だけを示し、内部実装は公開面に出しません。"
+      "A closed-source clothing creative design project for product and outfit composition workflows, linked only through its public login entry and kept free of internal implementation details.",
+      "閉源的服裝創意設計專案，面向服裝產品與搭配創作流程；公開頁只連結登入入口，不展示內部實作細節。",
+      "闭源的服装创意设计项目，面向服装产品与搭配创作流程；公开页只链接登录入口，不展示内部实现细节。",
+      "服飾プロダクトとコーディネート制作の流れを扱うクローズドソースのクリエイティブデザインプロジェクトです。公開面はログイン入口に限定しています。"
     )
   },
   {
@@ -131,14 +131,14 @@ export const liveProjects = [
     category: "applications",
     score: 72,
     skills: ["Closed source", "English learning", "Web"],
-    auxiliaryName: nameMap("开发者英语练习站", "開發者英語練習站", "开发者英语练习站", "开发者英语练习站"),
+    auxiliaryName: nameMap("开发者英语练习站", "开发者英语练习站", "开发者英语练习站", "开发者英语练习站"),
     liveRoutes: ["https://devenglish.club/"],
     evidence: ["Public project site", "Closed-source record"],
     safeSummary: four(
-      "A closed-source developer English learning project whose public site shows the learning direction while keeping private implementation details outside the project surface.",
-      "閉源的開發者英語學習專案，公開網站呈現學習方向，私人實作細節不進入專案公開面。",
-      "闭源的开发者英语学习项目，公开网站呈现学习方向，私有实现细节不进入项目公开面。",
-      "クローズドソースの開発者向け英語学習プロジェクトで、公開サイトでは学習の方向性を示し、非公開実装はプロジェクト面に出しません。"
+      "A closed-source developer English learning project whose public site presents the learning surface while private course, account, and implementation details stay outside the portfolio record.",
+      "閉源的開發者英語學習專案，公開站點呈現學習入口，課程、帳戶與實作細節不進入作品集公開面。",
+      "闭源的开发者英语学习项目，公开站点呈现学习入口，课程、账户与实现细节不进入作品集公开面。",
+      "開発者向け英語学習のクローズドソースプロジェクトです。公開サイトは学習入口を示し、コース、アカウント、実装詳細はポートフォリオ面に出しません。"
     )
   },
   {
@@ -152,11 +152,11 @@ export const liveProjects = [
     category: "learning",
     score: 54,
     skills: ["AWS", "Architecture", "Progress tracking"],
-    auxiliaryName: nameMap("SAP Practice-亚马逊云做题练习", "SAP Practice-亞馬遜雲做題練習", "SAP Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习"),
+    auxiliaryName: nameMap("SAP Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习"),
     liveRoutes: ["/sap/"],
     evidence: ["Live demo"],
     safeSummary: four(
-      "An Amazon cloud question-practice product for advanced architecture study, with focused sessions and progress-aware review on a separate SAP route.",
+      "An Amazon cloud question-practice product for advanced architecture study, with a separate SAP route for focused sessions and progress review.",
       "面向進階架構學習的亞馬遜雲做題練習產品，在獨立 SAP 路由中提供聚焦練習與進度回顧。",
       "面向高级架构学习的亚马逊云做题练习产品，在独立 SAP 路由中提供聚焦练习与进度回顾。",
       "高度なアーキテクチャ学習向けの Amazon クラウド問題練習プロダクトで、SAP 専用ルートで集中演習と進捗レビューを行います。"
@@ -172,14 +172,14 @@ export const repositoryOverrides = {
     category: "applications",
     score: 99,
     skills: ["Hono", "PostgreSQL", "Redis", "BullMQ", "Docker"],
-    auxiliaryName: nameMap("运营脉冲板", "營運脈衝板", "运营脉冲板", "运营脉冲板"),
+    auxiliaryName: nameMap("运营脉冲板", "运营脉冲板", "运营脉冲板", "运营脉冲板"),
     liveRoutes: ["/demo/", "/demo/frontend/", "/demo/docs"],
     evidence: ["Live demo", "Case study", "Architecture", "Runbook", "ADR", "Verification"],
     safeSummary: four(
-      "A backend, platform, and operations system with public API docs, health checks, background worker flow, data storage, rate limiting, and deployment verification.",
-      "後端、平台與營運系統，公開呈現 API 文件、健康檢查、背景 worker 流程、資料儲存、限流與部署驗證。",
-      "后端、平台与运营系统，公开呈现 API 文档、健康检查、后台 worker 流程、数据存储、限流和部署验证。",
-      "バックエンド、プラットフォーム、運用のためのシステムで、API ドキュメント、ヘルスチェック、バックグラウンド worker、データ保存、レート制限、デプロイ検証を公開範囲で示します。"
+      "A backend and operations system that exposes a reviewable API surface, health checks, background worker flow, storage boundaries, rate limiting, and deployment verification.",
+      "後端、平台與營運系統，公開呈現可檢查的 API、健康檢查、背景 worker 流程、資料儲存邊界、限流和部署驗證。",
+      "后端、平台与运营系统，公开呈现可检查的 API、健康检查、后台 worker 流程、数据存储边界、限流和部署验证。",
+      "確認可能な API、ヘルスチェック、worker フロー、保存境界、レート制限、デプロイ検証を示すバックエンド・運用システムです。"
     )
   },
   VMD_cpp: {
@@ -240,7 +240,7 @@ export const repositoryOverrides = {
     category: "learning",
     score: 60,
     skills: ["Dart", "AWS", "Question bank", "Progress tracking"],
-    auxiliaryName: nameMap("SAA Practice-亚马逊云做题练习", "SAA Practice-亞馬遜雲做題練習", "SAA Practice-亚马逊云做题练习", "SAA Practice-亚马逊云做题练习"),
+    auxiliaryName: nameMap("SAA Practice-亚马逊云做题练习", "SAA Practice-亚马逊云做题练习", "SAA Practice-亚马逊云做题练习", "SAA Practice-亚马逊云做题练习"),
     liveRoutes: ["/saa/"],
     evidence: ["Live demo", "Source"],
     safeSummary: four(

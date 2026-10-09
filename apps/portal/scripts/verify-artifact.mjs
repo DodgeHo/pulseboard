@@ -28,6 +28,7 @@ const homeOrder = ["HeatStack", "TapPhysics", "Career Radar", "PuzzleWear", "CWC
 const vmdHomeUrls = ["https://github.com/DodgeHo/VMD_cpp", "https://github.com/DodgeHo/VMD_2D_python", "https://github.com/DodgeHo/VMD_2D_cpp"];
 const puzzleWearUrl = "https://puzzlewear.cn/login";
 const requiredAuxiliaryNames = ["AI 热栈", "职海雷达", "一点物理", "CellLoc Web Controller- 细胞定位网络控制系统", "拼频品聘-服装创意设计", "开发者英语练习站", "运营脉冲板", "SAA Practice-亚马逊云做题练习", "SAP Practice-亚马逊云做题练习"];
+const requiredHomeAuxiliaryNames = [...requiredAuxiliaryNames, "ISPM Practice-服务管理做题练习"];
 const staleHeatStackCopy = ["portfolio projects", "interview preparation", "作品项目", "面试准备", "作品集", "面試"];
 const staleTapPhysicsCopy = ["evidence surface", "部署路由", "证据界面", "證據介面"];
 const scanExtensions = new Set([".html", ".xml", ".json", ".js", ".map"]);
@@ -231,7 +232,7 @@ async function verifyGeneratedPages(root) {
   assert(home.includes(`"action":"${puzzleWearUrl}"`), "Homepage is missing the exact PuzzleWear login URL");
   assert(!home.includes('href="https://puzzlewear.cn/"'), "Homepage still points PuzzleWear at the root URL");
   assert(home.includes("https://devenglish.club/"), "Homepage is missing DevEnglish live URL");
-  assertIncludesAll(home, requiredAuxiliaryNames, "Homepage project data");
+  assertIncludesAll(home, requiredHomeAuxiliaryNames, "Homepage project data");
   assertExcludesAll(homeProjectBlock(home, "HeatStack"), staleHeatStackCopy, "Homepage HeatStack project data");
   assertExcludesAll(homeProjectBlock(home, "TapPhysics"), staleTapPhysicsCopy, "Homepage TapPhysics project data");
   for (const name of ["CWC", "PuzzleWear", "DevEnglish", "ISPM Practice"]) {

@@ -12,11 +12,12 @@ const homeOrder = ['HeatStack', 'TapPhysics', 'Career Radar', 'PuzzleWear', 'CWC
 const vmdHomeUrls = ['https://github.com/DodgeHo/VMD_cpp', 'https://github.com/DodgeHo/VMD_2D_python', 'https://github.com/DodgeHo/VMD_2D_cpp'];
 const puzzleWearUrl = 'https://puzzlewear.cn/login';
 const requiredAuxiliaryNames = ['AI 热栈', '职海雷达', '一点物理', 'CellLoc Web Controller- 细胞定位网络控制系统', '拼频品聘-服装创意设计', '开发者英语练习站', '运营脉冲板', 'SAA Practice-亚马逊云做题练习', 'SAP Practice-亚马逊云做题练习'];
+const requiredHomeAuxiliaryNames = [...requiredAuxiliaryNames, 'ISPM Practice-服务管理做题练习'];
 const auxiliaryNamesByLocale = {
   en: requiredAuxiliaryNames,
   'zh-Hans': requiredAuxiliaryNames,
-  'zh-Hant': ['AI 熱棧', '職海雷達', '一點物理', 'CellLoc Web Controller- 細胞定位網路控制系統', '拼頻品聘-服裝創意設計', '開發者英語練習站', '營運脈衝板', 'SAA Practice-亞馬遜雲做題練習', 'SAP Practice-亞馬遜雲做題練習'],
-  ja: ['AI 熱棧', '職海雷達', '一点物理', 'CellLoc Web Controller- 细胞定位网络控制系统', '拼频品聘-服装创意设计', '开发者英语练习站', '运营脉冲板', 'SAA Practice-亚马逊云做题练习', 'SAP Practice-亚马逊云做题练习']
+  'zh-Hant': requiredAuxiliaryNames,
+  ja: requiredAuxiliaryNames
 };
 const staleHeatStackCopy = ['portfolio projects', 'interview preparation', '作品项目', '面试准备', '作品集', '面試'];
 const staleTapPhysicsCopy = ['evidence surface', '部署路由', '证据界面', '證據介面'];
@@ -122,7 +123,7 @@ async function verifyPortal() {
   expect('homepage has TapPhysics live route', body.includes('"route":"/tapphysics/"') && body.includes('"action":"/tapphysics/"'));
   expect('homepage has exact PuzzleWear login and DevEnglish URLs', body.includes(`"action":"${puzzleWearUrl}"`) && body.includes('https://devenglish.club/'));
   expect('homepage does not link PuzzleWear root URL', !body.includes('href="https://puzzlewear.cn/"'));
-  expect('homepage contains required auxiliary names', includesAll(body, requiredAuxiliaryNames), requiredAuxiliaryNames.filter((name) => !body.includes(name)).join(', '));
+  expect('homepage contains required auxiliary names', includesAll(body, requiredHomeAuxiliaryNames), requiredHomeAuxiliaryNames.filter((name) => !body.includes(name)).join(', '));
   expect('homepage HeatStack copy is refreshed', excludesAll(homeProjectBlock(body, 'HeatStack'), staleHeatStackCopy));
   expect('homepage TapPhysics copy is refreshed', excludesAll(homeProjectBlock(body, 'TapPhysics'), staleTapPhysicsCopy));
   expect('homepage contains closed-source flags', ['CWC', 'PuzzleWear', 'DevEnglish', 'ISPM Practice'].every((name) => {
