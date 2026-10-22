@@ -1,0 +1,157 @@
+name: Deploy ANLAN Portal
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_ref:
+        description: Git ref, branch, tag, or SHA to deploy
+        required: true
+        default: master
+
+concurrency:
+  group: anlan-portal-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: tencent-staging
+    steps:
+      - name: Validate deploy ref
+        env:
+          DEPLOY_REF: ${{ inputs.deploy_ref }}
+        run: |
+          set -euo pipefail
+          if [ "${#DEPLOY_REF}" -gt 128 ]; then
+            echo "deploy_ref must be 128 characters or fewer." >&2
+            exit 1
+          fi
+          case "$DEPLOY_REF" in
+            ""|-*|*[^A-Za-z0-9._/@-]*|*..*|*@{*)
+              echo "deploy_ref has an unsafe Git ref shape." >&2
+              exit 1
+              ;;
+          esac
+          git check-ref-format --allow-onelevel "$DEPLOY_REF"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.deploy_ref }}
+
+      - name: Resolve release
+        id: release
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Build and verify portal artifacts
+        env:
+          ANLAN_INCLUDE_UPWORK: "true"
+        run: |
+          set -euo pipefail
+          pnpm install --frozen-lockfile
+          pnpm build:portal
+          pnpm verify:portal
+
+      - name: Configure SSH
+        env:
+          STAGING_HOST: ${{ secrets.TENCENT_STAGING_HOST }}
+          STAGING_USER: ${{ secrets.TENCENT_STAGING_USER }}
+          STAGING_SSH_KEY: ${{ secrets.TENCENT_STAGING_SSH_KEY }}
+          STAGING_KNOWN_HOSTS: ${{ secrets.TENCENT_STAGING_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$STAGING_HOST"
+          test -n "$STAGING_USER"
+          test -n "$STAGING_SSH_KEY"
+          test -n "$STAGING_KNOWN_HOSTS"
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$STAGING_SSH_KEY" > ~/.ssh/anlan_portal
+          chmod 600 ~/.ssh/anlan_portal
+          printf '%s\n' "$STAGING_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<EOF
+          Host anlan-portal-target
+            HostName $STAGING_HOST
+            User $STAGING_USER
+            IdentityFile ~/.ssh/anlan_portal
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Package and upload portal files
+        id: package
+        env:
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          set -euo pipefail
+          archive="/tmp/anlan-portal-${RELEASE_SHA}.tar.gz"
+          tar -C deploy/anlan -czf "$archive" \
+            index.html feed.xml robots.txt sitemap.xml assets hire projects upwork ja zh-hans zh-hant
+          if tar -tzf "$archive" | grep -Eq '(^/|(^|/)\.\.(/|$)|^(demo|nginx|\.workbuddy)(/|$))'; then
+            echo "Portal archive contains an unsafe or out-of-scope path." >&2
+            exit 1
+          fi
+          checksum=$(sha256sum "$archive" | cut -d ' ' -f 1)
+          echo "sha256=$checksum" >> "$GITHUB_OUTPUT"
+          scp "$archive" "anlan-portal-target:/tmp/anlan-portal-${RELEASE_SHA}.tar.gz"
+
+      - name: Back up and install portal files only
+        env:
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+          ARCHIVE_SHA256: ${{ steps.package.outputs.sha256 }}
+        run: |
+          set -euo pipefail
+          ssh anlan-portal-target bash -se -- "$RELEASE_SHA" "$ARCHIVE_SHA256" <<'REMOTE'
+          set -euo pipefail
+          release="$1"
+          expected_sha="$2"
+          archive="/tmp/anlan-portal-${release}.tar.gz"
+          webroot=/var/www/html
+          backup_dir="$HOME/pulseboard-deploy-backups/${release}/portal-static"
+          actual_sha=$(sha256sum "$archive" | cut -d ' ' -f 1)
+          if [ "$actual_sha" != "$expected_sha" ]; then
+            echo "Portal archive checksum mismatch." >&2
+            exit 1
+          fi
+
+          mkdir -p "$backup_dir"
+          portal_paths=(index.html feed.xml robots.txt sitemap.xml assets hire projects upwork ja zh-hans zh-hant)
+          existing=()
+          for path in "${portal_paths[@]}"; do
+            if sudo test -e "$webroot/$path"; then existing+=("$path"); fi
+          done
+          if [ "${#existing[@]}" -gt 0 ]; then
+            sudo tar -C "$webroot" -czf - "${existing[@]}" > "$backup_dir/portal-static.tar.gz"
+          fi
+
+          sudo tar -tzf "$archive" > "$backup_dir/incoming-files.txt"
+          if grep -Eq '(^/|(^|/)\.\.(/|$)|^(demo|nginx|\.workbuddy)(/|$))' "$backup_dir/incoming-files.txt"; then
+            echo "Portal archive contains an unsafe or out-of-scope path." >&2
+            exit 1
+          fi
+          sudo tar --no-same-owner --no-same-permissions -xzf "$archive" -C "$webroot"
+          sudo test -s "$webroot/index.html"
+          sudo test -s "$webroot/assets/ink-scene.js"
+          sudo test -s "$webroot/zh-hans/projects/cwc/index.html"
+          printf 'Installed portal release %s; backup: %s/portal-static.tar.gz\n' "$release" "$backup_dir"
+          REMOTE
+
+      - name: Verify public site
+        env:
+          ANLAN_INCLUDE_UPWORK: "true"
+          PUBLIC_BASE_URL: ${{ vars.TENCENT_STAGING_PUBLIC_BASE_URL || 'https://anlan.store' }}
+        run: pnpm verify:public

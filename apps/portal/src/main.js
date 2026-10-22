@@ -509,55 +509,21 @@
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       const w = bounds.width; const h = bounds.height; const phase = time / 1300;
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#050b1d'; ctx.fillRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(23,214,255,.22)'; ctx.lineWidth = 1;
+      ctx.fillStyle = '#f1eff4'; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(70,97,143,.12)'; ctx.lineWidth = 1;
       for (let x = 0; x <= w; x += 26) { ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, h); ctx.stroke(); }
       for (let y = 0; y <= h; y += 26) { ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(w, y + .5); ctx.stroke(); }
-      ctx.strokeStyle = '#ff8f1f'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(0, h * .52); ctx.lineTo(w, h * .52); ctx.stroke();
+      ctx.strokeStyle = 'rgba(190,83,103,.55)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(0, h * .52); ctx.lineTo(w, h * .52); ctx.stroke();
       const markerX = w * (.5 + Math.sin(phase * .65) * .14);
-      ctx.strokeStyle = '#ff8f1f'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(markerX, 0); ctx.lineTo(markerX, h); ctx.stroke();
+      ctx.strokeStyle = '#bf5269'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(markerX, 0); ctx.lineTo(markerX, h); ctx.stroke();
       ctx.beginPath();
       for (let x = 0; x <= w; x += 2) {
         const xNorm = x / w;
         const y = h * .51 - Math.sin(xNorm * Math.PI * 13 + phase) * h * .28 * (0.68 + .32 * Math.sin(xNorm * Math.PI * 4 - phase));
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = '#17d6ff'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#f4f8ff'; ctx.beginPath(); ctx.arc(markerX, h * .52, 4, 0, Math.PI * 2); ctx.fill();
-      if (!reduce) frame = window.requestAnimationFrame(render);
-    };
-    render(0);
-    return () => window.cancelAnimationFrame(frame);
-  };
-
-  const drawLattice = () => {
-    const canvas = document.querySelector('#signal-lattice');
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) return () => {};
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let frame = 0;
-    const render = (time) => {
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      const width = Math.max(1, Math.round(window.innerWidth * ratio));
-      const height = Math.max(1, Math.round(window.innerHeight * ratio));
-      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      const w = window.innerWidth; const h = window.innerHeight; const phase = time / 1700;
-      ctx.clearRect(0, 0, w, h);
-      const bands = [{ y: h * .16, color: 'rgba(23,214,255,.22)', freq: .009 }, { y: h * .71, color: 'rgba(138,85,255,.17)', freq: .0065 }];
-      bands.forEach((band, index) => {
-        ctx.strokeStyle = band.color; ctx.lineWidth = 1; ctx.beginPath();
-        for (let x = 0; x <= w; x += 9) {
-          const y = band.y + Math.sin(x * band.freq + phase * (index ? .75 : 1)) * 22 + Math.sin(x * band.freq * 2.9 - phase) * 7;
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-      });
-      for (let x = 18; x < w; x += 72) {
-        const barHeight = 9 + ((Math.sin(x * .075 + phase) + 1) * 17);
-        ctx.fillStyle = x % 3 ? 'rgba(51,128,255,.15)' : 'rgba(255,143,31,.2)';
-        ctx.fillRect(x, h - 24 - barHeight, 2, barHeight);
-      }
+      ctx.strokeStyle = '#277884'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = '#f6f2f2'; ctx.beginPath(); ctx.arc(markerX, h * .52, 4, 0, Math.PI * 2); ctx.fill();
       if (!reduce) frame = window.requestAnimationFrame(render);
     };
     render(0);
@@ -574,5 +540,4 @@
   document.querySelector('#github-link').href = githubUrl;
   applyLocale(localeFromHash() || localeFromPath() || safeStoredLocale());
   drawWave();
-  drawLattice();
 })();

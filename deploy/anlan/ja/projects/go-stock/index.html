@@ -1,6 +1,6 @@
 <!doctype html><html lang="ja"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="エンジニアリング学習記録として残した Fork です。上流の作者を明示し、完全なオリジナル作品としては扱いません。"><meta name="theme-color" content="#060817">
+    <meta name="description" content="エンジニアリング学習記録として残した Fork です。上流の作者を明示し、完全なオリジナル作品としては扱いません。"><meta name="theme-color" content="#e9e8f0">
     <title>go-stock · ANLAN.STORE</title><link rel="canonical" href="https://anlan.store/ja/projects/go-stock/"><link rel="alternate" hreflang="en" href="https://anlan.store/projects/go-stock/"><link rel="alternate" hreflang="zh-Hant" href="https://anlan.store/zh-hant/projects/go-stock/"><link rel="alternate" hreflang="zh-Hans" href="https://anlan.store/zh-hans/projects/go-stock/"><link rel="alternate" hreflang="ja" href="https://anlan.store/ja/projects/go-stock/"><link rel="alternate" hreflang="x-default" href="https://anlan.store/projects/go-stock/">
     <meta property="og:type" content="article"><meta property="og:title" content="go-stock · ANLAN.STORE"><meta property="og:description" content="エンジニアリング学習記録として残した Fork です。上流の作者を明示し、完全なオリジナル作品としては扱いません。"><meta property="og:url" content="https://anlan.store/ja/projects/go-stock/">
     <style>@font-face {
@@ -266,8 +266,131 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+:root {
+  color-scheme: light;
+  --night: #e9e8f0;
+  --surface: #f7f5f8;
+  --surface-2: #eeedf3;
+  --ink: #27283d;
+  --muted: #55566d;
+  --faint: #68657c;
+  --rule: rgba(60, 69, 106, .24);
+  --cyan: #2b7883;
+  --cobalt: #46618f;
+  --violet: #80568e;
+  --orange: #be5367;
+  --hot: #9f3e58;
+  --font-ui: "Anlan Inter", "Noto Sans CJK SC", "Yu Gothic", sans-serif;
+}
+
+html, body { background: #d9dfea; color: var(--ink); }
+::selection { background: #e8a4b4; color: #30283b; }
+.ink-scene {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .86;
+  pointer-events: none;
+  animation: ink-breath 15s ease-in-out infinite alternate;
+}
+@keyframes ink-breath { from { opacity: .78; } to { opacity: .9; } }
+.archive-shell {
+  position: relative;
+  z-index: 1;
+  border-color: rgba(63, 66, 100, .22);
+  background: rgba(247, 245, 249, .55);
+}
+.archive-skip { border-color: #9f3e58; background: #f7f5f8; color: #27283d; }
+.archive-topbar { border-color: var(--rule); background: rgba(48, 45, 66, .94); }
+.archive-brand { color: #f9f4f4; }
+.archive-mark i:nth-child(1) { background: #73abb0; }
+.archive-mark i:nth-child(2) { background: #d78c9c; }
+.archive-mark i:nth-child(3) { background: #d9bd83; }
+.archive-context { color: #e7a1b3; }
+.archive-profile, .locale-links a { border-color: rgba(236, 227, 238, .3); color: #f1eaf2; }
+.archive-profile svg { color: #e9a0b1; }
+.locale-links a[aria-current="page"] { background: #d47f91; color: #2d2235; }
+.archive-profile:hover, .locale-links a:hover { border-color: #e3a0af; color: #fff; }
+
+.archive-hero, .case-hero { border-color: var(--rule-strong); }
+.archive-intro h1, .case-hero h1, .row-name h3 {
+  font-family: "Noto Serif CJK SC", "Songti SC", "Yu Mincho", Georgia, serif;
+  letter-spacing: 0;
+}
+.archive-intro h1, .case-hero h1 { font-size: clamp(48px, 5.1vw, 76px); line-height: .98; }
+.archive-hero::before { background: linear-gradient(105deg, transparent 0 54%, rgba(128, 86, 142, .12) 54% 55%, transparent 55% 100%); }
+.archive-hero::after, .case-hero::after { background: rgba(190, 83, 103, .66); box-shadow: 0 -54px 0 rgba(43, 120, 131, .32), 0 54px 0 rgba(128, 86, 142, .3); }
+.archive-intro h1, .case-hero h1 { color: #302a43; text-shadow: 0 1px rgba(255,255,255,.55); }
+.archive-intro p, .case-summary { color: #505168; }
+.archive-stats { border-color: var(--rule); background: rgba(244, 241, 247, .52); }
+.archive-stats div { border-color: var(--rule); }
+.archive-stats dt { color: #69657b; }
+.archive-stats div:nth-child(1) dd { color: #46618f; }
+.archive-stats div:nth-child(2) dd { color: #ad4b62; }
+.archive-stats div:nth-child(3) dd { color: #80568e; }
+
+.archive-controls { border-color: var(--rule-strong); background: rgba(244, 242, 248, .96); }
+.search-field input, .archive-sort { border-color: var(--rule-strong); background: rgba(255,255,255,.76); color: #302f47; }
+.search-field input::placeholder { color: #77738a; }
+.search-field svg { color: #62617a; }
+.archive-filters { border-color: var(--rule-strong); }
+.archive-filters button { border-color: var(--rule); color: #55566d; }
+.archive-filters button:hover { background: rgba(211, 207, 228, .45); color: #302f47; }
+.archive-filters button[aria-pressed="true"] { background: #80568e; color: #fff; }
+.inventory { background: rgba(247, 245, 249, .69); }
+.inventory-head { border-color: var(--rule-strong); }
+.inventory-head h2 { color: #302f47; }
+.inventory-head p { color: #5b596f; }
+.result-count { color: #66647a; }
+.archive-row { border-color: var(--rule); }
+.archive-row:hover { background: rgba(211, 207, 228, .32); }
+.row-index, .row-kind { color: #625f77; }
+.row-name h3 { color: #302f47; }
+.row-name-alt { color: #6a5477; }
+.row-copy { color: #505168; }
+.row-evidence { color: #646179; }
+.row-skills li, .row-flag { border-color: var(--rule); background: rgba(255,255,255,.4); color: #57576e; }
+.row-flag.is-origin { color: #46618f; }
+.row-flag.is-closed { color: #9f3e58; }
+.row-media { border-color: rgba(72, 88, 126, .34); background: rgba(255,255,255,.65); }
+.row-action { border-color: #47758b; background: rgba(255,255,255,.66); color: #286d78; }
+.row-action:hover { background: #286d78; color: #fff; }
+.locked-state { color: #9b3e56; }
+.empty-results { border-color: #bd5367; color: #92384f; }
+
+.case-hero { background: rgba(245, 243, 248, .42); }
+.case-alt-name { color: #67566f; }
+.case-actions a { border-color: var(--rule-strong); background: rgba(255,255,255,.58); color: #43445d; }
+.case-actions a:first-child { border-color: #286d78; background: #286d78; color: #fff; }
+.case-visuals { border-color: var(--rule); background: rgba(238, 236, 244, .64); }
+.case-visuals img { border-color: var(--rule-strong); background: #eceaf1; }
+.case-visuals figcaption { color: #5b596f; }
+.case-content { background: rgba(248, 246, 249, .64); }
+.case-section { border-color: var(--rule); }
+.case-section h2 { color: #6e4e82; }
+.case-section p { color: #4e5068; }
+.case-aside { border-color: var(--rule); background: rgba(241, 239, 246, .74); }
+.case-aside h2 { color: #3d3c54; }
+.asset-nav li, .related a { border-color: var(--rule); }
+.asset-nav a, .related a { color: #515269; }
+.asset-nav a:hover, .related a:hover { color: #a04259; }
+.archive-footer { border-color: var(--rule-strong); color: #5b596f; }
+.archive-footer a { color: #276c78; }
+.archive-footer a:hover { color: #9f3e58; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline-color: #a43f59; }
+
+@media (max-width: 780px) {
+  .archive-stats { background: rgba(244, 241, 247, .78); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-scene { animation: none; }
+}
 </style><script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","headline":"go-stock","description":"エンジニアリング学習記録として残した Fork です。上流の作者を明示し、完全なオリジナル作品としては扱いません。","dateModified":"2026-05-22T05:32:40Z","url":"https://anlan.store/ja/projects/go-stock/","author":{"@type":"Person","name":"Dodge Ho"}}</script>
-  </head><body><a class="archive-skip" href="#main">プロジェクト目録へ移動</a><div class="archive-shell"><header class="archive-topbar">
+  </head><body><a class="archive-skip" href="#main">プロジェクト目録へ移動</a><canvas class="ink-scene" data-ink-scene aria-hidden="true"></canvas><div class="archive-shell"><header class="archive-topbar">
     <a class="archive-brand" href="/#ja" aria-label="ANLAN.STORE ホーム"><span class="archive-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>ANLAN.STORE</span></a>
     <p class="archive-context">プロジェクト資産ライブラリ</p>
     <div class="archive-actions">
@@ -275,4 +398,4 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
       <a class="archive-profile" href="https://github.com/DodgeHo" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4a9.6 9.6 0 0 0-3 18.7c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-4.8 0-1.1.4-1.9 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.6 1a9 9 0 0 1 4.8 0c1.8-1.3 2.6-1 2.6-1 .5 1.3.2 2.3.1 2.6.7.7 1 1.5 1 2.6 0 3.7-2.3 4.5-4.6 4.8.4.3.8 1 .8 2v2.3c0 .3.2.6.7.5A9.6 9.6 0 0 0 12 2.4Z" fill="currentColor"/></svg><span>GitHub</span></a>
       <nav class="locale-links" aria-label="Language"><a href="/projects/go-stock/">EN</a><a href="/zh-hant/projects/go-stock/">繁中</a><a href="/zh-hans/projects/go-stock/">简中</a><a href="/ja/projects/go-stock/" aria-current="page">日本語</a></nav>
     </div>
-  </header><main id="main"><section class="case-hero"><div class="case-title-line"><h1>go-stock</h1></div><div class="case-summary"><p>エンジニアリング学習記録として残した Fork です。上流の作者を明示し、完全なオリジナル作品としては扱いません。</p></div><div class="case-actions"><a href="https://github.com/DodgeHo/go-stock" target="_blank" rel="noreferrer">GitHub リポジトリを見る</a><a href="/ja/projects/">完全な目録へ戻る</a></div></section><div class="detail-main"><article class="case-content"><section class="case-section"><h2>プロジェクト記録</h2><p>この記録は、架空の成果を作らず、目録の事実、利用可能なソース、公開ルート、関連証拠を結びます。</p></section><section class="case-section"><h2>技術</h2><p>Go</p></section><section class="case-section"><h2>証拠</h2><p>Source</p></section></article><aside class="case-aside"><h2>プロジェクト記録</h2><dl class="archive-stats"><div><dt>状態</dt><dd>Fork / 貢献</dd></div><div><dt>リポジトリ更新</dt><dd>2026-05-22</dd></div></dl><div class="related"><h2>関連プロジェクト</h2><a href="/ja/projects/alphamao-skills/">AlphaMao_Skills</a><a href="/ja/projects/apa-atinglab2019/">apa_atingLab2019</a><a href="/ja/projects/aso-gin-vue-admin/">ASO-gin-vue-admin</a><a href="/ja/projects/auto-company/">auto-company</a></div></aside></div></main><footer class="archive-footer"><span>ANLAN.STORE / 持続するエンジニアリング証拠</span><a href="/ja/projects/">完全な目録へ戻る</a></footer></div><script>(()=>{const m={'#en':'en','#zh':'zh-Hans','#zh-hans':'zh-Hans','#zh-hant':'zh-Hant','#ja':'ja'};const p={en:'', 'zh-Hans':'/zh-hans','zh-Hant':'/zh-hant',ja:'/ja'};const l=m[location.hash.toLowerCase()];if(l){const n=p[l]+'/projects/go-stock/';if(location.pathname!==n)location.replace(n);}})();</script></body></html>
+  </header><main id="main"><section class="case-hero"><div class="case-title-line"><h1>go-stock</h1></div><div class="case-summary"><p>エンジニアリング学習記録として残した Fork です。上流の作者を明示し、完全なオリジナル作品としては扱いません。</p></div><div class="case-actions"><a href="https://github.com/DodgeHo/go-stock" target="_blank" rel="noreferrer">GitHub リポジトリを見る</a><a href="/ja/projects/">完全な目録へ戻る</a></div></section><div class="detail-main"><article class="case-content"><section class="case-section"><h2>プロジェクト記録</h2><p>この記録は、架空の成果を作らず、目録の事実、利用可能なソース、公開ルート、関連証拠を結びます。</p></section><section class="case-section"><h2>技術</h2><p>Go</p></section><section class="case-section"><h2>証拠</h2><p>Source</p></section></article><aside class="case-aside"><h2>プロジェクト記録</h2><dl class="archive-stats"><div><dt>状態</dt><dd>Fork / 貢献</dd></div><div><dt>リポジトリ更新</dt><dd>2026-05-22</dd></div></dl><div class="related"><h2>関連プロジェクト</h2><a href="/ja/projects/alphamao-skills/">AlphaMao_Skills</a><a href="/ja/projects/apa-atinglab2019/">apa_atingLab2019</a><a href="/ja/projects/aso-gin-vue-admin/">ASO-gin-vue-admin</a><a href="/ja/projects/auto-company/">auto-company</a></div></aside></div></main><footer class="archive-footer"><span>ANLAN.STORE / 持続するエンジニアリング証拠</span><a href="/ja/projects/">完全な目録へ戻る</a></footer></div><script>(()=>{const m={'#en':'en','#zh':'zh-Hans','#zh-hans':'zh-Hans','#zh-hant':'zh-Hant','#ja':'ja'};const p={en:'', 'zh-Hans':'/zh-hans','zh-Hant':'/zh-hant',ja:'/ja'};const l=m[location.hash.toLowerCase()];if(l){const n=p[l]+'/projects/go-stock/';if(location.pathname!==n)location.replace(n);}})();</script><script src="/assets/ink-scene.js" defer></script></body></html>

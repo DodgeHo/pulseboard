@@ -228,11 +228,11 @@ const basePage = ({ locale, suffix, title, description, body, type = "website", 
   const footerIcp = siteCopy[locale].icp ? `<span>${escapeHtml(siteCopy[locale].icp)}</span>` : "";
   return `<!doctype html><html lang="${localeConfig[locale].htmlLang}"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="${escapeHtml(description)}"><meta name="theme-color" content="#060817">
+    <meta name="description" content="${escapeHtml(description)}"><meta name="theme-color" content="#e9e8f0">
     <title>${escapeHtml(title)} · ANLAN.STORE</title><link rel="canonical" href="${canonical}">${hreflangLinks(suffix)}
     <meta property="og:type" content="${type}"><meta property="og:title" content="${escapeHtml(title)} · ANLAN.STORE"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
     <style>${archiveCss}</style>${jsonLd ? `<script type="application/ld+json">${escapeJson(jsonLd)}</script>` : ""}
-  </head><body><a class="archive-skip" href="#main">${escapeHtml(siteCopy[locale].skip)}</a><div class="archive-shell">${topbar(locale, suffix)}${body}<footer class="archive-footer"><span>${escapeHtml(siteCopy[locale].footer)}</span>${footerIcp}<a href="${localePath(locale, "/projects/")}">${escapeHtml(siteCopy[locale].backArchive)}</a></footer></div>${languageHashRedirect(suffix)}${script ? `<script>${script}</script>` : ""}</body></html>`;
+  </head><body><a class="archive-skip" href="#main">${escapeHtml(siteCopy[locale].skip)}</a><canvas class="ink-scene" data-ink-scene aria-hidden="true"></canvas><div class="archive-shell">${topbar(locale, suffix)}${body}<footer class="archive-footer"><span>${escapeHtml(siteCopy[locale].footer)}</span>${footerIcp}<a href="${localePath(locale, "/projects/")}">${escapeHtml(siteCopy[locale].backArchive)}</a></footer></div>${languageHashRedirect(suffix)}<script src="/assets/ink-scene.js" defer></script>${script ? `<script>${script}</script>` : ""}</body></html>`;
 };
 
 const hireHref = (locale, key) => {
@@ -473,6 +473,10 @@ await rm(localRoot, { recursive: true, force: true });
 await writeOutput("index.html", homeArtifact);
 for (const root of [localRoot, deployRoot]) {
   await copyStaticDirectory(projectMediaDir, resolve(root, "assets/project-media"));
+  const inkSceneTarget = resolve(root, "assets/ink-scene.js");
+  await mkdir(dirname(inkSceneTarget), { recursive: true });
+  await copyFile(resolve(sourceRoot, "ink-scene.js"), inkSceneTarget);
+  outputPaths.push(inkSceneTarget);
 }
 
 const sitemapPaths = ["/"];

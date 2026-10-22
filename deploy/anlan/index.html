@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="ANLAN.STORE is a multilingual signal directory for deployed systems and open-source engineering work.">
-  <meta name="theme-color" content="#060817">
+  <meta name="theme-color" content="#e9e8f0">
   <link rel="canonical" href="https://anlan.store/">
   <link rel="alternate" hreflang="en" href="https://anlan.store/#en">
   <link rel="alternate" hreflang="zh-Hant" href="https://anlan.store/#zh-hant">
@@ -378,7 +378,7 @@ canvas { display: block; }
 .scope-titlebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .live-dot { display: inline-flex; align-items: center; gap: 7px; color: var(--hot); font-family: var(--font-measure); font-size: 10px; font-weight: 700; }
 .live-dot i { width: 8px; height: 8px; background: var(--orange); box-shadow: 0 0 16px rgba(255, 143, 31, .65); }
-.scope-plot { min-height: 238px; margin-top: 19px; border: 1px solid var(--rule-strong); background: #050b1d; }
+.scope-plot { min-height: 238px; margin-top: 19px; border: 1px solid var(--rule-strong); background: rgba(241, 240, 247, .82); }
 .scope-plot canvas { width: 100%; height: 100%; min-height: 238px; }
 .scope-readout { display: grid; grid-template-columns: 1fr auto; gap: 7px 16px; margin-top: 15px; color: var(--muted); font-size: 10px; }
 .scope-readout > div { display: contents; }
@@ -674,7 +674,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   .rail-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rail-item:nth-child(n+7) { display: block; }
   .scope-copy { padding: 43px 18px; }
-  .scope-copy h1 { max-width: 9ch; font-size: clamp(47px, 16vw, 72px); }
+  .scope-copy h1 { max-width: 12ch; font-size: 43px; line-height: 1.06; }
+  .scope-copy h1 br { display: none; }
   .scope-lede { margin-top: 23px; font-size: 14px; }
   .hero-actions { width: 100%; flex-direction: column; }
   .signal-action { width: 100%; justify-content: center; }
@@ -702,6 +703,169 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-o
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+:root {
+  color-scheme: light;
+  --night: #e9e8f0;
+  --night-raised: #f7f5f8;
+  --ink: #27283d;
+  --muted: #55566d;
+  --faint: #68657c;
+  --rule: rgba(60, 69, 106, .24);
+  --rule-strong: rgba(60, 69, 106, .44);
+  --cyan: #2b7883;
+  --cobalt: #46618f;
+  --violet: #80568e;
+  --orange: #be5367;
+  --hot: #9f3e58;
+  --font-ui: "Anlan Inter", "Noto Sans CJK SC", "Yu Gothic", sans-serif;
+}
+
+html { background: #d9dfea; }
+body { background: #d9dfea; color: var(--ink); }
+::selection { background: #e8a4b4; color: #30283b; }
+
+.signal-canvas {
+  z-index: 0;
+  opacity: .86;
+  animation: ink-breath 15s ease-in-out infinite alternate;
+}
+
+@keyframes ink-breath {
+  from { opacity: .78; }
+  to { opacity: .9; }
+}
+
+.portal-shell {
+  border-color: rgba(63, 66, 100, .22);
+  background: rgba(246, 244, 249, .52);
+}
+
+.scope-copy h1, .project-title {
+  font-family: "Noto Serif CJK SC", "Songti SC", "Yu Mincho", Georgia, serif;
+  letter-spacing: 0;
+}
+
+.topbar {
+  border-bottom-color: rgba(63, 53, 83, .34);
+  background: rgba(48, 45, 66, .94);
+}
+
+.brand { color: #f9f4f4; }
+.brand-mark i:nth-child(1) { background: #73abb0; }
+.brand-mark i:nth-child(2) { background: #d78c9c; }
+.brand-mark i:nth-child(3) { background: #d9bd83; }
+.topbar-state { color: #d7c7d5; }
+.topbar-state::before { background: #d58ba0; }
+.profile-link, .github-link { border-color: rgba(236, 227, 238, .3); color: #f1eaf2; }
+.profile-link > svg:first-child { color: #e9a0b1; }
+.github-link { color: #c7b2db; }
+.profile-link:hover { border-color: #e3a0af; background: rgba(255,255,255,.1); color: #fff; }
+.github-link:hover { border-color: #d1b1df; background: rgba(255,255,255,.1); color: #f8eaff; }
+.locale-switcher { border-color: rgba(236, 227, 238, .3); }
+.locale-switcher button { border-color: rgba(236, 227, 238, .22); color: #eee7f0; }
+.locale-switcher button:hover { background: rgba(255,255,255,.12); color: #fff; }
+.locale-switcher button[aria-pressed="true"] { background: #d47f91; color: #2d2235; }
+
+.project-rail {
+  border-color: var(--rule-strong);
+  background: rgba(246, 244, 249, .77);
+}
+.rail-heading { border-color: var(--rule); }
+.rail-heading h2, .scope-titlebar h2 { color: #52617f; }
+.rail-item { border-color: var(--rule); }
+.rail-item a, .rail-record { color: #4f526a; }
+.rail-item a:hover { background: rgba(185, 196, 219, .34); color: #27283d; }
+.rail-item a[aria-current="true"] { background: rgba(224, 202, 218, .45); color: #30283d; box-shadow: inset 3px 0 0 var(--rail-color, var(--orange)); }
+.rail-keywords { color: #69667c; }
+.rail-item.is-unlinked { background: rgba(223, 221, 234, .58); }
+.rail-item.is-unlinked .rail-record { color: #67647a; }
+.rail-all-link { border-color: var(--rule-strong); color: #2b7883; }
+.rail-all-link:hover { color: #9f3e58; }
+
+.scope-main {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--rule-strong);
+}
+.scope-main::before {
+  position: absolute;
+  inset: 0;
+  background: rgba(246, 244, 249, .45);
+  content: "";
+  pointer-events: none;
+}
+.scope-copy, .live-scope { position: relative; z-index: 1; }
+.scope-copy {
+  border-color: var(--rule-strong);
+  background: rgba(247, 245, 249, .48);
+}
+.scope-copy h1 { color: #302a43; font-size: clamp(52px, 4.5vw, 70px); line-height: .98; text-shadow: 0 1px rgba(255,255,255,.55); }
+.scope-lede { color: #4e5068; }
+.identity-facts { border-color: var(--rule-strong); }
+.identity-facts div { border-color: var(--rule); }
+.identity-facts dt { color: var(--project-color, var(--cyan)); }
+.identity-facts dd { color: #393b53; }
+.signal-action { border-color: rgba(54, 94, 128, .6); color: #276c78; background: rgba(255,255,255,.36); }
+.signal-action:hover { border-color: #276c78; background: #276c78; color: #fff; }
+.signal-action-primary { border-color: #ad4b62; color: #94384f; }
+.signal-action-primary:hover { border-color: #ad4b62; background: #ad4b62; color: #fff; }
+.live-scope { background: rgba(240, 239, 246, .46); }
+.live-dot { color: #9a3f57; }
+.live-dot i { background: #bd5367; box-shadow: 0 0 0 4px rgba(189, 83, 103, .15); }
+.scope-plot { border-color: rgba(61, 91, 139, .42); background: rgba(248, 247, 250, .8); }
+.scope-readout { color: #55566d; }
+.scope-readout dt { color: #69657b; }
+.scope-readout dd { color: #35364d; }
+.scope-readout dd::before { background: #46618f; }
+.scope-readout > div:nth-child(2) dd::before { background: #80568e; }
+.scope-readout > div:nth-child(3) dd::before { background: #2b7883; }
+
+.project-index { background: rgba(246, 244, 249, .7); }
+.index-head { border-color: var(--rule-strong); }
+.index-head h2 { color: #342f49; }
+.index-head p { color: #5d5c72; }
+.filter-controls { border-color: var(--rule-strong); }
+.filter-controls button { border-color: var(--rule); color: #505168; }
+.filter-controls button:hover { background: rgba(190, 202, 222, .4); color: #282940; }
+.filter-controls button[aria-pressed="true"] { background: #80568e; color: #fff; }
+.project-row { border-color: var(--rule); }
+.project-row:hover { background: rgba(211, 207, 228, .33); }
+.project-media-mark { border-color: rgba(72, 88, 126, .34); background: rgba(251, 249, 251, .82); }
+.project-order { color: var(--project-color, var(--cyan)); }
+.project-title { color: #2e2d43; }
+.project-alias, .project-auxiliary { color: var(--project-color, var(--cyan)); }
+.project-description { color: #515269; }
+.project-route { color: #69657b; }
+.project-route code { color: #303149; }
+.project-tags li { border-color: var(--rule); color: #55566d; background: rgba(250,248,250,.3); }
+.status-label { color: #56566c; }
+.status-label.is-online, .status-label.is-static { color: #216e78; }
+.status-label.is-online i { background: #2b7883; box-shadow: none; }
+.status-label.is-unavailable, .status-label.is-private { color: #9f3e58; }
+.project-family { border-color: rgba(112, 91, 139, .38); background: rgba(240, 235, 244, .58); }
+.project-family strong { color: var(--project-color, #52617f); }
+.project-family span { color: #5b596f; }
+.project-family a { color: #33344b; }
+.project-family a:hover { color: var(--project-color, #2b7883); }
+.row-action { background: rgba(251,249,251,.74); }
+.row-action:hover { background: var(--project-color, var(--cyan)); border-color: var(--project-color, var(--cyan)); color: #fff; }
+.row-action-primary { background: var(--project-color, var(--cyan)); color: #fff; }
+.row-action-primary:hover { filter: saturate(1.1) brightness(.92); color: #fff; }
+.row-action-secondary { background: rgba(255,255,255,.44); color: #5c5970; }
+.project-evidence { color: #66647a; }
+.empty-state { border-color: #b94e64; color: #93374e; }
+.portal-footer { border-color: var(--rule-strong); color: #5a586e; }
+.portal-footer a { color: #276c78; }
+.portal-footer a:hover { color: #9f3e58; }
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-canvas { animation: none; }
+}
+
+@media (max-width: 510px) {
+  .scope-copy h1 { font-size: 43px; line-height: 1.06; }
+}
 </style>
 </head>
 <body>
@@ -716,7 +880,7 @@ ACCESSIBILITY: English is deterministic first visit; explicit language choices u
 FINISH: This surface is unfinished until its visual review, verifier, documentation, deployment, and public-route audit are complete.
 -->
   <a class="skip-link" href="#project-index" id="skip-link">Skip to project index</a>
-  <canvas class="signal-canvas" id="signal-lattice" aria-hidden="true"></canvas>
+  <canvas class="signal-canvas" id="signal-lattice" data-ink-scene aria-hidden="true"></canvas>
 
   <div class="portal-shell" id="top">
     <header class="topbar">
@@ -1306,55 +1470,21 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       const w = bounds.width; const h = bounds.height; const phase = time / 1300;
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#050b1d'; ctx.fillRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(23,214,255,.22)'; ctx.lineWidth = 1;
+      ctx.fillStyle = '#f1eff4'; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(70,97,143,.12)'; ctx.lineWidth = 1;
       for (let x = 0; x <= w; x += 26) { ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, h); ctx.stroke(); }
       for (let y = 0; y <= h; y += 26) { ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(w, y + .5); ctx.stroke(); }
-      ctx.strokeStyle = '#ff8f1f'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(0, h * .52); ctx.lineTo(w, h * .52); ctx.stroke();
+      ctx.strokeStyle = 'rgba(190,83,103,.55)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(0, h * .52); ctx.lineTo(w, h * .52); ctx.stroke();
       const markerX = w * (.5 + Math.sin(phase * .65) * .14);
-      ctx.strokeStyle = '#ff8f1f'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(markerX, 0); ctx.lineTo(markerX, h); ctx.stroke();
+      ctx.strokeStyle = '#bf5269'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(markerX, 0); ctx.lineTo(markerX, h); ctx.stroke();
       ctx.beginPath();
       for (let x = 0; x <= w; x += 2) {
         const xNorm = x / w;
         const y = h * .51 - Math.sin(xNorm * Math.PI * 13 + phase) * h * .28 * (0.68 + .32 * Math.sin(xNorm * Math.PI * 4 - phase));
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = '#17d6ff'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#f4f8ff'; ctx.beginPath(); ctx.arc(markerX, h * .52, 4, 0, Math.PI * 2); ctx.fill();
-      if (!reduce) frame = window.requestAnimationFrame(render);
-    };
-    render(0);
-    return () => window.cancelAnimationFrame(frame);
-  };
-
-  const drawLattice = () => {
-    const canvas = document.querySelector('#signal-lattice');
-    const ctx = canvas?.getContext('2d');
-    if (!canvas || !ctx) return () => {};
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let frame = 0;
-    const render = (time) => {
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      const width = Math.max(1, Math.round(window.innerWidth * ratio));
-      const height = Math.max(1, Math.round(window.innerHeight * ratio));
-      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      const w = window.innerWidth; const h = window.innerHeight; const phase = time / 1700;
-      ctx.clearRect(0, 0, w, h);
-      const bands = [{ y: h * .16, color: 'rgba(23,214,255,.22)', freq: .009 }, { y: h * .71, color: 'rgba(138,85,255,.17)', freq: .0065 }];
-      bands.forEach((band, index) => {
-        ctx.strokeStyle = band.color; ctx.lineWidth = 1; ctx.beginPath();
-        for (let x = 0; x <= w; x += 9) {
-          const y = band.y + Math.sin(x * band.freq + phase * (index ? .75 : 1)) * 22 + Math.sin(x * band.freq * 2.9 - phase) * 7;
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-      });
-      for (let x = 18; x < w; x += 72) {
-        const barHeight = 9 + ((Math.sin(x * .075 + phase) + 1) * 17);
-        ctx.fillStyle = x % 3 ? 'rgba(51,128,255,.15)' : 'rgba(255,143,31,.2)';
-        ctx.fillRect(x, h - 24 - barHeight, 2, barHeight);
-      }
+      ctx.strokeStyle = '#277884'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = '#f6f2f2'; ctx.beginPath(); ctx.arc(markerX, h * .52, 4, 0, Math.PI * 2); ctx.fill();
       if (!reduce) frame = window.requestAnimationFrame(render);
     };
     render(0);
@@ -1371,8 +1501,8 @@ FINISH: This surface is unfinished until its visual review, verifier, documentat
   document.querySelector('#github-link').href = githubUrl;
   applyLocale(localeFromHash() || localeFromPath() || safeStoredLocale());
   drawWave();
-  drawLattice();
 })();
 </script>
+  <script src="/assets/ink-scene.js" defer></script>
 </body>
 </html>

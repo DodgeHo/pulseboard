@@ -1,32 +1,31 @@
 ---
 name: "ANLAN.STORE"
-description: "A four-language, colorful technical directory for Dodge Ho / 道安澜's public open-source work."
+description: "A four-language, illustrated ink-landscape directory for Dodge Ho / 道安澜's public engineering work."
 colors:
-  midnight: "#060817"
-  midnight-raised: "#090d20"
-  signal-ink: "#f4f8ff"
-  signal-muted: "#9cb3cf"
-  signal-faint: "#456182"
-  signal-rule: "#173b63"
-  signal-rule-strong: "#2874b0"
-  cyan: "#17d6ff"
-  cobalt: "#3380ff"
-  violet: "#8a55ff"
-  electric-orange: "#ff8f1f"
-  hot-amber: "#ffbd4a"
+  mist-paper: "#e9e8f0"
+  raised-paper: "#f7f5f8"
+  ink: "#27283d"
+  muted-ink: "#55566d"
+  faint-ink: "#68657c"
+  contour-rule: "rgba(60, 69, 106, .24)"
+  mineral-teal: "#2b7883"
+  mountain-cobalt: "#46618f"
+  violet-ink: "#80568e"
+  cinnabar: "#be5367"
+  deep-cinnabar: "#9f3e58"
 typography:
   display:
-    fontFamily: "Anlan Inter, Segoe UI, sans-serif"
-    fontSize: "clamp(58px, 7vw, 116px)"
+    fontFamily: "Noto Serif CJK SC, Songti SC, Yu Mincho, Georgia, serif"
+    fontSize: "clamp(52px, 4.5vw, 70px)"
     fontWeight: 600
-    lineHeight: 0.86
-    letterSpacing: "-0.04em"
+    lineHeight: 0.98
+    letterSpacing: "0"
   title:
-    fontFamily: "Anlan Inter, Segoe UI, sans-serif"
+    fontFamily: "Noto Serif CJK SC, Songti SC, Yu Mincho, Georgia, serif"
     fontSize: "clamp(20px, 2.25vw, 34px)"
     fontWeight: 600
     lineHeight: 1
-    letterSpacing: "-0.03em"
+    letterSpacing: "0"
   body:
     fontFamily: "Anlan Inter, Segoe UI, sans-serif"
     fontSize: "15px"
@@ -45,18 +44,18 @@ spacing:
 components:
   signal-action:
     backgroundColor: "transparent"
-    textColor: "{colors.cyan}"
+    textColor: "{colors.mineral-teal}"
     minHeight: "49px"
     padding: "11px 16px"
     typography: "{typography.label}"
   signal-action-primary:
     backgroundColor: "transparent"
-    textColor: "{colors.hot-amber}"
+    textColor: "{colors.deep-cinnabar}"
     minHeight: "49px"
     padding: "11px 16px"
     typography: "{typography.label}"
   locale-control:
-    borderColor: "{colors.signal-rule}"
+    borderColor: "{colors.contour-rule}"
     minHeight: "44px"
     typography: "{typography.label}"
 ---
@@ -65,44 +64,46 @@ components:
 
 ## Overview
 
-**Creative North Star: "Signal Lattice / Project Scope."**
+**Creative North Star: "Ink Landscape / Project Scroll."**
 
-ANLAN.STORE is Dodge Ho / 道安澜's public open-source project space. It is a colorful engineering directory—not a generic portfolio, a social profile, or a uniform dashboard. The opening introduces Dodge and frames the work as inspectable systems, signal work, and practical tools; the English opening is **“DODGE HO. BUILDS IN PUBLIC.”**
+ANLAN.STORE is Dodge Ho / 道安澜's public engineering portfolio. It is an illustrated ink-landscape scroll—not a generic portfolio, a social profile, or a uniform dashboard. Mountain washes and contour strokes establish cultural character; the opening still introduces Dodge and frames the work as inspectable systems, signal work, and practical tools.
 
-The approved Signal Lattice **composition C** has three functional readings on desktop: a numbered project directory rail on the left; Dodge's identity, introduction, facts, and actions in the central copy field; and a live signal scope at right. A project scope below uses intentionally unequal evidence records. Midnight is the use scene; cobalt, violet, cyan, and electric orange are signal-family identifiers, not generic neon decoration.
+The former Signal Lattice palette and composition are retired from the portal and archive. The shared page language uses mist-blue paper, plum ink, mineral teal, violet mountain layers, and a restrained cinnabar accent. Project records remain unequal in visual weight and ordered for recruiter scanning; the visual art supports rather than replaces project evidence.
 
-A fixed, decorative canvas adds colored waveform, sample, and barcode geometry. Canvas never contains essential information: all identity, locale, project, status, route, and repository information is semantic HTML.
+A fixed, deterministic Canvas scene paints authored ridge paths, translucent pigment layers, contour marks, and a mist band. It is decorative only: all identity, locale, project, status, route, and repository information remains semantic HTML. Motion is limited to a low-amplitude opacity breath and becomes fully static under reduced-motion preferences.
 
 ## Colors
 
-The palette uses a deep midnight base and four high-energy signal families, restrained by cool text and structural blue rules.
+The palette uses a cool mist-paper ground with layered ink and pigment roles.
 
 ### Primary
 
-- **Signal Cyan (`#17d6ff`):** primary technical interaction, online route state, and PulseBoard signal family.
-- **Cobalt Carrier (`#3380ff`):** structural signal family, prominent rules, SAA, and IELTS.
+- **Mineral Teal (`#2b7883`):** primary technical interaction and live-route state.
+- **Mountain Cobalt (`#46618f`):** structural hierarchy and secondary project identity.
 
 ### Secondary
 
-- **Ultraviolet Channel (`#8a55ff`):** selected project-filter state, SAP, and VMD.
-- **Electric Orange (`#ff8f1f`):** attention state, live marker, selected locale, HeatStack, Career Radar, PAL4, and the archived ISPM record.
-- **Hot Amber (`#ffbd4a`):** the prioritized live-work action and highly visible focus outline.
+- **Violet Ink (`#80568e`):** selected filters, research identity, and distant pigment layers.
+- **Cinnabar (`#be5367`):** restrained attention accent, live marker, and warm mountain wash.
+- **Deep Cinnabar (`#9f3e58`):** visible keyboard focus and high-priority emphasis.
 
 ### Neutral
 
-- **Midnight / Raised Midnight:** `#060817` and `#090d20` provide the operating context and translucent layered surfaces.
-- **Signal Ink / Muted / Faint:** `#f4f8ff`, `#9cb3cf`, and `#456182` establish readable title, body, and technical-metadata hierarchy.
-- **Signal Rule / Strong Rule:** `#173b63` and `#2874b0` are one-pixel structural dividers rather than shadow-based elevation.
+- **Mist / Raised Paper:** `#e9e8f0` and `#f7f5f8` establish the page ground and readable surfaces.
+- **Ink / Muted / Faint:** `#27283d`, `#55566d`, and `#68657c` establish title, body, and metadata hierarchy.
+- **Contour Rule:** a low-opacity blue-violet rule separates records without turning the archive into a card grid.
 
 ### Named Rules
 
 **The Signal-Family Rule.** Give a project, route state, or control state one accent family. Do not distribute every accent through one component for visual noise.
 
-**The Midnight Rule.** Keep the ground dark and calm so color conveys families, state, and direction instead of becoming a full-screen glow effect.
+**The Landscape Rule.** Keep pigment behind the evidence and preserve clear paper-toned reading surfaces wherever recruiters scan copy or controls.
 
 ## Typography
 
-**Display and body font:** self-hosted `Anlan Inter` regular and semibold WOFF assets, with `Segoe UI` and sans-serif fallbacks.
+**Display font:** a CJK-capable Song-style serif stack, with system serif fallback. It lends the name and project titles an editorial, brush-adjacent character without simulating calligraphy.
+
+**Body font:** self-hosted `Anlan Inter` regular and semibold WOFF assets, with CJK sans-serif and system fallbacks for localized text.
 
 **Technical-label font:** `Cascadia Mono`, `SFMono-Regular`, `Consolas`, monospace.
 
@@ -112,7 +113,7 @@ Recognized language hashes (`#en`, `#zh-hant`, `#zh-hans`, and `#ja`) provide sh
 
 ### Hierarchy
 
-- **Display:** A tightly tracked, compact-line-height identity statement carries the portal's purpose once. Every locale substitutes a localized personal introduction, not a machine-selected locale.
+- **Display:** A large CJK-capable serif gives titles a literary landscape voice; compact display scale preserves the portal's purpose and project scanability in every locale.
 - **Title:** Project names use the responsive Inter title scale; the emphasized records are visibly larger than study and compact source records.
 - **Body:** The personal introduction and project descriptions remain readable at a bounded measure.
 - **Label:** Small, bold, slightly tracked mono text labels controls, routes, project categories, live states, directory technologies, and footer metadata. Latin labels may be uppercase; CJK labels remain legible in their native script.
@@ -127,13 +128,13 @@ The bordered, centered portal shell has a maximum width of `1540px`. On desktop,
 
 The directory is a numbered list of ten records. Each record exposes a concise technical-keyword rail, such as `Astro · AI Skills · Windows CLI` for HeatStack, `Hono · PostgreSQL · Redis` for PulseBoard, `invite-only · inbox · digests` for Career Radar, `AWS · questions · progress` for SAA, `C++ · Eigen · VMD` for VMD_cpp, `Python · localization · MIT` for PAL4, and `Python · robotics · RRT` for Dynamic RRT Connect.
 
-The Project Scope is deliberately non-uniform on desktop: HeatStack leads as a full-width orange feature record; PulseBoard follows as the full-width evidence anchor with the largest evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors HeatStack, PulseBoard, Career Radar, SAA, SAP, and VMD over the smaller archive and secondary source records.
+The Project Scope is deliberately non-uniform on desktop: HeatStack leads as a full-width cinnabar feature record; PulseBoard follows as the full-width evidence anchor with the largest evidence switcher; Career Radar spans seven of twelve columns; SAA spans five; SAP and ISPM each occupy compact three-column records; VMD is a six-column research record; PAL4 is five columns; IELTS is three; and Dynamic RRT Connect is four. This weighting favors the strongest evidence over smaller archive and secondary source records.
 
 At `1120px`, the rail reduces to `216px`, the identity copy precedes the live scope, and ordinary records resolve to two six-column tracks. At `820px` and below, the page’s semantic and visual order is: top bar, identity/live-scope main field, compact project-directory rail, then the project index. The rail becomes three columns and keeps all ten records visible at this width. At `510px` and below, the explicit profile link and locale selector each take a row, the rail becomes two columns and continues to show all ten records, hero actions stack full width, and project records resolve to a single readable column. The responsive contract is no page-level horizontal overflow at 360px, 768px, 1280px, or 1440px.
 
 ## Elevation & Depth
 
-This is a flat, layered system. One-pixel borders, translucent midnight surfaces, and density establish depth; project records do not use floating card shadows. Small live-status and scope-dot signals may glow subtly to communicate activity, not elevation. The fixed background lattice remains behind an opaque, readable portal shell.
+This is a flat, layered system. Contour rules, translucent paper surfaces, and pigment layers establish depth; project records do not use floating card shadows. Small live-status marks communicate state without glow. The fixed ink landscape remains behind readable semantic content.
 
 ### Named Rule
 
@@ -141,7 +142,7 @@ This is a flat, layered system. One-pixel borders, translucent midnight surfaces
 
 ## Shapes
 
-The form language is rectilinear and precise. Controls, locale segments, tags, image frames, rail entries, and project records use square corners and one-pixel borders. Accent bars, technical rules, square status marks, and waveform geometry supply the recurring silhouette. Keyboard focus is a visible, offset hot-amber outline; primary actions and locale controls have a minimum height of at least 44px.
+The form language pairs precise rectilinear controls with organic painted terrain. Controls, locale segments, tags, image frames, rail entries, and project records use square corners and one-pixel contour rules. Ink ridges and sparse linework supply the landscape silhouette. Keyboard focus is a visible, offset deep-cinnabar outline; primary actions and locale controls have a minimum height of at least 44px.
 
 ## Components
 
@@ -163,22 +164,22 @@ The form language is rectilinear and precise. Controls, locale segments, tags, i
 
 ### Actions and Filters
 
-- **Hero actions:** Rectangular icon-plus-label actions lead to the Project Scope and the VMD source anchor. The live-work action uses hot amber; the source action is cyan-led.
+- **Hero actions:** Rectangular icon-plus-label actions lead to the Project Scope and the VMD source anchor. Cinnabar prioritizes live work; mineral teal marks source browsing.
 - **Row actions:** Linked projects have one concise route or external-repository action. External actions include an arrow mark and use safe external-link attributes.
-- **Filter segments:** `All`, `Live`, `Source`, and `Study` are mono controls with `aria-pressed`; violet marks the active filter.
+- **Filter segments:** `All`, `Live`, `Source`, and `Study` are mono controls with `aria-pressed`; violet ink marks the active filter.
 
-### Signal Scopes
+### Ink Landscape
 
-- **Foreground scope:** A grid-backed waveform canvas uses orange reference axes, a cyan live waveform, and a moving white sample point next to semantic readouts.
-- **Background lattice:** The fixed `aria-hidden` canvas draws colored cyan/violet bands and cobalt/orange barcode marks behind the shell.
-- **Motion:** Both canvases render a static frame under `prefers-reduced-motion: reduce`. Otherwise motion is a subtle, continuous signal change, not an entrance spectacle.
+- **Background scene:** A fixed decorative canvas uses authored ridge paths, translucent pigment layers, contour marks, and a mist band behind translucent paper reading surfaces.
+- **Project evidence:** The live waveform remains a compact evidence display; its line and reference marks use mineral teal and cinnabar rather than the retired neon palette.
+- **Motion:** The landscape is deterministic and repaints only on resize. A restrained opacity breath is disabled under reduced-motion preferences.
 
 ## Do's and Don'ts
 
 ### Do
 
-- Use Project Scope composition C: left directory rail, Dodge’s central identity field, live signal scope, then varied project evidence.
-- Keep the colorful midnight/cobalt/violet/cyan/electric-orange signal system and assign color purposefully.
+- Use a continuous ink-landscape field across the home, archive, and project-detail pages; retain the recruiter-oriented project hierarchy and varied evidence records.
+- Keep mist paper, plum ink, mineral teal, violet, and cinnabar roles purposeful and legible.
 - Introduce Dodge Ho / 道安澜 as the person behind this public open-source work in all four locales; use `道安瀾（ドッジ・ホー）` in Japanese identity copy.
 - Keep **My LinkedIn profile** explicit, first-person, and visually accompanied by a LinkedIn mark rather than presenting it as a generic social destination.
 - Retain technical-keyword rails and non-uniform project weight: HeatStack first, PulseBoard as the evidence anchor, Career Radar/SAA/SAP/VMD prominent, ISPM subdued and unlinked.
@@ -186,7 +187,8 @@ The form language is rectilinear and precise. Controls, locale segments, tags, i
 
 ### Don't
 
-- Revert to the former light publishing grid, rounded portfolio cards, or an equal-size dashboard grid.
+- Restore the former dark Signal Lattice visual world on the portal or archive.
+- Let landscape artwork obscure project names, statuses, controls, or reading contrast.
 - Use a bare LinkedIn glyph, a non-first-person profile label, or an unlabeled external icon for the personal profile.
 - Add a root-page link or action for ISPM, even though `/ispm/` remains deployed.
 - Make canvas the sole source of identity, project, status, route, or language state.
@@ -194,7 +196,7 @@ The form language is rectilinear and precise. Controls, locale segments, tags, i
 
 ## Route-Specific System: `/hire/`
 
-The hiring profile is an intentional exception to the root portal's Signal Lattice visual system. It is a serious reading surface for recruiters and hiring managers, not another project directory, application dashboard, marketing landing page, or online resume. This exception applies only to `/hire/` and its four locale variants; the homepage and project archive retain the system above without modification.
+The hiring profile is an intentional exception to the root portal's ink-landscape visual system. It is a serious reading surface for recruiters and hiring managers, not another project directory, application dashboard, marketing landing page, or online resume. This exception applies only to `/hire/` and its four locale variants; the homepage, project archive, and project details use the ink-landscape system above.
 
 ### Visual Direction
 

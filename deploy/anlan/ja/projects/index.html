@@ -1,6 +1,6 @@
 <!doctype html><html lang="ja"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="74 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。"><meta name="theme-color" content="#060817">
+    <meta name="description" content="74 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。"><meta name="theme-color" content="#e9e8f0">
     <title>完全なエンジニアリング資産目録 · ANLAN.STORE</title><link rel="canonical" href="https://anlan.store/ja/projects/"><link rel="alternate" hreflang="en" href="https://anlan.store/projects/"><link rel="alternate" hreflang="zh-Hant" href="https://anlan.store/zh-hant/projects/"><link rel="alternate" hreflang="zh-Hans" href="https://anlan.store/zh-hans/projects/"><link rel="alternate" hreflang="ja" href="https://anlan.store/ja/projects/"><link rel="alternate" hreflang="x-default" href="https://anlan.store/projects/">
     <meta property="og:type" content="website"><meta property="og:title" content="完全なエンジニアリング資産目録 · ANLAN.STORE"><meta property="og:description" content="74 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。"><meta property="og:url" content="https://anlan.store/ja/projects/">
     <style>@font-face {
@@ -266,8 +266,131 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+:root {
+  color-scheme: light;
+  --night: #e9e8f0;
+  --surface: #f7f5f8;
+  --surface-2: #eeedf3;
+  --ink: #27283d;
+  --muted: #55566d;
+  --faint: #68657c;
+  --rule: rgba(60, 69, 106, .24);
+  --cyan: #2b7883;
+  --cobalt: #46618f;
+  --violet: #80568e;
+  --orange: #be5367;
+  --hot: #9f3e58;
+  --font-ui: "Anlan Inter", "Noto Sans CJK SC", "Yu Gothic", sans-serif;
+}
+
+html, body { background: #d9dfea; color: var(--ink); }
+::selection { background: #e8a4b4; color: #30283b; }
+.ink-scene {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .86;
+  pointer-events: none;
+  animation: ink-breath 15s ease-in-out infinite alternate;
+}
+@keyframes ink-breath { from { opacity: .78; } to { opacity: .9; } }
+.archive-shell {
+  position: relative;
+  z-index: 1;
+  border-color: rgba(63, 66, 100, .22);
+  background: rgba(247, 245, 249, .55);
+}
+.archive-skip { border-color: #9f3e58; background: #f7f5f8; color: #27283d; }
+.archive-topbar { border-color: var(--rule); background: rgba(48, 45, 66, .94); }
+.archive-brand { color: #f9f4f4; }
+.archive-mark i:nth-child(1) { background: #73abb0; }
+.archive-mark i:nth-child(2) { background: #d78c9c; }
+.archive-mark i:nth-child(3) { background: #d9bd83; }
+.archive-context { color: #e7a1b3; }
+.archive-profile, .locale-links a { border-color: rgba(236, 227, 238, .3); color: #f1eaf2; }
+.archive-profile svg { color: #e9a0b1; }
+.locale-links a[aria-current="page"] { background: #d47f91; color: #2d2235; }
+.archive-profile:hover, .locale-links a:hover { border-color: #e3a0af; color: #fff; }
+
+.archive-hero, .case-hero { border-color: var(--rule-strong); }
+.archive-intro h1, .case-hero h1, .row-name h3 {
+  font-family: "Noto Serif CJK SC", "Songti SC", "Yu Mincho", Georgia, serif;
+  letter-spacing: 0;
+}
+.archive-intro h1, .case-hero h1 { font-size: clamp(48px, 5.1vw, 76px); line-height: .98; }
+.archive-hero::before { background: linear-gradient(105deg, transparent 0 54%, rgba(128, 86, 142, .12) 54% 55%, transparent 55% 100%); }
+.archive-hero::after, .case-hero::after { background: rgba(190, 83, 103, .66); box-shadow: 0 -54px 0 rgba(43, 120, 131, .32), 0 54px 0 rgba(128, 86, 142, .3); }
+.archive-intro h1, .case-hero h1 { color: #302a43; text-shadow: 0 1px rgba(255,255,255,.55); }
+.archive-intro p, .case-summary { color: #505168; }
+.archive-stats { border-color: var(--rule); background: rgba(244, 241, 247, .52); }
+.archive-stats div { border-color: var(--rule); }
+.archive-stats dt { color: #69657b; }
+.archive-stats div:nth-child(1) dd { color: #46618f; }
+.archive-stats div:nth-child(2) dd { color: #ad4b62; }
+.archive-stats div:nth-child(3) dd { color: #80568e; }
+
+.archive-controls { border-color: var(--rule-strong); background: rgba(244, 242, 248, .96); }
+.search-field input, .archive-sort { border-color: var(--rule-strong); background: rgba(255,255,255,.76); color: #302f47; }
+.search-field input::placeholder { color: #77738a; }
+.search-field svg { color: #62617a; }
+.archive-filters { border-color: var(--rule-strong); }
+.archive-filters button { border-color: var(--rule); color: #55566d; }
+.archive-filters button:hover { background: rgba(211, 207, 228, .45); color: #302f47; }
+.archive-filters button[aria-pressed="true"] { background: #80568e; color: #fff; }
+.inventory { background: rgba(247, 245, 249, .69); }
+.inventory-head { border-color: var(--rule-strong); }
+.inventory-head h2 { color: #302f47; }
+.inventory-head p { color: #5b596f; }
+.result-count { color: #66647a; }
+.archive-row { border-color: var(--rule); }
+.archive-row:hover { background: rgba(211, 207, 228, .32); }
+.row-index, .row-kind { color: #625f77; }
+.row-name h3 { color: #302f47; }
+.row-name-alt { color: #6a5477; }
+.row-copy { color: #505168; }
+.row-evidence { color: #646179; }
+.row-skills li, .row-flag { border-color: var(--rule); background: rgba(255,255,255,.4); color: #57576e; }
+.row-flag.is-origin { color: #46618f; }
+.row-flag.is-closed { color: #9f3e58; }
+.row-media { border-color: rgba(72, 88, 126, .34); background: rgba(255,255,255,.65); }
+.row-action { border-color: #47758b; background: rgba(255,255,255,.66); color: #286d78; }
+.row-action:hover { background: #286d78; color: #fff; }
+.locked-state { color: #9b3e56; }
+.empty-results { border-color: #bd5367; color: #92384f; }
+
+.case-hero { background: rgba(245, 243, 248, .42); }
+.case-alt-name { color: #67566f; }
+.case-actions a { border-color: var(--rule-strong); background: rgba(255,255,255,.58); color: #43445d; }
+.case-actions a:first-child { border-color: #286d78; background: #286d78; color: #fff; }
+.case-visuals { border-color: var(--rule); background: rgba(238, 236, 244, .64); }
+.case-visuals img { border-color: var(--rule-strong); background: #eceaf1; }
+.case-visuals figcaption { color: #5b596f; }
+.case-content { background: rgba(248, 246, 249, .64); }
+.case-section { border-color: var(--rule); }
+.case-section h2 { color: #6e4e82; }
+.case-section p { color: #4e5068; }
+.case-aside { border-color: var(--rule); background: rgba(241, 239, 246, .74); }
+.case-aside h2 { color: #3d3c54; }
+.asset-nav li, .related a { border-color: var(--rule); }
+.asset-nav a, .related a { color: #515269; }
+.asset-nav a:hover, .related a:hover { color: #a04259; }
+.archive-footer { border-color: var(--rule-strong); color: #5b596f; }
+.archive-footer a { color: #276c78; }
+.archive-footer a:hover { color: #9f3e58; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline-color: #a43f59; }
+
+@media (max-width: 780px) {
+  .archive-stats { background: rgba(244, 241, 247, .78); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-scene { animation: none; }
+}
 </style><script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"完全なエンジニアリング資産目録","description":"74 件すべての GitHub リポジトリと、単一リポジトリに一対一対応しない公開システムを収録。更新日時だけでなく、採用上の価値と証拠の品質で並べます。","url":"https://anlan.store/ja/projects/","author":{"@type":"Person","name":"Dodge Ho","sameAs":"https://www.linkedin.com/in/lang-he-a94655120/"}}</script>
-  </head><body><a class="archive-skip" href="#main">プロジェクト目録へ移動</a><div class="archive-shell"><header class="archive-topbar">
+  </head><body><a class="archive-skip" href="#main">プロジェクト目録へ移動</a><canvas class="ink-scene" data-ink-scene aria-hidden="true"></canvas><div class="archive-shell"><header class="archive-topbar">
     <a class="archive-brand" href="/#ja" aria-label="ANLAN.STORE ホーム"><span class="archive-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>ANLAN.STORE</span></a>
     <p class="archive-context">プロジェクト資産ライブラリ</p>
     <div class="archive-actions">
@@ -769,7 +892,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <p class="row-evidence"><strong>証拠</strong>Source</p>
     <div class="row-actions"><a class="row-action" href="/ja/projects/rpca/">プロジェクト記録を見る</a><a class="row-action" href="https://github.com/DodgeHo/RPCA" target="_blank" rel="noreferrer">GitHub リポジトリを見る<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3h7v7M13 3 6.5 9.5M12 9.5V13H3V4h3.5" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></a></div>
   </article></div><p class="empty-results" data-empty-results hidden>現在の検索と絞り込みに一致するプロジェクトはありません。</p></section>
-  </main><footer class="archive-footer"><span>ANLAN.STORE / 持続するエンジニアリング証拠</span><a href="/ja/projects/">完全な目録へ戻る</a></footer></div><script>(()=>{const m={'#en':'en','#zh':'zh-Hans','#zh-hans':'zh-Hans','#zh-hant':'zh-Hant','#ja':'ja'};const p={en:'', 'zh-Hans':'/zh-hans','zh-Hant':'/zh-hant',ja:'/ja'};const l=m[location.hash.toLowerCase()];if(l){const n=p[l]+'/projects/';if(location.pathname!==n)location.replace(n);}})();</script><script>(() => {
+  </main><footer class="archive-footer"><span>ANLAN.STORE / 持続するエンジニアリング証拠</span><a href="/ja/projects/">完全な目録へ戻る</a></footer></div><script>(()=>{const m={'#en':'en','#zh':'zh-Hans','#zh-hans':'zh-Hans','#zh-hant':'zh-Hant','#ja':'ja'};const p={en:'', 'zh-Hans':'/zh-hans','zh-Hant':'/zh-hant',ja:'/ja'};const l=m[location.hash.toLowerCase()];if(l){const n=p[l]+'/projects/';if(location.pathname!==n)location.replace(n);}})();</script><script src="/assets/ink-scene.js" defer></script><script>(() => {
   const search = document.querySelector('[data-project-search]');
   const filters = Array.from(document.querySelectorAll('[data-project-filter]'));
   const sort = document.querySelector('[data-project-sort]');

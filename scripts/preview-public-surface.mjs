@@ -67,7 +67,7 @@ function studyShell(name) {
 }
 
 async function serveGenerated(path, response) {
-  if (!generatedFiles.has(path) && !generatedPrefixes.some((prefix) => path.startsWith(prefix))) return false;
+  if (!generatedFiles.has(path) && !generatedPrefixes.some((prefix) => path.startsWith(prefix)) && !path.startsWith('/assets/')) return false;
   let relativePath;
   try {
     relativePath = decodeURIComponent(path).replace(/^\/+/, '');
