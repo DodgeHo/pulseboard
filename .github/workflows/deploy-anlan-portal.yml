@@ -127,7 +127,7 @@ jobs:
 
           git archive --format=tar "$release" "${portal_paths[@]/#/deploy/anlan/}" \
             | tar -tf - \
-            | sed -e 's#^deploy/anlan/##' -e '/^deploy\/anlan\/?$/d' -e '/^deploy\/?$/d' \
+            | sed -e '/^deploy\/$/d' -e 's#^deploy/anlan/##' -e '/^$/d' \
             > "$backup_dir/incoming-files.txt"
           if grep -Evq '^(index\.html|feed\.xml|robots\.txt|sitemap\.xml|assets/|hire/|projects/|upwork/|ja/|zh-hans/|zh-hant/)' "$backup_dir/incoming-files.txt"; then
             echo "Portal archive contains an unexpected path." >&2
