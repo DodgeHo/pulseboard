@@ -141,8 +141,27 @@ jobs:
           if [ "${#existing[@]}" -gt 0 ]; then
             sudo tar -C "$webroot" -czf - "${existing[@]}" > "$backup_dir/portal-static.tar.gz"
           fi
+          mkdir -p "$backup_dir/nginx"
+          if sudo test -f /etc/nginx/sites-available/anlan.conf; then
+            sudo cp /etc/nginx/sites-available/anlan.conf "$backup_dir/nginx/sites-available-anlan.conf"
+          fi
+          if sudo test -f /etc/nginx/sites-enabled/anlan.conf; then
+            sudo cp /etc/nginx/sites-enabled/anlan.conf "$backup_dir/nginx/sites-enabled-anlan.conf"
+          fi
           git archive --format=tar "$release" "${portal_paths[@]/#/deploy/anlan/}" \
             | sudo tar --no-same-owner --no-same-permissions --strip-components=2 -xf - -C "$webroot"
+          git show "$release:deploy/anlan/nginx/anlan.conf" | sudo tee /etc/nginx/sites-available/anlan.conf.candidate-"$release" >/dev/null
+          git show "$release:deploy/anlan/nginx/anlan.conf" | sudo tee /etc/nginx/sites-enabled/anlan.conf.candidate-"$release" >/dev/null
+          sudo mv /etc/nginx/sites-available/anlan.conf.candidate-"$release" /etc/nginx/sites-available/anlan.conf
+          sudo mv /etc/nginx/sites-enabled/anlan.conf.candidate-"$release" /etc/nginx/sites-enabled/anlan.conf
+          if ! sudo nginx -t; then
+            echo "Nginx validation failed; restoring the previous site files." >&2
+            if sudo test -f "$backup_dir/nginx/sites-available-anlan.conf"; then sudo cp "$backup_dir/nginx/sites-available-anlan.conf" /etc/nginx/sites-available/anlan.conf; fi
+            if sudo test -f "$backup_dir/nginx/sites-enabled-anlan.conf"; then sudo cp "$backup_dir/nginx/sites-enabled-anlan.conf" /etc/nginx/sites-enabled/anlan.conf; fi
+            sudo nginx -t
+            exit 1
+          fi
+          sudo systemctl reload nginx
           sudo test -s "$webroot/index.html"
           sudo test -s "$webroot/assets/ink-scene.js"
           sudo test -s "$webroot/zh-hans/projects/cwc/index.html"

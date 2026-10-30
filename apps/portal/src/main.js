@@ -361,8 +361,8 @@
   const makeEvidence = () => `
     <div class="pulse-evidence" aria-label="${t().pulseEvidence}">
       <div class="evidence-frame">
-        <img class="is-active" data-preview="ops" src="__PULSEBOARD_OPS_IMAGE__" alt="${t().opsAlt}">
-        <img data-preview="customer" src="__PULSEBOARD_CUSTOMER_IMAGE__" alt="${t().customerAlt}">
+        <img class="is-active" data-preview="ops" src="__PULSEBOARD_OPS_IMAGE__" alt="${t().opsAlt}" loading="lazy" decoding="async">
+        <img data-preview="customer" src="__PULSEBOARD_CUSTOMER_IMAGE__" alt="${t().customerAlt}" loading="lazy" decoding="async">
       </div>
       <div class="evidence-controls" role="group" aria-label="${t().chooseEvidence}">
         <button type="button" data-preview-target="ops" aria-pressed="true">${t().previewOps}</button>

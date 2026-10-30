@@ -219,6 +219,15 @@ async function verifyHirePage(root, relativePath, locale) {
 
 async function verifyGeneratedPages(root) {
   const home = await read(root, "index.html");
+  const assetVersion = home.match(/\/assets\/fonts\/Inter-400\.woff\?v=([a-f0-9]{12})/)?.[1];
+  assert(assetVersion, "Homepage is missing a versioned font asset URL");
+  assert(!/data:(?:image|font)\/[^;]+;base64,/i.test(home), "Homepage still embeds image or font data as base64");
+  assert(home.includes(`/assets/project-media/pulseboard-ops.png?v=${assetVersion}`), "Homepage is missing the versioned PulseBoard operations image");
+  assert(home.includes(`/assets/project-media/pulseboard-customer.png?v=${assetVersion}`), "Homepage is missing the versioned PulseBoard customer image");
+  assert(await fileExists(root, "assets/fonts/Inter-400.woff"), `${root} is missing Inter 400 font asset`);
+  assert(await fileExists(root, "assets/fonts/Inter-600.woff"), `${root} is missing Inter 600 font asset`);
+  assert(await fileExists(root, "assets/project-media/pulseboard-ops.png"), `${root} is missing PulseBoard operations image asset`);
+  assert(await fileExists(root, "assets/project-media/pulseboard-customer.png"), `${root} is missing PulseBoard customer image asset`);
   assert(home.includes("ANLAN.STORE") && home.includes('id="signal-lattice"'), "Homepage lost composition C identity");
   assert(home.includes("https://www.linkedin.com/in/lang-he-a94655120/") && home.includes("My LinkedIn profile"), "Homepage lost the labeled LinkedIn profile control");
   assert(home.includes("https://github.com/DodgeHo") && home.includes("github-link"), "Homepage lost the GitHub profile control");
@@ -280,6 +289,8 @@ async function verifyGeneratedPages(root) {
     await verifyHirePage(root, `${prefix}hire/index.html`, locale);
     await verifyArchive(root, `${prefix}projects/index.html`, locale);
     const archive = await read(root, `${prefix}projects/index.html`);
+    assert(!/data:(?:image|font)\/[^;]+;base64,/i.test(archive), `${locale} archive still embeds image or font data as base64`);
+    assert(archive.includes(`/assets/fonts/Inter-400.woff?v=${assetVersion}`), `${locale} archive is missing the versioned font asset URL`);
     if (locale === "zh-Hans") assert(archive.includes("粤ICP备2026035259号-1"), "Simplified Chinese archive is missing ICP text");
     else assert(!archive.includes("粤ICP备2026035259号-1"), `${locale} archive must not contain Simplified Chinese ICP text`);
     for (const slug of caseStudySlugs) {

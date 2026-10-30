@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,9 +23,10 @@ const readTextOptional = async (path) => {
     throw error;
   }
 };
-const readDataUri = async (path, mimeType) => {
-  const bytes = await readFile(path);
-  return `data:${mimeType};base64,${bytes.toString("base64")}`;
+const contentHash = async (...paths) => {
+  const hash = createHash("sha256");
+  for (const path of paths) hash.update(await readFile(path));
+  return hash.digest("hex").slice(0, 12);
 };
 const escapeHtml = (value = "") => String(value)
   .replaceAll("&", "&amp;")
@@ -56,11 +58,18 @@ const [template, hireTemplate, portalCssRaw, portalJsRaw, archiveCssRaw, hireCss
   readText(resolve(sourceRoot, "archive.css")),
   readText(resolve(sourceRoot, "hire.css")),
   readText(resolve(sourceRoot, "archive.js")),
-  readDataUri(resolve(sourceRoot, "assets/pulseboard-ops.png"), "image/png"),
-  readDataUri(resolve(sourceRoot, "assets/pulseboard-customer.png"), "image/png"),
-  readDataUri(resolve(sourceRoot, "assets/fonts/Inter-400.woff"), "font/woff"),
-  readDataUri(resolve(sourceRoot, "assets/fonts/Inter-600.woff"), "font/woff")
+  "/assets/project-media/pulseboard-ops.png",
+  "/assets/project-media/pulseboard-customer.png",
+  "/assets/fonts/Inter-400.woff",
+  "/assets/fonts/Inter-600.woff"
 ]);
+const assetVersion = await contentHash(
+  resolve(sourceRoot, "ink-scene.js"),
+  resolve(sourceRoot, "assets/project-media/pulseboard-ops.png"),
+  resolve(sourceRoot, "assets/project-media/pulseboard-customer.png"),
+  resolve(sourceRoot, "assets/fonts/Inter-400.woff"),
+  resolve(sourceRoot, "assets/fonts/Inter-600.woff")
+);
 const includeUpwork = process.env.ANLAN_INCLUDE_UPWORK === "true";
 const upworkContent = includeUpwork ? await loadOptionalUpworkContent() : null;
 const [upworkCssRaw, upworkJs] = upworkContent ? await Promise.all([
@@ -177,10 +186,13 @@ ensureResolved(homeArtifact, "home page");
 
 const outputPaths = [];
 const writeOutput = async (relativePath, content) => {
+  const versionedContent = content.replace(/\/assets\/[^"'()\s<>?]+/g, (match, offset, source) => {
+    return source[offset + match.length] === "?" ? match : `${match}?v=${assetVersion}`;
+  });
   for (const root of [localRoot, deployRoot]) {
     const target = resolve(root, relativePath);
     await mkdir(dirname(target), { recursive: true });
-    await writeFile(target, content, "utf8");
+    await writeFile(target, versionedContent, "utf8");
     outputPaths.push(target);
   }
 };
@@ -473,6 +485,7 @@ await rm(localRoot, { recursive: true, force: true });
 await writeOutput("index.html", homeArtifact);
 for (const root of [localRoot, deployRoot]) {
   await copyStaticDirectory(projectMediaDir, resolve(root, "assets/project-media"));
+  await copyStaticDirectory(resolve(sourceRoot, "assets/fonts"), resolve(root, "assets/fonts"));
   const inkSceneTarget = resolve(root, "assets/ink-scene.js");
   await mkdir(dirname(inkSceneTarget), { recursive: true });
   await copyFile(resolve(sourceRoot, "ink-scene.js"), inkSceneTarget);
